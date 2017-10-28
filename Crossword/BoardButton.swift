@@ -9,17 +9,16 @@
 import UIKit
 
 class BoardButton: UIButton {
-    var phrase: String?
-    var clue: String?
-    var hint: String?
     var letter: Character?
     var across: String!
     var down: String!
     var superscriptLabel = UILabel()
+    var shouldShowHint = false
+    var allowsTouch: Bool!
     
     var cons = [NSLayoutConstraint]()
     
-    
+    // Adds number superscript to idicate beginning of phrase
     func setSuperScriptLabel(number: String) {
 
         self.addSubview(superscriptLabel)

@@ -9,18 +9,26 @@
 import UIKit
 
 class GameViewController: UIViewController {
+    // Used tp determine which phone the user has
+    let screenSize = UIScreen.main.bounds
+    
     var selectedBoardSpaces = [Int]()
     var across = true
     var userLevel = 1
+    var indexOfButton: Int!
+    var acrossNumbers = [Int]()
+    var downNumbers = [Int]()
 
-
+    // Hides the status bar in game so there is more room for the board
     override var prefersStatusBarHidden: Bool {
         return true
     }
     
+    // Buttons for the keyboard and gameboard
     @IBOutlet var keys: [UIButton]!
     @IBOutlet var boardSpaces: [BoardButton]!
     
+    // Keyboard area constraints to manage size on different devices
     @IBOutlet var topKeysHeight: NSLayoutConstraint!
     @IBOutlet var middleKeysHeight: NSLayoutConstraint!
     @IBOutlet var bottomKeysHeight: NSLayoutConstraint!
@@ -28,10 +36,211 @@ class GameViewController: UIViewController {
     @IBOutlet var bottomRowLeading: NSLayoutConstraint!
     @IBOutlet var bottomRowTrailing: NSLayoutConstraint!
     
+    // Clue area labels and buttons
     @IBOutlet var clueLabel: UILabel!
+    @IBOutlet var timerLabel: UILabel!
+    @IBOutlet var directionLabel: UILabel!
+    @IBOutlet var backPhraseButton: UIButton!
+    @IBOutlet var nextPhraseButton: UIButton!
     
+    @IBOutlet var clueHeightConstraint: NSLayoutConstraint!
+    
+    // To know where the user last was
     var previousButton = 0
     var previousSpaces = [Int]()
+    
+    /*****************************************
+    *                                        *
+    *                 UI SETUP               *
+    *                                        *
+    *****************************************/
+    
+    func setUpBoard(board: [String]) {
+        let iphoneSEkeysHeight: CGFloat = 45
+        let iphoneKeysHeight: CGFloat = 52.5
+        let iphonePlusKeysHeight: CGFloat = 55
+        
+        switch screenSize.height {
+        // Sets constraints for iPhone SE
+        case 568:
+            topKeysHeight.constant = iphoneSEkeysHeight
+            middleKeysHeight.constant = iphoneSEkeysHeight
+            bottomKeysHeight.constant = iphoneSEkeysHeight
+            
+            bottomRowLeading.constant = iphoneSEkeysHeight
+            bottomRowTrailing.constant = iphoneSEkeysHeight
+        // Sets constraints for iPhone and iPhone X
+        case 667:
+            topKeysHeight.constant = iphoneKeysHeight
+            middleKeysHeight.constant = iphoneKeysHeight
+            bottomKeysHeight.constant = iphoneKeysHeight
+            
+            bottomRowLeading.constant = 52.5
+            bottomRowTrailing.constant = 52.5
+            
+            keyboardBackHeight.constant = 210
+        // Sets constraints for iPhone Plus
+        case 736:
+            topKeysHeight.constant = iphonePlusKeysHeight
+            middleKeysHeight.constant = iphonePlusKeysHeight
+            bottomKeysHeight.constant = iphonePlusKeysHeight
+            
+            bottomRowLeading.constant = 55
+            bottomRowTrailing.constant = 55
+            
+            keyboardBackHeight.constant = 220
+            clueHeightConstraint.constant = 55
+            clueLabel.font = clueLabel.font.withSize(40)
+        // Sets constraints for iPhone X
+        case 812:
+            topKeysHeight.constant = 57
+            middleKeysHeight.constant = 57
+            bottomKeysHeight.constant = 57
+            
+            bottomRowLeading.constant = 52.5
+            bottomRowTrailing.constant = 52.5
+            
+            keyboardBackHeight.constant = 250
+            
+            clueHeightConstraint.constant = 70
+            clueLabel.font = clueLabel.font.withSize(40)
+        default:
+            break
+        }
+        
+        // Gives buttons a nice rounded corner
+        for button in keys {
+            button.layer.cornerRadius = 5
+        }
+        
+        // Set up the board buttons
+        for button in boardSpaces {
+            // If we are on a smaller screen have a smaller font for letters
+            if screenSize.width == 320 {
+                button.titleLabel?.font = button.titleLabel?.font.withSize(10.0)
+            } else {
+                button.titleLabel?.font = button.titleLabel?.font.withSize(13.0)
+            }
+            
+            // Button letters should be black
+            button.setTitleColor(.black, for: .normal)
+            
+            // Give buttons a nice rounded corner
+            button.layer.cornerRadius = 4
+        }
+        
+        // Gives each space on the board specific properties depending on how the board is arranged
+        giveBoardSpacesProperties(board: board)
+    }
+    
+    func clueAreaSetup() {
+        // Set border width, shape, and color for the clue label and advancement buttons
+        clueLabel.layer.borderWidth = 2
+        clueLabel.layer.cornerRadius = 10
+        clueLabel.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
+        
+        nextPhraseButton.layer.borderWidth = 1
+        nextPhraseButton.layer.cornerRadius = 4
+        nextPhraseButton.layer.borderColor = UIColor.white.cgColor
+        nextPhraseButton.setTitleColor(UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1), for: .normal)
+        
+        backPhraseButton.layer.borderWidth = 1
+        backPhraseButton.layer.cornerRadius = 4
+        backPhraseButton.layer.borderColor = UIColor.white.cgColor
+        backPhraseButton.setTitleColor(UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1), for: .normal)
+    }
+    
+    func giveBoardSpacesProperties(board: [String]) {
+        // Board[0] contains the letter of each square. If square should be blank, letter is "-"
+        let gameBoardLetters = board[0]
+        
+        // Board[1] contains the number of squares to indicate they are a phrase
+        let gameBoardNums = board[1]
+        
+        // Board[2] contains down and across information for each square
+        let gameBoardDA = board[2]
+        
+        // Each string above has different lenghts so iteration jumps are different between
+        // the strings
+        var letterIterator = 0
+        var numbersIterator = 0
+        var DAIterator = 0
+        
+        // Containers for object at specific index
+        var letter: Character
+        var number: Character
+        var daString: String
+        
+        // Go through all the buttons and assign each one their needed information
+        for button in boardSpaces {
+            
+            // Grabs the letter in the string
+            letter = gameBoardLetters[gameBoardLetters.index(gameBoardLetters.startIndex, offsetBy: letterIterator)]
+            
+            // If the letter is a "-", square should be disables and turned black
+            // Otherwise, assign the letter to the square
+            if letter == "-" {
+                button.isEnabled = false
+                button.backgroundColor = .black
+                button.allowsTouch = false
+            } else {
+                button.letter = letter
+                button.allowsTouch = true
+            }
+            
+            // Grab the number in the string
+            number = gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator)]
+            
+            // If the number is a "-" then there should be no number in the top corner so set the label to an empty string
+            // Otherwise, set the label on the square to the corresponing number grabbed
+            if number == "-" {
+                button.superscriptLabel.text?.append("")
+            } else {
+                button.setSuperScriptLabel(number: String(number))
+                
+                // If the next character is a number as well, append it to the space label (so we can represent 2 digit numbers)
+                if gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)] != "-" {
+                    button.superscriptLabel.text?.append(gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)])
+                    
+                    // Need serperate iterator because sometimes we need to take 2 from the string
+                    numbersIterator += 1
+                }
+                
+            }
+            
+            // The gameBoardDA is set up differently than the other two. Each space contains 6 characters in this format:
+            // 00a00d
+            // The first two numbers tell what number across it is apart of
+            // The a indicates across
+            // The second group of numbers tell what number down it is apart of
+            // The d indicates down
+            // The string looks like 00a00d00a00d01a01d etc.
+            // Every button is assigned a down/across string (disabled buttons assigned 00a00d)
+            
+            // Grabs a string of 6 characters
+            let startIndex = gameBoardDA.index(gameBoardDA.startIndex, offsetBy: DAIterator)
+            let endIndex = gameBoardDA.index(gameBoardDA.startIndex, offsetBy: DAIterator+5)
+            daString = String(gameBoardDA[startIndex...endIndex])
+            
+            // Splits in half, button's across property assigned first half and down property assigned second half
+            let midIndex = daString.index(daString.startIndex, offsetBy: 3)
+            button.across = String(daString[..<midIndex])
+            button.down = String(daString[midIndex..<daString.endIndex])
+            
+            // Increase the iterators. DA iterator increases 6 since it has a greater length than the other strings
+            numbersIterator += 1
+            letterIterator += 1
+            DAIterator += 6
+        }
+        
+    }
+    
+    
+     /*****************************************
+     *                                        *
+     *             Action Handling            *
+     *                                        *
+     *****************************************/
     
     @IBAction func boardButtonTapped(_ sender: BoardButton) {
         // Uses tag of tapped square to determine row/column that user tapped
@@ -75,156 +284,613 @@ class GameViewController: UIViewController {
         
         // Use row and column to determine where in the outlet array the
         // selected button is
-        let indexOfButton = ((row - 1) * 13) + col - 1
+        indexOfButton = ((row - 1) * 13) + col - 1
         
-        print("ROW: \(row) // COL: \(col) // INDEX: \(indexOfButton) // LETTER: \(sender.letter!)")
-        
-        //
+        // Determines which buttons are selected and should be highlighted
         rowAndColumnDetermination(indexOfButton: indexOfButton)
+        
+        // Set the label for the clueLabel
+        clueLabel.text = getClue(indexOfButton: indexOfButton)
+        
+        // Set the label for the direction
+        determineDirectionText(indexOfButton: indexOfButton)
         
         // Allows us to look back one to see what the last press was
         previousButton = indexOfButton
     }
-    
-    /* UI SETUP */
-    let screenSize = UIScreen.main.bounds
-    let iphoneSEkeysHeight: CGFloat = 45
-    let iphoneKeysHeight: CGFloat = 52.5
-    let iphonePlusKeysHeight: CGFloat = 58.5
-    
-    func setUpBoard(board: [String]) {
-        switch screenSize.width {
-        // Sets constraints for iPhone SE
-        case 320:
-            topKeysHeight.constant = iphoneSEkeysHeight
-            middleKeysHeight.constant = iphoneSEkeysHeight
-            bottomKeysHeight.constant = iphoneSEkeysHeight
-            
-            bottomRowLeading.constant = iphoneSEkeysHeight
-            bottomRowTrailing.constant = iphoneSEkeysHeight
-        // Sets constraints for iPhone
-        case 375:
-            topKeysHeight.constant = iphoneKeysHeight
-            middleKeysHeight.constant = iphoneKeysHeight
-            bottomKeysHeight.constant = iphoneKeysHeight
-            
-            keyboardBackHeight.constant = 210
-        // Sets constraints for iPhone Plus
-        case 414:
-            topKeysHeight.constant = iphonePlusKeysHeight
-            middleKeysHeight.constant = iphonePlusKeysHeight
-            bottomKeysHeight.constant = iphonePlusKeysHeight
-            
-            keyboardBackHeight.constant = 240
-        default:
-            break
-        }
+
+    @IBAction func eraseButtonTapped(_ sender: Any) {
+        // Get current square
+        let currentSquareTitle = boardSpaces[indexOfButton].title(for: .normal)
         
-        // Gives buttons a nice rounded corner
-        for button in keys {
-            button.layer.cornerRadius = 5
-        }
-        
-        // Set up the board buttons
-        for button in boardSpaces {
-            // If we are on a smaller screen have a smaller font for letters
-            if screenSize.width == 320 {
-                button.titleLabel?.font = button.titleLabel?.font.withSize(10.0)
+        // If the square has text, erase it and stay there
+        if currentSquareTitle != nil {
+            boardSpaces[indexOfButton].setTitle(nil, for: .normal)
+        } else {
+            // Otherwise, if the square is empty see if we're at the beginning of
+            // the selected phrase
+            if indexOfButton == selectedBoardSpaces.min() {
+                // If we're at the beginning, we are going to go back a phrase
+                // when the erase button is pressed
+                backPhraseButton.sendActions(for: .touchUpInside)
+                
+                // And the selected square should be the last one of the phrase
+                indexOfButton = selectedBoardSpaces.max()!
+                
+                // Then simulate a tap there
+                boardButtonTapped(boardSpaces[indexOfButton])
+                
             } else {
-                button.titleLabel?.font = button.titleLabel?.font.withSize(13.0)
+                // If we aren't at the beginning of a phrase, just move a square
+                // back if across or 13 back if down
+                if across {
+                    boardButtonTapped(boardSpaces[indexOfButton - 1])
+                } else {
+                    boardButtonTapped(boardSpaces[indexOfButton - 13])
+                }
             }
             
-            // Button letters should be black
-            button.setTitleColor(.black, for: .normal)
-            
-            // Give buttons a nice rounded corner
-            button.layer.cornerRadius = 4
+            // Erase the selected square
+            boardSpaces[indexOfButton].setTitle(nil, for: .normal)
         }
         
-        giveBoardSpacesProperties(board: board)
+        
     }
     
-    func giveBoardSpacesProperties(board: [String]) {
-        // Board[0] contains the letter of each square. If square should be blank, letter is "-"
-        let gameBoardLetters = board[0]
+    @IBAction func nextPhraseButtonTapped(_ sender: Any) {
+        // Get the current space
+        let currentSquare = boardSpaces[indexOfButton]
         
-        // Board[1] contains the number of squares to indicate they are a phrase
-        let gameBoardNums = board[1]
-        
-        // Board[2] contains down and across information for each square
-        let gameBoardDA = board[2]
-        
-        // Each string above has different lenghts so iteration jumps are different between
-        // the strings
-        var letterIterator = 0
-        var numbersIterator = 0
-        var DAIterator = 0
-        
-        // Containers for object at specific index
-        var letter: Character
-        var number: Character
-        var daString: String
-        
-        // Go through all the buttons and assign each one their needed information
-        for button in boardSpaces {
+        // Orientation determines how we will move
+        if across {
+            // Gets the number associated with the square
+            let acrossString = currentSquare.across
+            let acrossStart = acrossString!.startIndex
+            let num = Int(acrossString![acrossStart...acrossString!.index(after: acrossStart)])!
             
-            // Grabs the letter in the string
-            letter = gameBoardLetters[gameBoardLetters.index(gameBoardLetters.startIndex, offsetBy: letterIterator)]
+            // Used to tell which button to tap next
+            var nextAcross = ""
             
-            // If the letter is a "-", square should be disables and turned black
-            // Otherwise, assign the letter to the square
-            if letter == "-" {
-                button.isEnabled = false
-                button.backgroundColor = .black
-            } else {
-                button.letter = letter
+            // Go through the across array until we find a number larger than the current square.
+            // Since the array is sorted, we know that this is next largest number. Break if we've
+            // found it.
+            for x in acrossNumbers {
+                if x > num {
+                    // Depending on the string, we may need to add a 0 at the beginning
+                    if x < 10 {
+                        nextAcross = "0\(x)a"
+                    } else {
+                        nextAcross = "\(x)a"
+                    }
+                    break
+                }
+                // If we made it all the way though without finding a larger value, we don't have
+                // anymore across values. Therefore, switch orientation and simulate a tap to go
+                // to the first down.
+                else if x == acrossNumbers.max()! {
+                    across = false
+                    indexOfButton = 0
+                    nextPhraseButton.sendActions(for: .touchUpInside)
+                }
             }
             
-            // Grab the number in the string
-            number = gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator)]
+            // Go through the board spaces until the desired across location is found.
+            // Simulate a tap there.
+            for button in boardSpaces {
+                if button.across == nextAcross {
+                    button.sendActions(for: .touchUpInside)
+                    break
+                }
+            }
+        } else {
+            // Gets the number associated with the square
+            let downString = currentSquare.down
+            let downStart = downString!.startIndex
+            let num = Int(downString![downStart...downString!.index(after: downStart)])!
             
-            // If the number is a "-" then there should be no number in the top corner so set the label to an empty string
-            // Otherwise, set the label on the square to the corresponing number grabbed
-            if number == "-" {
-                button.superscriptLabel.text?.append("")
-            } else {
-                button.setSuperScriptLabel(number: String(number))
+            // Used to tell which button to tap next
+            var nextDown = ""
+            
+            // Go through the down array until we find a number larger than the current square.
+            // Since the array is sorted, we know that this is next largest number. Break if we've
+            // found it.
+            for x in downNumbers {
+                if x > num {
+                    // Depending on the string, we may need to add a 0 at the beginning
+                    if x < 10 {
+                        nextDown = "0\(x)d"
+                    } else {
+                        nextDown = "\(x)d"
+                    }
+                    break
+                }
+                // If we made it all the way though without finding a larger value, we don't have
+                // anymore down values. Therefore, switch orientation and simulate a tap to go
+                // to the first across.
+                else if x == downNumbers.max()! {
+                    across = true
+                    indexOfButton = 0
+                    nextPhraseButton.sendActions(for: .touchUpInside)
+                }
+            }
+            
+            // Go through the board spaces until the desired across location is found.
+            // Simulate a tap there.
+            for button in boardSpaces {
+                if button.down == nextDown {
+                    button.sendActions(for: .touchUpInside)
+                    break
+                }
+            }
+        }
+    }
+    
+    // Needed to communicate between the if/else
+    var jumpDown = ""
+    var jumpAcross = ""
+    
+    @IBAction func backPhraseButtonTapped(_ sender: Any) {
+        // Get the current space
+        let currentSquare = boardSpaces[indexOfButton]
+        
+        if across {
+            // Gets the number associated with the square
+            let acrossString = currentSquare.across
+            let acrossStart = acrossString!.startIndex
+            let num = Int(acrossString![acrossStart...acrossString!.index(after: acrossStart)])!
+            
+            // The next number we should go to
+            var nextAcross = ""
+            
+            // Initialize this as the max in the across array. Prevents an error in finding the lowest
+            // value from the array
+            var nextLowest = acrossNumbers.max()!
+            
+            // If request came from down square, use jump across to determine our landing spot
+            if jumpAcross != "" {
+                nextAcross = jumpAcross
+                jumpAcross = ""
+            }
                 
-                // If the next character is a number as well, append it to the space label (so we can represent 2 digit numbers)
-                if gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)] != "-" {
-                    button.superscriptLabel.text?.append(gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)])
+            // If request came from across square, figure out where to go next
+            else {
+                // Go through the across array until we find a square who is equal to current square.
+                for x in acrossNumbers {
+                    // If at 1 (lowest number possible in the game) we already know to jump to down.
+                    if num == 1 {
+                        across = false
+                        
+                        // Since we're going to down, find the highest down number and set our jump to
+                        // that square. Then execute the tap.
+                        if downNumbers.max()! > 10 {
+                            jumpDown = "\(downNumbers.max()!)d"
+                        } else {
+                            jumpDown = "0\(downNumbers.max()!)d"
+                        }
+                        backPhraseButton.sendActions(for: .touchUpInside)
+                    }
+                    // The request is to go to the next lowest across. Since we've been keeping
+                    // track of the number that is one lower than x, we can set that
+                    // as our next square to go to.
+                    else if x == num {
+                        if nextLowest < 10 {
+                            nextAcross = "0\(nextLowest)a"
+                        } else {
+                            nextAcross = "\(nextLowest)a"
+                        }
+                        break
+                    }
                     
-                    // Need serperate iterator because sometimes we need to take 2 from the string
-                    numbersIterator += 1
+                    // Holds our number lower than x
+                    nextLowest = x
+                }
+            }
+            
+            // Go through the board spaces until the desired across location is found.
+            // Simulate a tap there.
+            for button in boardSpaces {
+                if button.across == nextAcross {
+                    button.sendActions(for: .touchUpInside)
+                    break
+                }
+            }
+        } else {
+            // Gets the number associated with the square
+            let downString = currentSquare.down
+            let downStart = downString!.startIndex
+            let num = Int(downString![downStart...downString!.index(after: downStart)])!
+
+            // The next number we should go to
+            var nextDown = ""
+            
+            // Initialize this as the max in the down array. Prevents an error in finding the lowest
+            // value from the array
+            var nextLowest = downNumbers.max()!
+
+            // If request came from across square, use jump down to determine our landing spot
+            if jumpDown != "" {
+                nextDown = jumpDown
+                jumpDown = ""
+            }
+                
+            //If request came from across square, figure out where to go next
+            else {
+                // Go through the down array until we find a square who is equal to current square.
+                for x in downNumbers {
+                    // If at 1 (lowest number possible in the game) we already know to jump to across.
+                    if num == 1 {
+                        across = true
+                        
+                        // Since we're going to across, find the highest across number and set our jump to
+                        // that square. Then execute the tap.
+                        if acrossNumbers.max()! > 10 {
+                            jumpAcross = "\(acrossNumbers.max()!)a"
+                        } else {
+                            jumpAcross = "0\(acrossNumbers.max()!)a"
+                        }
+                        backPhraseButton.sendActions(for: .touchUpInside)
+                    }
+                        
+                    // The request is to go to the next lowest down. Since we've been keeping
+                    // track of the number that is one lower than x, we can set that
+                    // as our next square to go to.
+                    else if x == num {
+                        if x < 10 {
+                            nextDown = "0\(nextLowest)d"
+                        } else {
+                            nextDown = "\(nextLowest)d"
+                        }
+                        break
+                    }
+                    
+                    // Holds our number lower than x
+                    nextLowest = x
+                }
+            }
+            
+            // Go through the board spaces until the desired across location is found.
+            // Simulate a tap there.
+            for button in boardSpaces {
+                if button.down == nextDown {
+                    button.sendActions(for: .touchUpInside)
+                    break
+                }
+            }
+        }
+    }
+    
+    
+    var letter: Character!
+    @IBAction func keyboardButtonPressed(_ sender: UIButton) {
+        // Each key of the keyboard has a tag from 1-26. The tag tells which key was pressed.
+        // Keyboard is standard qwerty and tags start at Q(1) and end at M(26)
+        
+        switch sender.tag {
+        case 1:
+            letter = "q"
+        case 2:
+            letter = "w"
+        case 3:
+            letter = "e"
+        case 4:
+            letter = "r"
+        case 5:
+            letter = "t"
+        case 6:
+            letter = "y"
+        case 7:
+            letter = "u"
+        case 8:
+            letter = "i"
+        case 9:
+            letter = "o"
+        case 10:
+            letter = "p"
+        case 11:
+            letter = "a"
+        case 12:
+            letter = "s"
+        case 13:
+            letter = "d"
+        case 14:
+            letter = "f"
+        case 15:
+            letter = "g"
+        case 16:
+            letter = "h"
+        case 17:
+            letter = "j"
+        case 18:
+            letter = "k"
+        case 19:
+            letter = "l"
+        case 20:
+            letter = "z"
+        case 21:
+            letter = "x"
+        case 22:
+            letter = "c"
+        case 23:
+            letter = "v"
+        case 24:
+            letter = "b"
+        case 25:
+            letter = "n"
+        case 26:
+            letter = "m"
+        default:
+            letter = " "
+        }
+        
+        // Sets the board space to display the uppercase letter
+        boardSpaces[indexOfButton].setTitle(String(letter).uppercased(), for: .normal)
+        
+        // After each key press we should check if there is a correct answer. If there is,
+        // do the correct answer animation and jump to the next phrase.
+        if correctAnswerEntered() {
+            highlightCorrectAnswer()
+            nextPhraseButton.sendActions(for: .touchUpInside)
+            
+            // Return so we go to the first spot in the next phrase and not the second
+            return
+        }
+        
+        // If there was no correct answer, then move to the next spot in current orientation
+        if across {
+            moveToNextAcross()
+        } else {
+            moveToNextDown()
+        }
+    }
+    
+    func correctAnswerEntered() -> Bool {
+        // Checks the selected spaces with their assigned letters, if it determines that
+        // they are all correct returns true, otherwise returns false.
+        for space in selectedBoardSpaces {
+            if let userEntry = boardSpaces[space].title(for: .normal)?.lowercased() {
+                let entryToChar = Character(userEntry.lowercased())
+                if entryToChar == boardSpaces[space].letter {
+                    continue
+                } else {
+                    return false
                 }
                 
+            } else {
+                return false
+            }
+        }
+        return true
+    }
+    
+    func moveToNextAcross() {
+        // Checks bounds before movement
+        if indexOfButton < 168 {
+            boardSpaces[indexOfButton + 1].sendActions(for: .touchUpInside)
+        }
+        
+        // If we hit a disabled square or a square not part of an across go to next across phrase
+        if !boardSpaces[indexOfButton].isEnabled || boardSpaces[indexOfButton].across == "00a" {
+            // Gets previous location so we know where to go
+            let acrossString = boardSpaces[indexOfButton - 1].across!
+            let index = acrossString.index(acrossString.startIndex, offsetBy: 2)
+            let i = Int(acrossString[acrossString.startIndex..<index])!
+            
+            // Loop through our array containing all across number. Since the array is sorted,
+            // once we hit a number greater than the current one that's where we'll jump.
+            // If we ever hit a spot where we loop through the whole across array, we're going
+            // to flip the orientation to down and go to the first down.
+            var nextAcross = ""
+            for x in acrossNumbers {
+                if x > i {
+                    if x < 10 {
+                        nextAcross = "0\(x)a"
+                    } else {
+                        nextAcross = "\(x)a"
+                    }
+                    break
+                } else if x == acrossNumbers.max()! {
+                    let shouldGoDown = "0\(downNumbers.min()!)d"
+                    across = false
+                    for button in boardSpaces {
+                        if button.down == shouldGoDown {
+                            button.sendActions(for: .touchUpInside)
+                            break
+                        }
+                    }
+                }
             }
             
-            // The gameBoardDA is set up differently than the other two. Each space contains 6 characters in this format:
-            // 01a003d
-            // The first two numbers tell what number across it is apart of
-            // The a indicates across
-            // The second group of numbers tell what number down it is apart of
-            // The d indicates down
-            // The string looks like 00a00d00a00d01a01d etc.
-            // Every button is assigned a down/across string (disabled buttons assigned 00a00d)
-            
-            // Grabs a string of 6 characters
-            let startIndex = gameBoardDA.index(gameBoardDA.startIndex, offsetBy: DAIterator)
-            let endIndex = gameBoardDA.index(gameBoardDA.startIndex, offsetBy: DAIterator+5)
-            daString = String(gameBoardDA[startIndex...endIndex])
-            
-            // Splits in half, button's across property assigned first half and down property assigned second half
-            let midIndex = daString.index(daString.startIndex, offsetBy: 3)
-            button.across = String(daString[..<midIndex])
-            button.down = String(daString[midIndex..<daString.endIndex])
-            
-            // Increase the iterators. DA iterator increases 6 since it has a greater length than the other strings
-            numbersIterator += 1
-            letterIterator += 1
-            DAIterator += 6
+            // Go through the board spaces until the desired across location is found.
+            // Simulate a tap there.
+            for button in boardSpaces {
+                if button.across == nextAcross {
+                    button.sendActions(for: .touchUpInside)
+                    break
+                }
+            }
         }
+    }
+    
+    func moveToNextDown() {
+        
+        // Bounds check
+        var outOfBounds = false
+        if indexOfButton + 13 > 168 {
+            outOfBounds = true
+        }
+        
+        if !outOfBounds {
+            boardSpaces[indexOfButton + 13].sendActions(for: .touchUpInside)
+            across = false
+        }
+        
+        // Loop through our array containing all down number. Since the array is sorted,
+        // once we hit a number greater than the current one that's where we'll jump.
+        // If we ever hit a spot where we loop through the whole down array, we're going
+        // to flip the orientation to across and go to the first across.
+        if outOfBounds || !boardSpaces[indexOfButton].isEnabled || boardSpaces[indexOfButton].down == "00d" {
+            let downString = boardSpaces[indexOfButton - 13].down!
+            let index = downString.index(downString.startIndex, offsetBy: 2)
+            let i = Int(downString[downString.startIndex..<index])!
+            
+            var nextDown = ""
+            for x in downNumbers {
+                if x > i {
+                    if x < 10 {
+                        nextDown = "0\(x)d"
+                    } else {
+                        nextDown = "\(x)d"
+                    }
+                    break
+                } else if x == downNumbers.max()! {
+                    let shouldGoAcross = "0\(acrossNumbers.min()!)d"
+                    across = true
+                    for button in boardSpaces {
+                        if button.down == shouldGoAcross {
+                            button.sendActions(for: .touchUpInside)
+                            break
+                        }
+                    }
+                }
+            }
+            
+            // Go through the board spaces until the desired across location is found.
+            // Simulate a tap there.
+            for button in boardSpaces {
+                if button.down == nextDown {
+                    button.sendActions(for: .touchUpInside)
+                    break
+                }
+            }
+        }
+    }
+    
+     /*****************************************
+     *                                        *
+     *               Highlighting             *
+     *                                        *
+     *****************************************/
+    func highlight(selectedSpaces: [Int], atSquare: Int, prevSquare: Int) {
+        
+        // Sets the border for the spaces
+        for i in selectedSpaces {
+            // CAShapeLayer allows us to put the border outside of the button, giving the button more space
+            let border = CAShapeLayer()
+            
+            // Give the layer a name so we can remove it when it shouldn't be highlighted
+            border.name = "BORDER"
+            
+            // Sets the properties of the border
+            switch screenSize.height{
+            case 568:
+                border.frame = CGRect(x: 0, y: 0, width: 21, height: 21)
+            case 667:
+                border.frame = CGRect(x: 0, y: 0, width: 26, height: 26)
+            case 736:
+                border.frame = CGRect(x: 0, y: 0, width: 29, height: 30)
+            case 812:
+                border.frame = CGRect(x: 0, y: 0, width: 25, height: 28)
+            default:
+                border.frame = boardSpaces[i].bounds
+            }
+            border.lineWidth = 2.5
+            border.path = UIBezierPath(roundedRect: border.bounds, cornerRadius:3).cgPath
+            border.fillColor = UIColor.clear.cgColor
+            border.strokeColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
+            self.boardSpaces[i].layer.addSublayer(border)
+        }
+        
+        // Gives the selected button a pulsing animation
+        if atSquare != prevSquare {
+            let pulse = CABasicAnimation(keyPath: "transform.scale")
+            pulse.duration = 1.2
+            pulse.autoreverses = true
+            pulse.repeatCount = .infinity
+            pulse.fromValue = 1
+            pulse.toValue = 1.25
+            self.boardSpaces[atSquare].layer.add(pulse, forKey: "")
+            boardSpaces[atSquare].layer.zPosition = 10
+        }
+    }
+    
+    func highlightCorrectAnswer() {
+        // Sets the border for the spaces
+        for i in selectedBoardSpaces {
+            // CAShapeLayer allows us to put the border outside of the button, giving the button more space
+            let border = CAShapeLayer()
+            
+            // Sets the properties of the border
+            switch screenSize.height{
+            case 568:
+                border.frame = CGRect(x: 0, y: 0, width: 21, height: 21)
+            case 667:
+                border.frame = CGRect(x: 0, y: 0, width: 26, height: 26)
+            case 736:
+                border.frame = CGRect(x: 0, y: 0, width: 29, height: 30)
+            case 812:
+                border.frame = CGRect(x: 0, y: 0, width: 25, height: 28)
+            default:
+                border.frame = boardSpaces[i].bounds
+            }
 
+            
+            // Width is 0 since we don't want a border left over after the animation
+            border.lineWidth = 0
+            border.path = UIBezierPath(roundedRect: border.bounds, cornerRadius:3).cgPath
+            border.fillColor = UIColor.clear.cgColor
+            border.strokeColor = UIColor.green.cgColor
+            
+            self.boardSpaces[i].layer.addSublayer(border)
+            
+            // Animation to be played on the border. Grows quickly then shrinks.
+            let animation = CABasicAnimation(keyPath: "lineWidth")
+            animation.duration = 0.45
+            animation.fromValue = 0
+            animation.toValue = 4
+            animation.autoreverses = true
+            border.add(animation, forKey: "")
+            border.zPosition = 10
+        }
+    }
+    
+    func determineDirectionText(indexOfButton: Int) {
+        // This text is displayed in the clue bar. Extra indicator of where the user is and what
+        // direction they are currently inputting text for.
+        // eg Displays "1↓" for one down
+        
+        var number: Int
+        var direction: Character
+        
+        // Grabs information from the current square. Current orientation determines which info
+        // should be grabbed.
+        if across {
+            let acrossString = boardSpaces[indexOfButton].across
+            let acrossStringStart = acrossString?.startIndex
+            let acrossStringEnd = acrossString?.endIndex
+            
+            number = Int(acrossString![acrossStringStart!...acrossString!.index(after: acrossStringStart!)])!
+            direction = acrossString![(acrossString?.index(before: acrossStringEnd!))!]
+        } else {
+            let downString = boardSpaces[indexOfButton].down
+            let downStart = downString?.startIndex
+            let downEnd = downString?.endIndex
+            
+            number = Int(downString![downStart!...downString!.index(after: downStart!)])!
+            direction = downString![(downString?.index(before: downEnd!))!]
+        }
+        
+        // Start creating our label with the number of the across or down
+        var directionLabelText = String(number)
+        
+        // Append the arrow to string we're going to set
+        if direction == "a" {
+            directionLabelText.append("→")
+        } else {
+            directionLabelText.append("↓")
+        }
+        
+        // Set the label
+        directionLabel.text = directionLabelText
     }
     
     func rowAndColumnDetermination(indexOfButton: Int) {
@@ -241,7 +907,7 @@ class GameViewController: UIViewController {
         
         // Empty array containing previous board spaces
         selectedBoardSpaces.removeAll(keepingCapacity: false)
-
+        
         // Sets the initial highlight based on what path it is included in
         // If there is no down then automatically switch to across
         // If there is no across, automatically switch to down
@@ -308,7 +974,7 @@ class GameViewController: UIViewController {
                 i += 1
             }
         }
-        
+            
         else {
             // Used to check if we hit the top or bottom of a column
             var topOfColumn: Bool
@@ -356,9 +1022,6 @@ class GameViewController: UIViewController {
             }
         }
         
-        // Set the label of the
-        clueLabel.text = getClue(indexOfButton: indexOfButton)
-        
         // Highlight the row or column selected
         if indexOfButton != previousButton {
             self.boardSpaces[previousButton].layer.removeAllAnimations()
@@ -372,6 +1035,57 @@ class GameViewController: UIViewController {
         
         // Holds previous spaces to manage highlighting when user taps the same button
         previousSpaces = selectedBoardSpaces
+    }
+    
+    
+     /*****************************************
+     *                                        *
+     *               PLIST READING            *
+     *                                        *
+     *****************************************/
+    
+    // Read from plist containing clues/phrases/hints
+    func getArrayFromPlist(name: String) -> (Array<Dictionary<String, String>>) {
+        // Path to the plist
+        let path = Bundle.main.path(forResource: name, ofType: "plist")
+        
+        // Array to store information from plist
+        var arr: NSArray?
+        
+        // Set array with information from the plist
+        arr = NSArray(contentsOfFile: path!)
+        
+        // Return the array to be filtered
+        return (arr as? Array<Dictionary<String, String>>)!
+    }
+    
+    // Gets information for the given phrase (clue, hint, # of words)
+    // Returns them as an array of dictionaries
+    func getClueForPhrase(phrase: String) -> (Array<[String:String]>) {
+        // Gets information from the plist
+        let array = getArrayFromPlist(name: "emojis")
+        
+        // This is the phrase we want to find
+        let phrasePredicate = NSPredicate(format: "Phrase = %@", phrase)
+        
+        // Filter and return all info related to phrase
+        return [array.filter {phrasePredicate.evaluate(with: $0)}[0]]
+    }
+    
+    func getLevelFromPlist(level: Int) -> (Array<Dictionary<String, String>>) {
+        let name = "level_\(level)"
+        
+        // Path to the plist
+        let path = Bundle.main.path(forResource: name, ofType: "plist")
+        
+        // Array to store information from plist
+        var arr: NSArray?
+        
+        // Set array with information from the plist
+        arr = NSArray(contentsOfFile: path!)
+        
+        // Return the array to be filtered
+        return (arr as? Array<Dictionary<String, String>>)!
     }
     
     func getClue(indexOfButton: Int) -> String {
@@ -433,95 +1147,51 @@ class GameViewController: UIViewController {
         return ""
     }
     
-    
-    /* HIGHLIGHTING SELECTION */
-    func highlight(selectedSpaces: [Int], atSquare: Int, prevSquare: Int) {
-        
-        // Sets the border for the spaces
-        for i in selectedSpaces {
-            // CAShapeLayer allows us to put the border outside of the button, giving the button more space
-            let border = CAShapeLayer()
-            
-            // Give the layer a name so we can remove it when it shouldn't be highlighted
-            border.name = "BORDER"
-            
-            // Sets the properties of the border
-            border.frame = boardSpaces[i].bounds
-            border.lineWidth = 2.5
-            border.path = UIBezierPath(roundedRect: border.bounds, cornerRadius:3).cgPath
-            border.fillColor = UIColor.clear.cgColor
-            border.strokeColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor            
-            self.boardSpaces[i].layer.addSublayer(border)
+    func fillAcrossDownArrays() {
+        // Grab across and down numbers from the plist and append them to the array
+        for i in 1..<getLevelFromPlist(level: userLevel).count {
+            let ac = getLevelFromPlist(level: userLevel)[i]["Across"]!
+            let down = getLevelFromPlist(level: userLevel)[i]["Down"]!
+            if ac != "" {
+                acrossNumbers.append(Int(ac)!)
+            }
+            if down != "" {
+                downNumbers.append(Int(down)!)
+            }
         }
         
-        // Gives the selected button a pulsing animation
-        if atSquare != prevSquare {
-            let pulse = CABasicAnimation(keyPath: "transform.scale")
-            pulse.duration = 1.2
-            pulse.autoreverses = true
-            pulse.repeatCount = .infinity
-            pulse.fromValue = 1
-            pulse.toValue = 1.25
-            self.boardSpaces[atSquare].layer.add(pulse, forKey: "")
-            boardSpaces[atSquare].layer.zPosition = 1
-        }
-    }
-    
-    
-    /* PLIST READING */
-    
-    // Read from plist containing clues/phrases/hints
-    func getArrayFromPlist(name: String) -> (Array<Dictionary<String, String>>) {
-        // Path to the plist
-        let path = Bundle.main.path(forResource: name, ofType: "plist")
-        
-        // Array to store information from plist
-        var arr: NSArray?
-        
-        // Set array with information from the plist
-        arr = NSArray(contentsOfFile: path!)
-        
-        // Return the array to be filtered
-        return (arr as? Array<Dictionary<String, String>>)!
-    }
-    
-    // Gets information for the given phrase (clue, hint, # of words)
-    // Returns them as an array of dictionaries
-    func getClueForPhrase(phrase: String) -> (Array<[String:String]>) {
-        // Gets information from the plist
-        let array = getArrayFromPlist(name: "emojis")
-        
-        // This is the phrase we want to find
-        let phrasePredicate = NSPredicate(format: "Phrase = %@", phrase)
-        
-        // Filter and return all info related to phrase
-        return [array.filter {phrasePredicate.evaluate(with: $0)}[0]]
-    }
-    
-    func getLevelFromPlist(level: Int) -> (Array<Dictionary<String, String>>) {
-        let name = "level_\(level)"
-        
-        // Path to the plist
-        let path = Bundle.main.path(forResource: name, ofType: "plist")
-        
-        // Array to store information from plist
-        var arr: NSArray?
-        
-        // Set array with information from the plist
-        arr = NSArray(contentsOfFile: path!)
-        
-        // Return the array to be filtered
-        return (arr as? Array<Dictionary<String, String>>)!
+        // Sort the arrays from lowest to highest
+        acrossNumbers.sort()
+        downNumbers.sort()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // This is the board that needs to be set up
+        // board[1] contains the letters
+        // board[2] contains numbers indication across/down
+        // board[3] contains across/down for each individual square
         let board = [getLevelFromPlist(level: userLevel)[1]["Board"]!,
                      getLevelFromPlist(level: userLevel)[2]["Board"]!,
                      getLevelFromPlist(level: userLevel)[3]["Board"]!]
         
+        fillAcrossDownArrays()
+        clueAreaSetup()
         setUpBoard(board: board)
+        
+        // Start the user on whatever 1 is available (prefers 1 across)
+        for button in boardSpaces {
+            // If there is no 1 across, start vertical
+            if button.across == "01a" || button.down == "01d" {
+                if button.down == "01d" && button.across != "01a" {
+                    across = false
+                }
+                
+                button.sendActions(for: .touchUpInside)
+                break
+            }
+        }
+        
     }
 }
