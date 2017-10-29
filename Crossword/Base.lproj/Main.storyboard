@@ -413,7 +413,7 @@
                                                     <action selector="boardButtonTapped:" destination="CQO-aK-gww" eventType="touchUpInside" id="SoM-Cb-RU5"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" tag="103" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="neP-x8-Ue1" customClass="BoardButton" customModule="Crossword" customModuleProvider="target">
+                                            <button opaque="NO" tag="103" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="neP-x8-Ue1" customClass="BoardButton" customModule="Crossword" customModuleProvider="target">
                                                 <rect key="frame" x="57" y="0.0" width="26" height="27"/>
                                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <connections>

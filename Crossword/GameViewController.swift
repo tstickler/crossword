@@ -181,6 +181,7 @@ class GameViewController: UIViewController {
             // Otherwise, assign the letter to the square
             if letter == "-" {
                 button.isEnabled = false
+                button.letter = "-"
                 button.backgroundColor = .black
                 button.allowsTouch = false
             } else {
@@ -626,11 +627,18 @@ class GameViewController: UIViewController {
         boardSpaces[indexOfButton].setTitle(String(letter).uppercased(), for: .normal)
         
         // After each key press we should check if there is a correct answer. If there is,
-        // do the correct answer animation and jump to the next phrase.
+        // check if the user has entered all the right answers. If they have, end the game.
+        // Otherwise, skip to the next square.
         if correctAnswerEntered() {
             highlightCorrectAnswer()
-            nextPhraseButton.sendActions(for: .touchUpInside)
             
+            if gameOver() {
+                clueLabel.textColor = .white
+                clueLabel.text = "Game Over"
+                return
+            } else {
+                nextPhraseButton.sendActions(for: .touchUpInside)
+            }
             // Return so we go to the first spot in the next phrase and not the second
             return
         }
@@ -643,6 +651,40 @@ class GameViewController: UIViewController {
         }
     }
     
+    func gameOver() -> Bool {
+        
+        for space in boardSpaces {
+            // Each inactive space is assigned a "-" as their letter.
+            // Check if all the buttons that can be tapped have non-nil values.
+            // If there is still a nil value, there is an open board space, which
+            // means the game is not over.
+            if space.title(for: .normal) == nil && space.letter! != "-" {
+                return false
+            } else {
+                if var spaceTitle = space.title(for: .normal) {
+                    // Letters are stored lowercase while titles are displayed as uppercase.
+                    // Lowercase the title so we can compare it with the stored letter.
+                    spaceTitle = spaceTitle.lowercased()
+                    
+                    // Nothing needs to happen if the letters match or we're at a inactive square.
+                    // Just continue the loop
+                    if Character(spaceTitle) == space.letter! || space.letter! == "-" {
+                        /* nothing needs to happen */
+                    }
+                    else {
+                        // If the user entered a wrong answer, then the game is not over
+                        return false
+                    }
+                }
+
+            }
+        }
+        
+        // If we made it all the way through the board spaces without returning false
+        // then the user has finished the game.
+        return true
+    }
+    
     func correctAnswerEntered() -> Bool {
         // Checks the selected spaces with their assigned letters, if it determines that
         // they are all correct returns true, otherwise returns false.
@@ -650,11 +692,10 @@ class GameViewController: UIViewController {
             if let userEntry = boardSpaces[space].title(for: .normal)?.lowercased() {
                 let entryToChar = Character(userEntry.lowercased())
                 if entryToChar == boardSpaces[space].letter {
-                    continue
+                    /* nothing needs to happen */
                 } else {
                     return false
                 }
-                
             } else {
                 return false
             }
@@ -809,7 +850,7 @@ class GameViewController: UIViewController {
             pulse.fromValue = 1
             pulse.toValue = 1.25
             self.boardSpaces[atSquare].layer.add(pulse, forKey: "")
-            boardSpaces[atSquare].layer.zPosition = 10
+            boardSpaces[atSquare].layer.zPosition = CGFloat.greatestFiniteMagnitude
         }
     }
     
@@ -1072,7 +1113,7 @@ class GameViewController: UIViewController {
         return [array.filter {phrasePredicate.evaluate(with: $0)}[0]]
     }
     
-    func getLevelFromPlist(level: Int) -> (Array<Dictionary<String, String>>) {
+    func getInfoFromPlist(level: Int) -> (Array<Dictionary<String, String>>) {
         let name = "level_\(level)"
         
         // Path to the plist
@@ -1111,8 +1152,8 @@ class GameViewController: UIViewController {
                 // Since our plist is set up with Phrase/Clue/Hint/Across/Down all in the
                 // same index, we can use the index where we found our across number to get
                 // the corresponding clue
-                if getLevelFromPlist(level: userLevel)[i]["Across"] == numAcross {
-                    return getLevelFromPlist(level: userLevel)[i]["Clue"]!
+                if getInfoFromPlist(level: userLevel)[i]["Across"] == numAcross {
+                    return getInfoFromPlist(level: userLevel)[i]["Clue"]!
                 }
                 i += 1
             }
@@ -1136,8 +1177,8 @@ class GameViewController: UIViewController {
             // same index, we can use the index where we found our down number to get
             // the corresponding clue
             while i < 17 {
-                if getLevelFromPlist(level: userLevel)[i]["Down"] == numDown {
-                    return getLevelFromPlist(level: userLevel)[i]["Clue"]!
+                if getInfoFromPlist(level: userLevel)[i]["Down"] == numDown {
+                    return getInfoFromPlist(level: userLevel)[i]["Clue"]!
                 }
                 i += 1
             }
@@ -1149,9 +1190,9 @@ class GameViewController: UIViewController {
     
     func fillAcrossDownArrays() {
         // Grab across and down numbers from the plist and append them to the array
-        for i in 1..<getLevelFromPlist(level: userLevel).count {
-            let ac = getLevelFromPlist(level: userLevel)[i]["Across"]!
-            let down = getLevelFromPlist(level: userLevel)[i]["Down"]!
+        for i in 1..<getInfoFromPlist(level: userLevel).count {
+            let ac = getInfoFromPlist(level: userLevel)[i]["Across"]!
+            let down = getInfoFromPlist(level: userLevel)[i]["Down"]!
             if ac != "" {
                 acrossNumbers.append(Int(ac)!)
             }
@@ -1172,9 +1213,9 @@ class GameViewController: UIViewController {
         // board[1] contains the letters
         // board[2] contains numbers indication across/down
         // board[3] contains across/down for each individual square
-        let board = [getLevelFromPlist(level: userLevel)[1]["Board"]!,
-                     getLevelFromPlist(level: userLevel)[2]["Board"]!,
-                     getLevelFromPlist(level: userLevel)[3]["Board"]!]
+        let board = [getInfoFromPlist(level: userLevel)[1]["Board"]!,
+                     getInfoFromPlist(level: userLevel)[2]["Board"]!,
+                     getInfoFromPlist(level: userLevel)[3]["Board"]!]
         
         fillAcrossDownArrays()
         clueAreaSetup()
