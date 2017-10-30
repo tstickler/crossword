@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  GameViewController.swift
 //  Crossword
 //
 //  Created by Tyler Stickler on 10/20/17.
@@ -9,7 +9,7 @@
 import UIKit
 
 class GameViewController: UIViewController {
-    // Used tp determine which phone the user has
+    // Used to determine which phone the user has
     let screenSize = UIScreen.main.bounds
     
     var selectedBoardSpaces = [Int]()
@@ -18,6 +18,10 @@ class GameViewController: UIViewController {
     var indexOfButton: Int!
     var acrossNumbers = [Int]()
     var downNumbers = [Int]()
+    
+    // UI colors
+    let blueColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1)
+    let blueColorCG = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
 
     // Hides the status bar in game so there is more room for the board
     override var prefersStatusBarHidden: Bool {
@@ -67,8 +71,8 @@ class GameViewController: UIViewController {
             middleKeysHeight.constant = iphoneSEkeysHeight
             bottomKeysHeight.constant = iphoneSEkeysHeight
             
-            bottomRowLeading.constant = iphoneSEkeysHeight
-            bottomRowTrailing.constant = iphoneSEkeysHeight
+            bottomRowLeading.constant = 45
+            bottomRowTrailing.constant = 45
         // Sets constraints for iPhone and iPhone X
         case 667:
             topKeysHeight.constant = iphoneKeysHeight
@@ -137,17 +141,17 @@ class GameViewController: UIViewController {
         // Set border width, shape, and color for the clue label and advancement buttons
         clueLabel.layer.borderWidth = 2
         clueLabel.layer.cornerRadius = 10
-        clueLabel.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
+        clueLabel.layer.borderColor = blueColorCG
         
         nextPhraseButton.layer.borderWidth = 1
         nextPhraseButton.layer.cornerRadius = 4
         nextPhraseButton.layer.borderColor = UIColor.white.cgColor
-        nextPhraseButton.setTitleColor(UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1), for: .normal)
+        nextPhraseButton.setTitleColor(blueColor, for: .normal)
         
         backPhraseButton.layer.borderWidth = 1
         backPhraseButton.layer.cornerRadius = 4
         backPhraseButton.layer.borderColor = UIColor.white.cgColor
-        backPhraseButton.setTitleColor(UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1), for: .normal)
+        backPhraseButton.setTitleColor(blueColor, for: .normal)
     }
     
     func giveBoardSpacesProperties(board: [String]) {
@@ -183,10 +187,8 @@ class GameViewController: UIViewController {
                 button.isEnabled = false
                 button.letter = "-"
                 button.backgroundColor = .black
-                button.allowsTouch = false
             } else {
                 button.letter = letter
-                button.allowsTouch = true
             }
             
             // Grab the number in the string
@@ -233,7 +235,6 @@ class GameViewController: UIViewController {
             letterIterator += 1
             DAIterator += 6
         }
-        
     }
     
     
@@ -364,11 +365,11 @@ class GameViewController: UIViewController {
                         nextAcross = "\(x)a"
                     }
                     break
-                }
-                // If we made it all the way though without finding a larger value, we don't have
-                // anymore across values. Therefore, switch orientation and simulate a tap to go
-                // to the first down.
-                else if x == acrossNumbers.max()! {
+                } else if x == acrossNumbers.max()! {
+                    // If we made it all the way though without finding a larger value, we don't have
+                    // anymore across values. Therefore, switch orientation and simulate a tap to go
+                    // to the first down.
+
                     across = false
                     indexOfButton = 0
                     nextPhraseButton.sendActions(for: .touchUpInside)
@@ -424,6 +425,15 @@ class GameViewController: UIViewController {
                 }
             }
         }
+        
+        // Skip filled squares
+        if boardSpaces[indexOfButton].currentTitle != nil {
+            if across {
+                moveToNextAcross()
+            } else {
+                moveToNextDown()
+            }
+        }
     }
     
     // Needed to communicate between the if/else
@@ -451,10 +461,8 @@ class GameViewController: UIViewController {
             if jumpAcross != "" {
                 nextAcross = jumpAcross
                 jumpAcross = ""
-            }
-                
-            // If request came from across square, figure out where to go next
-            else {
+            } else {
+                // If request came from across square, figure out where to go next
                 // Go through the across array until we find a square who is equal to current square.
                 for x in acrossNumbers {
                     // If at 1 (lowest number possible in the game) we already know to jump to down.
@@ -469,11 +477,11 @@ class GameViewController: UIViewController {
                             jumpDown = "0\(downNumbers.max()!)d"
                         }
                         backPhraseButton.sendActions(for: .touchUpInside)
-                    }
-                    // The request is to go to the next lowest across. Since we've been keeping
-                    // track of the number that is one lower than x, we can set that
-                    // as our next square to go to.
-                    else if x == num {
+                    } else if x == num {
+                        // The request is to go to the next lowest across. Since we've been keeping
+                        // track of the number that is one lower than x, we can set that
+                        // as our next square to go to.
+
                         if nextLowest < 10 {
                             nextAcross = "0\(nextLowest)a"
                         } else {
@@ -512,10 +520,8 @@ class GameViewController: UIViewController {
             if jumpDown != "" {
                 nextDown = jumpDown
                 jumpDown = ""
-            }
-                
-            //If request came from across square, figure out where to go next
-            else {
+            } else {
+                //If request came from across square, figure out where to go next
                 // Go through the down array until we find a square who is equal to current square.
                 for x in downNumbers {
                     // If at 1 (lowest number possible in the game) we already know to jump to across.
@@ -530,12 +536,11 @@ class GameViewController: UIViewController {
                             jumpAcross = "0\(acrossNumbers.max()!)a"
                         }
                         backPhraseButton.sendActions(for: .touchUpInside)
-                    }
-                        
-                    // The request is to go to the next lowest down. Since we've been keeping
-                    // track of the number that is one lower than x, we can set that
-                    // as our next square to go to.
-                    else if x == num {
+                    } else if x == num {
+                        // The request is to go to the next lowest down. Since we've been keeping
+                        // track of the number that is one lower than x, we can set that
+                        // as our next square to go to.
+
                         if x < 10 {
                             nextDown = "0\(nextLowest)d"
                         } else {
@@ -556,6 +561,15 @@ class GameViewController: UIViewController {
                     button.sendActions(for: .touchUpInside)
                     break
                 }
+            }
+        }
+        
+        // Skip filled squares
+        if boardSpaces[indexOfButton].currentTitle != nil {
+            if across {
+                moveToNextAcross()
+            } else {
+                moveToNextDown()
             }
         }
     }
@@ -623,8 +637,12 @@ class GameViewController: UIViewController {
             letter = " "
         }
         
-        // Sets the board space to display the uppercase letter
-        boardSpaces[indexOfButton].setTitle(String(letter).uppercased(), for: .normal)
+        // Sets the board space to display the uppercase letter if the space isn't locked
+        if !boardSpaces[indexOfButton].lockedForCorrectAnswer {
+            boardSpaces[indexOfButton].setTitle(String(letter).uppercased(), for: .normal)
+        } else {
+            return
+        }
         
         // After each key press we should check if there is a correct answer. If there is,
         // check if the user has entered all the right answers. If they have, end the game.
@@ -670,8 +688,7 @@ class GameViewController: UIViewController {
                     // Just continue the loop
                     if Character(spaceTitle) == space.letter! || space.letter! == "-" {
                         /* nothing needs to happen */
-                    }
-                    else {
+                    } else {
                         // If the user entered a wrong answer, then the game is not over
                         return false
                     }
@@ -699,6 +716,11 @@ class GameViewController: UIViewController {
             } else {
                 return false
             }
+        }
+        
+        // Disallow changing of letters after correct answer entered
+        for space in selectedBoardSpaces {
+            boardSpaces[space].lockedForCorrectAnswer = true
         }
         return true
     }
@@ -749,6 +771,11 @@ class GameViewController: UIViewController {
                     break
                 }
             }
+        }
+        
+        // Skip filled squares
+        if boardSpaces[indexOfButton].currentTitle != nil {
+            moveToNextAcross()
         }
     }
     
@@ -804,6 +831,11 @@ class GameViewController: UIViewController {
                 }
             }
         }
+        
+        // Skip filled squares
+        if boardSpaces[indexOfButton].currentTitle != nil {
+            moveToNextDown()
+        }
     }
     
      /*****************************************
@@ -837,7 +869,7 @@ class GameViewController: UIViewController {
             border.lineWidth = 2.5
             border.path = UIBezierPath(roundedRect: border.bounds, cornerRadius:3).cgPath
             border.fillColor = UIColor.clear.cgColor
-            border.strokeColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
+            border.strokeColor = blueColorCG
             self.boardSpaces[i].layer.addSublayer(border)
         }
         
@@ -850,7 +882,7 @@ class GameViewController: UIViewController {
             pulse.fromValue = 1
             pulse.toValue = 1.25
             self.boardSpaces[atSquare].layer.add(pulse, forKey: "")
-            boardSpaces[atSquare].layer.zPosition = CGFloat.greatestFiniteMagnitude
+            boardSpaces[atSquare].layer.zPosition = 1000
         }
     }
     
@@ -874,7 +906,6 @@ class GameViewController: UIViewController {
                 border.frame = boardSpaces[i].bounds
             }
 
-            
             // Width is 0 since we don't want a border left over after the animation
             border.lineWidth = 0
             border.path = UIBezierPath(roundedRect: border.bounds, cornerRadius:3).cgPath
@@ -890,7 +921,7 @@ class GameViewController: UIViewController {
             animation.toValue = 4
             animation.autoreverses = true
             border.add(animation, forKey: "")
-            border.zPosition = 10
+            border.zPosition = 1000
         }
     }
     
@@ -1014,9 +1045,7 @@ class GameViewController: UIViewController {
                 }
                 i += 1
             }
-        }
-            
-        else {
+        } else {
             // Used to check if we hit the top or bottom of a column
             var topOfColumn: Bool
             var bottomOfColumn: Bool
@@ -1078,6 +1107,21 @@ class GameViewController: UIViewController {
         previousSpaces = selectedBoardSpaces
     }
     
+    func initialHighlight() {
+        // Start the user on whatever 1 is available (prefers 1 across)
+        for button in boardSpaces {
+            // If there is no 1 across, start vertical
+            if button.across == "01a" || button.down == "01d" {
+                if button.down == "01d" && button.across != "01a" {
+                    across = false
+                }
+                
+                button.sendActions(for: .touchUpInside)
+                break
+            }
+        }
+    }
+    
     
      /*****************************************
      *                                        *
@@ -1114,19 +1158,19 @@ class GameViewController: UIViewController {
     }
     
     func getInfoFromPlist(level: Int) -> (Array<Dictionary<String, String>>) {
-        let name = "level_\(level)"
+        let levelName = "level_\(level)"
         
         // Path to the plist
-        let path = Bundle.main.path(forResource: name, ofType: "plist")
+        let path = Bundle.main.path(forResource: levelName, ofType: "plist")
         
         // Array to store information from plist
-        var arr: NSArray?
+        var storedInfoArray: NSArray?
         
         // Set array with information from the plist
-        arr = NSArray(contentsOfFile: path!)
+        storedInfoArray = NSArray(contentsOfFile: path!)
         
         // Return the array to be filtered
-        return (arr as? Array<Dictionary<String, String>>)!
+        return (storedInfoArray as? Array<Dictionary<String, String>>)!
     }
     
     func getClue(indexOfButton: Int) -> String {
@@ -1157,9 +1201,9 @@ class GameViewController: UIViewController {
                 }
                 i += 1
             }
-        }
+        } else {
             // If we are currently looking for down, get the down clue associated with the square
-        else {
+
             // Grab down variable to determine where in the plist we should look
             // Remember, the down string is in the form 00d, with the numbers being
             // the related down
@@ -1210,29 +1254,17 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         // This is the board that needs to be set up
-        // board[1] contains the letters
-        // board[2] contains numbers indication across/down
-        // board[3] contains across/down for each individual square
+        // board[1] contains the letters in their locations
+        // board[2] contains numbers superscripts for across/down
+        // board[3] contains across/down information for each individual square
         let board = [getInfoFromPlist(level: userLevel)[1]["Board"]!,
                      getInfoFromPlist(level: userLevel)[2]["Board"]!,
                      getInfoFromPlist(level: userLevel)[3]["Board"]!]
         
+        // Set everything up
         fillAcrossDownArrays()
         clueAreaSetup()
         setUpBoard(board: board)
-        
-        // Start the user on whatever 1 is available (prefers 1 across)
-        for button in boardSpaces {
-            // If there is no 1 across, start vertical
-            if button.across == "01a" || button.down == "01d" {
-                if button.down == "01d" && button.across != "01a" {
-                    across = false
-                }
-                
-                button.sendActions(for: .touchUpInside)
-                break
-            }
-        }
-        
+        initialHighlight()
     }
 }

@@ -13,10 +13,10 @@ class BoardButton: UIButton {
     var across: String!
     var down: String!
     var superscriptLabel = UILabel()
+    var lockedForCorrectAnswer = false
     var shouldShowHint = false
-    var allowsTouch: Bool!
     
-    var cons = [NSLayoutConstraint]()
+    var numberConstraints = [NSLayoutConstraint]()
     
     // Adds number superscript to idicate beginning of phrase
     func setSuperScriptLabel(number: String) {
@@ -26,10 +26,11 @@ class BoardButton: UIButton {
         superscriptLabel.text = number
         superscriptLabel.font = superscriptLabel.font.withSize(7)
         
-        cons.append(NSLayoutConstraint(item: self.superscriptLabel, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 1))
+        // Put the number on the top  left corner
+        numberConstraints.append(NSLayoutConstraint(item: self.superscriptLabel, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 1))
 
-        cons.append(NSLayoutConstraint(item: self.superscriptLabel, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 1))
+        numberConstraints.append(NSLayoutConstraint(item: self.superscriptLabel, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 1))
 
-        NSLayoutConstraint.activate(cons)
+        NSLayoutConstraint.activate(numberConstraints)
     }
 }
