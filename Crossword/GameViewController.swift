@@ -11,7 +11,7 @@ import UIKit
 class GameViewController: UIViewController {
     // Used to determine which phone the user has
     let screenSize = UIScreen.main.bounds
-    
+        
     var selectedBoardSpaces = [Int]()
     var across = true
     var userLevel = 1
@@ -130,7 +130,7 @@ class GameViewController: UIViewController {
             button.setTitleColor(.black, for: .normal)
             
             // Give buttons a nice rounded corner
-            button.layer.cornerRadius = 4
+            button.layer.cornerRadius = 2
         }
         
         // Gives each space on the board specific properties depending on how the board is arranged
@@ -306,7 +306,7 @@ class GameViewController: UIViewController {
         let currentSquareTitle = boardSpaces[indexOfButton].title(for: .normal)
         
         // If the square has text, erase it and stay there
-        if currentSquareTitle != nil {
+        if currentSquareTitle != nil && boardSpaces[indexOfButton].lockedForCorrectAnswer == false{
             boardSpaces[indexOfButton].setTitle(nil, for: .normal)
         } else {
             // Otherwise, if the square is empty see if we're at the beginning of
@@ -333,7 +333,9 @@ class GameViewController: UIViewController {
             }
             
             // Erase the selected square
-            boardSpaces[indexOfButton].setTitle(nil, for: .normal)
+            if boardSpaces[indexOfButton].lockedForCorrectAnswer == false {
+                boardSpaces[indexOfButton].setTitle(nil, for: .normal)
+            }
         }
         
         
@@ -634,7 +636,7 @@ class GameViewController: UIViewController {
         case 26:
             letter = "m"
         default:
-            letter = " "
+            letter = nil
         }
         
         // Sets the board space to display the uppercase letter if the space isn't locked
@@ -648,6 +650,7 @@ class GameViewController: UIViewController {
         // check if the user has entered all the right answers. If they have, end the game.
         // Otherwise, skip to the next square.
         if correctAnswerEntered() {
+            
             highlightCorrectAnswer()
             
             if gameOver() {
