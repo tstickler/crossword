@@ -19,6 +19,13 @@ class GameViewController: UIViewController {
     var acrossNumbers = [Int]()
     var downNumbers = [Int]()
     
+    var musicEnabled = true
+    var soundEffectsEnabled = false
+    var timerEnabled = true
+    var skipFilledSquares = true
+    var lockCorrectAnswers = true
+    var correctAnimationEnabled = true
+    
     // UI colors
     let blueColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1)
     let blueColorCG = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
@@ -650,8 +657,9 @@ class GameViewController: UIViewController {
         // check if the user has entered all the right answers. If they have, end the game.
         // Otherwise, skip to the next square.
         if correctAnswerEntered() {
-            
-            highlightCorrectAnswer()
+            if correctAnimationEnabled {
+                highlightCorrectAnswer()
+            }
             
             if gameOver() {
                 clueLabel.textColor = .white
@@ -1269,5 +1277,18 @@ class GameViewController: UIViewController {
         clueAreaSetup()
         setUpBoard(board: board)
         initialHighlight()
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "settingSegue" {
+            if let menuVC = segue.destination as? MenuViewController {
+                menuVC.musicEnabled = musicEnabled
+                menuVC.soundEffectsEnabled = soundEffectsEnabled
+                menuVC.timerEnabled = timerEnabled
+                menuVC.skipFilledEnabled = skipFilledSquares
+                menuVC.lockCorrectEnabled = lockCorrectAnswers
+                menuVC.correctAnimationEnabled = correctAnimationEnabled
+            }
+        }
     }
 }

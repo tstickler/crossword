@@ -32,7 +32,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2135" y="-511"/>
+            <point key="canvasLocation" x="2135" y="-700"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="k3e-By-1MV">
@@ -1668,7 +1668,7 @@
                                 <inset key="imageEdgeInsets" minX="5" minY="9" maxX="5" maxY="9"/>
                                 <state key="normal" image="settings.png"/>
                                 <connections>
-                                    <segue destination="Ppb-1U-1o0" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="HZd-Qw-Df1"/>
+                                    <segue destination="Ppb-1U-1o0" kind="presentation" identifier="settingSegue" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="HZd-Qw-Df1"/>
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="2jV-Os-jYS" userLabel="Help Buttons">
@@ -1981,34 +1981,53 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="k5z-WE-cLh">
                                 <rect key="frame" x="25" y="158.5" width="325" height="350"/>
                                 <subviews>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Xp-21-HT5" userLabel="Music Switch">
-                                        <rect key="frame" x="261" y="115.5" width="51" height="31"/>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dcL-fn-8MQ" userLabel="Music Switch">
+                                        <rect key="frame" x="261" y="18.5" width="51" height="31"/>
                                         <color key="onTintColor" red="0.37647058823529411" green="0.7803921568627451" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="musicSwitchToggled:" destination="Ppb-1U-1o0" eventType="valueChanged" id="clI-lY-Qic"/>
+                                        </connections>
                                     </switch>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vFx-nw-FBG" userLabel="Sound Effects Switch">
                                         <rect key="frame" x="261" y="67" width="51" height="31"/>
                                         <color key="onTintColor" red="0.37647058823529411" green="0.7803921568627451" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="soundEffectsToggled:" destination="Ppb-1U-1o0" eventType="valueChanged" id="CaY-Gq-ULh"/>
+                                        </connections>
                                     </switch>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dcL-fn-8MQ" userLabel="Show Timer Switch">
-                                        <rect key="frame" x="261" y="18.5" width="51" height="31"/>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Xp-21-HT5" userLabel="Timer Switch">
+                                        <rect key="frame" x="261" y="115.5" width="51" height="31"/>
                                         <color key="onTintColor" red="0.37647058823529411" green="0.7803921568627451" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="timerToggled:" destination="Ppb-1U-1o0" eventType="valueChanged" id="wRn-T8-Md8"/>
+                                        </connections>
                                     </switch>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PGb-eY-8cZ" userLabel="Skip Filled Square Switch">
-                                        <rect key="frame" x="261" y="212" width="51" height="31"/>
-                                        <color key="onTintColor" red="0.37647058823529411" green="0.7803921568627451" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                        <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                    </switch>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tT4-xb-IXj" userLabel="Lock Correct Answer Switch">
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tT4-xb-IXj" userLabel="Skip Filled Switch">
                                         <rect key="frame" x="261" y="163.5" width="51" height="31"/>
                                         <color key="onTintColor" red="0.37647058823529411" green="0.7803921568627451" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="skipFilledToggled:" destination="Ppb-1U-1o0" eventType="valueChanged" id="bxy-px-qSY"/>
+                                        </connections>
                                     </switch>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="r72-X5-uMn" userLabel="Show Correct Animation">
-                                        <rect key="frame" x="261" y="260.5" width="51" height="31"/>
-                                        <color key="onTintColor" red="0.37998470664024353" green="0.78114724159240723" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PGb-eY-8cZ" userLabel="Lock Correct Switch">
+                                        <rect key="frame" x="261" y="212" width="51" height="31"/>
+                                        <color key="onTintColor" red="0.37647058823529411" green="0.7803921568627451" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="lockCorrectToggled:" destination="Ppb-1U-1o0" eventType="valueChanged" id="zl0-ba-FrH"/>
+                                        </connections>
+                                    </switch>
+                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xVN-9E-NrB" userLabel="Correct Animation Switch">
+                                        <rect key="frame" x="261" y="259.5" width="51" height="31"/>
+                                        <color key="onTintColor" red="0.37647058820000001" green="0.78039215689999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <connections>
+                                            <action selector="correctAnimationToggled:" destination="Ppb-1U-1o0" eventType="valueChanged" id="U4S-q6-HhG"/>
+                                        </connections>
                                     </switch>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Jp-n0-bO7">
                                         <rect key="frame" x="145" y="315" width="34" height="30"/>
@@ -2067,20 +2086,20 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="0Xp-21-HT5" firstAttribute="centerY" secondItem="DxJ-Ec-ORj" secondAttribute="centerY" id="0Gi-QJ-EHL"/>
-                                    <constraint firstItem="r72-X5-uMn" firstAttribute="centerY" secondItem="nVy-48-1ia" secondAttribute="centerY" id="7JS-DP-Qmy"/>
                                     <constraint firstItem="vFx-nw-FBG" firstAttribute="centerY" secondItem="2AJ-Ra-50n" secondAttribute="centerY" id="EcC-nJ-PnL"/>
                                     <constraint firstAttribute="trailing" secondItem="tT4-xb-IXj" secondAttribute="trailing" constant="15" id="Jwl-s0-4zi"/>
                                     <constraint firstItem="C2d-ff-GK3" firstAttribute="leading" secondItem="k5z-WE-cLh" secondAttribute="leading" constant="15" id="NjX-Yl-ZQq"/>
                                     <constraint firstAttribute="bottom" secondItem="4Jp-n0-bO7" secondAttribute="bottom" constant="5" id="P4M-ZA-asQ"/>
                                     <constraint firstItem="4Jp-n0-bO7" firstAttribute="centerX" secondItem="k5z-WE-cLh" secondAttribute="centerX" id="QgE-T5-wlh"/>
+                                    <constraint firstAttribute="trailing" secondItem="xVN-9E-NrB" secondAttribute="trailing" constant="15" id="Ubh-tO-Cpi"/>
                                     <constraint firstItem="PGb-eY-8cZ" firstAttribute="centerY" secondItem="DVk-kM-fzF" secondAttribute="centerY" id="VZU-H6-SzV"/>
                                     <constraint firstAttribute="trailing" secondItem="dcL-fn-8MQ" secondAttribute="trailing" constant="15" id="X2r-Ug-7Xu"/>
                                     <constraint firstAttribute="bottom" secondItem="C2d-ff-GK3" secondAttribute="bottom" constant="50" id="Xjs-gT-tU5"/>
                                     <constraint firstAttribute="height" constant="350" id="Y09-6L-qpk"/>
                                     <constraint firstItem="C2d-ff-GK3" firstAttribute="top" secondItem="k5z-WE-cLh" secondAttribute="top" constant="10" id="arr-LP-Hha"/>
                                     <constraint firstAttribute="trailing" secondItem="0Xp-21-HT5" secondAttribute="trailing" constant="15" id="bIb-7m-ebn"/>
-                                    <constraint firstAttribute="trailing" secondItem="r72-X5-uMn" secondAttribute="trailing" constant="15" id="d83-iI-ngk"/>
                                     <constraint firstAttribute="trailing" secondItem="PGb-eY-8cZ" secondAttribute="trailing" constant="15" id="mUC-e6-dKg"/>
+                                    <constraint firstItem="xVN-9E-NrB" firstAttribute="centerY" secondItem="nVy-48-1ia" secondAttribute="centerY" id="vH3-JP-WcK"/>
                                     <constraint firstAttribute="trailing" secondItem="vFx-nw-FBG" secondAttribute="trailing" constant="15" id="wZy-D9-6Xk"/>
                                     <constraint firstItem="dcL-fn-8MQ" firstAttribute="centerY" secondItem="Z98-Pe-rFy" secondAttribute="centerY" id="waS-N1-lDL"/>
                                     <constraint firstItem="tT4-xb-IXj" firstAttribute="centerY" secondItem="vfn-Cr-iI3" secondAttribute="centerY" id="zDG-Ht-sl9"/>
@@ -2096,13 +2115,13 @@
                         <viewLayoutGuide key="safeArea" id="poR-NK-lH4"/>
                     </view>
                     <connections>
-                        <outlet property="correctAnimationSwitch" destination="r72-X5-uMn" id="uYI-rg-j4a"/>
-                        <outlet property="lockCorrectSwitch" destination="tT4-xb-IXj" id="dkP-zr-Apw"/>
+                        <outlet property="correctAnimationSwitch" destination="xVN-9E-NrB" id="rDK-RZ-EjW"/>
+                        <outlet property="lockCorrectSwitch" destination="PGb-eY-8cZ" id="GaV-pp-VCD"/>
                         <outlet property="menuBackground" destination="k5z-WE-cLh" id="eRN-hx-NSL"/>
-                        <outlet property="musicSwitch" destination="0Xp-21-HT5" id="8aW-XO-4wo"/>
-                        <outlet property="skipFilledSwitch" destination="PGb-eY-8cZ" id="8at-Dq-Gb4"/>
+                        <outlet property="musicSwitch" destination="dcL-fn-8MQ" id="WbM-9Q-ege"/>
+                        <outlet property="skipFilledSwitch" destination="tT4-xb-IXj" id="kBZ-KE-zf4"/>
                         <outlet property="soundEffectsSwitch" destination="vFx-nw-FBG" id="KgG-Fl-Iyd"/>
-                        <outlet property="timerSwitch" destination="dcL-fn-8MQ" id="ayt-qw-GGB"/>
+                        <outlet property="timerSwitch" destination="0Xp-21-HT5" id="tzW-6M-hqc"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JHX-9c-LU2" userLabel="First Responder" sceneMemberID="firstResponder"/>
