@@ -14,7 +14,9 @@ class BoardButton: UIButton {
     var down: String!
     var superscriptLabel = UILabel()
     var lockedForCorrectAnswer = false
-    var shouldShowHint = false
+    var shouldShowHintAcross = false
+    var shouldShowHintDown = false
+    var revealedByHelper = false
     
     var numberConstraints = [NSLayoutConstraint]()
     
