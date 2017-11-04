@@ -11,13 +11,15 @@ import UIKit
 class GameViewController: UIViewController {
     // Used to determine which phone the user has
     let screenSize = UIScreen.main.bounds
-        
+    
     var selectedBoardSpaces = [Int]()
     var across = true
-    var userLevel = 1
+    var userLevel = 2
     var indexOfButton: Int!
     var acrossNumbers = [Int]()
     var downNumbers = [Int]()
+    var acrossClues = [(Num: String, Clue: String, Hint: String, WordCt: String)]()
+    var downClues = [(Num: String, Clue: String, Hint: String, WordCt: String)]()
     
     // Settings that can be modified by the user
     var musicEnabled = true
@@ -30,7 +32,18 @@ class GameViewController: UIViewController {
     // UI colors
     let blueColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1)
     let blueColorCG = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
-
+    let redColorCG = UIColor.init(red: 255/255, green: 150/255, blue: 176/255, alpha: 1).cgColor
+    let orangeColorCG = UIColor.init(red: 255/255, green: 197/255, blue: 126/255, alpha: 1).cgColor
+    let yellowColorCG = UIColor.init(red: 249/255, green: 255/255, blue: 140/255, alpha: 1).cgColor
+    
+    // Cheat Buttons
+    @IBOutlet var hintButton: UIButton!
+    @IBOutlet var fillSquareButton: UIButton!
+    @IBOutlet var fillWordButton: UIButton!
+    
+    // Iterator to prevent inifinte loop
+    var checkAllDirectionFilledIterator = 0
+    
     // Hides the status bar in game so there is more room for the board
     override var prefersStatusBarHidden: Bool {
         return true
@@ -160,6 +173,15 @@ class GameViewController: UIViewController {
         backPhraseButton.layer.cornerRadius = 4
         backPhraseButton.layer.borderColor = UIColor.white.cgColor
         backPhraseButton.setTitleColor(blueColor, for: .normal)
+        
+        hintButton.layer.cornerRadius = 5
+        hintButton.layer.backgroundColor = redColorCG
+        
+        fillSquareButton.layer.cornerRadius = 5
+        fillSquareButton.layer.backgroundColor = orangeColorCG
+
+        fillWordButton.layer.cornerRadius = 5
+        fillWordButton.layer.backgroundColor = yellowColorCG
     }
     
     func giveBoardSpacesProperties(board: [String]) {
@@ -346,109 +368,212 @@ class GameViewController: UIViewController {
             }
             
             // Erase the selected square
-            if boardSpaces[indexOfButton].lockedForCorrectAnswer == false {
+            if boardSpaces[indexOfButton].lockedForCorrectAnswer == false || !lockCorrectAnswers {
                 boardSpaces[indexOfButton].setTitle(nil, for: .normal)
             }
         }
-        
-        
     }
     
     @IBAction func nextPhraseButtonTapped(_ sender: Any) {
         // Get the current space
         let currentSquare = boardSpaces[indexOfButton]
+        var moveCandidates = [Int]()
         
-        // Orientation determines how we will move
+        // Generate possible candidates for move
         if across {
-            // Gets the number associated with the square
             let acrossString = currentSquare.across
             let acrossStart = acrossString!.startIndex
             let num = Int(acrossString![acrossStart...acrossString!.index(after: acrossStart)])!
             
-            // Used to tell which button to tap next
-            var nextAcross = ""
+            for i in acrossNumbers {
+                if i > num {
+                    moveCandidates.append(i)
+                }
+            }
             
-            // Go through the across array until we find a number larger than the current square.
-            // Since the array is sorted, we know that this is next largest number. Break if we've
-            // found it.
-            for x in acrossNumbers {
-                if x > num {
-                    // Depending on the string, we may need to add a 0 at the beginning
-                    if x < 10 {
-                        nextAcross = "0\(x)a"
-                    } else {
-                        nextAcross = "\(x)a"
+            print(moveCandidates)
+            
+            
+            // TEST CANDIDATE
+            if !moveCandidates.isEmpty {
+                let candidate = moveCandidates.min()!
+                var stringToLook = ""
+                if candidate < 10 {
+                    stringToLook = "0\(candidate)a"
+                } else {
+                    stringToLook = "\(candidate)a"
+                }
+                for button in boardSpaces {
+                    if button.across == stringToLook {
+                        boardButtonTapped(button)
+                        if button.currentTitle == nil {
+                            break
+                        }
+                        for x in selectedBoardSpaces.min()!...selectedBoardSpaces.max()! {
+                            if(boardSpaces[x].currentTitle == nil) {
+                                boardButtonTapped(boardSpaces[x])
+                                break
+                            }
+                        }
+                        
+                        nextPhraseButton.sendActions(for: .touchUpInside)
+                        break
                     }
-                    break
-                } else if x == acrossNumbers.max()! {
-                    // If we made it all the way though without finding a larger value, we don't have
-                    // anymore across values. Therefore, switch orientation and simulate a tap to go
-                    // to the first down.
-
-                    across = false
-                    indexOfButton = 0
-                    nextPhraseButton.sendActions(for: .touchUpInside)
                 }
+            } else {
+                across = false
             }
-            
-            // Go through the board spaces until the desired across location is found.
-            // Simulate a tap there.
-            for button in boardSpaces {
-                if button.across == nextAcross {
-                    button.sendActions(for: .touchUpInside)
-                    break
-                }
-            }
-        } else {
-            // Gets the number associated with the square
+        }
+        
+        
+        // Generate possible candidates for move
+        if !across {
             let downString = currentSquare.down
             let downStart = downString!.startIndex
             let num = Int(downString![downStart...downString!.index(after: downStart)])!
             
-            // Used to tell which button to tap next
-            var nextDown = ""
+            for i in downNumbers {
+                if i > num {
+                    moveCandidates.append(i)
+                }
+            }
             
-            // Go through the down array until we find a number larger than the current square.
-            // Since the array is sorted, we know that this is next largest number. Break if we've
-            // found it.
-            for x in downNumbers {
-                if x > num {
-                    // Depending on the string, we may need to add a 0 at the beginning
-                    if x < 10 {
-                        nextDown = "0\(x)d"
-                    } else {
-                        nextDown = "\(x)d"
+            print(moveCandidates)
+            
+            
+            // TEST CANDIDATE
+            if !moveCandidates.isEmpty {
+                let candidate = moveCandidates.min()!
+                var stringToLook = ""
+                if candidate < 10 {
+                    stringToLook = "0\(candidate)d"
+                } else {
+                    stringToLook = "\(candidate)d"
+                }
+                for button in boardSpaces {
+                    if button.down == stringToLook {
+                        boardButtonTapped(button)
+                        if button.currentTitle == nil {
+                            break
+                        }
+                        for x in selectedBoardSpaces.min()!...selectedBoardSpaces.max()! {
+                            if(boardSpaces[x].currentTitle == nil) {
+                                boardButtonTapped(boardSpaces[x])
+                                break
+                            }
+                        }
+                        
+                        nextPhraseButton.sendActions(for: .touchUpInside)
+                        break
                     }
-                    break
                 }
-                // If we made it all the way though without finding a larger value, we don't have
-                // anymore down values. Therefore, switch orientation and simulate a tap to go
-                // to the first across.
-                else if x == downNumbers.max()! {
-                    across = true
-                    indexOfButton = 0
-                    nextPhraseButton.sendActions(for: .touchUpInside)
-                }
+            } else {
+                across = true
+                nextPhraseButton.sendActions(for: .touchUpInside)
             }
             
-            // Go through the board spaces until the desired across location is found.
-            // Simulate a tap there.
-            for button in boardSpaces {
-                if button.down == nextDown {
-                    button.sendActions(for: .touchUpInside)
-                    break
-                }
-            }
-        }
+    }
         
-        // Skip filled squares
-        if boardSpaces[indexOfButton].currentTitle != nil && skipFilledSquares {
-            if across {
-                moveToNextAcross()
-            } else {
-                moveToNextDown()
-            }
-        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        // Orientation determines how we will move
+//        if across {
+//            // Gets the number associated with the square
+//            let acrossString = currentSquare.across
+//            let acrossStart = acrossString!.startIndex
+//            let num = Int(acrossString![acrossStart...acrossString!.index(after: acrossStart)])!
+//
+//            // Used to tell which button to tap next
+//            var nextAcross = ""
+//
+//            // Go through the across array until we find a number larger than the current square.
+//            // Since the array is sorted, we know that this is next largest number. Break if we've
+//            // found it.
+//            for x in acrossNumbers {
+//                if x > num {
+//                    // Depending on the string, we may need to add a 0 at the beginning
+//                    if x < 10 {
+//                        nextAcross = "0\(x)a"
+//                    } else {
+//                        nextAcross = "\(x)a"
+//                    }
+//                    break
+//                } else if x == acrossNumbers.max()! {
+//                    // If we made it all the way though without finding a larger value, we don't have
+//                    // anymore across values. Therefore, switch orientation and simulate a tap to go
+//                    // to the first down.
+//
+//                    across = false
+//                    indexOfButton = 0
+//                    nextPhraseButton.sendActions(for: .touchUpInside)
+//                }
+//            }
+//
+//            // Go through the board spaces until the desired across location is found.
+//            // Simulate a tap there.
+//            for button in boardSpaces {
+//                if button.across == nextAcross {
+//                    button.sendActions(for: .touchUpInside)
+//                    break
+//                }
+//            }
+//        } else {
+//            // Gets the number associated with the square
+//            let downString = currentSquare.down
+//            let downStart = downString!.startIndex
+//            let num = Int(downString![downStart...downString!.index(after: downStart)])!
+//
+//            // Used to tell which button to tap next
+//            var nextDown = ""
+//
+//            // Go through the down array until we find a number larger than the current square.
+//            // Since the array is sorted, we know that this is next largest number. Break if we've
+//            // found it.
+//            for x in downNumbers {
+//                if x > num {
+//                    // Depending on the string, we may need to add a 0 at the beginning
+//                    if x < 10 {
+//                        nextDown = "0\(x)d"
+//                    } else {
+//                        nextDown = "\(x)d"
+//                    }
+//                    break
+//                }
+//                // If we made it all the way though without finding a larger value, we don't have
+//                // anymore down values. Therefore, switch orientation and simulate a tap to go
+//                // to the first across.
+//                else if x == downNumbers.max()! {
+//                    across = true
+//                    indexOfButton = 0
+//                    nextPhraseButton.sendActions(for: .touchUpInside)
+//                }
+//            }
+//
+//            // Go through the board spaces until the desired across location is found.
+//            // Simulate a tap there.
+//            for button in boardSpaces {
+//                if button.down == nextDown {
+//                    button.sendActions(for: .touchUpInside)
+//                    break
+//                }
+//            }
+//        }
+//
+//        // Skip filled squares
+//        if boardSpaces[indexOfButton].currentTitle != nil && skipFilledSquares {
+//            if across {
+//                moveToNextAcross()
+//            } else {
+//                moveToNextDown()
+//            }
+//        }
     }
     
     // Needed to communicate between the if/else
@@ -458,20 +583,20 @@ class GameViewController: UIViewController {
     @IBAction func backPhraseButtonTapped(_ sender: Any) {
         // Get the current space
         let currentSquare = boardSpaces[indexOfButton]
-        
+
         if across {
             // Gets the number associated with the square
             let acrossString = currentSquare.across
             let acrossStart = acrossString!.startIndex
             let num = Int(acrossString![acrossStart...acrossString!.index(after: acrossStart)])!
-            
+
             // The next number we should go to
             var nextAcross = ""
-            
+
             // Initialize this as the max in the across array. Prevents an error in finding the lowest
             // value from the array
             var nextLowest = acrossNumbers.max()!
-            
+
             // If request came from down square, use jump across to determine our landing spot
             if jumpAcross != "" {
                 nextAcross = jumpAcross
@@ -483,7 +608,7 @@ class GameViewController: UIViewController {
                     // If at 1 (lowest number possible in the game) we already know to jump to down.
                     if num == 1 {
                         across = false
-                        
+
                         // Since we're going to down, find the highest down number and set our jump to
                         // that square. Then execute the tap.
                         if downNumbers.max()! > 10 {
@@ -504,12 +629,12 @@ class GameViewController: UIViewController {
                         }
                         break
                     }
-                    
+
                     // Holds our number lower than x
                     nextLowest = x
                 }
             }
-            
+
             // Go through the board spaces until the desired across location is found.
             // Simulate a tap there.
             for button in boardSpaces {
@@ -526,7 +651,7 @@ class GameViewController: UIViewController {
 
             // The next number we should go to
             var nextDown = ""
-            
+
             // Initialize this as the max in the down array. Prevents an error in finding the lowest
             // value from the array
             var nextLowest = downNumbers.max()!
@@ -542,7 +667,7 @@ class GameViewController: UIViewController {
                     // If at 1 (lowest number possible in the game) we already know to jump to across.
                     if num == 1 {
                         across = true
-                        
+
                         // Since we're going to across, find the highest across number and set our jump to
                         // that square. Then execute the tap.
                         if acrossNumbers.max()! > 10 {
@@ -563,28 +688,57 @@ class GameViewController: UIViewController {
                         }
                         break
                     }
-                    
+
                     // Holds our number lower than x
                     nextLowest = x
                 }
             }
-            
+
             // Go through the board spaces until the desired across location is found.
             // Simulate a tap there.
             for button in boardSpaces {
                 if button.down == nextDown {
                     button.sendActions(for: .touchUpInside)
+
                     break
                 }
             }
         }
-        
+
+
         // Skip filled squares
         if boardSpaces[indexOfButton].currentTitle != nil && skipFilledSquares {
             if across {
-                moveToNextAcross()
+                // Go through the phrase until we hit a blank space
+                while boardSpaces[indexOfButton].currentTitle != nil {
+                    // Move to the next space
+                    indexOfButton! += 1
+                    boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
+
+                    // If we've hit a black square or gone over the edge, then the whole word
+                    // is full and we should jump back a phrase
+                    if !boardSpaces[indexOfButton].isEnabled || indexOfButton % 13 == 0  {
+                        boardSpaces[indexOfButton - 1].sendActions(for: .touchUpInside)
+                        backPhraseButton.sendActions(for: .touchUpInside)
+                    }
+                }
             } else {
-                moveToNextDown()
+                // Go through the phrase until we hit a blank space
+                while boardSpaces[indexOfButton].currentTitle != nil {
+                    // Move to the next space
+                    indexOfButton! += 13
+                    boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
+
+                    // If we've hit a black square or have gone past the bottom or top top of the screen,
+                    // then the whole word is full and we should jump back a phrase
+                    if !boardSpaces[indexOfButton].isEnabled || indexOfButton < 0 || indexOfButton > 168  {
+                        boardSpaces[indexOfButton - 13].sendActions(for: .touchUpInside)
+                        while boardSpaces[indexOfButton].across != "00a" {
+                            boardSpaces[indexOfButton - 13].sendActions(for: .touchUpInside)
+                        }
+                        backPhraseButton.sendActions(for: .touchUpInside)
+                    }
+                }
             }
         }
     }
@@ -701,6 +855,27 @@ class GameViewController: UIViewController {
             }
             // Return so we go to the first spot in the next phrase and not the second
             return
+        } else if allSquaresFilled() {
+            clueLabel.textColor = .white
+            clueLabel.text = "Somethings not quite right"
+            return
+        } else {
+            // This checks the other direction at an intersection but the original
+            // direction is not completely correct.
+            // Useful when user has all but one letter and is going
+            // through at a different direction and fills the last correct
+            // space.
+            
+            // Flip the direction
+            boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
+            
+            // See if that direction is correct and highlight if it is
+            if correctAnswerEntered() {
+                highlightCorrectAnswer()
+            }
+            
+            // Go back to the original direction
+            boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
         }
         
         // If there was no correct answer, then move to the next spot in current orientation
@@ -771,6 +946,8 @@ class GameViewController: UIViewController {
         // Checks bounds before movement
         if indexOfButton < 168 {
             boardSpaces[indexOfButton + 1].sendActions(for: .touchUpInside)
+        } else {
+            indexOfButton = 1
         }
         
         // If we hit a disabled square or a square not part of an across go to next across phrase
@@ -817,8 +994,33 @@ class GameViewController: UIViewController {
         
         // Skip filled squares
         if boardSpaces[indexOfButton].currentTitle != nil && skipFilledSquares {
+            // We need to check and make sure all the across squares aren't filled
+            // If they are, and we try to move to the next across, we get an infinite loop
+            // Use of an iterator to see if we've gone through every single button helps
+            // us decide if we've evaluated all possible across squares to move to. If we
+            // have check every square we need to go to the next available down. We also
+            // check all squares filled as well because even if the iterator has checked
+            // to see if we can't do anymore across, it'll just oscilate between across
+            // and down checking.
+            if gameOver() || allSquaresFilled() {
+                return
+            }
+            
+            //
+            checkAllDirectionFilledIterator += 1
+            if checkAllDirectionFilledIterator > 168 {
+                indexOfButton = 0
+                checkAllDirectionFilledIterator = 0
+                across = false
+                moveToNextDown()
+                return
+            }
+            
+            
             moveToNextAcross()
         }
+        
+        checkAllDirectionFilledIterator = 0
     }
     
     func moveToNextDown() {
@@ -876,8 +1078,102 @@ class GameViewController: UIViewController {
         
         // Skip filled squares
         if boardSpaces[indexOfButton].currentTitle != nil && skipFilledSquares {
+            // We need to check and make sure all the across squares aren't filled
+            // If they are, and we try to move to the next across, we get an infinite loop
+            // Use of an iterator to see if we've gone through every single button helps
+            // us decide if we've evaluated all possible across squares to move to. If we
+            // have check every square we need to go to the next available down. We also
+            // check all squares filled as well because even if the iterator has checked
+            // to see if we can't do anymore across, it'll just oscilate between across
+            // and down checking.
+            if gameOver() || allSquaresFilled() {
+                return
+            }
+            
+            checkAllDirectionFilledIterator += 1
+            if checkAllDirectionFilledIterator > 168 {
+                indexOfButton = 0
+                checkAllDirectionFilledIterator = 0
+                across = true
+                moveToNextAcross()
+                return
+            }
+
             moveToNextDown()
         }
+        
+        // Reset the iterator if we've made a successful move
+        checkAllDirectionFilledIterator = 0
+    }
+    
+    func getClue(indexOfButton: Int) -> String {
+        var i = 0
+        // Grabs the clue related to the selected square
+        // If we are currently looking for across, get the across clue associated with the square
+        if across {
+            // Grab across variable to determine where in the plist we should look
+            // Remember, the across string is in the form 00a, with the numbers being
+            // the related across
+            let across = boardSpaces[indexOfButton].across
+            
+            // Toss out the a, and a leading 0 if it is there
+            // The plist has the number with no leading 0
+            var numAcross = String(across![across!.startIndex..<across!.index((across?.startIndex)!, offsetBy: 2)])
+            if numAcross[numAcross.startIndex] == "0" {
+                numAcross = String(numAcross[numAcross.index(numAcross.startIndex, offsetBy: 1)])
+            }
+            
+            // Go through the plist until we find the matching across
+            while i < acrossClues.count {
+                // If we find the across, set the clue label to the matching clue.
+                // Since our plist is set up with Phrase/Clue/Hint/Across/Down all in the
+                // same index, we can use the index where we found our across number to get
+                // the corresponding clue
+                if acrossClues[i].Num == numAcross {
+                    return acrossClues[i].Clue
+                }
+                i += 1
+            }
+        } else {
+            // If we are currently looking for down, get the down clue associated with the square
+            
+            // Grab down variable to determine where in the plist we should look
+            // Remember, the down string is in the form 00d, with the numbers being
+            // the related down
+            let down = boardSpaces[indexOfButton].down
+            
+            // Toss out the d, and a leading 0 if it is there
+            // The plist has the number with no leading 0
+            var numDown = String(down![down!.startIndex..<down!.index((down?.startIndex)!, offsetBy: 2)])
+            if numDown[numDown.startIndex] == "0" {
+                numDown = String(numDown[numDown.index(numDown.startIndex, offsetBy: 1)])
+            }
+            
+            // If we find the down, set the clue label to the matching clue.
+            // Since our plist is set up with Phrase/Clue/Hint/Across/Down all in the
+            // same index, we can use the index where we found our down number to get
+            // the corresponding clue
+            while i < downClues.count {
+                if downClues[i].Num == numDown {
+                    return downClues[i].Clue
+                }
+                i += 1
+            }
+        }
+        
+        // Nothing found (shouldn't ever happen)
+        return ""
+    }
+    
+    func allSquaresFilled() -> Bool {
+        for button in boardSpaces {
+            if !button.isEnabled || button.currentTitle != nil {
+                
+            } else {
+                return false
+            }
+        }
+        return true
     }
     
      /*****************************************
@@ -1178,34 +1474,6 @@ class GameViewController: UIViewController {
      *                                        *
      *****************************************/
     
-    // Read from plist containing clues/phrases/hints
-    func getArrayFromPlist(name: String) -> (Array<Dictionary<String, String>>) {
-        // Path to the plist
-        let path = Bundle.main.path(forResource: name, ofType: "plist")
-        
-        // Array to store information from plist
-        var arr: NSArray?
-        
-        // Set array with information from the plist
-        arr = NSArray(contentsOfFile: path!)
-        
-        // Return the array to be filtered
-        return (arr as? Array<Dictionary<String, String>>)!
-    }
-    
-    // Gets information for the given phrase (clue, hint, # of words)
-    // Returns them as an array of dictionaries
-    func getClueForPhrase(phrase: String) -> (Array<[String:String]>) {
-        // Gets information from the plist
-        let array = getArrayFromPlist(name: "emojis")
-        
-        // This is the phrase we want to find
-        let phrasePredicate = NSPredicate(format: "Phrase = %@", phrase)
-        
-        // Filter and return all info related to phrase
-        return [array.filter {phrasePredicate.evaluate(with: $0)}[0]]
-    }
-    
     func getInfoFromPlist(level: Int) -> (Array<Dictionary<String, String>>) {
         let levelName = "level_\(level)"
         
@@ -1220,65 +1488,6 @@ class GameViewController: UIViewController {
         
         // Return the array to be filtered
         return (storedInfoArray as? Array<Dictionary<String, String>>)!
-    }
-    
-    func getClue(indexOfButton: Int) -> String {
-        var i = 1
-        // Grabs the clue related to the selected square
-        // If we are currently looking for across, get the across clue associated with the square
-        if across {
-            // Grab across variable to determine where in the plist we should look
-            // Remember, the across string is in the form 00a, with the numbers being
-            // the related across
-            let across = boardSpaces[indexOfButton].across
-            
-            // Toss out the a, and a leading 0 if it is there
-            // The plist has the number with no leading 0
-            var numAcross = String(across![across!.startIndex..<across!.index((across?.startIndex)!, offsetBy: 2)])
-            if numAcross[numAcross.startIndex] == "0" {
-                numAcross = String(numAcross[numAcross.index(numAcross.startIndex, offsetBy: 1)])
-            }
-            
-            // Go through the plist until we find the matching across
-            while i < 17 {
-                // If we find the across, set the clue label to the matching clue.
-                // Since our plist is set up with Phrase/Clue/Hint/Across/Down all in the
-                // same index, we can use the index where we found our across number to get
-                // the corresponding clue
-                if getInfoFromPlist(level: userLevel)[i]["Across"] == numAcross {
-                    return getInfoFromPlist(level: userLevel)[i]["Clue"]!
-                }
-                i += 1
-            }
-        } else {
-            // If we are currently looking for down, get the down clue associated with the square
-
-            // Grab down variable to determine where in the plist we should look
-            // Remember, the down string is in the form 00d, with the numbers being
-            // the related down
-            let down = boardSpaces[indexOfButton].down
-            
-            // Toss out the d, and a leading 0 if it is there
-            // The plist has the number with no leading 0
-            var numDown = String(down![down!.startIndex..<down!.index((down?.startIndex)!, offsetBy: 2)])
-            if numDown[numDown.startIndex] == "0" {
-                numDown = String(numDown[numDown.index(numDown.startIndex, offsetBy: 1)])
-            }
-            
-            // If we find the down, set the clue label to the matching clue.
-            // Since our plist is set up with Phrase/Clue/Hint/Across/Down all in the
-            // same index, we can use the index where we found our down number to get
-            // the corresponding clue
-            while i < 17 {
-                if getInfoFromPlist(level: userLevel)[i]["Down"] == numDown {
-                    return getInfoFromPlist(level: userLevel)[i]["Clue"]!
-                }
-                i += 1
-            }
-        }
-        
-        // Nothing found (shouldn't ever happen)
-        return ""
     }
     
     func fillAcrossDownArrays() {
@@ -1299,6 +1508,23 @@ class GameViewController: UIViewController {
         downNumbers.sort()
     }
     
+    func makeClueArrays() {
+        for i in 1..<getInfoFromPlist(level: userLevel).count{
+            if getInfoFromPlist(level: userLevel)[i]["Across"]! != "" {
+                acrossClues.append((getInfoFromPlist(level: userLevel)[i]["Across"]!,
+                                getInfoFromPlist(level: userLevel)[i]["Clue"]!,
+                                getInfoFromPlist(level: userLevel)[i]["Hint"]!,
+                                getInfoFromPlist(level: userLevel)[i]["# of words"]!))
+            }
+            if getInfoFromPlist(level: userLevel)[i]["Down"]! != "" {
+                downClues.append((getInfoFromPlist(level: userLevel)[i]["Down"]!,
+                                getInfoFromPlist(level: userLevel)[i]["Clue"]!,
+                                getInfoFromPlist(level: userLevel)[i]["Hint"]!,
+                                getInfoFromPlist(level: userLevel)[i]["# of words"]!))
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -1310,8 +1536,10 @@ class GameViewController: UIViewController {
                      getInfoFromPlist(level: userLevel)[2]["Board"]!,
                      getInfoFromPlist(level: userLevel)[3]["Board"]!]
         
+        
         // Set everything up
         fillAcrossDownArrays()
+        makeClueArrays()
         clueAreaSetup()
         setUpBoard(board: board)
         initialHighlight()

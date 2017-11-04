@@ -8,7 +8,11 @@
 
 import UIKit
 
-class MenuViewController: UIViewController {
+class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
+    
+    override var prefersStatusBarHidden: Bool {
+        return false
+    }
     @IBOutlet var menuBackground: UIView!
     
     var musicEnabled: Bool!
@@ -17,6 +21,8 @@ class MenuViewController: UIViewController {
     var skipFilledEnabled: Bool!
     var lockCorrectEnabled: Bool!
     var correctAnimationEnabled: Bool!
+    
+    @IBOutlet var backButton: UIButton!
     
     @IBOutlet var musicSwitch: UISwitch!
     @IBOutlet var soundEffectsSwitch: UISwitch!
@@ -34,7 +40,8 @@ class MenuViewController: UIViewController {
         super.viewWillAppear(animated)
         setSwitches()
     }
-    
+
+    // Returns selected information back to parent view
     @IBAction func backButtonTapped(_ sender: Any) {
         if let parentGame = presentingViewController as? GameViewController {
             parentGame.musicEnabled = musicEnabled
@@ -47,7 +54,7 @@ class MenuViewController: UIViewController {
         dismiss(animated: true, completion: nil)
     }
     
-    
+    // Sets initial state of switches on loading
     func setSwitches() {
         musicSwitch.setOn(musicEnabled, animated: false)
         soundEffectsSwitch.setOn(soundEffectsEnabled, animated: false)
@@ -57,6 +64,7 @@ class MenuViewController: UIViewController {
         correctAnimationSwitch.setOn(correctAnimationEnabled, animated: false)
     }
     
+    // Switch toggling
     @IBAction func musicSwitchToggled(_ sender: Any) {
         if musicSwitch.isOn == true {
             musicEnabled = true
@@ -98,5 +106,17 @@ class MenuViewController: UIViewController {
         } else {
             correctAnimationEnabled = false
         }
+    }
+    
+    // Gesture recognizers
+    @IBAction func backgroundTapped(_ sender: Any) {
+        backButton.sendActions(for: .touchUpInside)
+    }
+    
+    func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+        if menuBackground.frame.contains(touch.location(in: view)) {
+            return false
+        }
+        return true
     }
 }

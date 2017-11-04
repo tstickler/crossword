@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13196" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="CQO-aK-gww">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="CQO-aK-gww">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -1672,30 +1672,34 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="2jV-Os-jYS" userLabel="Help Buttons">
-                                <rect key="frame" x="8" y="492" width="164" height="18"/>
+                                <rect key="frame" x="8" y="488" width="110" height="24"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3uM-qU-Rzy">
-                                        <rect key="frame" x="0.0" y="0.0" width="30" height="18"/>
-                                        <state key="normal" title="Hint">
-                                            <color key="titleColor" red="1" green="0.58985140931372548" blue="0.69019607843137254" alpha="1" colorSpace="calibratedRGB"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="30" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="dEJ-Zy-nR5"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
+                                        <state key="normal" title="?">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kUD-h2-99s">
-                                        <rect key="frame" x="40" y="0.0" width="40" height="18"/>
-                                        <state key="normal" title="FillSQ">
-                                            <color key="titleColor" red="1" green="0.81959908963585437" blue="0.61936712184873943" alpha="1" colorSpace="calibratedRGB"/>
+                                        <rect key="frame" x="40" y="0.0" width="30" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="liB-8u-4mA"/>
+                                        </constraints>
+                                        <state key="normal">
+                                            <color key="titleColor" red="1" green="0.77425130208333337" blue="0.4928927951388889" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SSh-fV-z2k">
-                                        <rect key="frame" x="90" y="0.0" width="34" height="18"/>
-                                        <state key="normal" title="FillW">
-                                            <color key="titleColor" red="1" green="1" blue="0.72941176470588232" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                    </button>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QNm-A5-Pka">
-                                        <rect key="frame" x="134" y="0.0" width="30" height="18"/>
-                                        <state key="normal" title="FillB">
-                                            <color key="titleColor" red="0.72941176470588232" green="1" blue="0.78823529411764703" alpha="1" colorSpace="calibratedRGB"/>
+                                        <rect key="frame" x="80" y="0.0" width="30" height="24"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="30" id="hEf-lo-XrS"/>
+                                        </constraints>
+                                        <state key="normal">
+                                            <color key="titleColor" red="0.97642686631944442" green="1" blue="0.72941176470588232" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                     </button>
                                 </subviews>
@@ -1703,7 +1707,7 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="SDX-nf-MkU" firstAttribute="top" secondItem="2jV-Os-jYS" secondAttribute="bottom" constant="10" id="48c-kv-PQE"/>
+                            <constraint firstItem="SDX-nf-MkU" firstAttribute="top" secondItem="2jV-Os-jYS" secondAttribute="bottom" constant="8" id="48c-kv-PQE"/>
                             <constraint firstAttribute="trailing" secondItem="cEC-de-W0A" secondAttribute="trailing" constant="3" id="5aO-Q9-lhe"/>
                             <constraint firstItem="5HK-MV-4Bb" firstAttribute="top" secondItem="HHL-sI-5b8" secondAttribute="bottom" constant="10" id="6yD-LB-RiQ"/>
                             <constraint firstItem="CbG-1b-voo" firstAttribute="leading" secondItem="1WR-0j-Sjf" secondAttribute="leading" constant="57" id="72O-mD-izA"/>
@@ -1743,7 +1747,7 @@
                             <constraint firstItem="HHL-sI-5b8" firstAttribute="leading" secondItem="NEQ-gs-OeF" secondAttribute="trailing" constant="5" id="r3h-zC-xsT"/>
                             <constraint firstItem="Z1E-eb-3pe" firstAttribute="leading" secondItem="CbG-1b-voo" secondAttribute="trailing" constant="5" id="ryY-E4-Cz8"/>
                             <constraint firstItem="1WR-0j-Sjf" firstAttribute="bottom" secondItem="i1V-zv-Ra3" secondAttribute="bottom" constant="3" id="t7g-hV-pga"/>
-                            <constraint firstItem="2jV-Os-jYS" firstAttribute="top" secondItem="NEQ-gs-OeF" secondAttribute="bottom" constant="20" id="uGI-mL-mdp"/>
+                            <constraint firstItem="2jV-Os-jYS" firstAttribute="top" secondItem="NEQ-gs-OeF" secondAttribute="bottom" constant="16" id="uGI-mL-mdp"/>
                             <constraint firstItem="3eP-Dy-RBW" firstAttribute="top" secondItem="cEC-de-W0A" secondAttribute="bottom" constant="10" id="uWF-dl-paG"/>
                             <constraint firstItem="5HK-MV-4Bb" firstAttribute="top" secondItem="NEQ-gs-OeF" secondAttribute="bottom" constant="10" id="wEM-dK-xkr"/>
                             <constraint firstItem="1WR-0j-Sjf" firstAttribute="trailing" secondItem="QUV-wa-LY7" secondAttribute="trailing" constant="17" id="ysz-go-OdI"/>
@@ -1762,6 +1766,9 @@
                         <outlet property="clueHeightConstraint" destination="zMo-z2-TQk" id="Vad-x1-Cdg"/>
                         <outlet property="clueLabel" destination="NEQ-gs-OeF" id="GGQ-Jv-vav"/>
                         <outlet property="directionLabel" destination="e4j-ak-fNL" id="K8V-4S-326"/>
+                        <outlet property="fillSquareButton" destination="kUD-h2-99s" id="ccy-hq-3X9"/>
+                        <outlet property="fillWordButton" destination="SSh-fV-z2k" id="r5d-nS-iRY"/>
+                        <outlet property="hintButton" destination="3uM-qU-Rzy" id="ysc-ec-csS"/>
                         <outlet property="keyboardBackHeight" destination="pj1-7s-4rD" id="NAI-FQ-Dj2"/>
                         <outlet property="middleKeysHeight" destination="AWt-1b-nbb" id="Bi2-Ax-He5"/>
                         <outlet property="nextPhraseButton" destination="HHL-sI-5b8" id="uxQ-01-PI0"/>
@@ -2107,14 +2114,19 @@
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.85277204949238583" green="0.85277204949238583" blue="0.85277204949238583" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="poR-NK-lH4" firstAttribute="trailing" secondItem="k5z-WE-cLh" secondAttribute="trailing" constant="25" id="9bK-FX-wLX"/>
                             <constraint firstItem="k5z-WE-cLh" firstAttribute="leading" secondItem="poR-NK-lH4" secondAttribute="leading" constant="25" id="Hg3-IA-tgb"/>
                             <constraint firstItem="k5z-WE-cLh" firstAttribute="centerY" secondItem="xLt-Lr-MbM" secondAttribute="centerY" id="Wq4-ub-Bl4"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="poR-NK-lH4"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="uyr-0r-iTH" appends="YES" id="0eW-L1-xdT"/>
+                        </connections>
                     </view>
                     <connections>
+                        <outlet property="backButton" destination="4Jp-n0-bO7" id="ePC-3q-yr6"/>
                         <outlet property="correctAnimationSwitch" destination="xVN-9E-NrB" id="rDK-RZ-EjW"/>
                         <outlet property="lockCorrectSwitch" destination="PGb-eY-8cZ" id="GaV-pp-VCD"/>
                         <outlet property="menuBackground" destination="k5z-WE-cLh" id="eRN-hx-NSL"/>
@@ -2125,6 +2137,12 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JHX-9c-LU2" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="uyr-0r-iTH">
+                    <connections>
+                        <action selector="backgroundTapped:" destination="Ppb-1U-1o0" id="1aW-wj-2gL"/>
+                        <outlet property="delegate" destination="Ppb-1U-1o0" id="tt9-Ov-ukv"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="2159" y="145"/>
         </scene>
