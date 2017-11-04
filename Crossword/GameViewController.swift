@@ -374,6 +374,7 @@ class GameViewController: UIViewController {
         }
     }
     
+    
     @IBAction func nextPhraseButtonTapped(_ sender: Any) {
         // Get the current space
         let currentSquare = boardSpaces[indexOfButton]
@@ -391,11 +392,8 @@ class GameViewController: UIViewController {
                 }
             }
             
-            print(moveCandidates)
-            
-            
             // TEST CANDIDATE
-            if !moveCandidates.isEmpty {
+            outer: if !moveCandidates.isEmpty {
                 let candidate = moveCandidates.min()!
                 var stringToLook = ""
                 if candidate < 10 {
@@ -406,13 +404,13 @@ class GameViewController: UIViewController {
                 for button in boardSpaces {
                     if button.across == stringToLook {
                         boardButtonTapped(button)
-                        if button.currentTitle == nil {
+                        if button.currentTitle == nil || !skipFilledSquares {
                             break
                         }
                         for x in selectedBoardSpaces.min()!...selectedBoardSpaces.max()! {
                             if(boardSpaces[x].currentTitle == nil) {
                                 boardButtonTapped(boardSpaces[x])
-                                break
+                                break outer
                             }
                         }
                         
@@ -422,12 +420,15 @@ class GameViewController: UIViewController {
                 }
             } else {
                 across = false
+                indexOfButton = 0
+                while boardSpaces[indexOfButton].isEnabled {
+                    indexOfButton! += 1
+                }
+                nextPhraseButton.sendActions(for: .touchUpInside)
+                
+                return
             }
-        }
-        
-        
-        // Generate possible candidates for move
-        if !across {
+        } else if !across {
             let downString = currentSquare.down
             let downStart = downString!.startIndex
             let num = Int(downString![downStart...downString!.index(after: downStart)])!
@@ -437,12 +438,9 @@ class GameViewController: UIViewController {
                     moveCandidates.append(i)
                 }
             }
-            
-            print(moveCandidates)
-            
-            
+
             // TEST CANDIDATE
-            if !moveCandidates.isEmpty {
+            outer: if !moveCandidates.isEmpty {
                 let candidate = moveCandidates.min()!
                 var stringToLook = ""
                 if candidate < 10 {
@@ -453,13 +451,13 @@ class GameViewController: UIViewController {
                 for button in boardSpaces {
                     if button.down == stringToLook {
                         boardButtonTapped(button)
-                        if button.currentTitle == nil {
+                        if button.currentTitle == nil || !skipFilledSquares {
                             break
                         }
-                        for x in selectedBoardSpaces.min()!...selectedBoardSpaces.max()! {
+                        for x in stride(from: selectedBoardSpaces.min()!, to: selectedBoardSpaces.max()!, by: 13) {
                             if(boardSpaces[x].currentTitle == nil) {
                                 boardButtonTapped(boardSpaces[x])
-                                break
+                                break outer
                             }
                         }
                         
@@ -469,276 +467,123 @@ class GameViewController: UIViewController {
                 }
             } else {
                 across = true
+                indexOfButton = 0
+                while boardSpaces[indexOfButton].isEnabled {
+                    indexOfButton! += 1
+                }
                 nextPhraseButton.sendActions(for: .touchUpInside)
+                
+                return
             }
-            
+        }
     }
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        // Orientation determines how we will move
-//        if across {
-//            // Gets the number associated with the square
-//            let acrossString = currentSquare.across
-//            let acrossStart = acrossString!.startIndex
-//            let num = Int(acrossString![acrossStart...acrossString!.index(after: acrossStart)])!
-//
-//            // Used to tell which button to tap next
-//            var nextAcross = ""
-//
-//            // Go through the across array until we find a number larger than the current square.
-//            // Since the array is sorted, we know that this is next largest number. Break if we've
-//            // found it.
-//            for x in acrossNumbers {
-//                if x > num {
-//                    // Depending on the string, we may need to add a 0 at the beginning
-//                    if x < 10 {
-//                        nextAcross = "0\(x)a"
-//                    } else {
-//                        nextAcross = "\(x)a"
-//                    }
-//                    break
-//                } else if x == acrossNumbers.max()! {
-//                    // If we made it all the way though without finding a larger value, we don't have
-//                    // anymore across values. Therefore, switch orientation and simulate a tap to go
-//                    // to the first down.
-//
-//                    across = false
-//                    indexOfButton = 0
-//                    nextPhraseButton.sendActions(for: .touchUpInside)
-//                }
-//            }
-//
-//            // Go through the board spaces until the desired across location is found.
-//            // Simulate a tap there.
-//            for button in boardSpaces {
-//                if button.across == nextAcross {
-//                    button.sendActions(for: .touchUpInside)
-//                    break
-//                }
-//            }
-//        } else {
-//            // Gets the number associated with the square
-//            let downString = currentSquare.down
-//            let downStart = downString!.startIndex
-//            let num = Int(downString![downStart...downString!.index(after: downStart)])!
-//
-//            // Used to tell which button to tap next
-//            var nextDown = ""
-//
-//            // Go through the down array until we find a number larger than the current square.
-//            // Since the array is sorted, we know that this is next largest number. Break if we've
-//            // found it.
-//            for x in downNumbers {
-//                if x > num {
-//                    // Depending on the string, we may need to add a 0 at the beginning
-//                    if x < 10 {
-//                        nextDown = "0\(x)d"
-//                    } else {
-//                        nextDown = "\(x)d"
-//                    }
-//                    break
-//                }
-//                // If we made it all the way though without finding a larger value, we don't have
-//                // anymore down values. Therefore, switch orientation and simulate a tap to go
-//                // to the first across.
-//                else if x == downNumbers.max()! {
-//                    across = true
-//                    indexOfButton = 0
-//                    nextPhraseButton.sendActions(for: .touchUpInside)
-//                }
-//            }
-//
-//            // Go through the board spaces until the desired across location is found.
-//            // Simulate a tap there.
-//            for button in boardSpaces {
-//                if button.down == nextDown {
-//                    button.sendActions(for: .touchUpInside)
-//                    break
-//                }
-//            }
-//        }
-//
-//        // Skip filled squares
-//        if boardSpaces[indexOfButton].currentTitle != nil && skipFilledSquares {
-//            if across {
-//                moveToNextAcross()
-//            } else {
-//                moveToNextDown()
-//            }
-//        }
-    }
-    
-    // Needed to communicate between the if/else
-    var jumpDown = ""
-    var jumpAcross = ""
     
     @IBAction func backPhraseButtonTapped(_ sender: Any) {
         // Get the current space
         let currentSquare = boardSpaces[indexOfButton]
-
+        var moveCandidates = [Int]()
+        
+        // Generate possible candidates for move
         if across {
-            // Gets the number associated with the square
             let acrossString = currentSquare.across
             let acrossStart = acrossString!.startIndex
-            let num = Int(acrossString![acrossStart...acrossString!.index(after: acrossStart)])!
-
-            // The next number we should go to
-            var nextAcross = ""
-
-            // Initialize this as the max in the across array. Prevents an error in finding the lowest
-            // value from the array
-            var nextLowest = acrossNumbers.max()!
-
-            // If request came from down square, use jump across to determine our landing spot
-            if jumpAcross != "" {
-                nextAcross = jumpAcross
-                jumpAcross = ""
-            } else {
-                // If request came from across square, figure out where to go next
-                // Go through the across array until we find a square who is equal to current square.
-                for x in acrossNumbers {
-                    // If at 1 (lowest number possible in the game) we already know to jump to down.
-                    if num == 1 {
-                        across = false
-
-                        // Since we're going to down, find the highest down number and set our jump to
-                        // that square. Then execute the tap.
-                        if downNumbers.max()! > 10 {
-                            jumpDown = "\(downNumbers.max()!)d"
-                        } else {
-                            jumpDown = "0\(downNumbers.max()!)d"
+            var num = Int(acrossString![acrossStart...acrossString!.index(after: acrossStart)])!
+            
+            if num == 0 {
+                num = acrossNumbers.max()! + 1
+            }
+            
+            for i in acrossNumbers {
+                if i < num {
+                    moveCandidates.append(i)
+                }
+            }
+            
+            // TEST CANDIDATE
+            outer: if !moveCandidates.isEmpty {
+                let candidate = moveCandidates.max()!
+                var stringToLook = ""
+                if candidate < 10 {
+                    stringToLook = "0\(candidate)a"
+                } else {
+                    stringToLook = "\(candidate)a"
+                }
+                for button in boardSpaces {
+                    if button.across == stringToLook {
+                        boardButtonTapped(button)
+                        if button.currentTitle == nil || !skipFilledSquares {
+                            break
                         }
+                        for x in selectedBoardSpaces.min()!...selectedBoardSpaces.max()! {
+                            if(boardSpaces[x].currentTitle == nil) {
+                                boardButtonTapped(boardSpaces[x])
+                                break outer
+                            }
+                        }
+                        
                         backPhraseButton.sendActions(for: .touchUpInside)
-                    } else if x == num {
-                        // The request is to go to the next lowest across. Since we've been keeping
-                        // track of the number that is one lower than x, we can set that
-                        // as our next square to go to.
-
-                        if nextLowest < 10 {
-                            nextAcross = "0\(nextLowest)a"
-                        } else {
-                            nextAcross = "\(nextLowest)a"
-                        }
                         break
                     }
-
-                    // Holds our number lower than x
-                    nextLowest = x
                 }
-            }
-
-            // Go through the board spaces until the desired across location is found.
-            // Simulate a tap there.
-            for button in boardSpaces {
-                if button.across == nextAcross {
-                    button.sendActions(for: .touchUpInside)
-                    break
+            } else {
+                across = false
+                while boardSpaces[indexOfButton].isEnabled {
+                    indexOfButton! += 1
                 }
+                backPhraseButton.sendActions(for: .touchUpInside)
+                
+                return
             }
-        } else {
-            // Gets the number associated with the square
+        } else if !across {
             let downString = currentSquare.down
             let downStart = downString!.startIndex
-            let num = Int(downString![downStart...downString!.index(after: downStart)])!
-
-            // The next number we should go to
-            var nextDown = ""
-
-            // Initialize this as the max in the down array. Prevents an error in finding the lowest
-            // value from the array
-            var nextLowest = downNumbers.max()!
-
-            // If request came from across square, use jump down to determine our landing spot
-            if jumpDown != "" {
-                nextDown = jumpDown
-                jumpDown = ""
-            } else {
-                //If request came from across square, figure out where to go next
-                // Go through the down array until we find a square who is equal to current square.
-                for x in downNumbers {
-                    // If at 1 (lowest number possible in the game) we already know to jump to across.
-                    if num == 1 {
-                        across = true
-
-                        // Since we're going to across, find the highest across number and set our jump to
-                        // that square. Then execute the tap.
-                        if acrossNumbers.max()! > 10 {
-                            jumpAcross = "\(acrossNumbers.max()!)a"
-                        } else {
-                            jumpAcross = "0\(acrossNumbers.max()!)a"
+            var num = Int(downString![downStart...downString!.index(after: downStart)])!
+            
+            if num == 0 {
+                num = downNumbers.max()! + 1
+            }
+            
+            for i in downNumbers {
+                if i < num {
+                    moveCandidates.append(i)
+                }
+            }
+            
+            // TEST CANDIDATE
+            outer: if !moveCandidates.isEmpty {
+                let candidate = moveCandidates.max()!
+                var stringToLook = ""
+                if candidate < 10 {
+                    stringToLook = "0\(candidate)d"
+                } else {
+                    stringToLook = "\(candidate)d"
+                }
+                for button in boardSpaces {
+                    if button.down == stringToLook {
+                        boardButtonTapped(button)
+                        if button.currentTitle == nil || !skipFilledSquares {
+                            break
                         }
+                        for x in stride(from: selectedBoardSpaces.min()!, to: selectedBoardSpaces.max()!, by: 13) {
+                            if(boardSpaces[x].currentTitle == nil) {
+                                boardButtonTapped(boardSpaces[x])
+                                break outer
+                            }
+                        }
+                        
                         backPhraseButton.sendActions(for: .touchUpInside)
-                    } else if x == num {
-                        // The request is to go to the next lowest down. Since we've been keeping
-                        // track of the number that is one lower than x, we can set that
-                        // as our next square to go to.
-
-                        if x < 10 {
-                            nextDown = "0\(nextLowest)d"
-                        } else {
-                            nextDown = "\(nextLowest)d"
-                        }
                         break
                     }
-
-                    // Holds our number lower than x
-                    nextLowest = x
-                }
-            }
-
-            // Go through the board spaces until the desired across location is found.
-            // Simulate a tap there.
-            for button in boardSpaces {
-                if button.down == nextDown {
-                    button.sendActions(for: .touchUpInside)
-
-                    break
-                }
-            }
-        }
-
-
-        // Skip filled squares
-        if boardSpaces[indexOfButton].currentTitle != nil && skipFilledSquares {
-            if across {
-                // Go through the phrase until we hit a blank space
-                while boardSpaces[indexOfButton].currentTitle != nil {
-                    // Move to the next space
-                    indexOfButton! += 1
-                    boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
-
-                    // If we've hit a black square or gone over the edge, then the whole word
-                    // is full and we should jump back a phrase
-                    if !boardSpaces[indexOfButton].isEnabled || indexOfButton % 13 == 0  {
-                        boardSpaces[indexOfButton - 1].sendActions(for: .touchUpInside)
-                        backPhraseButton.sendActions(for: .touchUpInside)
-                    }
                 }
             } else {
-                // Go through the phrase until we hit a blank space
-                while boardSpaces[indexOfButton].currentTitle != nil {
-                    // Move to the next space
-                    indexOfButton! += 13
-                    boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
-
-                    // If we've hit a black square or have gone past the bottom or top top of the screen,
-                    // then the whole word is full and we should jump back a phrase
-                    if !boardSpaces[indexOfButton].isEnabled || indexOfButton < 0 || indexOfButton > 168  {
-                        boardSpaces[indexOfButton - 13].sendActions(for: .touchUpInside)
-                        while boardSpaces[indexOfButton].across != "00a" {
-                            boardSpaces[indexOfButton - 13].sendActions(for: .touchUpInside)
-                        }
-                        backPhraseButton.sendActions(for: .touchUpInside)
-                    }
+                across = true
+                indexOfButton = 0
+                while boardSpaces[indexOfButton].isEnabled {
+                    indexOfButton! += 1
                 }
+                backPhraseButton.sendActions(for: .touchUpInside)
+                
+                return
             }
         }
     }
