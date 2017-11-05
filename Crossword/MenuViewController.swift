@@ -9,10 +9,6 @@
 import UIKit
 
 class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
-    
-    override var prefersStatusBarHidden: Bool {
-        return false
-    }
     @IBOutlet var menuBackground: UIView!
     
     var musicEnabled: Bool!
