@@ -19,6 +19,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     var correctAnimationEnabled: Bool!
     
     @IBOutlet var backButton: UIButton!
+    @IBOutlet var homeButton: UIButton!
     
     @IBOutlet var musicSwitch: UISwitch!
     @IBOutlet var soundEffectsSwitch: UISwitch!
@@ -30,6 +31,14 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         menuBackground.layer.cornerRadius = 15
+        
+        backButton.layer.borderWidth = 2
+        backButton.layer.cornerRadius = 3
+        backButton.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
+        
+        homeButton.layer.borderWidth = 2
+        homeButton.layer.cornerRadius = 3
+        homeButton.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -48,6 +57,20 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
             parentGame.correctAnimationEnabled = correctAnimationEnabled
         }
         dismiss(animated: true, completion: nil)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // Save switches into home view controller
+        if segue.identifier == "homeSegue" {
+            if let homeVC = segue.destination as? HomeViewController {
+                homeVC.musicEnabled = musicEnabled
+                homeVC.soundEffectsEnabled = soundEffectsEnabled
+                homeVC.timerEnabled = timerEnabled
+                homeVC.skipFilledEnabled = skipFilledEnabled
+                homeVC.lockCorrectEnabled = lockCorrectEnabled
+                homeVC.correctAnimationEnabled = correctAnimationEnabled
+            }
+        }
     }
     
     // Sets initial state of switches on loading
@@ -78,8 +101,15 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func timerToggled(_ sender: Any) {
         if timerSwitch.isOn == true {
             timerEnabled = true
+            if let parentVC = presentingViewController as? GameViewController {
+                parentVC.timerStack.isHidden = false
+                
+            }
         } else {
             timerEnabled = false
+            if let parentVC = presentingViewController as? GameViewController {
+                parentVC.timerStack.isHidden = true
+            }
         }
     }
     @IBAction func skipFilledToggled(_ sender: Any) {

@@ -26,7 +26,11 @@ class BoardButton: UIButton {
         self.addSubview(superscriptLabel)
         superscriptLabel.translatesAutoresizingMaskIntoConstraints = false
         superscriptLabel.text = number
-        superscriptLabel.font = superscriptLabel.font.withSize(7)
+        if UIScreen.main.bounds.height == 568 {
+            superscriptLabel.font = superscriptLabel.font.withSize(6)
+        } else {
+            superscriptLabel.font = superscriptLabel.font.withSize(7)
+        }
         
         // Put the number on the top  left corner
         numberConstraints.append(NSLayoutConstraint(item: self.superscriptLabel, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1.0, constant: 1))

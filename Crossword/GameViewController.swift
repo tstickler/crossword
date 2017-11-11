@@ -9,14 +9,12 @@
 import UIKit
 
 class GameViewController: UIViewController {
-    var startAnimation: Bool!
-    let nc = NotificationCenter.default
     // Used to determine which phone the user has
     let screenSize = UIScreen.main.bounds
 
     var selectedBoardSpaces = [Int]()
     var across = true
-    var userLevel = 2
+    var userLevel = 1
     var indexOfButton: Int!
     var acrossNumbers = [Int]()
     var downNumbers = [Int]()
@@ -24,12 +22,12 @@ class GameViewController: UIViewController {
     var downClues = [(Num: String, Clue: String, Hint: String, WordCt: String)]()
     
     // Settings that can be modified by the user
-    var musicEnabled = true
-    var soundEffectsEnabled = true
-    var timerEnabled = true
-    var skipFilledSquares = true
-    var lockCorrectAnswers = true
-    var correctAnimationEnabled = true
+    var musicEnabled: Bool!
+    var soundEffectsEnabled: Bool!
+    var timerEnabled: Bool!
+    var skipFilledSquares: Bool!
+    var lockCorrectAnswers: Bool!
+    var correctAnimationEnabled: Bool!
     
     // UI colors
     let blueColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1)
@@ -40,8 +38,11 @@ class GameViewController: UIViewController {
     
     // Cheat Buttons
     @IBOutlet var hintButton: UIButton!
+    @IBOutlet weak var hintButtonWidth: NSLayoutConstraint!
     @IBOutlet var fillSquareButton: UIButton!
-    @IBOutlet var fillWordButton: UIButton!
+    @IBOutlet weak var fillSquareWidth: NSLayoutConstraint!
+    @IBOutlet weak var cheatCountLabel: UILabel!
+    var cheatCount: Int = 10
     
     // Iterator to prevent inifinte loop
     var checkAllDirectionFilledIterator = 0
@@ -65,16 +66,27 @@ class GameViewController: UIViewController {
     
     // Clue area labels and buttons
     @IBOutlet var clueLabel: UILabel!
-    @IBOutlet var timerLabel: UILabel!
     @IBOutlet var directionLabel: UILabel!
     @IBOutlet var backPhraseButton: UIButton!
     @IBOutlet var nextPhraseButton: UIButton!
-    
+    @IBOutlet weak var levelLabel: UILabel!
     @IBOutlet var clueHeightConstraint: NSLayoutConstraint!
     
     // To know where the user last was
     var previousButton = 0
     var previousSpaces = [Int]()
+    
+    // Timer
+    @IBOutlet weak var timerStack: UIStackView!
+    @IBOutlet weak var hoursLabel: UILabel!
+    @IBOutlet weak var minutesLabel: UILabel!
+    @IBOutlet weak var secondsLabel: UILabel!
+    
+    var gameTimer: Timer!
+    var secondsCounter = 0
+    var minutesCounter = 0
+    var hoursCounter = 0
+    let formatter = NumberFormatter()
     
     /*****************************************
     *                                        *
@@ -105,7 +117,9 @@ class GameViewController: UIViewController {
             bottomRowLeading.constant = 52.5
             bottomRowTrailing.constant = 52.5
             
-            keyboardBackHeight.constant = 210
+            clueLabel.font = clueLabel.font.withSize(40)
+            clueHeightConstraint.constant = 55
+            keyboardBackHeight.constant = 175
         // Sets constraints for iPhone Plus
         case 736:
             topKeysHeight.constant = iphonePlusKeysHeight
@@ -115,9 +129,9 @@ class GameViewController: UIViewController {
             bottomRowLeading.constant = 55
             bottomRowTrailing.constant = 55
             
-            keyboardBackHeight.constant = 220
-            clueHeightConstraint.constant = 55
-            clueLabel.font = clueLabel.font.withSize(40)
+            keyboardBackHeight.constant = 185
+            clueHeightConstraint.constant = 70
+            clueLabel.font = clueLabel.font.withSize(45)
         // Sets constraints for iPhone X
         case 812:
             topKeysHeight.constant = 57
@@ -127,9 +141,9 @@ class GameViewController: UIViewController {
             bottomRowLeading.constant = 52.5
             bottomRowTrailing.constant = 52.5
             
-            keyboardBackHeight.constant = 250
+            keyboardBackHeight.constant = 190
             
-            clueHeightConstraint.constant = 70
+            clueHeightConstraint.constant = 75
             clueLabel.font = clueLabel.font.withSize(40)
         default:
             break
@@ -144,7 +158,7 @@ class GameViewController: UIViewController {
         for button in boardSpaces {
             // If we are on a smaller screen have a smaller font for letters
             if screenSize.width == 320 {
-                button.titleLabel?.font = button.titleLabel?.font.withSize(10.0)
+                button.titleLabel?.font = button.titleLabel?.font.withSize(9.0)
             } else {
                 button.titleLabel?.font = button.titleLabel?.font.withSize(13.0)
             }
@@ -177,14 +191,22 @@ class GameViewController: UIViewController {
         backPhraseButton.setTitleColor(blueColor, for: .normal)
         
         hintButton.layer.cornerRadius = 5
+        hintButtonWidth.constant = 29
         hintButton.layer.backgroundColor = redColorCG
         
         fillSquareButton.layer.cornerRadius = 5
+        fillSquareWidth.constant = 29
         fillSquareButton.layer.backgroundColor = orangeColorCG
-
-        fillWordButton.layer.cornerRadius = 5
-        fillWordButton.layer.backgroundColor = yellowColorCG
         
+        let attributedString = NSAttributedString(string: "\(cheatCount)")
+        let textRange = NSMakeRange(0, attributedString.length)
+        let underlinedMessage = NSMutableAttributedString(attributedString: attributedString)
+        underlinedMessage.addAttribute(NSAttributedStringKey.underlineStyle,
+                                       value:NSUnderlineStyle.styleSingle.rawValue,
+                                       range: textRange)
+        cheatCountLabel.attributedText = underlinedMessage
+
+        levelLabel.text = "Level \(userLevel)"
     }
     
     func giveBoardSpacesProperties(board: [String]) {
@@ -340,7 +362,7 @@ class GameViewController: UIViewController {
         let currentSquareTitle = boardSpaces[indexOfButton].title(for: .normal)
         
         // If the square has text, erase it and stay there
-        if currentSquareTitle != nil && (boardSpaces[indexOfButton].lockedForCorrectAnswer == false || !lockCorrectAnswers) {
+        if currentSquareTitle != nil && (boardSpaces[indexOfButton].lockedForCorrectAnswer == false || !lockCorrectAnswers && !boardSpaces[indexOfButton].revealedByHelper) {
             boardSpaces[indexOfButton].setTitle(nil, for: .normal)
             
             // Erasing a correct answer should make it uncorrect again
@@ -376,8 +398,13 @@ class GameViewController: UIViewController {
             }
             
             // Erase the selected square
-            if boardSpaces[indexOfButton].lockedForCorrectAnswer == false || !lockCorrectAnswers {
+            if boardSpaces[indexOfButton].lockedForCorrectAnswer == false || !lockCorrectAnswers && !boardSpaces[indexOfButton].revealedByHelper {
                 boardSpaces[indexOfButton].setTitle(nil, for: .normal)
+                
+                // If it was locked, we need to unlock it since it is being erased
+                if boardSpaces[indexOfButton].lockedForCorrectAnswer == true {
+                    boardSpaces[indexOfButton].lockedForCorrectAnswer = false
+                }
             }
         }
     }
@@ -701,12 +728,90 @@ class GameViewController: UIViewController {
             }
         }
     }
+
+    @IBAction func hintButtonTapped(_ sender: Any) {
+        if cheatCount == 0 {
+            return
+        }
+        
+        for index in selectedBoardSpaces {
+            if across {
+                boardSpaces[index].shouldShowHintAcross = true
+                if !boardSpaces[index].revealedByHelper {
+                    boardSpaces[index].backgroundColor = UIColor.init(cgColor: redColorCG)
+                }
+            } else {
+                boardSpaces[index].shouldShowHintDown = true
+                if !boardSpaces[index].revealedByHelper {
+                    boardSpaces[index].backgroundColor = UIColor.init(cgColor: redColorCG)
+                }
+            }
+        }
+        
+        // Remove a cheat and set the label
+        cheatCount -= 1
+        
+        if cheatCount == 0 {
+            fillSquareButton.backgroundColor = .gray
+            hintButton.backgroundColor = .gray
+        }
+        
+        let stringToUnderline = NSAttributedString(string: "\(cheatCount)")
+        let textRange = NSMakeRange(0, stringToUnderline.length)
+        let underlinedCount = NSMutableAttributedString(attributedString: stringToUnderline)
+        underlinedCount.addAttribute(NSAttributedStringKey.underlineStyle,
+                                     value:NSUnderlineStyle.styleSingle.rawValue,
+                                     range: textRange)
+        cheatCountLabel.attributedText = underlinedCount
+    }
+    
+    @IBAction func fillSquareButtonTapped(_ sender: Any) {
+        if cheatCount == 0 {
+            return
+        }
+        
+        // A square revealed by a cheat should never be able to be erased or changed
+        boardSpaces[indexOfButton].revealedByHelper = true
+        boardSpaces[indexOfButton].lockedForCorrectAnswer = true
+        
+        // Set the title equal to the correct answer
+        // Set the background to indicate a cheat was used at that square
+        boardSpaces[indexOfButton].setTitle(String(boardSpaces[indexOfButton].letter!).uppercased(), for: .normal)
+        boardSpaces[indexOfButton].backgroundColor = UIColor.init(cgColor: orangeColorCG)
+        
+        // Remove a cheat and set the label
+        cheatCount -= 1
+        
+        if cheatCount == 0 {
+            fillSquareButton.backgroundColor = .gray
+            hintButton.backgroundColor = .gray
+        }
+        
+        let stringToUnderline = NSAttributedString(string: "\(cheatCount)")
+        let textRange = NSMakeRange(0, stringToUnderline.length)
+        let underlinedCount = NSMutableAttributedString(attributedString: stringToUnderline)
+        underlinedCount.addAttribute(NSAttributedStringKey.underlineStyle,
+                                       value:NSUnderlineStyle.styleSingle.rawValue,
+                                       range: textRange)
+        cheatCountLabel.attributedText = underlinedCount
+
+
+        
+        // Move after cheat use
+        if across {
+            moveToNextAcross()
+        } else {
+            moveToNextDown()
+        }
+    }
+    
+    
     
     @IBAction func keyboardButtonPressed(_ sender: UIButton) {
         // Each key of the keyboard has a tag from 1-26. The tag tells which key was pressed.
         // Keyboard is standard qwerty and tags start at Q(1) and end at M(26)
         var letter: Character!
-
+        
         switch sender.tag {
         case 1:
             letter = "q"
@@ -765,7 +870,7 @@ class GameViewController: UIViewController {
         }
         
         // Sets the board space to display the uppercase letter if the space isn't locked
-        if !boardSpaces[indexOfButton].lockedForCorrectAnswer || !lockCorrectAnswers {
+        if !boardSpaces[indexOfButton].lockedForCorrectAnswer || !lockCorrectAnswers && !boardSpaces[indexOfButton].revealedByHelper{
             // If the space was a correct answer but was changed, indicate that square is wrong
             if boardSpaces[indexOfButton].lockedForCorrectAnswer &&
                 letter != boardSpaces[indexOfButton].letter {
@@ -903,6 +1008,10 @@ class GameViewController: UIViewController {
         // Checks bounds before movement
         if indexOfButton < 168 {
             boardSpaces[indexOfButton + 1].sendActions(for: .touchUpInside)
+        } else {
+            across = false
+            nextPhraseButton.sendActions(for: .touchUpInside)
+            return
         }
         
         // If we hit a disabled square or a square not part of an across go to next across phrase
@@ -1089,7 +1198,7 @@ class GameViewController: UIViewController {
             case 736:
                 border.frame = CGRect(x: 0, y: 0, width: 29, height: 30)
             case 812:
-                border.frame = CGRect(x: 0, y: 0, width: 25, height: 28)
+                border.frame = CGRect(x: 0, y: 0, width: 25, height: 28.3)
             default:
                 border.frame = boardSpaces[i].bounds
             }
@@ -1101,7 +1210,7 @@ class GameViewController: UIViewController {
         }
         
         // Gives the selected button a pulsing animation
-        if atSquare != prevSquare || startAnimation {
+        if atSquare != prevSquare {
             let pulse = CABasicAnimation(keyPath: "transform.scale")
             pulse.duration = 1.2
             pulse.autoreverses = true
@@ -1117,8 +1226,6 @@ class GameViewController: UIViewController {
                     space.layer.zPosition = 0
                 }
             }
-            
-            startAnimation = false
         }
     }
     
@@ -1434,13 +1541,13 @@ class GameViewController: UIViewController {
         // Set everything up
         fillAcrossDownArrays()
         makeClueArrays()
-        clueAreaSetup()
         setUpBoard(board: board)
+        clueAreaSetup()
+        startTimer()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        startAnimation = true
         initialHighlight()
     }
     
@@ -1458,5 +1565,30 @@ class GameViewController: UIViewController {
                 menuVC.correctAnimationEnabled = correctAnimationEnabled
             }
         }
+    }
+    
+    func startTimer() {
+        formatter.minimumIntegerDigits = 2
+        gameTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateTimerLabel), userInfo: nil, repeats: true)
+    }
+    
+    @objc func updateTimerLabel() {        
+        secondsCounter += 1
+        if secondsCounter == 60 {
+            secondsCounter = 0
+            minutesCounter += 1
+        }
+        
+        if minutesCounter == 60 {
+            minutesCounter = 0
+            hoursCounter += 1
+        }
+        
+        let secs = formatter.string(for: secondsCounter)
+        let mins = formatter.string(for: minutesCounter)
+        
+        secondsLabel.text = ":\(secs!)"
+        minutesLabel.text = ":\(mins!)"
+        hoursLabel.text = "\(hoursCounter)"
     }
 }
