@@ -14,16 +14,12 @@ class HomeViewController: UIViewController {
         return true
     }
     
-    var audioPlayer: AVAudioPlayer!
-    
     // Falling objects
     var labels = [UILabel]()
     var emojisToChoose = [String]()
     var animator: UIDynamicAnimator!
     var timer: Timer!
     
-    var musicEnabled = true
-    var soundEffectsEnabled = true
     var timerEnabled = true
     var skipFilledEnabled = true
     var lockCorrectEnabled = true
@@ -42,13 +38,6 @@ class HomeViewController: UIViewController {
         if segue.identifier == "level\(levelNumber)Segue" {
             if let gameVC = segue.destination as? GameViewController {
                 gameVC.userLevel = levelNumber
-    
-                gameVC.musicEnabled = musicEnabled
-                gameVC.soundEffectsEnabled = soundEffectsEnabled
-                gameVC.timerEnabled = timerEnabled
-                gameVC.skipFilledSquares = skipFilledEnabled
-                gameVC.lockCorrectAnswers = lockCorrectEnabled
-                gameVC.correctAnimationEnabled = correctAnimationEnabled
             }
         }
         
@@ -58,8 +47,6 @@ class HomeViewController: UIViewController {
             lab.removeFromSuperview()
         }
         labels.removeAll()
-        
-        audioPlayer.setVolume(0, fadeDuration: 1.0)
     }
     
     override func viewDidLoad() {
@@ -87,20 +74,10 @@ class HomeViewController: UIViewController {
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
         timer.fire()
         
-        // MUSIC
-        let path = Bundle.main.path(forResource: "home.mp3", ofType: nil)!
-        let url = URL(fileURLWithPath: path)
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer.numberOfLoops = -1
-            audioPlayer.volume = 0
-            audioPlayer.prepareToPlay()
-            audioPlayer.play()
-            if musicEnabled {
-                audioPlayer.setVolume(0.5, fadeDuration: 1.0)
-            }
-        } catch {
-            print(error)
+        
+        MusicPlayer.start(musicTitle: "home", ext: "mp3")
+        if !Settings.musicEnabled {
+            MusicPlayer.musicPlayer.volume = 0
         }
     }
     

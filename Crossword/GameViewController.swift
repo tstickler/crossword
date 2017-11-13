@@ -22,14 +22,6 @@ class GameViewController: UIViewController {
     var acrossClues = [(Num: String, Clue: String, Hint: String, WordCt: String)]()
     var downClues = [(Num: String, Clue: String, Hint: String, WordCt: String)]()
     
-    // Settings that can be modified by the user
-    var musicEnabled: Bool!
-    var soundEffectsEnabled: Bool!
-    var timerEnabled: Bool!
-    var skipFilledSquares: Bool!
-    var lockCorrectAnswers: Bool!
-    var correctAnimationEnabled: Bool!
-    
     // UI colors
     let blueColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1)
     let blueColorCG = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
@@ -87,9 +79,6 @@ class GameViewController: UIViewController {
     var minutesCounter = 0
     var hoursCounter = 0
     let formatter = NumberFormatter()
-    
-    var audioPlayer: AVAudioPlayer!
-    
     
     /*****************************************
     *                                        *
@@ -212,6 +201,12 @@ class GameViewController: UIViewController {
         cheatCountLabel.attributedText = underlinedMessage
 
         levelLabel.text = "Level \(userLevel)"
+        
+        if !Settings.showTimer {
+            timerStack.isHidden = true
+        } else {
+            timerStack.isHidden = false
+        }
     }
     
     func giveBoardSpacesProperties(board: [String]) {
@@ -383,7 +378,7 @@ class GameViewController: UIViewController {
         let currentSquareTitle = boardSpaces[indexOfButton].title(for: .normal)
         
         // If the square has text, erase it and stay there
-        if currentSquareTitle != nil && (boardSpaces[indexOfButton].lockedForCorrectAnswer == false || !lockCorrectAnswers && !boardSpaces[indexOfButton].revealedByHelper) {
+        if currentSquareTitle != nil && (boardSpaces[indexOfButton].lockedForCorrectAnswer == false || !Settings.lockCorrect && !boardSpaces[indexOfButton].revealedByHelper) {
             boardSpaces[indexOfButton].setTitle(nil, for: .normal)
             
             // Erasing a correct answer should make it uncorrect again
@@ -419,7 +414,7 @@ class GameViewController: UIViewController {
             }
             
             // Erase the selected square
-            if boardSpaces[indexOfButton].lockedForCorrectAnswer == false || !lockCorrectAnswers && !boardSpaces[indexOfButton].revealedByHelper {
+            if boardSpaces[indexOfButton].lockedForCorrectAnswer == false || !Settings.lockCorrect && !boardSpaces[indexOfButton].revealedByHelper {
                 boardSpaces[indexOfButton].setTitle(nil, for: .normal)
                 
                 // If it was locked, we need to unlock it since it is being erased
@@ -478,7 +473,7 @@ class GameViewController: UIViewController {
                         // This occurs when the first letter is not filled, the user
                         // has turned off skip filled squares, or when all squares
                         // have been filled (but aren't all correct)
-                        if button.currentTitle == nil || !skipFilledSquares || allSquaresFilled() {
+                        if button.currentTitle == nil || !Settings.skipFilledSquares || allSquaresFilled() {
                             break
                         }
                         
@@ -549,7 +544,7 @@ class GameViewController: UIViewController {
                         // This occurs when the first letter is not filled, the user
                         // has turned off skip filled squares, or when all squares
                         // have been filled (but aren't all correct)
-                        if button.currentTitle == nil || !skipFilledSquares || allSquaresFilled() {
+                        if button.currentTitle == nil || !Settings.skipFilledSquares || allSquaresFilled() {
                             break
                         }
                         
@@ -638,7 +633,7 @@ class GameViewController: UIViewController {
                         // has turned off skip filled squares, when all squares
                         // have been filled (but aren't all correct), or when
                         // we are erasing
-                        if button.currentTitle == nil || !skipFilledSquares || allSquaresFilled() || erasing {
+                        if button.currentTitle == nil || !Settings.skipFilledSquares || allSquaresFilled() || erasing {
                             break
                         }
                         
@@ -715,7 +710,7 @@ class GameViewController: UIViewController {
                         // has turned off skip filled squares, when all squares
                         // have been filled (but aren't all correct), or when
                         // we are erasing
-                        if button.currentTitle == nil || !skipFilledSquares || allSquaresFilled() || erasing {
+                        if button.currentTitle == nil || !Settings.skipFilledSquares || allSquaresFilled() || erasing {
                             break
                         }
                         
@@ -825,7 +820,7 @@ class GameViewController: UIViewController {
         cheatCountLabel.attributedText = underlinedCount
 
         if correctAnswerEntered() {
-            if correctAnimationEnabled {
+            if Settings.correctAnim {
                 highlightCorrectAnswer()
             }
         }
@@ -917,7 +912,7 @@ class GameViewController: UIViewController {
         }
         
         // Sets the board space to display the uppercase letter if the space isn't locked
-        if !boardSpaces[indexOfButton].lockedForCorrectAnswer || !lockCorrectAnswers && !boardSpaces[indexOfButton].revealedByHelper{
+        if !boardSpaces[indexOfButton].lockedForCorrectAnswer || !Settings.lockCorrect && !boardSpaces[indexOfButton].revealedByHelper{
             // If the space was a correct answer but was changed, indicate that square is wrong
             if boardSpaces[indexOfButton].lockedForCorrectAnswer &&
                 letter != boardSpaces[indexOfButton].letter {
@@ -938,7 +933,7 @@ class GameViewController: UIViewController {
         // check if the user has entered all the right answers. If they have, end the game.
         // Otherwise, skip to the next square.
         if correctAnswerEntered() {
-            if correctAnimationEnabled {
+            if Settings.correctAnim {
                 highlightCorrectAnswer()
                 
                 // We also need to check if correct answer was entered at an intersection.
@@ -1078,7 +1073,7 @@ class GameViewController: UIViewController {
         }
         
         // Skip filled squares
-        if boardSpaces[indexOfButton].currentTitle != nil && skipFilledSquares {
+        if boardSpaces[indexOfButton].currentTitle != nil && Settings.skipFilledSquares {
             // We need to check and make sure all the across squares aren't filled
             // If they are, and we try to move to the next across, we get an infinite loop
             // Use of an iterator to see if we've gone through every single button helps
@@ -1130,7 +1125,7 @@ class GameViewController: UIViewController {
         }
         
         // Skip filled squares
-        if boardSpaces[indexOfButton].currentTitle != nil && skipFilledSquares {
+        if boardSpaces[indexOfButton].currentTitle != nil && Settings.skipFilledSquares {
             // We need to check and make sure all the down squares aren't filled
             // If they are, and we try to move to the next down, we get an infinite loop
             // Use of an iterator to see if we've gone through every single button helps
@@ -1646,19 +1641,9 @@ class GameViewController: UIViewController {
         startTimer()
         
         // MUSIC
-        let path = Bundle.main.path(forResource: "game.mp3", ofType: nil)!
-        let url = URL(fileURLWithPath: path)
-        do {
-            audioPlayer = try AVAudioPlayer(contentsOf: url)
-            audioPlayer.numberOfLoops = -1
-            audioPlayer.volume = 0
-            audioPlayer.prepareToPlay()
-            audioPlayer.play()
-            if musicEnabled {
-                audioPlayer.setVolume(0.5, fadeDuration: 1.0)
-            }
-        } catch {
-            print(error)
+        MusicPlayer.start(musicTitle: "game", ext: "mp3")
+        if !Settings.musicEnabled {
+            MusicPlayer.musicPlayer.volume = 0
         }
     }
     
@@ -1671,17 +1656,8 @@ class GameViewController: UIViewController {
         // When the setting button is clicked, give the view information needed
         // to set the switches to their initial positions which can then be modified
         // by the user.
-        if segue.identifier == "settingSegue" {
-            if let menuVC = segue.destination as? MenuViewController {
-                menuVC.musicEnabled = musicEnabled
-                menuVC.soundEffectsEnabled = soundEffectsEnabled
-                menuVC.timerEnabled = timerEnabled
-                menuVC.skipFilledEnabled = skipFilledSquares
-                menuVC.lockCorrectEnabled = lockCorrectAnswers
-                menuVC.correctAnimationEnabled = correctAnimationEnabled
-                menuVC.audioPlayer = audioPlayer
-            }
-        } else if segue.identifier == "hintSegue" {
+
+        if segue.identifier == "hintSegue" {
             if let hintVC = segue.destination as? HintViewController {
                 hintVC.emoji = getSpotInfo(indexOfButton: indexOfButton, info: "Clue")
                 hintVC.wordCount = getSpotInfo(indexOfButton: indexOfButton, info: "WordCt")

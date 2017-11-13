@@ -12,13 +12,6 @@ import AVFoundation
 class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var menuBackground: UIView!
     
-    var musicEnabled: Bool!
-    var soundEffectsEnabled: Bool!
-    var timerEnabled: Bool!
-    var skipFilledEnabled: Bool!
-    var lockCorrectEnabled: Bool!
-    var correctAnimationEnabled: Bool!
-    
     @IBOutlet var backButton: UIButton!
     @IBOutlet var homeButton: UIButton!
     
@@ -28,8 +21,6 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var skipFilledSwitch: UISwitch!
     @IBOutlet var lockCorrectSwitch: UISwitch!
     @IBOutlet var correctAnimationSwitch: UISwitch!
-    
-    var audioPlayer: AVAudioPlayer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -50,74 +41,49 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         setSwitches()
+        
     }
 
     // Returns selected information back to parent view
     @IBAction func backButtonTapped(_ sender: Any) {
-        if let parentGame = presentingViewController as? GameViewController {
-            parentGame.musicEnabled = musicEnabled
-            parentGame.soundEffectsEnabled = soundEffectsEnabled
-            parentGame.timerEnabled = timerEnabled
-            parentGame.skipFilledSquares = skipFilledEnabled
-            parentGame.lockCorrectAnswers = lockCorrectEnabled
-            parentGame.correctAnimationEnabled = correctAnimationEnabled
-            parentGame.audioPlayer = audioPlayer
-        }
         dismiss(animated: true, completion: nil)
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Save switches into home view controller
-        if segue.identifier == "homeSegue" {
-            if let homeVC = segue.destination as? HomeViewController {
-                homeVC.musicEnabled = musicEnabled
-                homeVC.soundEffectsEnabled = soundEffectsEnabled
-                homeVC.timerEnabled = timerEnabled
-                homeVC.skipFilledEnabled = skipFilledEnabled
-                homeVC.lockCorrectEnabled = lockCorrectEnabled
-                homeVC.correctAnimationEnabled = correctAnimationEnabled
-                
-                audioPlayer.setVolume(0, fadeDuration: 1.0)
-            }
-        }
     }
     
     // Sets initial state of switches on loading
     func setSwitches() {
-        musicSwitch.setOn(musicEnabled, animated: false)
-        soundEffectsSwitch.setOn(soundEffectsEnabled, animated: false)
-        timerSwitch.setOn(timerEnabled, animated: false)
-        skipFilledSwitch.setOn(skipFilledEnabled, animated: false)
-        lockCorrectSwitch.setOn(lockCorrectEnabled, animated: false)
-        correctAnimationSwitch.setOn(correctAnimationEnabled, animated: false)
+        musicSwitch.setOn(Settings.musicEnabled, animated: false)
+        soundEffectsSwitch.setOn(Settings.soundEffects, animated: false)
+        timerSwitch.setOn(Settings.showTimer, animated: false)
+        skipFilledSwitch.setOn(Settings.skipFilledSquares, animated: false)
+        lockCorrectSwitch.setOn(Settings.lockCorrect, animated: false)
+        correctAnimationSwitch.setOn(Settings.correctAnim, animated: false)
     }
     
     // Switch toggling
     @IBAction func musicSwitchToggled(_ sender: Any) {
         if musicSwitch.isOn == true {
-            musicEnabled = true
-            audioPlayer.setVolume(0.5, fadeDuration: 1.0)
+            Settings.musicEnabled = true
+            MusicPlayer.musicPlayer.setVolume(1.0, fadeDuration: 1.0)
         } else {
-            musicEnabled = false
-            audioPlayer.setVolume(0, fadeDuration: 1.0)
+            Settings.musicEnabled = false
+            MusicPlayer.musicPlayer.setVolume(0, fadeDuration: 1.0)
         }
     }
     @IBAction func soundEffectsToggled(_ sender: Any) {
         if soundEffectsSwitch.isOn == true {
-            soundEffectsEnabled = true
+            Settings.soundEffects = true
         } else {
-            soundEffectsEnabled = false
+            Settings.soundEffects = false
         }
     }
     @IBAction func timerToggled(_ sender: Any) {
         if timerSwitch.isOn == true {
-            timerEnabled = true
+            Settings.showTimer = true
             if let parentVC = presentingViewController as? GameViewController {
                 parentVC.timerStack.isHidden = false
-                
             }
         } else {
-            timerEnabled = false
+            Settings.showTimer = false
             if let parentVC = presentingViewController as? GameViewController {
                 parentVC.timerStack.isHidden = true
             }
@@ -125,23 +91,23 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     @IBAction func skipFilledToggled(_ sender: Any) {
         if skipFilledSwitch.isOn == true {
-            skipFilledEnabled = true
+            Settings.skipFilledSquares = true
         } else {
-            skipFilledEnabled = false
+            Settings.skipFilledSquares = false
         }
     }
     @IBAction func lockCorrectToggled(_ sender: Any) {
         if lockCorrectSwitch.isOn == true {
-            lockCorrectEnabled = true
+            Settings.lockCorrect = true
         } else {
-            lockCorrectEnabled = false
+            Settings.lockCorrect = false
         }
     }
     @IBAction func correctAnimationToggled(_ sender: Any) {
         if correctAnimationSwitch.isOn == true {
-            correctAnimationEnabled = true
+            Settings.correctAnim = true
         } else {
-            correctAnimationEnabled = false
+            Settings.correctAnim = false
         }
     }
     
