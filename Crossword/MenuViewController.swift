@@ -96,7 +96,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func musicSwitchToggled(_ sender: Any) {
         if musicSwitch.isOn == true {
             musicEnabled = true
-            audioPlayer.setVolume(0.5, fadeDuration: 2.0)
+            audioPlayer.setVolume(0.5, fadeDuration: 1.0)
         } else {
             musicEnabled = false
             audioPlayer.setVolume(0, fadeDuration: 1.0)

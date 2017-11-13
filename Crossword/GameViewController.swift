@@ -1655,7 +1655,7 @@ class GameViewController: UIViewController {
             audioPlayer.prepareToPlay()
             audioPlayer.play()
             if musicEnabled {
-                audioPlayer.setVolume(0.5, fadeDuration: 2.0)
+                audioPlayer.setVolume(0.5, fadeDuration: 1.0)
             }
         } catch {
             print(error)

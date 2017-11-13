@@ -22,7 +22,7 @@ class HomeViewController: UIViewController {
     var animator: UIDynamicAnimator!
     var timer: Timer!
     
-    var musicEnabled = false
+    var musicEnabled = true
     var soundEffectsEnabled = true
     var timerEnabled = true
     var skipFilledEnabled = true
@@ -59,7 +59,7 @@ class HomeViewController: UIViewController {
         }
         labels.removeAll()
         
-        audioPlayer.setVolume(0, fadeDuration: 2.0)
+        audioPlayer.setVolume(0, fadeDuration: 1.0)
     }
     
     override func viewDidLoad() {
@@ -97,7 +97,7 @@ class HomeViewController: UIViewController {
             audioPlayer.prepareToPlay()
             audioPlayer.play()
             if musicEnabled {
-                audioPlayer.setVolume(0.5, fadeDuration: 2.0)
+                audioPlayer.setVolume(0.5, fadeDuration: 1.0)
             }
         } catch {
             print(error)
