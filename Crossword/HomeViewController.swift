@@ -7,11 +7,14 @@
 //
 
 import UIKit
+import AVFoundation
 
 class HomeViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    
+    var audioPlayer: AVAudioPlayer!
     
     // Falling objects
     var labels = [UILabel]()
@@ -19,7 +22,7 @@ class HomeViewController: UIViewController {
     var animator: UIDynamicAnimator!
     var timer: Timer!
     
-    var musicEnabled = true
+    var musicEnabled = false
     var soundEffectsEnabled = true
     var timerEnabled = true
     var skipFilledEnabled = true
@@ -39,7 +42,7 @@ class HomeViewController: UIViewController {
         if segue.identifier == "level\(levelNumber)Segue" {
             if let gameVC = segue.destination as? GameViewController {
                 gameVC.userLevel = levelNumber
-                
+    
                 gameVC.musicEnabled = musicEnabled
                 gameVC.soundEffectsEnabled = soundEffectsEnabled
                 gameVC.timerEnabled = timerEnabled
@@ -55,10 +58,13 @@ class HomeViewController: UIViewController {
             lab.removeFromSuperview()
         }
         labels.removeAll()
+        
+        audioPlayer.setVolume(0, fadeDuration: 2.0)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         animator = UIDynamicAnimator(referenceView: self.view)
         emojisToChoose = ["😄", "😇", "😂", "🤣", "🙂", "🙃", "😍", "😘", "😋", "😜",
                           "🤪", "🤩", "😎", "🤓", "😏", "😭", "😤", "😢", "😡", "🤬",
@@ -80,6 +86,27 @@ class HomeViewController: UIViewController {
         // When timer fires, will create a new label to be dropped from the view
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
         timer.fire()
+        
+        // MUSIC
+        let path = Bundle.main.path(forResource: "home.mp3", ofType: nil)!
+        let url = URL(fileURLWithPath: path)
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer.numberOfLoops = -1
+            audioPlayer.volume = 0
+            audioPlayer.prepareToPlay()
+            audioPlayer.play()
+            if musicEnabled {
+                audioPlayer.setVolume(0.5, fadeDuration: 2.0)
+            }
+        } catch {
+            print(error)
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
     }
     
     @objc func update() {

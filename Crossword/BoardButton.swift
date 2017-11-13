@@ -13,12 +13,34 @@ class BoardButton: UIButton {
     var across: String!
     var down: String!
     var superscriptLabel = UILabel()
+    var hintLabel = UILabel()
     var lockedForCorrectAnswer = false
     var shouldShowHintAcross = false
     var shouldShowHintDown = false
     var revealedByHelper = false
     
     var numberConstraints = [NSLayoutConstraint]()
+    var hintConstraints = [NSLayoutConstraint]()
+    
+    func showHintLabel() {
+        self.addSubview(hintLabel)
+        hintLabel.translatesAutoresizingMaskIntoConstraints = false
+        hintLabel.text = "!"
+        hintLabel.textColor = UIColor.init(red: 255/255, green: 150/255, blue: 176/255, alpha: 1)
+        
+        if UIScreen.main.bounds.height == 568 {
+            hintLabel.font = hintLabel.font.withSize(10)
+        } else {
+            hintLabel.font = hintLabel.font.withSize(12)
+        }
+        
+        hintConstraints.append(NSLayoutConstraint(item: self.hintLabel, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1.0, constant: -2))
+        
+        hintConstraints.append(NSLayoutConstraint(item: self.hintLabel, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1.0, constant: 1))
+        
+        NSLayoutConstraint.activate(hintConstraints)
+
+    }
     
     // Adds number superscript to idicate beginning of phrase
     func setSuperScriptLabel(number: String) {

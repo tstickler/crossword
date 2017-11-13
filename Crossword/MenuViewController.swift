@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var menuBackground: UIView!
@@ -28,15 +29,20 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var lockCorrectSwitch: UISwitch!
     @IBOutlet var correctAnimationSwitch: UISwitch!
     
+    var audioPlayer: AVAudioPlayer!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        menuBackground.layer.cornerRadius = 15
         
-        backButton.layer.borderWidth = 2
+        menuBackground.layer.cornerRadius = 15
+        menuBackground.layer.borderWidth = 3
+        menuBackground.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
+        
+        backButton.layer.borderWidth = 1
         backButton.layer.cornerRadius = 3
         backButton.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
         
-        homeButton.layer.borderWidth = 2
+        homeButton.layer.borderWidth = 1
         homeButton.layer.cornerRadius = 3
         homeButton.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
     }
@@ -55,6 +61,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
             parentGame.skipFilledSquares = skipFilledEnabled
             parentGame.lockCorrectAnswers = lockCorrectEnabled
             parentGame.correctAnimationEnabled = correctAnimationEnabled
+            parentGame.audioPlayer = audioPlayer
         }
         dismiss(animated: true, completion: nil)
     }
@@ -69,6 +76,8 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
                 homeVC.skipFilledEnabled = skipFilledEnabled
                 homeVC.lockCorrectEnabled = lockCorrectEnabled
                 homeVC.correctAnimationEnabled = correctAnimationEnabled
+                
+                audioPlayer.setVolume(0, fadeDuration: 1.0)
             }
         }
     }
@@ -87,8 +96,10 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func musicSwitchToggled(_ sender: Any) {
         if musicSwitch.isOn == true {
             musicEnabled = true
+            audioPlayer.setVolume(0.5, fadeDuration: 2.0)
         } else {
             musicEnabled = false
+            audioPlayer.setVolume(0, fadeDuration: 1.0)
         }
     }
     @IBAction func soundEffectsToggled(_ sender: Any) {

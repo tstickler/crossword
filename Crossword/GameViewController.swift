@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import AVFoundation
 
 class GameViewController: UIViewController {
     // Used to determine which phone the user has
@@ -38,11 +39,11 @@ class GameViewController: UIViewController {
     
     // Cheat Buttons
     @IBOutlet var hintButton: UIButton!
-    @IBOutlet weak var hintButtonWidth: NSLayoutConstraint!
     @IBOutlet var fillSquareButton: UIButton!
-    @IBOutlet weak var fillSquareWidth: NSLayoutConstraint!
     @IBOutlet weak var cheatCountLabel: UILabel!
-    var cheatCount: Int = 10
+    @IBOutlet var hintEnabledButton: UIButton!
+    
+    var cheatCount: Int = 1000
     
     // Iterator to prevent inifinte loop
     var checkAllDirectionFilledIterator = 0
@@ -74,7 +75,6 @@ class GameViewController: UIViewController {
     
     // To know where the user last was
     var previousButton = 0
-    var previousSpaces = [Int]()
     
     // Timer
     @IBOutlet weak var timerStack: UIStackView!
@@ -87,6 +87,9 @@ class GameViewController: UIViewController {
     var minutesCounter = 0
     var hoursCounter = 0
     let formatter = NumberFormatter()
+    
+    var audioPlayer: AVAudioPlayer!
+    
     
     /*****************************************
     *                                        *
@@ -191,12 +194,14 @@ class GameViewController: UIViewController {
         backPhraseButton.setTitleColor(blueColor, for: .normal)
         
         hintButton.layer.cornerRadius = 5
-        hintButtonWidth.constant = 29
         hintButton.layer.backgroundColor = redColorCG
         
         fillSquareButton.layer.cornerRadius = 5
-        fillSquareWidth.constant = 29
         fillSquareButton.layer.backgroundColor = orangeColorCG
+        
+        hintEnabledButton.layer.cornerRadius = 12.5
+        hintEnabledButton.layer.borderColor = UIColor.white.cgColor
+        hintEnabledButton.layer.borderWidth = 1
         
         let attributedString = NSAttributedString(string: "\(cheatCount)")
         let textRange = NSMakeRange(0, attributedString.length)
@@ -347,10 +352,26 @@ class GameViewController: UIViewController {
         rowAndColumnDetermination(indexOfButton: indexOfButton)
         
         // Set the label for the clueLabel
-        clueLabel.text = getClue(indexOfButton: indexOfButton)
+        clueLabel.text = getSpotInfo(indexOfButton: indexOfButton, info: "Clue")
         
         // Set the label for the direction
         determineDirectionText(indexOfButton: indexOfButton)
+        
+        // Determine if hint enabled button should be shown for selected squares
+        if (across && boardSpaces[indexOfButton].shouldShowHintAcross) ||
+            (!across && boardSpaces[indexOfButton].shouldShowHintDown) {
+            hintEnabledButton.isHidden = false
+            hintEnabledButton.isEnabled = true
+            
+            hintButton.backgroundColor = .gray
+            hintButton.isEnabled = false
+        } else {
+            hintButton.backgroundColor = UIColor(cgColor: redColorCG)
+            hintEnabledButton.isHidden = true
+            hintEnabledButton.isEnabled = false
+            
+            hintButton.isEnabled = true
+        }
         
         // Allows us to look back one to see what the last press was
         previousButton = indexOfButton
@@ -734,19 +755,25 @@ class GameViewController: UIViewController {
             return
         }
         
+        performSegue(withIdentifier: "hintSegue", sender: self)
+        
         for index in selectedBoardSpaces {
             if across {
                 boardSpaces[index].shouldShowHintAcross = true
                 if !boardSpaces[index].revealedByHelper {
-                    boardSpaces[index].backgroundColor = UIColor.init(cgColor: redColorCG)
+                    boardSpaces[index].showHintLabel()
                 }
             } else {
                 boardSpaces[index].shouldShowHintDown = true
                 if !boardSpaces[index].revealedByHelper {
-                    boardSpaces[index].backgroundColor = UIColor.init(cgColor: redColorCG)
+                    boardSpaces[index].showHintLabel()
                 }
             }
         }
+        
+        hintEnabledButton.isEnabled = true
+        hintEnabledButton.isHidden = false
+        hintButton.backgroundColor = .gray
         
         // Remove a cheat and set the label
         cheatCount -= 1
@@ -763,10 +790,12 @@ class GameViewController: UIViewController {
                                      value:NSUnderlineStyle.styleSingle.rawValue,
                                      range: textRange)
         cheatCountLabel.attributedText = underlinedCount
+        
+        hintButton.isEnabled = false
     }
     
     @IBAction func fillSquareButtonTapped(_ sender: Any) {
-        if cheatCount == 0 {
+        if cheatCount == 0  || boardSpaces[indexOfButton].revealedByHelper {
             return
         }
         
@@ -795,7 +824,25 @@ class GameViewController: UIViewController {
                                        range: textRange)
         cheatCountLabel.attributedText = underlinedCount
 
-
+        if correctAnswerEntered() {
+            if correctAnimationEnabled {
+                highlightCorrectAnswer()
+            }
+        }
+        
+        if allSquaresFilled() {
+            // See if the user has entered all the right answers
+            if gameOver() {
+                clueLabel.textColor = .white
+                clueLabel.text = "Game Over"
+                return
+            } else {
+                // If the user isn't right, tell them how many wrong
+                clueLabel.textColor = .white
+                clueLabel.text = "\(countWrong()) wrong"
+                return
+            }
+        }
         
         // Move after cheat use
         if across {
@@ -909,18 +956,28 @@ class GameViewController: UIViewController {
                 boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
             }
             
-            if gameOver() {
-                clueLabel.textColor = .white
-                clueLabel.text = "Game Over"
-                return
+            // See if all the squares have been filled
+            if allSquaresFilled() {
+                // If all squares are filled, see if the user is right
+                if gameOver(){
+                    clueLabel.textColor = .white
+                    clueLabel.text = "Game Over"
+                    return
+                } else {
+                    // If the user isn't right, tell them how many wrong
+                    clueLabel.textColor = .white
+                    clueLabel.text = "\(countWrong()) wrong"
+                    return
+                }
             } else {
                 nextPhraseButton.sendActions(for: .touchUpInside)
             }
             // Return so we go to the first spot in the next phrase and not the second
             return
         } else if allSquaresFilled() {
+            // If the user isn't right, tell them how many wrong
             clueLabel.textColor = .white
-            clueLabel.text = "Somethings not quite right"
+            clueLabel.text = "\(countWrong()) wrong"
             return
         } else {
             // This checks the other direction at an intersection but the original
@@ -1103,7 +1160,7 @@ class GameViewController: UIViewController {
         checkAllDirectionFilledIterator = 0
     }
     
-    func getClue(indexOfButton: Int) -> String {
+    func getSpotInfo(indexOfButton: Int, info: String) -> String {
         var i = 0
         // Grabs the clue related to the selected square
         // If we are currently looking for across, get the across clue associated with the square
@@ -1127,7 +1184,18 @@ class GameViewController: UIViewController {
                 // same index, we can use the index where we found our across number to get
                 // the corresponding clue
                 if acrossClues[i].Num == numAcross {
-                    return acrossClues[i].Clue
+                    switch info {
+                        case "Clue":
+                            return acrossClues[i].Clue
+                        case "Hint":
+                            return acrossClues[i].Hint
+                        case "WordCt":
+                            return acrossClues[i].WordCt
+                        case "Num":
+                            return acrossClues[i].Num
+                        default:
+                            return ""
+                    }
                 }
                 i += 1
             }
@@ -1152,7 +1220,18 @@ class GameViewController: UIViewController {
             // the corresponding clue
             while i < downClues.count {
                 if downClues[i].Num == numDown {
-                    return downClues[i].Clue
+                    switch info {
+                    case "Clue":
+                        return downClues[i].Clue
+                    case "Hint":
+                        return downClues[i].Hint
+                    case "WordCt":
+                        return downClues[i].WordCt
+                    case "Num":
+                        return downClues[i].Num
+                    default:
+                        return ""
+                    }
                 }
                 i += 1
             }
@@ -1172,6 +1251,30 @@ class GameViewController: UIViewController {
             }
         }
         return true
+    }
+    
+    func countWrong() -> Int {
+        var numberWrongCounter = 0
+        
+        // Loop through the board spaces and find how many errors the user made
+        for space in boardSpaces {
+            if var spaceTitle = space.title(for: .normal) {
+                // Letters are stored lowercase while titles are displayed as uppercase.
+                // Lowercase the title so we can compare it with the stored letter.
+                spaceTitle = spaceTitle.lowercased()
+                    
+                // Nothing needs to happen if the letters match or we're at a inactive square.
+                // Just continue the loop
+                if Character(spaceTitle) == space.letter! || space.letter! == "-" {
+                    /* nothing needs to happen */
+                } else {
+                    // If the user entered a wrong answer, increase our counter
+                    numberWrongCounter += 1
+                }
+            }
+        }
+        
+        return numberWrongCounter
     }
     
      /*****************************************
@@ -1445,9 +1548,6 @@ class GameViewController: UIViewController {
         
         // Handles highlighting the needed selected squares
         highlight(selectedSpaces: selectedBoardSpaces, atSquare: indexOfButton, prevSquare: previousButton)
-        
-        // Holds previous spaces to manage highlighting when user taps the same button
-        previousSpaces = selectedBoardSpaces
     }
     
     func initialHighlight() {
@@ -1544,6 +1644,22 @@ class GameViewController: UIViewController {
         setUpBoard(board: board)
         clueAreaSetup()
         startTimer()
+        
+        // MUSIC
+        let path = Bundle.main.path(forResource: "game.mp3", ofType: nil)!
+        let url = URL(fileURLWithPath: path)
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer.numberOfLoops = -1
+            audioPlayer.volume = 0
+            audioPlayer.prepareToPlay()
+            audioPlayer.play()
+            if musicEnabled {
+                audioPlayer.setVolume(0.5, fadeDuration: 2.0)
+            }
+        } catch {
+            print(error)
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -1563,6 +1679,15 @@ class GameViewController: UIViewController {
                 menuVC.skipFilledEnabled = skipFilledSquares
                 menuVC.lockCorrectEnabled = lockCorrectAnswers
                 menuVC.correctAnimationEnabled = correctAnimationEnabled
+                menuVC.audioPlayer = audioPlayer
+            }
+        } else if segue.identifier == "hintSegue" {
+            if let hintVC = segue.destination as? HintViewController {
+                hintVC.emoji = getSpotInfo(indexOfButton: indexOfButton, info: "Clue")
+                hintVC.wordCount = getSpotInfo(indexOfButton: indexOfButton, info: "WordCt")
+                hintVC.hint = getSpotInfo(indexOfButton: indexOfButton, info: "Hint")
+                hintVC.clueNumber = directionLabel.text!
+                hintVC.screenSize = screenSize
             }
         }
     }
