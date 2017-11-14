@@ -10,9 +10,22 @@ import UIKit
 import AVFoundation
 
 class HomeViewController: UIViewController {
+    @IBAction func unwindSegue(_ sender: UIStoryboardSegue) {
+        // Gives a nice animation when unwinding to the homescreen
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        transition.type = kCATransitionFade
+        self.navigationController?.view.layer.add(transition, forKey: nil)
+        _ = self.navigationController?.popToRootViewController(animated: false)
+    }
+
     override var prefersStatusBarHidden: Bool {
         return true
     }
+    
+    // Allows storing and reading from the disk
+    let defaults = UserDefaults.standard
     
     // Falling objects
     var labels = [UILabel]()
@@ -20,38 +33,13 @@ class HomeViewController: UIViewController {
     var animator: UIDynamicAnimator!
     var timer: Timer!
     
-    var timerEnabled = true
-    var skipFilledEnabled = true
-    var lockCorrectEnabled = true
-    var correctAnimationEnabled = true
-    
+    // The level we should go to
     var levelNumber = 1
-    
-    @IBAction func levelButtonPressed(_ sender: UIButton) {
-        levelNumber = sender.tag
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // When the setting button is clicked, give the view information needed
-        // to set the switches to their initial positions which can then be modified
-        // by the user.
-        if segue.identifier == "level\(levelNumber)Segue" {
-            if let gameVC = segue.destination as? GameViewController {
-                gameVC.userLevel = levelNumber
-            }
-        }
-        
-        // Remove the animated guys when transitioning
-        timer.invalidate()
-        for lab in labels {
-            lab.removeFromSuperview()
-        }
-        labels.removeAll()
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        loadSettings()
+
         animator = UIDynamicAnimator(referenceView: self.view)
         emojisToChoose = ["😄", "😇", "😂", "🤣", "🙂", "🙃", "😍", "😘", "😋", "😜",
                           "🤪", "🤩", "😎", "🤓", "😏", "😭", "😤", "😢", "😡", "🤬",
@@ -68,27 +56,39 @@ class HomeViewController: UIViewController {
                           "🌮", "🍬", "🍭", "🎂", "🍩", "⚽️", "🏀", "🏈", "⚾️", "🥇",
                           "🎨", "🎤", "🎷", "🎳", "🚗", "✈️", "🚀", "🗽", "🏝", "📱",
                           "📸", "☎️", "💡", "💵", "💎", "💣", "🔮", "🔑", "✉️", "❤️",
-                          "💔", "💘", "⚠️", "🌀", "🃏"]
+                          "💔", "💘", "⚠️", "🌀", "🃏", "🤞🏻", "👏🏼", "👌🏻", "👉🏼", "👍🏻"]
 
         // When timer fires, will create a new label to be dropped from the view
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
         timer.fire()
         
-        
+        // Start playing music
         MusicPlayer.start(musicTitle: "home", ext: "mp3")
         if !Settings.musicEnabled {
+            // Music is always playing but only if it's enabled should the volume be > 0
             MusicPlayer.musicPlayer.volume = 0
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.isNavigationBarHidden = true
+    }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        // Gives a nice animation to the next view
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        transition.type = kCATransitionFade
+        self.navigationController?.view.layer.add(transition, forKey: nil)
+
     }
     
     @objc func update() {
         // Create the emoji and add it to a label
-        let emoji = emojisToChoose[Int(arc4random_uniform(155))]
+        let emoji = emojisToChoose[Int(arc4random_uniform(160))]
         let label = UILabel()
         
         // Choose a random location at the top of the screen for the emoji to fall
@@ -134,5 +134,41 @@ class HomeViewController: UIViewController {
         
         // Begin animation
         animator?.addBehavior(push)
+    }
+    
+    func loadSettings() {
+        // Determine if this is the first time the user has used the app
+        Settings.launchedBefore = defaults.bool(forKey: "launchedBefore")
+        
+        // If the user hasn't used the app, set to their preferred settings
+        if Settings.launchedBefore {
+            Settings.launchedBefore = defaults.bool(forKey: "firstTime")
+            Settings.musicEnabled = defaults.bool(forKey: "musicEnabled")
+            Settings.soundEffects = defaults.bool(forKey: "soundEffects")
+            Settings.showTimer = defaults.bool(forKey: "showTimer")
+            Settings.skipFilledSquares = defaults.bool(forKey: "skipFilledSquares")
+            Settings.lockCorrect = defaults.bool(forKey: "lockCorrect")
+            Settings.correctAnim = defaults.bool(forKey: "correctAnim")
+        } else {
+            // If this is the user's first time, start all the settings as enabled.
+            // This must happen because loading from defaults when there is no key associated
+            // with the setting, it will just return false.
+            // If the user decides they don't like a setting, they can change it later
+            defaults.set(true, forKey: "launchedBefore")
+            
+            defaults.set(true, forKey: "musicEnabled")
+            defaults.set(true, forKey: "soundEffects")
+            defaults.set(true, forKey: "showTimer")
+            defaults.set(true, forKey: "skipFilledSquares")
+            defaults.set(true, forKey: "lockCorrect")
+            defaults.set(true, forKey: "correctAnim")
+            
+            Settings.musicEnabled = true
+            Settings.soundEffects = true
+            Settings.showTimer   = true
+            Settings.skipFilledSquares = true
+            Settings.lockCorrect = true
+            Settings.correctAnim = true
+        }
     }
 }

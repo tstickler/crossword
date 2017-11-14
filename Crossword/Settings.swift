@@ -9,10 +9,11 @@
 import UIKit
 
 class Settings {
-    static var musicEnabled: Bool = true
-    static var soundEffects: Bool = true
-    static var showTimer: Bool = true
-    static var skipFilledSquares: Bool = true
-    static var lockCorrect: Bool = true
-    static var correctAnim: Bool = true
+    static var musicEnabled: Bool!
+    static var soundEffects: Bool!
+    static var showTimer: Bool!
+    static var skipFilledSquares: Bool!
+    static var lockCorrect: Bool!
+    static var correctAnim: Bool!
+    static var launchedBefore: Bool!
 }

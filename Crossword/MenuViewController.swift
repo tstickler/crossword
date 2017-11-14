@@ -10,11 +10,17 @@ import UIKit
 import AVFoundation
 
 class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
+    // Allows saving the user preferences on the device
+    let defaults = UserDefaults.standard
+
+    // Frame to display the settings
     @IBOutlet var menuBackground: UIView!
     
+    // Navigation buttons. Back goes to the game, home goes to homescreen.
     @IBOutlet var backButton: UIButton!
     @IBOutlet var homeButton: UIButton!
     
+    // Switches to adjust preferences
     @IBOutlet var musicSwitch: UISwitch!
     @IBOutlet var soundEffectsSwitch: UISwitch!
     @IBOutlet var timerSwitch: UISwitch!
@@ -25,26 +31,14 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        menuBackground.layer.cornerRadius = 15
-        menuBackground.layer.borderWidth = 3
-        menuBackground.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
+        // Set up UI for user to interact with
+        setUpMenuUI()
         
-        backButton.layer.borderWidth = 1
-        backButton.layer.cornerRadius = 3
-        backButton.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
-        
-        homeButton.layer.borderWidth = 1
-        homeButton.layer.cornerRadius = 3
-        homeButton.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        // Switches are set to positions based on the settings
         setSwitches()
-        
     }
 
-    // Returns selected information back to parent view
+    // Close the view and return back to the game
     @IBAction func backButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
     }
@@ -61,6 +55,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // Switch toggling
     @IBAction func musicSwitchToggled(_ sender: Any) {
+        // Flipping the switch should immediately start or stop the music
         if musicSwitch.isOn == true {
             Settings.musicEnabled = true
             MusicPlayer.musicPlayer.setVolume(1.0, fadeDuration: 1.0)
@@ -68,6 +63,12 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
             Settings.musicEnabled = false
             MusicPlayer.musicPlayer.setVolume(0, fadeDuration: 1.0)
         }
+        
+        // Save the state of the setting
+        // Saving it when switch is toggled allows keeping the setting information
+        // even if the app were to crash or the user closes it without exiting the
+        // view.
+        defaults.set(Settings.musicEnabled, forKey: "musicEnabled")
     }
     @IBAction func soundEffectsToggled(_ sender: Any) {
         if soundEffectsSwitch.isOn == true {
@@ -75,6 +76,9 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         } else {
             Settings.soundEffects = false
         }
+        
+        // Save the state of the setting
+        defaults.set(Settings.soundEffects, forKey: "soundEffects")
     }
     @IBAction func timerToggled(_ sender: Any) {
         if timerSwitch.isOn == true {
@@ -88,6 +92,9 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
                 parentVC.timerStack.isHidden = true
             }
         }
+        
+        // Save the state of the setting
+        defaults.set(Settings.showTimer, forKey: "showTimer")
     }
     @IBAction func skipFilledToggled(_ sender: Any) {
         if skipFilledSwitch.isOn == true {
@@ -95,6 +102,9 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         } else {
             Settings.skipFilledSquares = false
         }
+        
+        // Save the state of the setting
+        defaults.set(Settings.skipFilledSquares, forKey: "skipFilledSquares")
     }
     @IBAction func lockCorrectToggled(_ sender: Any) {
         if lockCorrectSwitch.isOn == true {
@@ -102,6 +112,9 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         } else {
             Settings.lockCorrect = false
         }
+        
+        // Save the state of the setting
+        defaults.set(Settings.lockCorrect, forKey: "lockCorrect")
     }
     @IBAction func correctAnimationToggled(_ sender: Any) {
         if correctAnimationSwitch.isOn == true {
@@ -109,17 +122,37 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         } else {
             Settings.correctAnim = false
         }
+        
+        // Save the state of the setting
+        defaults.set(Settings.correctAnim, forKey: "correctAnim")
     }
     
-    // Gesture recognizers
+    // Gesture recognizer control
     @IBAction func backgroundTapped(_ sender: Any) {
         backButton.sendActions(for: .touchUpInside)
     }
     
+    // Gives bounds the user can tap to close the menu. These bounds are only outside of the menu
+    // background. Any taps inside the bounds won't close the menu.
     func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
         if menuBackground.frame.contains(touch.location(in: view)) {
             return false
         }
         return true
+    }
+    
+    // Make our UI elements look good
+    func setUpMenuUI() {
+        menuBackground.layer.cornerRadius = 15
+        menuBackground.layer.borderWidth = 3
+        menuBackground.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
+        
+        backButton.layer.borderWidth = 1
+        backButton.layer.cornerRadius = 3
+        backButton.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
+        
+        homeButton.layer.borderWidth = 1
+        homeButton.layer.cornerRadius = 3
+        homeButton.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
     }
 }

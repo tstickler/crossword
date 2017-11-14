@@ -14,10 +14,12 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
     private override init() {}
     
     static func start(musicTitle: String, ext: String) {
-        // MUSIC
+        // Find our music file
         let path = Bundle.main.path(forResource: musicTitle, ofType: ext)!
         let url = URL(fileURLWithPath: path)
+        
         do {
+            // Play the music
             MusicPlayer.musicPlayer = try AVAudioPlayer(contentsOf: url)
             MusicPlayer.musicPlayer.numberOfLoops = -1
             MusicPlayer.musicPlayer.volume = 0

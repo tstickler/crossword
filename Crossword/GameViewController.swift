@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 
 class GameViewController: UIViewController {
+    let defaults = UserDefaults.standard
     // Used to determine which phone the user has
     let screenSize = UIScreen.main.bounds
 
@@ -1650,6 +1651,10 @@ class GameViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         initialHighlight()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
