@@ -1673,8 +1673,8 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z1E-eb-3pe" userLabel="Backspace">
                                 <rect key="frame" x="268" y="521" width="49" height="45"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <inset key="imageEdgeInsets" minX="5" minY="9" maxX="5" maxY="9"/>
-                                <state key="normal" title="!" image="erase.png">
+                                <inset key="imageEdgeInsets" minX="4" minY="7" maxX="4" maxY="7"/>
+                                <state key="normal" title="!" image="back_arrow4-1">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -2115,7 +2115,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qj3-tv-BFu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1414.4927536231885" y="145.10869565217394"/>
+            <point key="canvasLocation" x="1413.75" y="144.71830985915494"/>
         </scene>
         <!--Hint View Controller-->
         <scene sceneID="3SP-uo-hc4">
@@ -2429,7 +2429,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="erase.png" width="100" height="100"/>
+        <image name="back_arrow4-1" width="459" height="459"/>
         <image name="fill_square2-1" width="439" height="438"/>
         <image name="line2-1" width="4193" height="22"/>
         <image name="play-1" width="3969" height="1041"/>
