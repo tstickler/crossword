@@ -2221,7 +2221,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2250" y="145.77464788732394"/>
+            <point key="canvasLocation" x="2194" y="145"/>
         </scene>
         <!--Menu View Controller-->
         <scene sceneID="PF1-TV-yKz">
@@ -2407,7 +2407,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2250" y="918"/>
+            <point key="canvasLocation" x="1864" y="945"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Euo-3a-XfB">

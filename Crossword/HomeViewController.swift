@@ -62,16 +62,18 @@ class HomeViewController: UIViewController {
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
         timer.fire()
         
-        // Start playing music
-        MusicPlayer.start(musicTitle: "home", ext: "mp3")
-        if !Settings.musicEnabled {
-            // Music is always playing but only if it's enabled should the volume be > 0
-            MusicPlayer.musicPlayer.volume = 0
-        }
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // Start playing music
+        MusicPlayer.start(musicTitle: "home", ext: "mp3")
+
+        if !Settings.musicEnabled {
+            // Music is always playing but only if it's enabled should the volume be > 0
+            MusicPlayer.musicPlayer.volume = 0
+        }
         self.navigationController?.isNavigationBarHidden = true
     }
     override func viewWillDisappear(_ animated: Bool) {

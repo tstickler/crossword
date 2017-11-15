@@ -83,12 +83,16 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func timerToggled(_ sender: Any) {
         if timerSwitch.isOn == true {
             Settings.showTimer = true
-            if let parentVC = presentingViewController as? GameViewController {
+            
+            // Immediately show the timer
+            if let parentVC = self.presentingViewController?.childViewControllers[1] as? GameViewController {
                 parentVC.timerStack.isHidden = false
             }
         } else {
             Settings.showTimer = false
-            if let parentVC = presentingViewController as? GameViewController {
+            
+            // Immediately hide the timer
+            if let parentVC = self.presentingViewController?.childViewControllers[1] as? GameViewController {
                 parentVC.timerStack.isHidden = true
             }
         }
