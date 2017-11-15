@@ -10,7 +10,19 @@ import UIKit
 import AVFoundation
 
 class GameViewController: UIViewController {
+    // Containers for button properties
+    var buttonLetterArray: [Character]!
+    var buttonTitleArray = Array(repeating: "", count: 169)
+    var buttonAcrossArray = Array(repeating: "", count: 169)
+    var buttonDownArray = Array(repeating: "", count: 169)
+    var buttonLockedForCorrect = Array(repeating: false, count: 169)
+    var buttonHintAcrossEnabled = Array(repeating: false, count: 169)
+    var buttonHintDownEnabled = Array(repeating: false, count: 169)
+    var buttonRevealedByHelper = Array(repeating: false, count: 169)
+    
+    // Allows us to save board state for user to come back to
     let defaults = UserDefaults.standard
+    
     // Used to determine which phone the user has
     let screenSize = UIScreen.main.bounds
 
@@ -213,6 +225,7 @@ class GameViewController: UIViewController {
     func giveBoardSpacesProperties(board: [String]) {
         // Board[0] contains the letter of each square. If square should be blank, letter is "-"
         let gameBoardLetters = board[0]
+        buttonLetterArray = Array(gameBoardLetters)
         
         // Board[1] contains the number of squares to indicate they are a phrase
         let gameBoardNums = board[1]
@@ -232,19 +245,16 @@ class GameViewController: UIViewController {
         var daString: String
         
         // Go through all the buttons and assign each one their needed information
-        for button in boardSpaces {
+        for i in 0...168 {
             
             // Grabs the letter in the string
-            letter = gameBoardLetters[gameBoardLetters.index(gameBoardLetters.startIndex, offsetBy: letterIterator)]
+            letter = buttonLetterArray[i]
             
             // If the letter is a "-", square should be disables and turned black
             // Otherwise, assign the letter to the square
             if letter == "-" {
-                button.isEnabled = false
-                button.letter = "-"
-                button.backgroundColor = .black
-            } else {
-                button.letter = letter
+                boardSpaces[i].isEnabled = false
+                boardSpaces[i].backgroundColor = .black
             }
             
             // Grab the number in the string
@@ -253,13 +263,13 @@ class GameViewController: UIViewController {
             // If the number is a "-" then there should be no number in the top corner so set the label to an empty string
             // Otherwise, set the label on the square to the corresponing number grabbed
             if number == "-" {
-                button.superscriptLabel.text?.append("")
+                boardSpaces[i].superscriptLabel.text?.append("")
             } else {
-                button.setSuperScriptLabel(number: String(number))
+                boardSpaces[i].setSuperScriptLabel(number: String(number))
                 
                 // If the next character is a number as well, append it to the space label (so we can represent 2 digit numbers)
                 if gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)] != "-" {
-                    button.superscriptLabel.text?.append(gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)])
+                    boardSpaces[i].superscriptLabel.text?.append(gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)])
                     
                     // Need serperate iterator because sometimes we need to take 2 from the string
                     numbersIterator += 1
@@ -283,8 +293,8 @@ class GameViewController: UIViewController {
             
             // Splits in half, button's across property assigned first half and down property assigned second half
             let midIndex = daString.index(daString.startIndex, offsetBy: 3)
-            button.across = String(daString[..<midIndex])
-            button.down = String(daString[midIndex..<daString.endIndex])
+            buttonAcrossArray[i] = String(daString[..<midIndex])
+            buttonDownArray[i] = String(daString[midIndex..<daString.endIndex])
             
             // Increase the iterators. DA iterator increases 6 since it has a greater length than the other strings
             numbersIterator += 1
@@ -354,8 +364,8 @@ class GameViewController: UIViewController {
         determineDirectionText(indexOfButton: indexOfButton)
         
         // Determine if hint enabled button should be shown for selected squares
-        if (across && boardSpaces[indexOfButton].shouldShowHintAcross) ||
-            (!across && boardSpaces[indexOfButton].shouldShowHintDown) {
+        if (across && buttonHintAcrossEnabled[indexOfButton]) ||
+            (!across && buttonHintDownEnabled[indexOfButton]) {
             hintEnabledButton.isHidden = false
             hintEnabledButton.isEnabled = true
             
@@ -379,12 +389,14 @@ class GameViewController: UIViewController {
         let currentSquareTitle = boardSpaces[indexOfButton].title(for: .normal)
         
         // If the square has text, erase it and stay there
-        if currentSquareTitle != nil && (boardSpaces[indexOfButton].lockedForCorrectAnswer == false || !Settings.lockCorrect && !boardSpaces[indexOfButton].revealedByHelper) {
+        if currentSquareTitle != nil && (buttonLockedForCorrect[indexOfButton] == false || !Settings.lockCorrect && !buttonRevealedByHelper[indexOfButton]) {
             boardSpaces[indexOfButton].setTitle(nil, for: .normal)
+            buttonTitleArray[indexOfButton] = ""
+            defaults.set(buttonTitleArray, forKey: "buttonTitles")
             
             // Erasing a correct answer should make it uncorrect again
-            if boardSpaces[indexOfButton].lockedForCorrectAnswer {
-                boardSpaces[indexOfButton].lockedForCorrectAnswer = false
+            if buttonLockedForCorrect[indexOfButton] {
+                buttonLockedForCorrect[indexOfButton] = false
             }
         } else {
             // Otherwise, if the square is empty see if we're at the beginning of
@@ -415,12 +427,14 @@ class GameViewController: UIViewController {
             }
             
             // Erase the selected square
-            if boardSpaces[indexOfButton].lockedForCorrectAnswer == false || !Settings.lockCorrect && !boardSpaces[indexOfButton].revealedByHelper {
+            if buttonLockedForCorrect[indexOfButton] == false || !Settings.lockCorrect && !buttonRevealedByHelper[indexOfButton] {
                 boardSpaces[indexOfButton].setTitle(nil, for: .normal)
-                
+                buttonTitleArray[indexOfButton] = ""
+                defaults.set(buttonTitleArray, forKey: "buttonTitles")
+
                 // If it was locked, we need to unlock it since it is being erased
-                if boardSpaces[indexOfButton].lockedForCorrectAnswer == true {
-                    boardSpaces[indexOfButton].lockedForCorrectAnswer = false
+                if buttonLockedForCorrect[indexOfButton] == true {
+                    buttonLockedForCorrect[indexOfButton] = false
                 }
             }
         }
@@ -428,18 +442,15 @@ class GameViewController: UIViewController {
     
     
     @IBAction func nextPhraseButtonTapped(_ sender: Any) {
-        // Get the current space
-        let currentSquare = boardSpaces[indexOfButton]
-        
         // Container for candidates that are available to move to
         var moveCandidates = [Int]()
         
         if across {
             // Generate possible candidates for move
             // Looks at the current square to get its across number
-            let acrossString = currentSquare.across
-            let acrossStart = acrossString!.startIndex
-            let num = Int(acrossString![acrossStart...acrossString!.index(after: acrossStart)])!
+            let acrossString = buttonAcrossArray[indexOfButton]
+            let acrossStart = acrossString.startIndex
+            let num = Int(acrossString[acrossStart...acrossString.index(after: acrossStart)])!
             
             // Candidate for forward movement are any number in across numbers that
             // is greater than the current across value.
@@ -464,17 +475,17 @@ class GameViewController: UIViewController {
                 }
                 
                 // Evaluate the current candidate
-                test: for button in boardSpaces {
+                test: for i in 0...168 {
                     // Found the candidate
-                    if button.across == stringToLook {
+                    if buttonAcrossArray[i] == stringToLook {
                         // Move to candidate
-                        boardButtonTapped(button)
+                        boardButtonTapped(boardSpaces[i])
                         
                         // Sometimes, stop when we hit the first candidate
                         // This occurs when the first letter is not filled, the user
                         // has turned off skip filled squares, or when all squares
                         // have been filled (but aren't all correct)
-                        if button.currentTitle == nil || !Settings.skipFilledSquares || allSquaresFilled() {
+                        if boardSpaces[i].currentTitle == nil || !Settings.skipFilledSquares || allSquaresFilled() {
                             break
                         }
                         
@@ -509,9 +520,9 @@ class GameViewController: UIViewController {
         } else if !across {
             // Generate possible candidates for move
             // Looks at the current square to get its down number
-            let downString = currentSquare.down
-            let downStart = downString!.startIndex
-            let num = Int(downString![downStart...downString!.index(after: downStart)])!
+            let downString = buttonDownArray[indexOfButton]
+            let downStart = downString.startIndex
+            let num = Int(downString[downStart...downString.index(after: downStart)])!
             
             // Candidate for forward movement are any number in down numbers that
             // is greater than the current down value.
@@ -536,16 +547,16 @@ class GameViewController: UIViewController {
                 }
                 
                 // Evaluate the current candidate
-                test: for button in boardSpaces {
+                test: for i in 0...168 {
                     // Found the candidate
-                    if button.down == stringToLook {
-                        boardButtonTapped(button)
+                    if buttonDownArray[i] == stringToLook {
+                        boardButtonTapped(boardSpaces[i])
                         
                         // Sometimes, stop when we hit the first candidate
                         // This occurs when the first letter is not filled, the user
                         // has turned off skip filled squares, or when all squares
                         // have been filled (but aren't all correct)
-                        if button.currentTitle == nil || !Settings.skipFilledSquares || allSquaresFilled() {
+                        if boardSpaces[i].currentTitle == nil || !Settings.skipFilledSquares || allSquaresFilled() {
                             break
                         }
                         
@@ -582,18 +593,15 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func backPhraseButtonTapped(_ sender: Any) {
-        // Get the current space
-        let currentSquare = boardSpaces[indexOfButton]
-        
         // Container for candidates that are available to move to
         var moveCandidates = [Int]()
         
         if across {
             // Generate possible candidates for move
             // Looks at the current square to get its across number
-            let acrossString = currentSquare.across
-            let acrossStart = acrossString!.startIndex
-            var num = Int(acrossString![acrossStart...acrossString!.index(after: acrossStart)])!
+            let acrossString = buttonAcrossArray[indexOfButton]
+            let acrossStart = acrossString.startIndex
+            var num = Int(acrossString[acrossStart...acrossString.index(after: acrossStart)])!
             
             // If we're starting from a blank landing spot, all values should be candidates
             if num == 0 {
@@ -623,18 +631,18 @@ class GameViewController: UIViewController {
                 }
                 
                 // Evaluate our current candidate
-                test: for button in boardSpaces {
+                test: for i in 0...168 {
                     // Foud the candidate
-                    if button.across == stringToLook {
+                    if buttonAcrossArray[i] == stringToLook {
                         // Move to candidate
-                        boardButtonTapped(button)
+                        boardButtonTapped(boardSpaces[i])
                         
                         // Sometimes, stop when we hit the first candidate
                         // This occurs when the first letter is not filled, the user
                         // has turned off skip filled squares, when all squares
                         // have been filled (but aren't all correct), or when
                         // we are erasing
-                        if button.currentTitle == nil || !Settings.skipFilledSquares || allSquaresFilled() || erasing {
+                        if boardSpaces[i].currentTitle == nil || !Settings.skipFilledSquares || allSquaresFilled() || erasing {
                             break
                         }
                         
@@ -669,9 +677,9 @@ class GameViewController: UIViewController {
         } else if !across {
             // Generate possible candidates for move
             // Looks at the current square to get its across number
-            let downString = currentSquare.down
-            let downStart = downString!.startIndex
-            var num = Int(downString![downStart...downString!.index(after: downStart)])!
+            let downString = buttonDownArray[indexOfButton]
+            let downStart = downString.startIndex
+            var num = Int(downString[downStart...downString.index(after: downStart)])!
             
             // If we're starting from a blank landing spot, all values should be candidates
             if num == 0 {
@@ -701,17 +709,17 @@ class GameViewController: UIViewController {
                 }
                 
                 // Evaluate our current candidate
-                for button in boardSpaces {
-                    if button.down == stringToLook {
+                for i in 0...168 {
+                    if buttonDownArray[i] == stringToLook {
                         // Move to candidate
-                        boardButtonTapped(button)
+                        boardButtonTapped(boardSpaces[i])
                         
                         // Sometimes, stop when we hit the first candidate
                         // This occurs when the first letter is not filled, the user
                         // has turned off skip filled squares, when all squares
                         // have been filled (but aren't all correct), or when
                         // we are erasing
-                        if button.currentTitle == nil || !Settings.skipFilledSquares || allSquaresFilled() || erasing {
+                        if boardSpaces[i].currentTitle == nil || !Settings.skipFilledSquares || allSquaresFilled() || erasing {
                             break
                         }
                         
@@ -755,14 +763,16 @@ class GameViewController: UIViewController {
         
         for index in selectedBoardSpaces {
             if across {
-                boardSpaces[index].shouldShowHintAcross = true
-                if !boardSpaces[index].revealedByHelper {
-                    boardSpaces[index].showHintLabel()
+                buttonHintAcrossEnabled[index] = true
+                boardSpaces[index].showHintLabel()
+
+                if !buttonRevealedByHelper[index] {
                 }
             } else {
-                boardSpaces[index].shouldShowHintDown = true
-                if !boardSpaces[index].revealedByHelper {
-                    boardSpaces[index].showHintLabel()
+                buttonHintDownEnabled[index] = true
+                boardSpaces[index].showHintLabel()
+
+                if !buttonRevealedByHelper[index] {
                 }
             }
         }
@@ -791,17 +801,20 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func fillSquareButtonTapped(_ sender: Any) {
-        if cheatCount == 0  || boardSpaces[indexOfButton].revealedByHelper {
+        if cheatCount == 0  || buttonRevealedByHelper[indexOfButton] {
             return
         }
         
         // A square revealed by a cheat should never be able to be erased or changed
-        boardSpaces[indexOfButton].revealedByHelper = true
-        boardSpaces[indexOfButton].lockedForCorrectAnswer = true
+        buttonRevealedByHelper[indexOfButton] = true
+        buttonLockedForCorrect[indexOfButton] = true
         
         // Set the title equal to the correct answer
         // Set the background to indicate a cheat was used at that square
-        boardSpaces[indexOfButton].setTitle(String(boardSpaces[indexOfButton].letter!).uppercased(), for: .normal)
+        boardSpaces[indexOfButton].setTitle(String(buttonLetterArray[indexOfButton]).uppercased(), for: .normal)
+        buttonTitleArray[indexOfButton] = String(buttonLetterArray[indexOfButton]).uppercased()
+        defaults.set(buttonTitleArray, forKey: "buttonTitles")
+
         boardSpaces[indexOfButton].backgroundColor = UIColor.init(cgColor: orangeColorCG)
         
         // Remove a cheat and set the label
@@ -913,13 +926,15 @@ class GameViewController: UIViewController {
         }
         
         // Sets the board space to display the uppercase letter if the space isn't locked
-        if !boardSpaces[indexOfButton].lockedForCorrectAnswer || !Settings.lockCorrect && !boardSpaces[indexOfButton].revealedByHelper{
+        if !buttonLockedForCorrect[indexOfButton] || !Settings.lockCorrect && !buttonRevealedByHelper[indexOfButton]{
             // If the space was a correct answer but was changed, indicate that square is wrong
-            if boardSpaces[indexOfButton].lockedForCorrectAnswer &&
-                letter != boardSpaces[indexOfButton].letter {
-                boardSpaces[indexOfButton].lockedForCorrectAnswer = false
+            if buttonLockedForCorrect[indexOfButton] &&
+                letter != buttonLetterArray[indexOfButton] {
+                buttonLockedForCorrect[indexOfButton] = false
             }
             boardSpaces[indexOfButton].setTitle(String(letter).uppercased(), for: .normal)
+            buttonTitleArray[indexOfButton] = String(letter).uppercased()
+            defaults.set(buttonTitleArray, forKey: "buttonTitles")
         } else {
             // If the space is locked, lets just move to the next square
             if across {
@@ -1003,22 +1018,22 @@ class GameViewController: UIViewController {
     }
     
     func gameOver() -> Bool {
-        for space in boardSpaces {
+        for i in 0...168 {
             // Each inactive space is assigned a "-" as their letter.
             // Check if all the buttons that can be tapped have non-nil values.
             // If there is still a nil value, there is an open board space, which
             // means the game is not over.
-            if space.title(for: .normal) == nil && space.letter! != "-" {
+            if boardSpaces[i].title(for: .normal) == nil && buttonLetterArray[i] != "-" {
                 return false
             } else {
-                if var spaceTitle = space.title(for: .normal) {
+                if var spaceTitle = boardSpaces[i].title(for: .normal) {
                     // Letters are stored lowercase while titles are displayed as uppercase.
                     // Lowercase the title so we can compare it with the stored letter.
                     spaceTitle = spaceTitle.lowercased()
                     
                     // Nothing needs to happen if the letters match or we're at a inactive square.
                     // Just continue the loop
-                    if Character(spaceTitle) == space.letter! || space.letter! == "-" {
+                    if Character(spaceTitle) == buttonLetterArray[i] || buttonLetterArray[i] == "-" {
                         /* nothing needs to happen */
                     } else {
                         // If the user entered a wrong answer, then the game is not over
@@ -1040,7 +1055,7 @@ class GameViewController: UIViewController {
         for space in selectedBoardSpaces {
             if let userEntry = boardSpaces[space].title(for: .normal)?.lowercased() {
                 let entryToChar = Character(userEntry.lowercased())
-                if entryToChar == boardSpaces[space].letter {
+                if entryToChar == buttonLetterArray[space] {
                     /* nothing needs to happen */
                 } else {
                     return false
@@ -1052,7 +1067,7 @@ class GameViewController: UIViewController {
         
         // Disallow changing of letters after correct answer entered
         for space in selectedBoardSpaces {
-            boardSpaces[space].lockedForCorrectAnswer = true
+            buttonLockedForCorrect[space] = true
         }
         return true
     }
@@ -1068,7 +1083,7 @@ class GameViewController: UIViewController {
         }
         
         // If we hit a disabled square or a square not part of an across go to next across phrase
-        if !boardSpaces[indexOfButton].isEnabled || boardSpaces[indexOfButton].across == "00a" {
+        if !boardSpaces[indexOfButton].isEnabled || buttonAcrossArray[indexOfButton] == "00a" {
             boardSpaces[indexOfButton - 1].sendActions(for: .touchUpInside)
             nextPhraseButton.sendActions(for: .touchUpInside)
         }
@@ -1120,7 +1135,7 @@ class GameViewController: UIViewController {
         // once we hit a number greater than the current one that's where we'll jump.
         // If we ever hit a spot where we loop through the whole down array, we're going
         // to flip the orientation to across and go to the first across.
-        if outOfBounds || !boardSpaces[indexOfButton].isEnabled || boardSpaces[indexOfButton].down == "00d" {
+        if outOfBounds || !boardSpaces[indexOfButton].isEnabled || buttonDownArray[indexOfButton] == "00d" {
             boardSpaces[indexOfButton - 13].sendActions(for: .touchUpInside)
             nextPhraseButton.sendActions(for: .touchUpInside)
         }
@@ -1164,11 +1179,11 @@ class GameViewController: UIViewController {
             // Grab across variable to determine where in the plist we should look
             // Remember, the across string is in the form 00a, with the numbers being
             // the related across
-            let across = boardSpaces[indexOfButton].across
+            let across = buttonAcrossArray[indexOfButton]
             
             // Toss out the a, and a leading 0 if it is there
             // The plist has the number with no leading 0
-            var numAcross = String(across![across!.startIndex..<across!.index((across?.startIndex)!, offsetBy: 2)])
+            var numAcross = String(across[across.startIndex..<across.index((across.startIndex), offsetBy: 2)])
             if numAcross[numAcross.startIndex] == "0" {
                 numAcross = String(numAcross[numAcross.index(numAcross.startIndex, offsetBy: 1)])
             }
@@ -1201,11 +1216,11 @@ class GameViewController: UIViewController {
             // Grab down variable to determine where in the plist we should look
             // Remember, the down string is in the form 00d, with the numbers being
             // the related down
-            let down = boardSpaces[indexOfButton].down
+            let down = buttonDownArray[indexOfButton]
             
             // Toss out the d, and a leading 0 if it is there
             // The plist has the number with no leading 0
-            var numDown = String(down![down!.startIndex..<down!.index((down?.startIndex)!, offsetBy: 2)])
+            var numDown = String(down[down.startIndex..<down.index((down.startIndex), offsetBy: 2)])
             if numDown[numDown.startIndex] == "0" {
                 numDown = String(numDown[numDown.index(numDown.startIndex, offsetBy: 1)])
             }
@@ -1253,15 +1268,15 @@ class GameViewController: UIViewController {
         var numberWrongCounter = 0
         
         // Loop through the board spaces and find how many errors the user made
-        for space in boardSpaces {
-            if var spaceTitle = space.title(for: .normal) {
+        for i in 0...168 {
+            if var spaceTitle = boardSpaces[i].title(for: .normal) {
                 // Letters are stored lowercase while titles are displayed as uppercase.
                 // Lowercase the title so we can compare it with the stored letter.
                 spaceTitle = spaceTitle.lowercased()
                     
                 // Nothing needs to happen if the letters match or we're at a inactive square.
                 // Just continue the loop
-                if Character(spaceTitle) == space.letter! || space.letter! == "-" {
+                if Character(spaceTitle) == buttonLetterArray[i] || buttonLetterArray[i] == "-" {
                     /* nothing needs to happen */
                 } else {
                     // If the user entered a wrong answer, increase our counter
@@ -1378,19 +1393,19 @@ class GameViewController: UIViewController {
         // Grabs information from the current square. Current orientation determines which info
         // should be grabbed.
         if across {
-            let acrossString = boardSpaces[indexOfButton].across
-            let acrossStringStart = acrossString?.startIndex
-            let acrossStringEnd = acrossString?.endIndex
+            let acrossString = buttonAcrossArray[indexOfButton]
+            let acrossStringStart = acrossString.startIndex
+            let acrossStringEnd = acrossString.endIndex
             
-            number = Int(acrossString![acrossStringStart!...acrossString!.index(after: acrossStringStart!)])!
-            direction = acrossString![(acrossString?.index(before: acrossStringEnd!))!]
+            number = Int(acrossString[acrossStringStart...acrossString.index(after: acrossStringStart)])!
+            direction = acrossString[(acrossString.index(before: acrossStringEnd))]
         } else {
-            let downString = boardSpaces[indexOfButton].down
-            let downStart = downString?.startIndex
-            let downEnd = downString?.endIndex
+            let downString = buttonDownArray[indexOfButton]
+            let downStart = downString.startIndex
+            let downEnd = downString.endIndex
             
-            number = Int(downString![downStart!...downString!.index(after: downStart!)])!
-            direction = downString![(downString?.index(before: downEnd!))!]
+            number = Int(downString[downStart...downString.index(after: downStart)])!
+            direction = downString[(downString.index(before: downEnd))]
         }
         
         // Start creating our label with the number of the across or down
@@ -1425,17 +1440,17 @@ class GameViewController: UIViewController {
         // Sets the initial highlight based on what path it is included in
         // If there is no down then automatically switch to across
         // If there is no across, automatically switch to down
-        if boardSpaces[indexOfButton].down == "00d" {
+        if buttonDownArray[indexOfButton] == "00d" {
             across = true
-        } else if boardSpaces[indexOfButton].across == "00a" {
+        } else if buttonAcrossArray[indexOfButton] == "00a" {
             across = false
         }
         
         // Double tapping on a button results in flipping its orietation as long as
         // the flip is valid and the button is part of both across and down
-        if indexOfButton == previousButton && across && boardSpaces[indexOfButton].down != "00d"{
+        if indexOfButton == previousButton && across && buttonDownArray[indexOfButton] != "00d"{
             across = false
-        } else if indexOfButton == previousButton && !across && boardSpaces[indexOfButton].across != "00a"{
+        } else if indexOfButton == previousButton && !across && buttonAcrossArray[indexOfButton] != "00a"{
             across = true
         }
         
@@ -1548,14 +1563,14 @@ class GameViewController: UIViewController {
     
     func initialHighlight() {
         // Start the user on whatever 1 is available (prefers 1 across)
-        for button in boardSpaces {
+        for i in 0...168 {
             // If there is no 1 across, start vertical
-            if button.across == "01a" || button.down == "01d" {
-                if button.down == "01d" && button.across != "01a" {
+            if buttonAcrossArray[i] == "01a" || buttonDownArray[i] == "01d" {
+                if buttonDownArray[i] == "01d" && buttonAcrossArray[i] != "01a" {
                     across = false
                 }
                 
-                button.sendActions(for: .touchUpInside)
+                boardSpaces[i].sendActions(for: .touchUpInside)
                 break
             }
         }
@@ -1624,6 +1639,9 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        defaults.set(1, forKey: "userLevel")
+
+        readFromDefaults()
         
         // This is the board that needs to be set up
         // board[1] contains the letters in their locations
@@ -1640,6 +1658,7 @@ class GameViewController: UIViewController {
         setUpBoard(board: board)
         clueAreaSetup()
         startTimer()
+        
         
         // MUSIC
         MusicPlayer.start(musicTitle: "game", ext: "mp3")
@@ -1696,5 +1715,23 @@ class GameViewController: UIViewController {
         secondsLabel.text = ":\(secs!)"
         minutesLabel.text = ":\(mins!)"
         hoursLabel.text = "\(hoursCounter)"
+    }
+    
+    func readFromDefaults() {
+        if let savedAnswers = defaults.array(forKey: "buttonTitles") {
+            buttonTitleArray = (savedAnswers as? [String])!
+            for i in 0...168 {
+                if buttonTitleArray[i] != "" {
+                    boardSpaces[i].setTitle(buttonTitleArray[i], for: .normal)
+                }
+            }
+        } else {
+            buttonTitleArray = Array(repeating: "", count: 169)
+        }
+        
+        userLevel = defaults.integer(forKey: "userLevel")
+        if userLevel == 0 {
+            userLevel = 1
+        }
     }
 }

@@ -9,16 +9,9 @@
 import UIKit
 
 class BoardButton: UIButton {
-    var letter: Character?
-    var across: String!
-    var down: String!
     var superscriptLabel = UILabel()
     var hintLabel = UILabel()
-    var lockedForCorrectAnswer = false
-    var shouldShowHintAcross = false
-    var shouldShowHintDown = false
-    var revealedByHelper = false
-    
+        
     var numberConstraints = [NSLayoutConstraint]()
     var hintConstraints = [NSLayoutConstraint]()
     
