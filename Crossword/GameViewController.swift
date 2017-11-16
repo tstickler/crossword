@@ -220,6 +220,21 @@ class GameViewController: UIViewController {
         } else {
             timerStack.isHidden = false
         }
+        
+        if secondsCounter < 9 {
+            secondsLabel.text = ":0\(secondsCounter)"
+        } else {
+            secondsLabel.text = ":\(secondsCounter)"
+        }
+        
+        if minutesCounter < 9 {
+            minutesLabel.text = ":0\(minutesCounter)"
+        } else {
+            minutesLabel.text = ":\(minutesCounter)"
+        }
+        
+        
+        hoursLabel.text = "\(hoursCounter)"
     }
     
     func giveBoardSpacesProperties(board: [String]) {
@@ -389,7 +404,7 @@ class GameViewController: UIViewController {
         let currentSquareTitle = boardSpaces[indexOfButton].title(for: .normal)
         
         // If the square has text, erase it and stay there
-        if currentSquareTitle != nil && (buttonLockedForCorrect[indexOfButton] == false || !Settings.lockCorrect && !buttonRevealedByHelper[indexOfButton]) {
+        if currentSquareTitle != nil && (buttonLockedForCorrect[indexOfButton] == false || !Settings.lockCorrect) && !buttonRevealedByHelper[indexOfButton] {
             boardSpaces[indexOfButton].setTitle(nil, for: .normal)
             buttonTitleArray[indexOfButton] = ""
             defaults.set(buttonTitleArray, forKey: "buttonTitles")
@@ -397,6 +412,7 @@ class GameViewController: UIViewController {
             // Erasing a correct answer should make it uncorrect again
             if buttonLockedForCorrect[indexOfButton] {
                 buttonLockedForCorrect[indexOfButton] = false
+                defaults.set(buttonLockedForCorrect, forKey: "lockCorrect")
             }
         } else {
             // Otherwise, if the square is empty see if we're at the beginning of
@@ -427,7 +443,10 @@ class GameViewController: UIViewController {
             }
             
             // Erase the selected square
-            if buttonLockedForCorrect[indexOfButton] == false || !Settings.lockCorrect && !buttonRevealedByHelper[indexOfButton] {
+            if (buttonLockedForCorrect[indexOfButton] == false || !Settings.lockCorrect) && !buttonRevealedByHelper[indexOfButton] {
+                print(indexOfButton)
+                print("IN BACKSPACE", buttonRevealedByHelper)
+                /* SOMETHING IS WRONG HERE */
                 boardSpaces[indexOfButton].setTitle(nil, for: .normal)
                 buttonTitleArray[indexOfButton] = ""
                 defaults.set(buttonTitleArray, forKey: "buttonTitles")
@@ -435,6 +454,7 @@ class GameViewController: UIViewController {
                 // If it was locked, we need to unlock it since it is being erased
                 if buttonLockedForCorrect[indexOfButton] == true {
                     buttonLockedForCorrect[indexOfButton] = false
+                    defaults.set(buttonLockedForCorrect, forKey: "lockCorrect")
                 }
             }
         }
@@ -764,16 +784,15 @@ class GameViewController: UIViewController {
         for index in selectedBoardSpaces {
             if across {
                 buttonHintAcrossEnabled[index] = true
+                defaults.set(buttonHintAcrossEnabled, forKey: "hintAcross")
                 boardSpaces[index].showHintLabel()
 
                 if !buttonRevealedByHelper[index] {
                 }
             } else {
                 buttonHintDownEnabled[index] = true
+                defaults.set(buttonHintDownEnabled, forKey: "hintDown")
                 boardSpaces[index].showHintLabel()
-
-                if !buttonRevealedByHelper[index] {
-                }
             }
         }
         
@@ -783,6 +802,7 @@ class GameViewController: UIViewController {
         
         // Remove a cheat and set the label
         cheatCount -= 1
+        defaults.set(cheatCount, forKey: "cheatCount")
         
         if cheatCount == 0 {
             fillSquareButton.backgroundColor = .gray
@@ -808,6 +828,8 @@ class GameViewController: UIViewController {
         // A square revealed by a cheat should never be able to be erased or changed
         buttonRevealedByHelper[indexOfButton] = true
         buttonLockedForCorrect[indexOfButton] = true
+        defaults.set(buttonRevealedByHelper, forKey: "revealed")
+        defaults.set(buttonLockedForCorrect, forKey: "lockCorrect")
         
         // Set the title equal to the correct answer
         // Set the background to indicate a cheat was used at that square
@@ -819,6 +841,7 @@ class GameViewController: UIViewController {
         
         // Remove a cheat and set the label
         cheatCount -= 1
+        defaults.set(cheatCount, forKey: "cheatCount")
         
         if cheatCount == 0 {
             fillSquareButton.backgroundColor = .gray
@@ -931,6 +954,7 @@ class GameViewController: UIViewController {
             if buttonLockedForCorrect[indexOfButton] &&
                 letter != buttonLetterArray[indexOfButton] {
                 buttonLockedForCorrect[indexOfButton] = false
+                defaults.set(buttonLockedForCorrect, forKey: "lockCorrect")
             }
             boardSpaces[indexOfButton].setTitle(String(letter).uppercased(), for: .normal)
             buttonTitleArray[indexOfButton] = String(letter).uppercased()
@@ -1068,6 +1092,7 @@ class GameViewController: UIViewController {
         // Disallow changing of letters after correct answer entered
         for space in selectedBoardSpaces {
             buttonLockedForCorrect[space] = true
+            defaults.set(buttonLockedForCorrect, forKey: "lockCorrect")
         }
         return true
     }
@@ -1715,6 +1740,10 @@ class GameViewController: UIViewController {
         secondsLabel.text = ":\(secs!)"
         minutesLabel.text = ":\(mins!)"
         hoursLabel.text = "\(hoursCounter)"
+        
+        defaults.set(secondsCounter, forKey: "seconds")
+        defaults.set(minutesCounter, forKey: "minutes")
+        defaults.set(hoursCounter, forKey: "hours")
     }
     
     func readFromDefaults() {
@@ -1729,9 +1758,58 @@ class GameViewController: UIViewController {
             buttonTitleArray = Array(repeating: "", count: 169)
         }
         
+        if let locked = defaults.array(forKey: "lockedCorrect") {
+            buttonLockedForCorrect = (locked as? [Bool])!
+        } else {
+            buttonLockedForCorrect = Array(repeating: false, count: 169)
+        }
+        
+        if let acrossHint = defaults.array(forKey: "hintAcross") {
+            buttonHintAcrossEnabled = (acrossHint as? [Bool])!
+            for i in 0...168 {
+                if buttonHintAcrossEnabled[i] == true {
+                    boardSpaces[i].showHintLabel()
+                }
+            }
+        } else {
+            buttonHintAcrossEnabled = Array(repeating: false, count: 169)
+        }
+        
+        if let downHint = defaults.array(forKey: "hintDown") {
+            buttonHintDownEnabled = (downHint as? [Bool])!
+            for i in 0...168 {
+                if buttonHintDownEnabled[i] == true {
+                    boardSpaces[i].showHintLabel()
+                }
+            }
+        } else {
+            buttonHintDownEnabled = Array(repeating: false, count: 169)
+        }
+        
+        if let revealed = defaults.array(forKey: "revealed") {
+            buttonRevealedByHelper = (revealed as? [Bool])!
+            print(buttonRevealedByHelper)
+            for i in 0...168 {
+                if buttonRevealedByHelper[i] == true {
+                    boardSpaces[i].backgroundColor = UIColor.init(cgColor: orangeColorCG)
+                }
+            }
+        } else {
+            buttonRevealedByHelper = Array(repeating: false, count: 169)
+        }
+        
         userLevel = defaults.integer(forKey: "userLevel")
         if userLevel == 0 {
             userLevel = 1
+        }
+        
+        secondsCounter = defaults.integer(forKey: "seconds")
+        minutesCounter = defaults.integer(forKey: "minutes")
+        hoursCounter = defaults.integer(forKey: "hours")
+        
+        cheatCount = defaults.integer(forKey: "cheatCount")
+        if cheatCount == 0 {
+            cheatCount = 1000
         }
     }
 }
