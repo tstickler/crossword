@@ -93,6 +93,8 @@ class GameViewController: UIViewController {
     var hoursCounter = 0
     let formatter = NumberFormatter()
     
+    var wrongViewShown = false
+    
     /*****************************************
     *                                        *
     *                 UI SETUP               *
@@ -378,7 +380,7 @@ class GameViewController: UIViewController {
         // Set the label for the direction
         determineDirectionText(indexOfButton: indexOfButton)
         
-        // Determine if hint enabled button should be shown for selected squares
+        // Determine if hint buttons should be shown for selected squares
         if (across && buttonHintAcrossEnabled[indexOfButton]) ||
             (!across && buttonHintDownEnabled[indexOfButton]) {
             hintEnabledButton.isHidden = false
@@ -392,6 +394,14 @@ class GameViewController: UIViewController {
             hintEnabledButton.isEnabled = false
             
             hintButton.isEnabled = true
+        }
+        
+        if buttonRevealedByHelper[indexOfButton] {
+            fillSquareButton.isEnabled = false
+            fillSquareButton.backgroundColor = .gray
+        } else {
+            fillSquareButton.backgroundColor = UIColor(cgColor: orangeColorCG)
+            fillSquareButton.isEnabled = true
         }
         
         // Allows us to look back one to see what the last press was
@@ -444,9 +454,6 @@ class GameViewController: UIViewController {
             
             // Erase the selected square
             if (buttonLockedForCorrect[indexOfButton] == false || !Settings.lockCorrect) && !buttonRevealedByHelper[indexOfButton] {
-                print(indexOfButton)
-                print("IN BACKSPACE", buttonRevealedByHelper)
-                /* SOMETHING IS WRONG HERE */
                 boardSpaces[indexOfButton].setTitle(nil, for: .normal)
                 buttonTitleArray[indexOfButton] = ""
                 defaults.set(buttonTitleArray, forKey: "buttonTitles")
@@ -865,13 +872,16 @@ class GameViewController: UIViewController {
         if allSquaresFilled() {
             // See if the user has entered all the right answers
             if gameOver() {
-                clueLabel.textColor = .white
-                clueLabel.text = "Game Over"
+                gameTimer.invalidate()
+                showGameOverView()
+                
                 return
             } else {
                 // If the user isn't right, tell them how many wrong
-                clueLabel.textColor = .white
-                clueLabel.text = "\(countWrong()) wrong"
+                if !wrongViewShown {
+                    showGameOverView()
+                    wrongViewShown = true
+                }
                 return
             }
         }
@@ -884,12 +894,12 @@ class GameViewController: UIViewController {
         }
     }
     
-    
-    
     @IBAction func keyboardButtonPressed(_ sender: UIButton) {
         // Each key of the keyboard has a tag from 1-26. The tag tells which key was pressed.
         // Keyboard is standard qwerty and tags start at Q(1) and end at M(26)
         var letter: Character!
+        
+        
         
         switch sender.tag {
         case 1:
@@ -995,13 +1005,20 @@ class GameViewController: UIViewController {
             if allSquaresFilled() {
                 // If all squares are filled, see if the user is right
                 if gameOver(){
-                    clueLabel.textColor = .white
-                    clueLabel.text = "Game Over"
+                    gameTimer.invalidate()
+
+                    showGameOverView()
+                    
                     return
                 } else {
                     // If the user isn't right, tell them how many wrong
                     clueLabel.textColor = .white
-                    clueLabel.text = "\(countWrong()) wrong"
+                    
+                    if !wrongViewShown {
+                        showGameOverView()
+                        wrongViewShown = true
+                    }
+                    
                     return
                 }
             } else {
@@ -1012,7 +1029,12 @@ class GameViewController: UIViewController {
         } else if allSquaresFilled() {
             // If the user isn't right, tell them how many wrong
             clueLabel.textColor = .white
-            clueLabel.text = "\(countWrong()) wrong"
+            
+            if !wrongViewShown {
+                showGameOverView()
+                wrongViewShown = true
+            }
+            
             return
         } else {
             // This checks the other direction at an intersection but the original
@@ -1289,8 +1311,10 @@ class GameViewController: UIViewController {
         return true
     }
     
+    var indexOfWrong = [Int]()
     func countWrong() -> Int {
         var numberWrongCounter = 0
+        indexOfWrong.removeAll()
         
         // Loop through the board spaces and find how many errors the user made
         for i in 0...168 {
@@ -1306,12 +1330,14 @@ class GameViewController: UIViewController {
                 } else {
                     // If the user entered a wrong answer, increase our counter
                     numberWrongCounter += 1
+                    indexOfWrong.append(i)
                 }
             }
         }
         
         return numberWrongCounter
     }
+    
     
      /*****************************************
      *                                        *
@@ -1405,6 +1431,65 @@ class GameViewController: UIViewController {
             border.add(animation, forKey: "")
             border.zPosition = 1000
         }
+    }
+    
+    func highlightWrongAnswers() {
+        // Remove interfering borders
+        //        for button in boardSpaces {
+        //            for layer in button.layer.sublayers! {
+        //                if layer.name == "BORDER" {
+        //                    layer.removeFromSuperlayer()
+        //                }
+        //            }
+        //        }
+        
+        // Sets the border for the spaces
+        for i in indexOfWrong {
+            // Remove the growing animation
+            //            boardSpaces[i].layer.removeAllAnimations()
+            
+            // CAShapeLayer allows us to put the border outside of the button, giving the button more space
+            let border = CAShapeLayer()
+            
+            // Sets the properties of the border
+            switch screenSize.height{
+            case 568:
+                border.frame = CGRect(x: 0, y: 0, width: 21, height: 21)
+            case 667:
+                border.frame = CGRect(x: 0, y: 0, width: 26, height: 26)
+            case 736:
+                border.frame = CGRect(x: 0, y: 0, width: 29, height: 30)
+            case 812:
+                border.frame = CGRect(x: 0, y: 0, width: 25, height: 28)
+            default:
+                border.frame = boardSpaces[i].bounds
+            }
+            
+            // Width is 0 since we don't want a border left over after the animation
+            border.lineWidth = 0
+            border.path = UIBezierPath(roundedRect: border.bounds, cornerRadius:3).cgPath
+            border.fillColor = UIColor.clear.cgColor
+            border.strokeColor = UIColor.red.cgColor
+            
+            self.boardSpaces[i].layer.addSublayer(border)
+            
+            // Animation to be played on the border. Grows quickly then shrinks.
+            let animation = CABasicAnimation(keyPath: "lineWidth")
+            animation.duration = 0.45
+            animation.fromValue = 0
+            animation.toValue = 4
+            animation.autoreverses = true
+            animation.repeatCount = 5
+            border.add(animation, forKey: "")
+            border.zPosition = 1000
+        }
+        
+        // Allows animation to begin again if the user clicks the same square
+        //        if indexOfButton - 1 < 0 {
+        //            previousButton = indexOfButton - 1
+        //        } else {
+        //            previousButton = indexOfButton + 1
+        //        }
     }
     
     func determineDirectionText(indexOfButton: Int) {
@@ -1664,7 +1749,6 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        defaults.set(1, forKey: "userLevel")
 
         readFromDefaults()
         
@@ -1788,7 +1872,6 @@ class GameViewController: UIViewController {
         
         if let revealed = defaults.array(forKey: "revealed") {
             buttonRevealedByHelper = (revealed as? [Bool])!
-            print(buttonRevealedByHelper)
             for i in 0...168 {
                 if buttonRevealedByHelper[i] == true {
                     boardSpaces[i].backgroundColor = UIColor.init(cgColor: orangeColorCG)
@@ -1811,5 +1894,13 @@ class GameViewController: UIViewController {
         if cheatCount == 0 {
             cheatCount = 1000
         }
+    }
+    
+    func showGameOverView() {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let GOVC = storyboard.instantiateViewController(withIdentifier: "GOVC")
+        GOVC.modalTransitionStyle = .crossDissolve
+        GOVC.modalPresentationStyle = .overCurrentContext
+        self.present(GOVC, animated: true, completion: nil)
     }
 }

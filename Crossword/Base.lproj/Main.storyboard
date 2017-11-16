@@ -52,12 +52,12 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2529.375" y="-700.35211267605632"/>
+            <point key="canvasLocation" x="2194" y="-657"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="k3e-By-1MV">
             <objects>
-                <viewController modalTransitionStyle="crossDissolve" modalPresentationStyle="overFullScreen" id="CQO-aK-gww" customClass="GameViewController" customModule="Crossword" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="GameViewController" modalTransitionStyle="crossDissolve" modalPresentationStyle="overFullScreen" id="CQO-aK-gww" customClass="GameViewController" customModule="Crossword" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="XjK-D1-LS5">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -2115,7 +2115,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qj3-tv-BFu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1413.75" y="144.71830985915494"/>
+            <point key="canvasLocation" x="1785" y="144"/>
         </scene>
         <!--Hint View Controller-->
         <scene sceneID="3SP-uo-hc4">
@@ -2221,7 +2221,96 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2194" y="145"/>
+            <point key="canvasLocation" x="996" y="944"/>
+        </scene>
+        <!--GameOverViewController-->
+        <scene sceneID="Nue-ej-jty">
+            <objects>
+                <viewController storyboardIdentifier="GOVC" title="GameOverViewController" id="hO5-dC-Lfu" customClass="GameOverViewController" customModule="Crossword" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="b23-cL-UwB">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="chb-M6-Qkd">
+                                <rect key="frame" x="40" y="184" width="240" height="200"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WUI-k2-rfO">
+                                        <rect key="frame" x="99" y="8" width="42" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Loc-uM-XTJ">
+                                        <rect key="frame" x="8" y="79" width="224" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u0E-DD-w0G">
+                                        <rect key="frame" x="40" y="150" width="160" height="30"/>
+                                        <state key="normal" title="Bottom">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="bottomButtonTapped:" destination="hO5-dC-Lfu" eventType="touchUpInside" id="okj-lC-bbf"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hUy-TN-A0Q">
+                                        <rect key="frame" x="40" y="115" width="160" height="30"/>
+                                        <state key="normal" title="Top">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="topButtonTapped:" destination="hO5-dC-Lfu" eventType="touchUpInside" id="axd-bG-bxa"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <constraints>
+                                    <constraint firstItem="u0E-DD-w0G" firstAttribute="leading" secondItem="chb-M6-Qkd" secondAttribute="leading" constant="40" id="4Us-FD-ZiF"/>
+                                    <constraint firstAttribute="trailing" secondItem="Loc-uM-XTJ" secondAttribute="trailing" constant="8" id="D05-ME-WtQ"/>
+                                    <constraint firstItem="hUy-TN-A0Q" firstAttribute="top" secondItem="Loc-uM-XTJ" secondAttribute="bottom" constant="15" id="E4r-Ju-hQN"/>
+                                    <constraint firstItem="WUI-k2-rfO" firstAttribute="centerX" secondItem="chb-M6-Qkd" secondAttribute="centerX" id="Gyr-Pb-pls"/>
+                                    <constraint firstAttribute="trailing" secondItem="u0E-DD-w0G" secondAttribute="trailing" constant="40" id="LrD-L7-VMT"/>
+                                    <constraint firstAttribute="bottom" secondItem="u0E-DD-w0G" secondAttribute="bottom" constant="20" id="OVH-Vj-Gw2"/>
+                                    <constraint firstItem="hUy-TN-A0Q" firstAttribute="centerX" secondItem="chb-M6-Qkd" secondAttribute="centerX" id="So1-tW-dZa"/>
+                                    <constraint firstItem="WUI-k2-rfO" firstAttribute="top" secondItem="chb-M6-Qkd" secondAttribute="top" constant="8" id="Vhs-30-BdS"/>
+                                    <constraint firstItem="hUy-TN-A0Q" firstAttribute="leading" secondItem="chb-M6-Qkd" secondAttribute="leading" constant="40" id="ZJJ-cZ-WtM"/>
+                                    <constraint firstItem="Loc-uM-XTJ" firstAttribute="centerX" secondItem="chb-M6-Qkd" secondAttribute="centerX" id="cY2-lF-151"/>
+                                    <constraint firstAttribute="trailing" secondItem="hUy-TN-A0Q" secondAttribute="trailing" constant="40" id="iy5-H4-BKP"/>
+                                    <constraint firstAttribute="height" constant="200" id="mOr-OE-Xap"/>
+                                    <constraint firstItem="Loc-uM-XTJ" firstAttribute="leading" secondItem="chb-M6-Qkd" secondAttribute="leading" constant="8" id="mTg-1q-h4c"/>
+                                    <constraint firstItem="u0E-DD-w0G" firstAttribute="top" secondItem="hUy-TN-A0Q" secondAttribute="bottom" constant="5" id="npI-U3-2wu"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.66666666666666663" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="chb-M6-Qkd" firstAttribute="leading" secondItem="gQK-Wh-Lvf" secondAttribute="leading" constant="40" id="GFp-fg-cnX"/>
+                            <constraint firstItem="chb-M6-Qkd" firstAttribute="centerY" secondItem="b23-cL-UwB" secondAttribute="centerY" id="TdD-fr-I4C"/>
+                            <constraint firstItem="chb-M6-Qkd" firstAttribute="centerX" secondItem="b23-cL-UwB" secondAttribute="centerX" id="UIP-P3-pgL"/>
+                            <constraint firstItem="gQK-Wh-Lvf" firstAttribute="trailing" secondItem="chb-M6-Qkd" secondAttribute="trailing" constant="40" id="xpG-4Z-cbv"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="gQK-Wh-Lvf"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="pcY-c2-bGa" appends="YES" id="cIO-MZ-bzM"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="bottomButton" destination="u0E-DD-w0G" id="KRt-Q9-DLR"/>
+                        <outlet property="messageLabel" destination="Loc-uM-XTJ" id="5CD-p0-Dms"/>
+                        <outlet property="titleLabel" destination="WUI-k2-rfO" id="Bm7-r8-7d0"/>
+                        <outlet property="topButton" destination="hUy-TN-A0Q" id="ArI-8V-Mu1"/>
+                        <outlet property="viewBackground" destination="chb-M6-Qkd" id="hBb-nY-k9G"/>
+                        <segue destination="ewI-Ev-mkv" kind="unwind" identifier="unwindSegue" unwindAction="unwindSegue:" id="rIC-yt-jNX"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ZCv-eT-kle" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <exit id="ewI-Ev-mkv" userLabel="Exit" sceneMemberID="exit"/>
+                <tapGestureRecognizer id="pcY-c2-bGa"/>
+            </objects>
+            <point key="canvasLocation" x="1785" y="942"/>
         </scene>
         <!--Menu View Controller-->
         <scene sceneID="PF1-TV-yKz">
@@ -2407,7 +2496,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1864" y="945"/>
+            <point key="canvasLocation" x="2580" y="941"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Euo-3a-XfB">
@@ -2425,7 +2514,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mdk-o9-ALZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1742" y="-725"/>
+            <point key="canvasLocation" x="1414" y="-656"/>
         </scene>
     </scenes>
     <resources>
