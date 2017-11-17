@@ -22,46 +22,38 @@ class GameOverViewController: UIViewController {
     var seconds: Int!
     var numberWrong: Int!
     
+    // Should always end up being 1 but this is safer
+    var indexOfPresenter: Int!
+    
     @IBAction func topButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
-        
+
         if gameOver == true {
-            if let parentVC = self.presentingViewController?.childViewControllers[1] as? GameViewController {
-                // Working on moving to the next level
-                parentVC.defaults.set(parentVC.userLevel + 1, forKey: "userLevel")
-                parentVC.defaults.set(Array(repeating: "", count: 169), forKey: "buttonTitles")
-                parentVC.defaults.set(Array(repeating: false, count: 169), forKey: "lockedCorrect")
-                parentVC.defaults.set(Array(repeating: false, count: 169), forKey: "hintAcross")
-                parentVC.defaults.set(Array(repeating: false, count: 169), forKey: "hintDown")
-                parentVC.defaults.set(Array(repeating: false, count: 169), forKey: "revealed")
-                parentVC.defaults.set(0, forKey: "seconds")
-                parentVC.defaults.set(0, forKey: "minutes")
-                parentVC.defaults.set(0, forKey: "hours")
-                
-                dismiss(animated: true, completion: nil)
+            if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
+                parentVC.newLevel()
             }
         } else {
-            if let parentVC = self.presentingViewController?.childViewControllers[1] as? GameViewController {
+            if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
                 parentVC.highlightWrongAnswers()
             }
         }
     }
     
     @IBAction func bottomButtonTapped(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+
         if gameOver == true {
             performSegue(withIdentifier: "unwindSegue", sender: self)
-        } else {
-            dismiss(animated: true, completion: nil)
-        }
+        } 
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+                
         viewBackground.layer.cornerRadius = 15
         viewBackground.layer.borderWidth = 3
         
-        if let parentVC = self.presentingViewController?.childViewControllers[1] as? GameViewController {
+        if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
             if parentVC.gameOver() {
                 gameOver = true
                 hours = parentVC.hoursCounter
@@ -115,5 +107,12 @@ class GameOverViewController: UIViewController {
                 bottomButton.setTitle("Continue", for: .normal)
             }
         }
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Should be 1 (the top view on the navigation stack)
+        indexOfPresenter = (self.presentingViewController?.childViewControllers.count)! - 1
     }
 }

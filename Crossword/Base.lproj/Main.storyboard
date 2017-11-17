@@ -37,14 +37,23 @@
                                     <constraint firstAttribute="width" secondItem="9dT-DP-0kx" secondAttribute="height" multiplier="359:255" id="oxn-RH-HCI"/>
                                 </constraints>
                             </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="detailDisclosure" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CZm-Vr-Qnq">
+                                <rect key="frame" x="290" y="538" width="22" height="22"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="9dT-DP-0kx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="48I-61-enV"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="CZm-Vr-Qnq" secondAttribute="bottom" constant="8" id="6H3-fh-vnM"/>
                             <constraint firstItem="9dT-DP-0kx" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="-40" id="PN3-kt-CAi"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="9dT-DP-0kx" secondAttribute="trailing" constant="8" id="POe-qa-5QM"/>
                             <constraint firstItem="Ekd-hd-Wcd" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Zzh-AF-fP1"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Ekd-hd-Wcd" secondAttribute="bottom" constant="120" id="bjC-MK-MwA"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="CZm-Vr-Qnq" secondAttribute="trailing" constant="8" id="e8A-el-ygl"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>

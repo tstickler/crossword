@@ -10,6 +10,8 @@ import UIKit
 import AVFoundation
 
 class GameViewController: UIViewController {
+    let maxNumOfLevels = 2
+    
     // Containers for button properties
     var buttonLetterArray: [Character]!
     var buttonTitleArray = Array(repeating: "", count: 169)
@@ -872,7 +874,14 @@ class GameViewController: UIViewController {
         if allSquaresFilled() {
             // See if the user has entered all the right answers
             if gameOver() {
+                if userLevel < maxNumOfLevels {
+                    defaults.set(userLevel + 1, forKey: "userLevel")
+                } else {
+                    defaults.set(1, forKey: "userLevel")
+                }
+
                 gameTimer.invalidate()
+                resetDefaults()
                 showGameOverView()
                 
                 return
@@ -899,7 +908,7 @@ class GameViewController: UIViewController {
         // Keyboard is standard qwerty and tags start at Q(1) and end at M(26)
         var letter: Character!
         
-        
+        print(navigationController?.viewControllers.count)
         
         switch sender.tag {
         case 1:
@@ -1006,9 +1015,17 @@ class GameViewController: UIViewController {
                 // If all squares are filled, see if the user is right
                 if gameOver(){
                     gameTimer.invalidate()
+                    
+                    if userLevel < maxNumOfLevels {
+                        defaults.set(userLevel + 1, forKey: "userLevel")
+                    } else {
+                        defaults.set(1, forKey: "userLevel")
+                    }
+
+                    resetDefaults()
 
                     showGameOverView()
-                    
+
                     return
                 } else {
                     // If the user isn't right, tell them how many wrong
@@ -1749,7 +1766,7 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         readFromDefaults()
         
         // This is the board that needs to be set up
@@ -1902,5 +1919,36 @@ class GameViewController: UIViewController {
         GOVC.modalTransitionStyle = .crossDissolve
         GOVC.modalPresentationStyle = .overCurrentContext
         self.present(GOVC, animated: true, completion: nil)
+    }
+    
+    func resetDefaults() {
+        // Set level specific board states back to initial board
+
+        defaults.set(Array(repeating: "", count: 169), forKey: "buttonTitles")
+        defaults.set(Array(repeating: false, count: 169), forKey: "lockedCorrect")
+        defaults.set(Array(repeating: false, count: 169), forKey: "hintAcross")
+        defaults.set(Array(repeating: false, count: 169), forKey: "hintDown")
+        defaults.set(Array(repeating: false, count: 169), forKey: "revealed")
+        defaults.set(0, forKey: "seconds")
+        defaults.set(0, forKey: "minutes")
+        defaults.set(0, forKey: "hours")
+    }
+    
+    func newLevel() {
+        // Creates a new board and pushes it onto the navigation stack
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
+        
+        // Gives a nice animation to the next view
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        transition.type = kCATransitionFade
+        self.navigationController?.view.layer.add(transition, forKey: nil)
+        
+        self.navigationController?.pushViewController(vc, animated: false)
+        
+        // Tosses the last game, we don't need it taking up memory on the stack
+        self.navigationController?.viewControllers.remove(at: 1)
     }
 }
