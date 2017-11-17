@@ -19,6 +19,7 @@
 		2F35EC751F9B1C07000014E5 /* CrosswordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F35EC741F9B1C07000014E5 /* CrosswordTests.swift */; };
 		2F35EC801F9B1C07000014E5 /* CrosswordUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F35EC7F1F9B1C07000014E5 /* CrosswordUITests.swift */; };
 		2F36BED71FBE03AE00095519 /* GameOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F36BED61FBE03AE00095519 /* GameOverViewController.swift */; };
+		2F5254D31FBE97B300051C65 /* master.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F5254D21FBE97B300051C65 /* master.plist */; };
 		2F5D9E701FA1522B004A2AB5 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D9E6F1FA1522B004A2AB5 /* MenuViewController.swift */; };
 		2F7CC5F61FB8D04A00ABA677 /* HintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7CC5F51FB8D04A00ABA677 /* HintViewController.swift */; };
 		2FA3F60C1FA2D8AD006938E2 /* BoardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA3F60B1FA2D8AD006938E2 /* BoardButton.swift */; };
@@ -63,6 +64,7 @@
 		2F35EC7F1F9B1C07000014E5 /* CrosswordUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrosswordUITests.swift; sourceTree = "<group>"; };
 		2F35EC811F9B1C07000014E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F36BED61FBE03AE00095519 /* GameOverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverViewController.swift; sourceTree = "<group>"; };
+		2F5254D21FBE97B300051C65 /* master.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = master.plist; sourceTree = "<group>"; };
 		2F5D9E6F1FA1522B004A2AB5 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		2F7CC5F51FB8D04A00ABA677 /* HintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintViewController.swift; sourceTree = "<group>"; };
 		2FA3F60B1FA2D8AD006938E2 /* BoardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardButton.swift; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 				2F35EC661F9B1C06000014E5 /* Assets.xcassets */,
 				2F35EC681F9B1C06000014E5 /* LaunchScreen.storyboard */,
 				2F35EC6B1F9B1C06000014E5 /* Info.plist */,
+				2F5254D21FBE97B300051C65 /* master.plist */,
 				2F39E1311FBE714400FC123C /* Levels */,
 				2F111B121FB964E200DBA3EE /* Music */,
 			);
@@ -283,6 +286,7 @@
 			files = (
 				2F35EC6A1F9B1C06000014E5 /* LaunchScreen.storyboard in Resources */,
 				2FF4B58F1FAD293100DAEC0A /* level_2.plist in Resources */,
+				2F5254D31FBE97B300051C65 /* master.plist in Resources */,
 				2F07758B1FBA3713001C9ABD /* game.mp3 in Resources */,
 				2FE9DA7F1FA399BC0078AE39 /* level_1.plist in Resources */,
 				2F35EC671F9B1C06000014E5 /* Assets.xcassets in Resources */,

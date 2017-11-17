@@ -226,13 +226,13 @@ class GameViewController: UIViewController {
             timerStack.isHidden = false
         }
         
-        if secondsCounter < 9 {
+        if secondsCounter < 10 {
             secondsLabel.text = ":0\(secondsCounter)"
         } else {
             secondsLabel.text = ":\(secondsCounter)"
         }
         
-        if minutesCounter < 9 {
+        if minutesCounter < 10 {
             minutesLabel.text = ":0\(minutesCounter)"
         } else {
             minutesLabel.text = ":\(minutesCounter)"
@@ -1745,22 +1745,45 @@ class GameViewController: UIViewController {
     // for faster access to the information since we don't need to keep reading
     // from the plist
     func makeClueArrays() {
-        for i in 1..<getInfoFromPlist(level: userLevel).count{
-            if getInfoFromPlist(level: userLevel)[i]["Across"]! != "" {
-                acrossClues.append((getInfoFromPlist(level: userLevel)[i]["Across"]!,
-                                getInfoFromPlist(level: userLevel)[i]["Clue"]!,
-                                getInfoFromPlist(level: userLevel)[i]["Hint"]!,
-                                getInfoFromPlist(level: userLevel)[i]["# of words"]!))
+        // Master clues are used to easily manage hints and clues
+        let info = getInfoFromMasterFile()
+        var masterClues = [(Phrase: String, Clue: String, Hint: String, WordCt: String)]()
+        for i in 1..<getInfoFromMasterFile().count {
+            masterClues.append((info[i]["Phrase"]!,
+                                info[i]["Clue"]!,
+                                info[i]["Hint"]!,
+                                info[i]["# of words"]!))
+        }
+
+        let levelArray = getInfoFromPlist(level: userLevel)
+        
+        for i in 1..<levelArray.count{
+            if levelArray[i]["Across"]! != "" {
+                for j in 1..<masterClues.count {
+                    if levelArray[i]["Phrase"] == masterClues[j].Phrase {
+                    acrossClues.append((levelArray[i]["Across"]!,
+                    masterClues[j].Clue,
+                    masterClues[j].Hint,
+                    masterClues[j].WordCt))
+                    }
+                }
             }
-            if getInfoFromPlist(level: userLevel)[i]["Down"]! != "" {
-                downClues.append((getInfoFromPlist(level: userLevel)[i]["Down"]!,
-                                getInfoFromPlist(level: userLevel)[i]["Clue"]!,
-                                getInfoFromPlist(level: userLevel)[i]["Hint"]!,
-                                getInfoFromPlist(level: userLevel)[i]["# of words"]!))
+            
+            if levelArray[i]["Down"]! != "" {
+                for j in 1..<masterClues.count {
+                    if levelArray[i]["Phrase"] == masterClues[j].Phrase {
+                        downClues.append((levelArray[i]["Down"]!,
+                                            masterClues[j].Clue,
+                                            masterClues[j].Hint,
+                                            masterClues[j].WordCt))
+                    }
+                }
             }
         }
     }
     
+    // Reads in from the master list so that the clues and hints are always up to date
+    // and can easily managed.
     func getInfoFromMasterFile() -> (Array<Dictionary<String, String>>) {
         // Read from master file so we always have the most up to date hints and clues
         // for each phrase.
@@ -1801,9 +1824,9 @@ class GameViewController: UIViewController {
         
         
         // MUSIC
-        MusicPlayer.start(musicTitle: "game", ext: "mp3")
+         MusicPlayer.start(musicTitle: "game", ext: "mp3")
         if !Settings.musicEnabled {
-            MusicPlayer.musicPlayer.volume = 0
+            MusicPlayer.gameMusicPlayer.volume = 0
         }
     }
     

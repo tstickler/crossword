@@ -2430,6 +2430,7 @@
                                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </state>
                                                 <connections>
+                                                    <action selector="homeButtonTapped:" destination="Ppb-1U-1o0" eventType="touchUpInside" id="xyL-Cw-9Co"/>
                                                     <segue destination="wJP-nG-4rE" kind="unwind" unwindAction="unwindSegue:" id="hez-XQ-BpZ"/>
                                                 </connections>
                                             </button>

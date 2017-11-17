@@ -9,7 +9,9 @@
 import AVFoundation
 
 class MusicPlayer: NSObject, AVAudioPlayerDelegate {
-    static var musicPlayer = AVAudioPlayer()
+    static var homeMusicPlayer = AVAudioPlayer()
+    static var gameMusicPlayer = AVAudioPlayer()
+    static var soundEffectPlayer = AVAudioPlayer()
     
     private override init() {}
     
@@ -17,15 +19,22 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
         // Find our music file
         let path = Bundle.main.path(forResource: musicTitle, ofType: ext)!
         let url = URL(fileURLWithPath: path)
+        var musicPlayer = AVAudioPlayer()
         
         do {
             // Play the music
-            MusicPlayer.musicPlayer = try AVAudioPlayer(contentsOf: url)
-            MusicPlayer.musicPlayer.numberOfLoops = -1
-            MusicPlayer.musicPlayer.volume = 0
-            MusicPlayer.musicPlayer.prepareToPlay()
-            MusicPlayer.musicPlayer.play()
-            MusicPlayer.musicPlayer.setVolume(1, fadeDuration: 2.0)
+            musicPlayer = try AVAudioPlayer(contentsOf: url)
+            musicPlayer.numberOfLoops = -1
+            musicPlayer.volume = 0
+            musicPlayer.prepareToPlay()
+            musicPlayer.play()
+            musicPlayer.setVolume(1, fadeDuration: 1.0)
+            
+            if musicTitle == "home" {
+                homeMusicPlayer = musicPlayer
+            } else if musicTitle == "game" {
+                gameMusicPlayer = musicPlayer
+            }
         } catch {
             print(error)
         }

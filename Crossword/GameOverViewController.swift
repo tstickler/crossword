@@ -42,7 +42,11 @@ class GameOverViewController: UIViewController {
     @IBAction func bottomButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
 
+        MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 1.0)
         if gameOver == true {
+            if Settings.musicEnabled {
+                MusicPlayer.homeMusicPlayer.setVolume(1.0, fadeDuration: 1.0)
+            }
             performSegue(withIdentifier: "unwindSegue", sender: self)
         } 
     }

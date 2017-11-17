@@ -37,6 +37,14 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         // Switches are set to positions based on the settings
         setSwitches()
     }
+    
+    @IBAction func homeButtonTapped(_ sender: Any) {
+        MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 1.0)
+        if Settings.musicEnabled {
+            MusicPlayer.homeMusicPlayer.setVolume(1.0, fadeDuration: 1.0)
+        }
+    }
+    
 
     // Close the view and return back to the game
     @IBAction func backButtonTapped(_ sender: Any) {
@@ -58,10 +66,10 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         // Flipping the switch should immediately start or stop the music
         if musicSwitch.isOn == true {
             Settings.musicEnabled = true
-            MusicPlayer.musicPlayer.setVolume(1.0, fadeDuration: 1.0)
+            MusicPlayer.gameMusicPlayer.setVolume(1.0, fadeDuration: 1.0)
         } else {
             Settings.musicEnabled = false
-            MusicPlayer.musicPlayer.setVolume(0, fadeDuration: 1.0)
+            MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 1.0)
         }
         
         // Save the state of the setting

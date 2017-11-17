@@ -62,7 +62,7 @@ class HomeViewController: UIViewController {
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
         timer.fire()
         
-
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -72,13 +72,15 @@ class HomeViewController: UIViewController {
 
         if !Settings.musicEnabled {
             // Music is always playing but only if it's enabled should the volume be > 0
-            MusicPlayer.musicPlayer.volume = 0
+            MusicPlayer.homeMusicPlayer.volume = 0
         }
         
         self.navigationController?.isNavigationBarHidden = true
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        MusicPlayer.homeMusicPlayer.setVolume(0, fadeDuration: 1.0)
         
         // Gives a nice animation to the next view
         let transition = CATransition()
