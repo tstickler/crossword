@@ -141,8 +141,7 @@
 				2F35EC661F9B1C06000014E5 /* Assets.xcassets */,
 				2F35EC681F9B1C06000014E5 /* LaunchScreen.storyboard */,
 				2F35EC6B1F9B1C06000014E5 /* Info.plist */,
-				2FE9DA7E1FA399BC0078AE39 /* level_1.plist */,
-				2FF4B58E1FAD293100DAEC0A /* level_2.plist */,
+				2F39E1311FBE714400FC123C /* Levels */,
 				2F111B121FB964E200DBA3EE /* Music */,
 			);
 			path = Crossword;
@@ -164,6 +163,15 @@
 				2F35EC811F9B1C07000014E5 /* Info.plist */,
 			);
 			path = CrosswordUITests;
+			sourceTree = "<group>";
+		};
+		2F39E1311FBE714400FC123C /* Levels */ = {
+			isa = PBXGroup;
+			children = (
+				2FE9DA7E1FA399BC0078AE39 /* level_1.plist */,
+				2FF4B58E1FAD293100DAEC0A /* level_2.plist */,
+			);
+			path = Levels;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */

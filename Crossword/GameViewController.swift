@@ -10,6 +10,7 @@ import UIKit
 import AVFoundation
 
 class GameViewController: UIViewController {
+    // Total number of levels
     let maxNumOfLevels = 2
     
     // Containers for button properties
@@ -907,9 +908,7 @@ class GameViewController: UIViewController {
         // Each key of the keyboard has a tag from 1-26. The tag tells which key was pressed.
         // Keyboard is standard qwerty and tags start at Q(1) and end at M(26)
         var letter: Character!
-        
-        print(navigationController?.viewControllers.count)
-        
+                
         switch sender.tag {
         case 1:
             letter = "q"
@@ -1029,13 +1028,11 @@ class GameViewController: UIViewController {
                     return
                 } else {
                     // If the user isn't right, tell them how many wrong
-                    clueLabel.textColor = .white
-                    
                     if !wrongViewShown {
                         showGameOverView()
                         wrongViewShown = true
                     }
-                    
+                    moveToNextAcross()
                     return
                 }
             } else {
@@ -1762,6 +1759,23 @@ class GameViewController: UIViewController {
                                 getInfoFromPlist(level: userLevel)[i]["# of words"]!))
             }
         }
+    }
+    
+    func getInfoFromMasterFile() -> (Array<Dictionary<String, String>>) {
+        // Read from master file so we always have the most up to date hints and clues
+        // for each phrase.
+        
+        // Path to the plist
+        let path = Bundle.main.path(forResource: "master", ofType: "plist")
+        
+        // Array to store information from plist
+        var storedInfoArray: NSArray?
+        
+        // Set array with information from the plist
+        storedInfoArray = NSArray(contentsOfFile: path!)
+        
+        // Return the array to be filtered
+        return (storedInfoArray as? Array<Dictionary<String, String>>)!
     }
     
     override func viewDidLoad() {
