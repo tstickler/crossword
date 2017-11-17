@@ -9,6 +9,7 @@
 import UIKit
 
 class Settings {
+    // Settings the user can modify to their preferences
     static var musicEnabled: Bool!
     static var soundEffects: Bool!
     static var showTimer: Bool!

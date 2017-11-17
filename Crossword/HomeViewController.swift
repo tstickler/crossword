@@ -11,7 +11,10 @@ import AVFoundation
 
 class HomeViewController: UIViewController {
     @IBAction func unwindSegue(_ sender: UIStoryboardSegue) {
-        // Gives a nice animation when unwinding to the homescreen
+        // Unwind segue allows jumping from the menu or game over view controllers
+        // all the way back to home.
+        
+        // Gives a nice animation
         let transition = CATransition()
         transition.duration = 0.5
         transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
@@ -21,6 +24,7 @@ class HomeViewController: UIViewController {
     }
 
     override var prefersStatusBarHidden: Bool {
+        // No status bar allows for more board room
         return true
     }
     
@@ -36,11 +40,16 @@ class HomeViewController: UIViewController {
     // The level we should go to
     var levelNumber = 1
     
+    // Home screen music enabling/disabling button
+    @IBOutlet var muteButton: UIButton!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         loadSettings()
 
         animator = UIDynamicAnimator(referenceView: self.view)
+        
+        // Possible emojis that will randomly fall from the top (160 to choose from)
         emojisToChoose = ["😄", "😇", "😂", "🤣", "🙂", "🙃", "😍", "😘", "😋", "😜",
                           "🤪", "🤩", "😎", "🤓", "😏", "😭", "😤", "😢", "😡", "🤬",
                           "🤯", "😱", "😓", "😰", "🤫", "🙄", "😬", "😴", "🤤", "🤮",
@@ -61,8 +70,6 @@ class HomeViewController: UIViewController {
         // When timer fires, will create a new label to be dropped from the view
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
         timer.fire()
-        
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,13 +80,18 @@ class HomeViewController: UIViewController {
         if !Settings.musicEnabled {
             // Music is always playing but only if it's enabled should the volume be > 0
             MusicPlayer.homeMusicPlayer.volume = 0
+            muteButton.setBackgroundImage(UIImage(named: "no_music-1.png"), for: .normal)
+        } else {
+            muteButton.setBackgroundImage(UIImage(named: "music-1.png"), for: .normal)
         }
         
+        // Don't need the navigation bar
         self.navigationController?.isNavigationBarHidden = true
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
+        // Fade out the home music
         MusicPlayer.homeMusicPlayer.setVolume(0, fadeDuration: 1.0)
         
         // Gives a nice animation to the next view
@@ -88,8 +100,39 @@ class HomeViewController: UIViewController {
         transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         transition.type = kCATransitionFade
         self.navigationController?.view.layer.add(transition, forKey: nil)
-
     }
+    
+    @IBAction func muteButtonTapped(_ sender: Any) {
+        var image: UIImage
+        
+
+        if Settings.musicEnabled {
+            // If tapping when music is enabled, disable it
+            Settings.musicEnabled = false
+            Settings.soundEffects = false
+            
+            // Set the image of the button to muted music
+            image = UIImage(named: "no_music-1.png")!
+            
+            // Actually mute the music
+            MusicPlayer.homeMusicPlayer.setVolume(0, fadeDuration: 1.0)
+        } else {
+            // If tapping when music is disabled, enable it
+            Settings.musicEnabled = true
+            Settings.soundEffects = true
+            
+            // Set the image of the button to unmuted music
+            image = UIImage(named: "music-1.png")!
+            
+            // Play the music
+            MusicPlayer.homeMusicPlayer.setVolume(1.0, fadeDuration: 1.0)
+        }
+        
+        // Save the user settings
+        defaults.set(Settings.musicEnabled, forKey: "musicEnabled")
+        muteButton.setBackgroundImage(image, for: .normal)
+    }
+    
     
     @objc func update() {
         // Create the emoji and add it to a label
@@ -145,7 +188,7 @@ class HomeViewController: UIViewController {
         // Determine if this is the first time the user has used the app
         Settings.launchedBefore = defaults.bool(forKey: "launchedBefore")
         
-        // If the user hasn't used the app, set to their preferred settings
+        // If the user has used the app, set to their preferred settings
         if Settings.launchedBefore {
             Settings.launchedBefore = defaults.bool(forKey: "firstTime")
             Settings.musicEnabled = defaults.bool(forKey: "musicEnabled")

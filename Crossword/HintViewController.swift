@@ -9,6 +9,7 @@
 import UIKit
 
 class HintViewController: UIViewController, UIGestureRecognizerDelegate {
+    // UI elements
     @IBOutlet var hintBackground: UIView!
     @IBOutlet var emojiLabel: UILabel!
     @IBOutlet var clueNumberLabel: UILabel!
@@ -23,24 +24,15 @@ class HintViewController: UIViewController, UIGestureRecognizerDelegate {
     var screenSize = UIScreen.main.bounds
     
     @IBAction func backButtonTapped(_ sender: Any) {
+        // Return to presenting view
         dismiss(animated: true, completion: nil)
     }
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        switch screenSize.height {
-            case 568:
-                emojiLabel.font = emojiLabel.font.withSize(40)
-            case 667, 812:
-                emojiLabel.font = emojiLabel.font.withSize(50)
-            case 736:
-                emojiLabel.font = emojiLabel.font.withSize(55)
-            default:
-                emojiLabel.font = emojiLabel.font.withSize(50)
-        }
-        
+        setUpUI()
+
+        // Displays the hint information to the user
         emojiLabel.text = emoji
         clueNumberLabel.text = clueNumber
         hintLabel.text = hint
@@ -50,11 +42,27 @@ class HintViewController: UIViewController, UIGestureRecognizerDelegate {
         } else {
             wordCountLabel.text = wordCount
         }
+    }
+    
+    func setUpUI() {
+        // Size of the emoji label should depend on screen size
+        switch screenSize.height {
+        case 568:
+            emojiLabel.font = emojiLabel.font.withSize(40)
+        case 667, 812:
+            emojiLabel.font = emojiLabel.font.withSize(50)
+        case 736:
+            emojiLabel.font = emojiLabel.font.withSize(55)
+        default:
+            emojiLabel.font = emojiLabel.font.withSize(50)
+        }
         
+        // Gives the background border a nice color/shape
         hintBackground.layer.cornerRadius = 15
         hintBackground.layer.borderWidth = 3
         hintBackground.layer.borderColor = UIColor.init(red: 255/255, green: 150/255, blue: 176/255, alpha: 1).cgColor
         
+        // Gives the button a nice color/shape
         backButton.layer.borderWidth = 1
         backButton.layer.cornerRadius = 3
         backButton.layer.borderColor = UIColor.init(red: 255/255, green: 150/255, blue: 176/255, alpha: 1).cgColor

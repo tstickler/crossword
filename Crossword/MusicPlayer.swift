@@ -9,6 +9,7 @@
 import AVFoundation
 
 class MusicPlayer: NSObject, AVAudioPlayerDelegate {
+    // 3 music players allow for better concurrent music/sound effects/fade
     static var homeMusicPlayer = AVAudioPlayer()
     static var gameMusicPlayer = AVAudioPlayer()
     static var soundEffectPlayer = AVAudioPlayer()
@@ -30,6 +31,7 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
             musicPlayer.play()
             musicPlayer.setVolume(1, fadeDuration: 1.0)
             
+            // Choose the player to play on based on the song sent
             if musicTitle == "home" {
                 homeMusicPlayer = musicPlayer
             } else if musicTitle == "game" {

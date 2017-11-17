@@ -28,8 +28,14 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var lockCorrectSwitch: UISwitch!
     @IBOutlet var correctAnimationSwitch: UISwitch!
     
+    // Should always end up being 1 but this is safer
+    var indexOfPresenter: Int!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Should be 1 (the top view on the navigation stack)
+        indexOfPresenter = (self.presentingViewController?.childViewControllers.count)! - 1
         
         // Set up UI for user to interact with
         setUpMenuUI()
@@ -39,6 +45,9 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @IBAction func homeButtonTapped(_ sender: Any) {
+        // Uses an unwind segue to go back to the home screen
+        
+        // Play the home music
         MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 1.0)
         if Settings.musicEnabled {
             MusicPlayer.homeMusicPlayer.setVolume(1.0, fadeDuration: 1.0)
@@ -51,7 +60,8 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         dismiss(animated: true, completion: nil)
     }
     
-    // Sets initial state of switches on loading
+    // Sets initial state of switches on display
+    // Switches are set based on the Settings class variables
     func setSwitches() {
         musicSwitch.setOn(Settings.musicEnabled, animated: false)
         soundEffectsSwitch.setOn(Settings.soundEffects, animated: false)
@@ -78,6 +88,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         // view.
         defaults.set(Settings.musicEnabled, forKey: "musicEnabled")
     }
+    
     @IBAction func soundEffectsToggled(_ sender: Any) {
         if soundEffectsSwitch.isOn == true {
             Settings.soundEffects = true
@@ -88,19 +99,24 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         // Save the state of the setting
         defaults.set(Settings.soundEffects, forKey: "soundEffects")
     }
+    
     @IBAction func timerToggled(_ sender: Any) {
         if timerSwitch.isOn == true {
             Settings.showTimer = true
             
             // Immediately show the timer
-            if let parentVC = self.presentingViewController?.childViewControllers[1] as? GameViewController {
+            // The way that the navigation stack is handled, the game view controller will always be at
+            // index 1.
+            if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
                 parentVC.timerStack.isHidden = false
             }
         } else {
             Settings.showTimer = false
             
             // Immediately hide the timer
-            if let parentVC = self.presentingViewController?.childViewControllers[1] as? GameViewController {
+            // The way that the navigation stack is handled, the game view controller will always be at
+            // index 1.
+            if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
                 parentVC.timerStack.isHidden = true
             }
         }
@@ -108,6 +124,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         // Save the state of the setting
         defaults.set(Settings.showTimer, forKey: "showTimer")
     }
+    
     @IBAction func skipFilledToggled(_ sender: Any) {
         if skipFilledSwitch.isOn == true {
             Settings.skipFilledSquares = true
@@ -118,6 +135,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         // Save the state of the setting
         defaults.set(Settings.skipFilledSquares, forKey: "skipFilledSquares")
     }
+    
     @IBAction func lockCorrectToggled(_ sender: Any) {
         if lockCorrectSwitch.isOn == true {
             Settings.lockCorrect = true
@@ -128,6 +146,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         // Save the state of the setting
         defaults.set(Settings.lockCorrect, forKey: "lockCorrect")
     }
+    
     @IBAction func correctAnimationToggled(_ sender: Any) {
         if correctAnimationSwitch.isOn == true {
             Settings.correctAnim = true

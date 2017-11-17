@@ -9,11 +9,11 @@
 import UIKit
 
 class GameOverViewController: UIViewController {
+    // UI elements
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var messageLabel: UILabel!
     @IBOutlet weak var topButton: UIButton!
     @IBOutlet weak var bottomButton: UIButton!
-    
     @IBOutlet weak var viewBackground: UIView!
     
     var gameOver: Bool!
@@ -27,7 +27,12 @@ class GameOverViewController: UIViewController {
     
     @IBAction func topButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
-
+        
+        // Top button does two things based on how the user presented the view
+        // If the user has presented the view through getting all correct answers,
+        // the top button should allow the user to move to the next level.
+        // If the user has presented the view with any wrong answers, the top button
+        // is used to display which letters are wrong on the board.
         if gameOver == true {
             if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
                 parentVC.newLevel()
@@ -41,24 +46,50 @@ class GameOverViewController: UIViewController {
     
     @IBAction func bottomButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
+        
+        // Bottom button does two things based on how the user presented the view
+        // If the user has presented the view through getting all correct answers,
+        // the bottom button should allow the user to move to the home screen.
+        // If the user has presented the view with any wrong answers, the bottom button
+        // is used to dismiss the view and return to the game with no hint showing which
+        // letters were incorrect.
 
-        MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 1.0)
         if gameOver == true {
+            // Fade out the game music
+            MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 1.0)
+
+            // Fade in the home music
             if Settings.musicEnabled {
                 MusicPlayer.homeMusicPlayer.setVolume(1.0, fadeDuration: 1.0)
             }
+            
+            // unwind to home screen
             performSegue(withIdentifier: "unwindSegue", sender: self)
         } 
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-                
+        
+        // Determines how the UI elements should be set up
+        setUpUI()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        // Should be 1 (the top view on the navigation stack)
+        indexOfPresenter = (self.presentingViewController?.childViewControllers.count)! - 1
+    }
+    
+    func setUpUI() {
+        // Gives the background a nice shape
         viewBackground.layer.cornerRadius = 15
         viewBackground.layer.borderWidth = 3
         
         if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
             if parentVC.gameOver() {
+                // If we came through a game over, set the view accordingly
                 gameOver = true
                 hours = parentVC.hoursCounter
                 minutes = parentVC.minutesCounter
@@ -87,6 +118,7 @@ class GameOverViewController: UIViewController {
                 bottomButton.layer.cornerRadius = 5
                 bottomButton.setTitle("Home", for: .normal)
             } else {
+                // If we came through a full board with at least 1 wrong letter, set the view accordingly
                 gameOver = false
                 numberWrong = parentVC.countWrong()
                 viewBackground.layer.borderColor = UIColor.red.cgColor
@@ -111,12 +143,5 @@ class GameOverViewController: UIViewController {
                 bottomButton.setTitle("Continue", for: .normal)
             }
         }
-    }
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        // Should be 1 (the top view on the navigation stack)
-        indexOfPresenter = (self.presentingViewController?.childViewControllers.count)! - 1
     }
 }
