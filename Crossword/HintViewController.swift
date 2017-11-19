@@ -16,11 +16,13 @@ class HintViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var wordCountLabel: UILabel!
     @IBOutlet var hintLabel: UILabel!
     @IBOutlet var backButton: UIButton!
+    @IBOutlet var letterCountLabel: UILabel!
     
     var emoji: String!
     var clueNumber: String!
     var wordCount: String!
     var hint: String!
+    var letterCount: String!
     var screenSize = UIScreen.main.bounds
     
     @IBAction func backButtonTapped(_ sender: Any) {
@@ -36,6 +38,7 @@ class HintViewController: UIViewController, UIGestureRecognizerDelegate {
         emojiLabel.text = emoji
         clueNumberLabel.text = clueNumber
         hintLabel.text = hint
+        letterCountLabel.text = ("Letters: \(letterCount!)")
         
         if wordCount != "abv." {
             wordCountLabel.text = ("Words: \(wordCount!)")

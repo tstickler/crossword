@@ -1852,6 +1852,7 @@ class GameViewController: UIViewController {
                 hintVC.hint = getSpotInfo(indexOfButton: indexOfButton, info: "Hint")
                 hintVC.clueNumber = directionLabel.text!
                 hintVC.screenSize = screenSize
+                hintVC.letterCount = String(selectedBoardSpaces.count)
             }
         }
     }

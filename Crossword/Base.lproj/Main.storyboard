@@ -2303,7 +2303,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hint" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RI3-W2-P0Q">
-                                        <rect key="frame" x="8" y="101" width="254" height="148"/>
+                                        <rect key="frame" x="8" y="124" width="254" height="125"/>
                                         <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -2337,22 +2337,34 @@
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="13 letters" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="XjC-9D-CQe">
+                                        <rect key="frame" x="0.0" y="96" width="270" height="20"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="20" id="k6p-uC-XnH"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="o5k-pC-uJH" firstAttribute="top" secondItem="RI3-W2-P0Q" secondAttribute="bottom" constant="8" id="1HB-iK-Knf"/>
                                     <constraint firstItem="o5k-pC-uJH" firstAttribute="centerX" secondItem="pEv-2w-dj9" secondAttribute="centerX" id="6Gx-tP-PbC"/>
                                     <constraint firstItem="RI3-W2-P0Q" firstAttribute="centerX" secondItem="pEv-2w-dj9" secondAttribute="centerX" id="7Nd-rV-RYi"/>
-                                    <constraint firstItem="RI3-W2-P0Q" firstAttribute="top" secondItem="cp1-en-iwp" secondAttribute="bottom" constant="8" id="9PU-NV-yAY"/>
                                     <constraint firstAttribute="trailing" secondItem="cp1-en-iwp" secondAttribute="trailing" constant="8" id="DlL-y1-7cg"/>
+                                    <constraint firstItem="XjC-9D-CQe" firstAttribute="top" secondItem="cp1-en-iwp" secondAttribute="bottom" constant="3" id="Ewn-d6-yZx"/>
                                     <constraint firstAttribute="trailing" secondItem="RI3-W2-P0Q" secondAttribute="trailing" constant="8" id="JB3-5a-I9X"/>
                                     <constraint firstAttribute="height" constant="300" id="UBI-JS-aef"/>
                                     <constraint firstItem="cp1-en-iwp" firstAttribute="top" secondItem="m1f-w6-EiL" secondAttribute="bottom" constant="5" id="Upx-83-wDc"/>
                                     <constraint firstItem="m1f-w6-EiL" firstAttribute="centerX" secondItem="pEv-2w-dj9" secondAttribute="centerX" id="eq2-Oe-2Qy"/>
                                     <constraint firstItem="m1f-w6-EiL" firstAttribute="top" secondItem="pEv-2w-dj9" secondAttribute="top" constant="8" id="fSe-Cm-eJ3"/>
+                                    <constraint firstAttribute="trailing" secondItem="XjC-9D-CQe" secondAttribute="trailing" id="hKn-FJ-GFI"/>
                                     <constraint firstItem="RI3-W2-P0Q" firstAttribute="leading" secondItem="pEv-2w-dj9" secondAttribute="leading" constant="8" id="hap-om-eMO"/>
+                                    <constraint firstItem="XjC-9D-CQe" firstAttribute="leading" secondItem="pEv-2w-dj9" secondAttribute="leading" id="iZJ-rc-239"/>
                                     <constraint firstItem="cp1-en-iwp" firstAttribute="leading" secondItem="pEv-2w-dj9" secondAttribute="leading" constant="8" id="jeQ-EQ-h4I"/>
                                     <constraint firstItem="0TM-8C-7eQ" firstAttribute="top" secondItem="pEv-2w-dj9" secondAttribute="top" constant="8" id="lCX-hc-IX6"/>
+                                    <constraint firstItem="RI3-W2-P0Q" firstAttribute="top" secondItem="XjC-9D-CQe" secondAttribute="bottom" constant="8" id="wDH-eC-dbr"/>
                                     <constraint firstAttribute="trailing" secondItem="0TM-8C-7eQ" secondAttribute="trailing" constant="8" id="wTt-sB-WXq"/>
                                     <constraint firstAttribute="bottom" secondItem="o5k-pC-uJH" secondAttribute="bottom" constant="8" id="wkh-jP-8wf"/>
                                 </constraints>
@@ -2376,6 +2388,7 @@
                         <outlet property="emojiLabel" destination="m1f-w6-EiL" id="s5u-ui-c7K"/>
                         <outlet property="hintBackground" destination="pEv-2w-dj9" id="8AZ-FE-eHa"/>
                         <outlet property="hintLabel" destination="RI3-W2-P0Q" id="I1G-gG-DRa"/>
+                        <outlet property="letterCountLabel" destination="XjC-9D-CQe" id="1s3-Jg-Plh"/>
                         <outlet property="wordCountLabel" destination="cp1-en-iwp" id="NB1-wT-tjN"/>
                     </connections>
                 </viewController>
@@ -2387,7 +2400,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1378" y="944"/>
+            <point key="canvasLocation" x="1376.25" y="943.30985915492954"/>
         </scene>
         <!--GameOverViewController-->
         <scene sceneID="Nue-ej-jty">
