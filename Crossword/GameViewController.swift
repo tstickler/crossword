@@ -28,6 +28,11 @@ class GameViewController: UIViewController {
     
     // Used to determine which phone the user has
     let screenSize = UIScreen.main.bounds
+    
+    override var prefersStatusBarHidden: Bool {
+        // No status bar allows for more board room
+        return true
+    }
 
     var selectedBoardSpaces = [Int]()
     var across = true
@@ -51,16 +56,11 @@ class GameViewController: UIViewController {
     @IBOutlet weak var cheatCountLabel: UILabel!
     @IBOutlet var hintEnabledButton: UIButton!
     
-    var cheatCount: Int = 1000
+    var cheatCount: Int = 10
     
     // Iterator to prevent inifinte loop
     var checkAllDirectionFilledIterator = 0
-    
-    // Hides the status bar in game so there is more room for the board
-    override var prefersStatusBarHidden: Bool {
-        return true
-    }
-    
+
     // Buttons for the keyboard and gameboard
     @IBOutlet var keys: [UIButton]!
     @IBOutlet var boardSpaces: [BoardButton]!
@@ -96,7 +96,9 @@ class GameViewController: UIViewController {
     var hoursCounter = 0
     let formatter = NumberFormatter()
     
+    // Wrong view should only be shown once
     var wrongViewShown = false
+    
     
     /*****************************************
     *                                        *
@@ -109,6 +111,11 @@ class GameViewController: UIViewController {
         let iphoneKeysHeight: CGFloat = 52.5
         let iphonePlusKeysHeight: CGFloat = 55
         
+        // Gives buttons a nice rounded corner
+        for button in keys {
+            button.layer.cornerRadius = 5
+        }
+        
         switch screenSize.height {
         // Sets constraints for iPhone SE
         case 568:
@@ -118,7 +125,8 @@ class GameViewController: UIViewController {
             
             bottomRowLeading.constant = 45
             bottomRowTrailing.constant = 45
-        // Sets constraints for iPhone and iPhone X
+            
+        // Sets constraints for iPhone
         case 667:
             topKeysHeight.constant = iphoneKeysHeight
             middleKeysHeight.constant = iphoneKeysHeight
@@ -130,6 +138,7 @@ class GameViewController: UIViewController {
             clueLabel.font = clueLabel.font.withSize(40)
             clueHeightConstraint.constant = 55
             keyboardBackHeight.constant = 175
+            
         // Sets constraints for iPhone Plus
         case 736:
             topKeysHeight.constant = iphonePlusKeysHeight
@@ -142,6 +151,7 @@ class GameViewController: UIViewController {
             keyboardBackHeight.constant = 185
             clueHeightConstraint.constant = 70
             clueLabel.font = clueLabel.font.withSize(45)
+            
         // Sets constraints for iPhone X
         case 812:
             topKeysHeight.constant = 57
@@ -155,13 +165,9 @@ class GameViewController: UIViewController {
             
             clueHeightConstraint.constant = 75
             clueLabel.font = clueLabel.font.withSize(40)
+            
         default:
             break
-        }
-        
-        // Gives buttons a nice rounded corner
-        for button in keys {
-            button.layer.cornerRadius = 5
         }
         
         // Set up the board buttons
@@ -185,7 +191,7 @@ class GameViewController: UIViewController {
     }
     
     func clueAreaSetup() {
-        // Set border width, shape, and color for the clue label, advancement buttons, and clue buttons
+        // Set border width, shape, and color for the clue label, advancement buttons, timer and clue buttons
         clueLabel.layer.borderWidth = 2
         clueLabel.layer.cornerRadius = 10
         clueLabel.layer.borderColor = blueColorCG
@@ -226,19 +232,11 @@ class GameViewController: UIViewController {
             timerStack.isHidden = false
         }
         
-        if secondsCounter < 10 {
-            secondsLabel.text = ":0\(secondsCounter)"
-        } else {
-            secondsLabel.text = ":\(secondsCounter)"
-        }
+        let secs = formatter.string(for: secondsCounter)
+        let mins = formatter.string(for: minutesCounter)
         
-        if minutesCounter < 10 {
-            minutesLabel.text = ":0\(minutesCounter)"
-        } else {
-            minutesLabel.text = ":\(minutesCounter)"
-        }
-        
-        
+        secondsLabel.text = ":\(secs!)"
+        minutesLabel.text = ":\(mins!)"
         hoursLabel.text = "\(hoursCounter)"
     }
     
@@ -785,20 +783,20 @@ class GameViewController: UIViewController {
     }
 
     @IBAction func hintButtonTapped(_ sender: Any) {
+        // If the user is out of cheats, don't do anything
         if cheatCount == 0 {
             return
         }
         
+        // Show the hint view
         performSegue(withIdentifier: "hintSegue", sender: self)
         
+        // Indicate on the buttons which have hints enabled
         for index in selectedBoardSpaces {
             if across {
                 buttonHintAcrossEnabled[index] = true
                 defaults.set(buttonHintAcrossEnabled, forKey: "hintAcross")
                 boardSpaces[index].showHintLabel()
-
-                if !buttonRevealedByHelper[index] {
-                }
             } else {
                 buttonHintDownEnabled[index] = true
                 defaults.set(buttonHintDownEnabled, forKey: "hintDown")
@@ -806,19 +804,22 @@ class GameViewController: UIViewController {
             }
         }
         
+        // Display the button on the clue area to allow the user to reopen the hint view
         hintEnabledButton.isEnabled = true
         hintEnabledButton.isHidden = false
         hintButton.backgroundColor = .gray
         
-        // Remove a cheat and set the label
+        // Remove a cheat and save to defaults
         cheatCount -= 1
         defaults.set(cheatCount, forKey: "cheatCount")
         
+        // If the user is out of cheats, gray out the buttons
         if cheatCount == 0 {
             fillSquareButton.backgroundColor = .gray
             hintButton.backgroundColor = .gray
         }
         
+        // Update the cheatlabel
         let stringToUnderline = NSAttributedString(string: "\(cheatCount)")
         let textRange = NSMakeRange(0, stringToUnderline.length)
         let underlinedCount = NSMutableAttributedString(attributedString: stringToUnderline)
@@ -827,11 +828,13 @@ class GameViewController: UIViewController {
                                      range: textRange)
         cheatCountLabel.attributedText = underlinedCount
         
+        // Don't allow hitting the button again without moving
         hintButton.isEnabled = false
     }
     
     @IBAction func fillSquareButtonTapped(_ sender: Any) {
-        if cheatCount == 0  || buttonRevealedByHelper[indexOfButton] {
+        // If the user is out of cheats, don't do anything
+        if cheatCount == 0 {
             return
         }
         
@@ -849,7 +852,7 @@ class GameViewController: UIViewController {
 
         boardSpaces[indexOfButton].backgroundColor = UIColor.init(cgColor: orangeColorCG)
         
-        // Remove a cheat and set the label
+        // Remove a cheat and save to defaults
         cheatCount -= 1
         defaults.set(cheatCount, forKey: "cheatCount")
         
@@ -858,6 +861,7 @@ class GameViewController: UIViewController {
             hintButton.backgroundColor = .gray
         }
         
+        // Update the cheatlabel
         let stringToUnderline = NSAttributedString(string: "\(cheatCount)")
         let textRange = NSMakeRange(0, stringToUnderline.length)
         let underlinedCount = NSMutableAttributedString(attributedString: stringToUnderline)
@@ -866,6 +870,7 @@ class GameViewController: UIViewController {
                                        range: textRange)
         cheatCountLabel.attributedText = underlinedCount
 
+        // Check if cheat completed a word and animate if it is correct
         if correctAnswerEntered() {
             if Settings.correctAnim {
                 highlightCorrectAnswer()
@@ -875,6 +880,7 @@ class GameViewController: UIViewController {
         if allSquaresFilled() {
             // See if the user has entered all the right answers
             if gameOver() {
+                // If they do, perform game over actions
                 if userLevel < maxNumOfLevels {
                     defaults.set(userLevel + 1, forKey: "userLevel")
                 } else {
@@ -887,12 +893,13 @@ class GameViewController: UIViewController {
                 
                 return
             } else {
-                // If the user isn't right, tell them how many wrong
+                // If the user isn't right, don't finish game
+                // Show them view displaying how many they got incorrect
                 if !wrongViewShown {
                     showGameOverView()
                     wrongViewShown = true
                 }
-                return
+                //return
             }
         }
         
@@ -1013,6 +1020,7 @@ class GameViewController: UIViewController {
             if allSquaresFilled() {
                 // If all squares are filled, see if the user is right
                 if gameOver(){
+                    // If the user is right, perform game over actions
                     gameTimer.invalidate()
                     
                     if userLevel < maxNumOfLevels {
@@ -1027,13 +1035,15 @@ class GameViewController: UIViewController {
 
                     return
                 } else {
-                    // If the user isn't right, tell them how many wrong
+                    // If the user isn't right, don't finish game
+                    // Show them view displaying how many they got incorrect
                     if !wrongViewShown {
                         showGameOverView()
                         wrongViewShown = true
                     }
-                    moveToNextAcross()
-                    return
+                    
+                    // Move accordingly
+                    nextPhraseButton.sendActions(for: .touchUpInside)
                 }
             } else {
                 nextPhraseButton.sendActions(for: .touchUpInside)
@@ -1049,7 +1059,7 @@ class GameViewController: UIViewController {
                 wrongViewShown = true
             }
             
-            return
+            //return
         } else {
             // This checks the other direction at an intersection but the original
             // direction is not completely correct.
@@ -1319,12 +1329,14 @@ class GameViewController: UIViewController {
             if !button.isEnabled || button.currentTitle != nil {
                 /* Don't need to do anything, keep loop going */
             } else {
+                // Found an empty square, board is not filled
                 return false
             }
         }
         return true
     }
     
+    // Count wrong answers and display where they are to the user
     var indexOfWrong = [Int]()
     func countWrong() -> Int {
         var numberWrongCounter = 0
@@ -1448,20 +1460,8 @@ class GameViewController: UIViewController {
     }
     
     func highlightWrongAnswers() {
-        // Remove interfering borders
-        //        for button in boardSpaces {
-        //            for layer in button.layer.sublayers! {
-        //                if layer.name == "BORDER" {
-        //                    layer.removeFromSuperlayer()
-        //                }
-        //            }
-        //        }
-        
         // Sets the border for the spaces
         for i in indexOfWrong {
-            // Remove the growing animation
-            //            boardSpaces[i].layer.removeAllAnimations()
-            
             // CAShapeLayer allows us to put the border outside of the button, giving the button more space
             let border = CAShapeLayer()
             
@@ -1497,13 +1497,6 @@ class GameViewController: UIViewController {
             border.add(animation, forKey: "")
             border.zPosition = 1000
         }
-        
-        // Allows animation to begin again if the user clicks the same square
-        //        if indexOfButton - 1 < 0 {
-        //            previousButton = indexOfButton - 1
-        //        } else {
-        //            previousButton = indexOfButton + 1
-        //        }
     }
     
     func determineDirectionText(indexOfButton: Int) {
@@ -1745,7 +1738,9 @@ class GameViewController: UIViewController {
     // for faster access to the information since we don't need to keep reading
     // from the plist
     func makeClueArrays() {
-        // Master clues are used to easily manage hints and clues
+        // Master clues are used to easily manage hints and clues.
+        // Any updates to hints or clues will apply to all phrases
+        // without needing to modify each level plist
         let info = getInfoFromMasterFile()
         var masterClues = [(Phrase: String, Clue: String, Hint: String, WordCt: String)]()
         for i in 1..<getInfoFromMasterFile().count {
@@ -1755,9 +1750,12 @@ class GameViewController: UIViewController {
                                 info[i]["# of words"]!))
         }
 
+        // Construct the level arrays
         let levelArray = getInfoFromPlist(level: userLevel)
-        
         for i in 1..<levelArray.count{
+            // Find the phrase in the master plist and grab the clue,
+            // hint, and number of words related to it
+
             if levelArray[i]["Across"]! != "" {
                 for j in 1..<masterClues.count {
                     if levelArray[i]["Phrase"] == masterClues[j].Phrase {
@@ -1804,6 +1802,7 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Initialize from defaults
         readFromDefaults()
         
         // This is the board that needs to be set up
@@ -1816,6 +1815,7 @@ class GameViewController: UIViewController {
         
         
         // Set everything up
+        formatter.minimumIntegerDigits = 2
         fillAcrossDownArrays()
         makeClueArrays()
         setUpBoard(board: board)
@@ -1823,8 +1823,8 @@ class GameViewController: UIViewController {
         startTimer()
         
         
-        // MUSIC
-         MusicPlayer.start(musicTitle: "game", ext: "mp3")
+        // Start playing game music
+        MusicPlayer.start(musicTitle: "game", ext: "mp3")
         if !Settings.musicEnabled {
             MusicPlayer.gameMusicPlayer.volume = 0
         }
@@ -1832,18 +1832,19 @@ class GameViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // Begins animation when coming from background
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.gameViewController = self
+        
+        // Our initial click
         initialHighlight()
     }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-    }
-    
+        
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // When the setting button is clicked, give the view information needed
         // to set the switches to their initial positions which can then be modified
         // by the user.
-
         if segue.identifier == "hintSegue" {
             if let hintVC = segue.destination as? HintViewController {
                 hintVC.emoji = getSpotInfo(indexOfButton: indexOfButton, info: "Clue")
@@ -1856,22 +1857,25 @@ class GameViewController: UIViewController {
     }
     
     func startTimer() {
-        formatter.minimumIntegerDigits = 2
         gameTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateTimerLabel), userInfo: nil, repeats: true)
     }
     
-    @objc func updateTimerLabel() {        
+    @objc func updateTimerLabel() {
+        // Increase the seconds counter every tick
+        // At 60, increase the minutes counter
         secondsCounter += 1
         if secondsCounter == 60 {
             secondsCounter = 0
             minutesCounter += 1
         }
         
+        // At 60, increase the hours counter
         if minutesCounter == 60 {
             minutesCounter = 0
             hoursCounter += 1
         }
         
+        // Display the timer
         let secs = formatter.string(for: secondsCounter)
         let mins = formatter.string(for: minutesCounter)
         
@@ -1879,12 +1883,14 @@ class GameViewController: UIViewController {
         minutesLabel.text = ":\(mins!)"
         hoursLabel.text = "\(hoursCounter)"
         
+        // Save the timer every time through
         defaults.set(secondsCounter, forKey: "seconds")
         defaults.set(minutesCounter, forKey: "minutes")
         defaults.set(hoursCounter, forKey: "hours")
     }
     
     func readFromDefaults() {
+        // If there are saved answers, then we want to display those
         if let savedAnswers = defaults.array(forKey: "buttonTitles") {
             buttonTitleArray = (savedAnswers as? [String])!
             for i in 0...168 {
@@ -1893,15 +1899,19 @@ class GameViewController: UIViewController {
                 }
             }
         } else {
+            // Otherwise, start new
             buttonTitleArray = Array(repeating: "", count: 169)
         }
         
+        // If there are locked answers, then we want to set those
         if let locked = defaults.array(forKey: "lockedCorrect") {
             buttonLockedForCorrect = (locked as? [Bool])!
         } else {
+            // Otherwise, start new
             buttonLockedForCorrect = Array(repeating: false, count: 169)
         }
         
+        // If there are squares with hints, then we want to display those
         if let acrossHint = defaults.array(forKey: "hintAcross") {
             buttonHintAcrossEnabled = (acrossHint as? [Bool])!
             for i in 0...168 {
@@ -1910,9 +1920,11 @@ class GameViewController: UIViewController {
                 }
             }
         } else {
+            // Otherwise, start new
             buttonHintAcrossEnabled = Array(repeating: false, count: 169)
         }
         
+        // If there are squares with hints, then we want to display those
         if let downHint = defaults.array(forKey: "hintDown") {
             buttonHintDownEnabled = (downHint as? [Bool])!
             for i in 0...168 {
@@ -1921,9 +1933,11 @@ class GameViewController: UIViewController {
                 }
             }
         } else {
+            // Otherwise, start new
             buttonHintDownEnabled = Array(repeating: false, count: 169)
         }
         
+        // If there are squares revealed, then we want to display those
         if let revealed = defaults.array(forKey: "revealed") {
             buttonRevealedByHelper = (revealed as? [Bool])!
             for i in 0...168 {
@@ -1932,25 +1946,34 @@ class GameViewController: UIViewController {
                 }
             }
         } else {
+            // Otherwise, start new
             buttonRevealedByHelper = Array(repeating: false, count: 169)
         }
         
+        // Get the user level
         userLevel = defaults.integer(forKey: "userLevel")
         if userLevel == 0 {
+            // Defaults returns 0 if there is no corresponding key.
+            // In this case, it is the user's first time and we start
+            // them at level 1
             userLevel = 1
         }
         
+        // Set the timing counters, they are 0 if there is no corresponding key
         secondsCounter = defaults.integer(forKey: "seconds")
         minutesCounter = defaults.integer(forKey: "minutes")
         hoursCounter = defaults.integer(forKey: "hours")
         
+        // Set the user's cheat counts
         cheatCount = defaults.integer(forKey: "cheatCount")
         if cheatCount == 0 {
-            cheatCount = 1000
+            cheatCount = 10
         }
     }
     
     func showGameOverView() {
+        // Gave over view has to be presented programmatically because there is no specific
+        // button to trigger its segue
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let GOVC = storyboard.instantiateViewController(withIdentifier: "GOVC")
         GOVC.modalTransitionStyle = .crossDissolve
@@ -1960,7 +1983,6 @@ class GameViewController: UIViewController {
     
     func resetDefaults() {
         // Set level specific board states back to initial board
-
         defaults.set(Array(repeating: "", count: 169), forKey: "buttonTitles")
         defaults.set(Array(repeating: false, count: 169), forKey: "lockedCorrect")
         defaults.set(Array(repeating: false, count: 169), forKey: "hintAcross")

@@ -46,7 +46,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         loadSettings()
-
+                
         animator = UIDynamicAnimator(referenceView: self.view)
         
         // Possible emojis that will randomly fall from the top (160 to choose from)
@@ -105,7 +105,6 @@ class HomeViewController: UIViewController {
     @IBAction func muteButtonTapped(_ sender: Any) {
         var image: UIImage
         
-
         if Settings.musicEnabled {
             // If tapping when music is enabled, disable it
             Settings.musicEnabled = false
@@ -190,7 +189,7 @@ class HomeViewController: UIViewController {
         
         // If the user has used the app, set to their preferred settings
         if Settings.launchedBefore {
-            Settings.launchedBefore = defaults.bool(forKey: "firstTime")
+            Settings.launchedBefore = defaults.bool(forKey: "launchedBefore")
             Settings.musicEnabled = defaults.bool(forKey: "musicEnabled")
             Settings.soundEffects = defaults.bool(forKey: "soundEffects")
             Settings.showTimer = defaults.bool(forKey: "showTimer")

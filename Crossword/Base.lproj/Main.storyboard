@@ -4,11 +4,23 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
+        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="ArialRoundedMTBold.ttf">
+            <string>ArialRoundedMTBold</string>
+        </array>
+        <array key="Futura.ttc">
+            <string>Futura-Medium</string>
+        </array>
+        <array key="GeezaPro.ttc">
+            <string>GeezaPro</string>
+        </array>
+    </customFonts>
     <scenes>
         <!--Home View Controller-->
         <scene sceneID="tne-QT-ifu">
@@ -43,6 +55,9 @@
                                 <state key="normal">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
+                                <connections>
+                                    <segue destination="dOf-1j-VPJ" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="PTg-YG-gvu"/>
+                                </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9x3-fH-e0u">
                                 <rect key="frame" x="137.5" y="458" width="45" height="45"/>
@@ -78,6 +93,129 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2193.75" y="-657.04225352112678"/>
+        </scene>
+        <!--Info View Controller-->
+        <scene sceneID="H4A-uj-l2M">
+            <objects>
+                <viewController id="dOf-1j-VPJ" customClass="InfoViewController" customModule="Crossword" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="KIg-aG-xQq">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OWY-Z2-TUi">
+                                <rect key="frame" x="25" y="155" width="270" height="258"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D22-Zm-Nv3">
+                                        <rect key="frame" x="5" y="229" width="260" height="21"/>
+                                        <string key="text">www.soundimage.org
+
+</string>
+                                        <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Music by Eric Matyas" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WUs-tV-SDy">
+                                        <rect key="frame" x="5" y="207" width="260" height="21"/>
+                                        <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Version:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="47t-mb-vbM">
+                                        <rect key="frame" x="75" y="100" width="150" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="150" id="uRy-bI-KFR"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="title_smaller" translatesAutoresizingMaskIntoConstraints="NO" id="wYI-Ds-MXm">
+                                        <rect key="frame" x="45" y="8" width="180" height="90"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="90" id="ktj-xm-6hH"/>
+                                        </constraints>
+                                    </imageView>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RPB-iM-Cv2">
+                                        <rect key="frame" x="80" y="129" width="50" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="50" id="3fN-Gd-I5P"/>
+                                            <constraint firstAttribute="height" constant="50" id="DiY-ia-Hvw"/>
+                                        </constraints>
+                                        <state key="normal" image="Twitter_white-1">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UiA-Ac-Gdj">
+                                        <rect key="frame" x="130" y="129" width="10" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="10" id="4Zk-BZ-naQ"/>
+                                            <constraint firstAttribute="height" constant="50" id="Ykh-y3-HWa"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ipk-GP-6t0">
+                                        <rect key="frame" x="140" y="129" width="50" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="50" id="I3p-p1-6dt"/>
+                                            <constraint firstAttribute="height" constant="50" id="ajx-a2-145"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                        <state key="normal" title="✉️"/>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstItem="UiA-Ac-Gdj" firstAttribute="centerX" secondItem="OWY-Z2-TUi" secondAttribute="centerX" id="0Pt-jN-byX"/>
+                                    <constraint firstItem="UiA-Ac-Gdj" firstAttribute="leading" secondItem="RPB-iM-Cv2" secondAttribute="trailing" id="2tT-sc-ohP"/>
+                                    <constraint firstAttribute="trailing" secondItem="wYI-Ds-MXm" secondAttribute="trailing" constant="45" id="4Xv-Do-roY"/>
+                                    <constraint firstAttribute="width" constant="270" id="98J-Ul-iJx"/>
+                                    <constraint firstItem="47t-mb-vbM" firstAttribute="trailing" secondItem="wYI-Ds-MXm" secondAttribute="trailing" id="BMk-gh-WOe"/>
+                                    <constraint firstItem="D22-Zm-Nv3" firstAttribute="top" secondItem="WUs-tV-SDy" secondAttribute="bottom" constant="1" id="Dqo-1y-PUp"/>
+                                    <constraint firstItem="wYI-Ds-MXm" firstAttribute="leading" secondItem="OWY-Z2-TUi" secondAttribute="leading" constant="45" id="FLP-Qt-0Iy"/>
+                                    <constraint firstItem="ipk-GP-6t0" firstAttribute="leading" secondItem="UiA-Ac-Gdj" secondAttribute="trailing" id="Fr4-fE-JeH"/>
+                                    <constraint firstItem="WUs-tV-SDy" firstAttribute="leading" secondItem="OWY-Z2-TUi" secondAttribute="leading" constant="5" id="JXF-6v-r16"/>
+                                    <constraint firstItem="D22-Zm-Nv3" firstAttribute="leading" secondItem="OWY-Z2-TUi" secondAttribute="leading" constant="5" id="Vwj-gQ-KxU"/>
+                                    <constraint firstAttribute="trailing" secondItem="WUs-tV-SDy" secondAttribute="trailing" constant="5" id="Xvn-G1-qnG"/>
+                                    <constraint firstItem="wYI-Ds-MXm" firstAttribute="top" secondItem="OWY-Z2-TUi" secondAttribute="top" constant="8" id="YL2-IG-es8"/>
+                                    <constraint firstItem="47t-mb-vbM" firstAttribute="top" secondItem="wYI-Ds-MXm" secondAttribute="bottom" constant="2" id="cef-32-bl7"/>
+                                    <constraint firstItem="ipk-GP-6t0" firstAttribute="top" secondItem="47t-mb-vbM" secondAttribute="bottom" constant="8" id="fFc-4D-dMp"/>
+                                    <constraint firstItem="RPB-iM-Cv2" firstAttribute="top" secondItem="ipk-GP-6t0" secondAttribute="top" id="geE-hq-lZm"/>
+                                    <constraint firstItem="UiA-Ac-Gdj" firstAttribute="top" secondItem="ipk-GP-6t0" secondAttribute="top" id="jze-X1-CAJ"/>
+                                    <constraint firstAttribute="bottom" secondItem="D22-Zm-Nv3" secondAttribute="bottom" constant="8" id="rb7-4i-1IG"/>
+                                    <constraint firstAttribute="trailing" secondItem="D22-Zm-Nv3" secondAttribute="trailing" constant="5" id="wXK-SJ-YFS"/>
+                                    <constraint firstItem="UiA-Ac-Gdj" firstAttribute="bottom" secondItem="ipk-GP-6t0" secondAttribute="bottom" id="zlo-6n-hKW"/>
+                                    <constraint firstAttribute="height" constant="258" id="znr-jg-Ahj"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.70154644691780821" colorSpace="calibratedRGB"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="OWY-Z2-TUi" firstAttribute="centerX" secondItem="KIg-aG-xQq" secondAttribute="centerX" id="Jy2-CI-On4"/>
+                            <constraint firstItem="OWY-Z2-TUi" firstAttribute="centerY" secondItem="KIg-aG-xQq" secondAttribute="centerY" id="xca-Gs-l60"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="Lp3-vZ-cqE"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="0kU-zx-Eqb" appends="YES" id="EvU-90-4AE"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="infoBackground" destination="OWY-Z2-TUi" id="Pl9-OJ-Pce"/>
+                        <outlet property="mailButton" destination="ipk-GP-6t0" id="JMX-bc-2Gx"/>
+                        <outlet property="twitterButton" destination="RPB-iM-Cv2" id="N3d-Za-Xjh"/>
+                        <outlet property="versionLabel" destination="47t-mb-vbM" id="ukx-Na-PAA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="M3Z-m0-blL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="0kU-zx-Eqb">
+                    <connections>
+                        <action selector="backgroundTapped:" destination="dOf-1j-VPJ" id="MWW-CP-1yG"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="2975.625" y="-657.04225352112678"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="k3e-By-1MV">
@@ -1349,9 +1487,9 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 1↓" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e4j-ak-fNL">
-                                <rect key="frame" x="47" y="380" width="21.5" height="16"/>
-                                <fontDescription key="fontDescription" type="boldSystem" pointSize="13"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text=" 1→" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e4j-ak-fNL">
+                                <rect key="frame" x="47" y="378" width="26.5" height="20.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -1698,8 +1836,9 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z1E-eb-3pe" userLabel="Backspace">
                                 <rect key="frame" x="268" y="521" width="49" height="45"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <inset key="imageEdgeInsets" minX="4" minY="7" maxX="4" maxY="7"/>
-                                <state key="normal" title="!" image="erase arrow">
+                                <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                <inset key="imageEdgeInsets" minX="5" minY="8" maxX="5" maxY="8"/>
+                                <state key="normal" image="erase arrow">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 </state>
                                 <connections>
@@ -1709,7 +1848,8 @@
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i1V-zv-Ra3" userLabel="Menu">
                                 <rect key="frame" x="3" y="521" width="49" height="44"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <inset key="imageEdgeInsets" minX="4" minY="8" maxX="4" maxY="8"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="26"/>
+                                <inset key="imageEdgeInsets" minX="5" minY="9" maxX="5" maxY="9"/>
                                 <state key="normal" image="settings"/>
                                 <connections>
                                     <segue destination="Ppb-1U-1o0" kind="presentation" identifier="settingSegue" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="HZd-Qw-Df1"/>
@@ -1719,8 +1859,8 @@
                                 <rect key="frame" x="0.0" y="20" width="320" height="40"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Level" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WDw-4S-cLn">
-                                        <rect key="frame" x="5" y="5" width="40" height="30"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <rect key="frame" x="5" y="5" width="41" height="30"/>
+                                        <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                         <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -1730,7 +1870,7 @@
                                             <constraint firstAttribute="height" constant="30" id="5jz-pF-bSs"/>
                                             <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="c61-uh-Zcc"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                         <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -1739,7 +1879,7 @@
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j7t-b5-9QG">
                                                 <rect key="frame" x="0.0" y="0.0" width="10.5" height="30"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="17"/>
                                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -1748,7 +1888,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="26.5" id="h80-no-Non"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="17"/>
                                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -1757,7 +1897,7 @@
                                                 <constraints>
                                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="26.5" id="0Ix-pG-U3L"/>
                                                 </constraints>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" name="ArialRoundedMTBold" family="Arial Rounded MT Bold" pointSize="17"/>
                                                 <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -2140,7 +2280,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qj3-tv-BFu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1785" y="144"/>
+            <point key="canvasLocation" x="2194" y="142"/>
         </scene>
         <!--Hint View Controller-->
         <scene sceneID="3SP-uo-hc4">
@@ -2164,7 +2304,7 @@
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Hint" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RI3-W2-P0Q">
                                         <rect key="frame" x="8" y="101" width="254" height="148"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -2174,6 +2314,7 @@
                                             <constraint firstAttribute="width" constant="70" id="Aaq-P5-p1n"/>
                                             <constraint firstAttribute="height" constant="35" id="jF3-M8-R5w"/>
                                         </constraints>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="15"/>
                                         <state key="normal" title="Back">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         </state>
@@ -2186,12 +2327,12 @@
                                         <constraints>
                                             <constraint firstAttribute="height" constant="20" id="xPc-AB-W2Y"/>
                                         </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Clue num" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0TM-8C-7eQ">
-                                        <rect key="frame" x="189" y="8" width="73" height="20"/>
+                                        <rect key="frame" x="189" y="8" width="73" height="21"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
@@ -2217,7 +2358,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.85098039215686272" green="0.85098039215686272" blue="0.85098039215686272" alpha="0.75" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.70382063356164382" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="pEv-2w-dj9" firstAttribute="centerY" secondItem="eba-fF-lVC" secondAttribute="centerY" id="1d0-xy-C3z"/>
@@ -2246,7 +2387,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="996" y="944"/>
+            <point key="canvasLocation" x="1378" y="944"/>
         </scene>
         <!--GameOverViewController-->
         <scene sceneID="Nue-ej-jty">
@@ -2261,18 +2402,19 @@
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WUI-k2-rfO">
                                         <rect key="frame" x="99" y="8" width="42" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Loc-uM-XTJ">
-                                        <rect key="frame" x="8" y="79" width="224" height="21"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <rect key="frame" x="8" y="75" width="224" height="21"/>
+                                        <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                         <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u0E-DD-w0G">
-                                        <rect key="frame" x="40" y="150" width="160" height="30"/>
+                                        <rect key="frame" x="40" y="148" width="160" height="32"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="15"/>
                                         <state key="normal" title="Bottom">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
@@ -2281,7 +2423,8 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hUy-TN-A0Q">
-                                        <rect key="frame" x="40" y="115" width="160" height="30"/>
+                                        <rect key="frame" x="40" y="111" width="160" height="32"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="15"/>
                                         <state key="normal" title="Top">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
@@ -2309,7 +2452,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" white="0.66666666666666663" alpha="0.5" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.70162671232876717" colorSpace="custom" customColorSpace="sRGB"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="chb-M6-Qkd" firstAttribute="leading" secondItem="gQK-Wh-Lvf" secondAttribute="leading" constant="40" id="GFp-fg-cnX"/>
@@ -2335,7 +2478,7 @@
                 <exit id="ewI-Ev-mkv" userLabel="Exit" sceneMemberID="exit"/>
                 <tapGestureRecognizer id="pcY-c2-bGa"/>
             </objects>
-            <point key="canvasLocation" x="1785" y="942"/>
+            <point key="canvasLocation" x="2194" y="943"/>
         </scene>
         <!--Menu View Controller-->
         <scene sceneID="PF1-TV-yKz">
@@ -2397,41 +2540,41 @@
                                         </connections>
                                     </switch>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="C2d-ff-GK3">
-                                        <rect key="frame" x="15" y="10" width="168.5" height="289"/>
+                                        <rect key="frame" x="15" y="10" width="167.5" height="289"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Music" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z98-Pe-rFy">
-                                                <rect key="frame" x="0.0" y="0.0" width="168.5" height="48"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="48"/>
+                                                <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                                 <color key="textColor" red="0.99864394430000003" green="0.99864394430000003" blue="0.99864394430000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sound Effects" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2AJ-Ra-50n">
-                                                <rect key="frame" x="0.0" y="48" width="168.5" height="48.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <rect key="frame" x="0.0" y="48" width="167.5" height="48.5"/>
+                                                <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                                 <color key="textColor" red="0.99864394430000003" green="0.99864394430000003" blue="0.99864394430000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Timer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxJ-Ec-ORj">
-                                                <rect key="frame" x="0.0" y="96.5" width="168.5" height="48"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <rect key="frame" x="0.0" y="96.5" width="167.5" height="48"/>
+                                                <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                                 <color key="textColor" red="0.99864394430000003" green="0.99864394430000003" blue="0.99864394430000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Skip Filled Squares" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vfn-Cr-iI3">
-                                                <rect key="frame" x="0.0" y="144.5" width="168.5" height="48"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <rect key="frame" x="0.0" y="144.5" width="167.5" height="48"/>
+                                                <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                                 <color key="textColor" red="0.99864394430000003" green="0.99864394430000003" blue="0.99864394430000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lock Correct Answers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DVk-kM-fzF">
-                                                <rect key="frame" x="0.0" y="192.5" width="168.5" height="48.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <rect key="frame" x="0.0" y="192.5" width="167.5" height="48.5"/>
+                                                <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                                 <color key="textColor" red="0.99864394430000003" green="0.99864394430000003" blue="0.99864394430000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Correct Animation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nVy-48-1ia" userLabel="Correct Answer Indicator">
-                                                <rect key="frame" x="0.0" y="241" width="168.5" height="48"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <rect key="frame" x="0.0" y="241" width="167.5" height="48"/>
+                                                <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                                 <color key="textColor" red="0.99864394430000003" green="0.99864394430000003" blue="0.99864394430000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -2442,6 +2585,7 @@
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BOZ-8o-3mr">
                                                 <rect key="frame" x="0.0" y="0.0" width="122" height="35"/>
+                                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="15"/>
                                                 <state key="normal" title="Home">
                                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </state>
@@ -2452,6 +2596,7 @@
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Jp-n0-bO7">
                                                 <rect key="frame" x="132" y="0.0" width="122" height="35"/>
+                                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="15"/>
                                                 <state key="normal" title="Back">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 </state>
@@ -2489,7 +2634,7 @@
                                 </constraints>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.85277204949238583" green="0.85277204949238583" blue="0.85277204949238583" alpha="0.5" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.70026220034246578" colorSpace="calibratedRGB"/>
                         <gestureRecognizers/>
                         <constraints>
                             <constraint firstItem="poR-NK-lH4" firstAttribute="trailing" secondItem="k5z-WE-cLh" secondAttribute="trailing" constant="25" id="9bK-FX-wLX"/>
@@ -2522,7 +2667,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2580" y="941"/>
+            <point key="canvasLocation" x="2976" y="942"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="Euo-3a-XfB">
@@ -2544,6 +2689,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="Twitter_white-1" width="400" height="400"/>
         <image name="erase arrow" width="459" height="459"/>
         <image name="fill_square2-1" width="439" height="438"/>
         <image name="line2-1" width="4193" height="22"/>

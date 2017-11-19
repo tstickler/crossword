@@ -11,6 +11,7 @@
 		2F07758B1FBA3713001C9ABD /* game.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2F0775891FBA3713001C9ABD /* game.mp3 */; };
 		2F07758D1FBA391C001C9ABD /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F07758C1FBA391C001C9ABD /* MusicPlayer.swift */; };
 		2F07758F1FBA4404001C9ABD /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F07758E1FBA4404001C9ABD /* Settings.swift */; };
+		2F0929E01FC0A6EF00EA18B2 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0929DF1FC0A6EF00EA18B2 /* InfoViewController.swift */; };
 		2F35EC601F9B1C06000014E5 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F35EC5F1F9B1C06000014E5 /* AppDelegate.swift */; };
 		2F35EC621F9B1C06000014E5 /* GameViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F35EC611F9B1C06000014E5 /* GameViewController.swift */; };
 		2F35EC651F9B1C06000014E5 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2F35EC631F9B1C06000014E5 /* Main.storyboard */; };
@@ -19,7 +20,7 @@
 		2F35EC751F9B1C07000014E5 /* CrosswordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F35EC741F9B1C07000014E5 /* CrosswordTests.swift */; };
 		2F35EC801F9B1C07000014E5 /* CrosswordUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F35EC7F1F9B1C07000014E5 /* CrosswordUITests.swift */; };
 		2F36BED71FBE03AE00095519 /* GameOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F36BED61FBE03AE00095519 /* GameOverViewController.swift */; };
-		2F5254D31FBE97B300051C65 /* master.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F5254D21FBE97B300051C65 /* master.plist */; };
+		2F579C6C1FC21BB400F56B9C /* master.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F579C6B1FC21BB400F56B9C /* master.plist */; };
 		2F5D9E701FA1522B004A2AB5 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D9E6F1FA1522B004A2AB5 /* MenuViewController.swift */; };
 		2F7CC5F61FB8D04A00ABA677 /* HintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7CC5F51FB8D04A00ABA677 /* HintViewController.swift */; };
 		2FA3F60C1FA2D8AD006938E2 /* BoardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA3F60B1FA2D8AD006938E2 /* BoardButton.swift */; };
@@ -50,6 +51,7 @@
 		2F0775891FBA3713001C9ABD /* game.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = game.mp3; sourceTree = "<group>"; };
 		2F07758C1FBA391C001C9ABD /* MusicPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
 		2F07758E1FBA4404001C9ABD /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
+		2F0929DF1FC0A6EF00EA18B2 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
 		2F35EC5C1F9B1C06000014E5 /* Crossword.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Crossword.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		2F35EC5F1F9B1C06000014E5 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2F35EC611F9B1C06000014E5 /* GameViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameViewController.swift; sourceTree = "<group>"; };
@@ -64,7 +66,7 @@
 		2F35EC7F1F9B1C07000014E5 /* CrosswordUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrosswordUITests.swift; sourceTree = "<group>"; };
 		2F35EC811F9B1C07000014E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F36BED61FBE03AE00095519 /* GameOverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverViewController.swift; sourceTree = "<group>"; };
-		2F5254D21FBE97B300051C65 /* master.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = master.plist; sourceTree = "<group>"; };
+		2F579C6B1FC21BB400F56B9C /* master.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; name = master.plist; path = ../../../master.plist; sourceTree = "<group>"; };
 		2F5D9E6F1FA1522B004A2AB5 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
 		2F7CC5F51FB8D04A00ABA677 /* HintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintViewController.swift; sourceTree = "<group>"; };
 		2FA3F60B1FA2D8AD006938E2 /* BoardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardButton.swift; sourceTree = "<group>"; };
@@ -131,11 +133,12 @@
 			isa = PBXGroup;
 			children = (
 				2F35EC5F1F9B1C06000014E5 /* AppDelegate.swift */,
-				2F35EC611F9B1C06000014E5 /* GameViewController.swift */,
-				2F36BED61FBE03AE00095519 /* GameOverViewController.swift */,
 				2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */,
+				2F0929DF1FC0A6EF00EA18B2 /* InfoViewController.swift */,
+				2F35EC611F9B1C06000014E5 /* GameViewController.swift */,
 				2F5D9E6F1FA1522B004A2AB5 /* MenuViewController.swift */,
 				2F7CC5F51FB8D04A00ABA677 /* HintViewController.swift */,
+				2F36BED61FBE03AE00095519 /* GameOverViewController.swift */,
 				2F07758C1FBA391C001C9ABD /* MusicPlayer.swift */,
 				2F07758E1FBA4404001C9ABD /* Settings.swift */,
 				2FA3F60B1FA2D8AD006938E2 /* BoardButton.swift */,
@@ -143,7 +146,7 @@
 				2F35EC661F9B1C06000014E5 /* Assets.xcassets */,
 				2F35EC681F9B1C06000014E5 /* LaunchScreen.storyboard */,
 				2F35EC6B1F9B1C06000014E5 /* Info.plist */,
-				2F5254D21FBE97B300051C65 /* master.plist */,
+				2F579C6B1FC21BB400F56B9C /* master.plist */,
 				2F39E1311FBE714400FC123C /* Levels */,
 				2F111B121FB964E200DBA3EE /* Music */,
 			);
@@ -284,9 +287,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F579C6C1FC21BB400F56B9C /* master.plist in Resources */,
 				2F35EC6A1F9B1C06000014E5 /* LaunchScreen.storyboard in Resources */,
 				2FF4B58F1FAD293100DAEC0A /* level_2.plist in Resources */,
-				2F5254D31FBE97B300051C65 /* master.plist in Resources */,
 				2F07758B1FBA3713001C9ABD /* game.mp3 in Resources */,
 				2FE9DA7F1FA399BC0078AE39 /* level_1.plist in Resources */,
 				2F35EC671F9B1C06000014E5 /* Assets.xcassets in Resources */,
@@ -320,6 +323,7 @@
 				2F7CC5F61FB8D04A00ABA677 /* HintViewController.swift in Sources */,
 				2F07758F1FBA4404001C9ABD /* Settings.swift in Sources */,
 				2FA3F60C1FA2D8AD006938E2 /* BoardButton.swift in Sources */,
+				2F0929E01FC0A6EF00EA18B2 /* InfoViewController.swift in Sources */,
 				2F35EC621F9B1C06000014E5 /* GameViewController.swift in Sources */,
 				2F07758D1FBA391C001C9ABD /* MusicPlayer.swift in Sources */,
 				2F5D9E701FA1522B004A2AB5 /* MenuViewController.swift in Sources */,
@@ -493,11 +497,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 78T5848B44;
 				INFOPLIST_FILE = Crossword/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tstick.Crossword;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -508,11 +513,12 @@
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 78T5848B44;
 				INFOPLIST_FILE = Crossword/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.tstick.Crossword;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
