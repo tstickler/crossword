@@ -69,14 +69,13 @@ class HomeViewController: UIViewController {
 
         // When timer fires, will create a new label to be dropped from the view
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
-        timer.fire()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Start playing music
         MusicPlayer.start(musicTitle: "home", ext: "mp3")
-
+        
         if !Settings.musicEnabled {
             // Music is always playing but only if it's enabled should the volume be > 0
             MusicPlayer.homeMusicPlayer.volume = 0
@@ -101,7 +100,7 @@ class HomeViewController: UIViewController {
         transition.type = kCATransitionFade
         self.navigationController?.view.layer.add(transition, forKey: nil)
     }
-    
+
     @IBAction func muteButtonTapped(_ sender: Any) {
         var image: UIImage
         
@@ -124,11 +123,12 @@ class HomeViewController: UIViewController {
             image = UIImage(named: "music-1.png")!
             
             // Play the music
-            MusicPlayer.homeMusicPlayer.setVolume(1.0, fadeDuration: 1.0)
+            MusicPlayer.homeMusicPlayer.setVolume(0.15, fadeDuration: 1.0)
         }
         
         // Save the user settings
         defaults.set(Settings.musicEnabled, forKey: "musicEnabled")
+        defaults.set(Settings.soundEffects, forKey: "soundEffects")
         muteButton.setBackgroundImage(image, for: .normal)
     }
     
@@ -137,6 +137,7 @@ class HomeViewController: UIViewController {
         // Create the emoji and add it to a label
         let emoji = emojisToChoose[Int(arc4random_uniform(160))]
         let label = UILabel()
+        labels.append(label)
         
         // Choose a random location at the top of the screen for the emoji to fall
         var xLocation = CGFloat(arc4random_uniform(UInt32(UIScreen.main.bounds.width)))
@@ -159,15 +160,16 @@ class HomeViewController: UIViewController {
         view.addSubview(label)
         view.sendSubview(toBack: label)
         
-        labels.append(label)
         
         // Remove any labels that are out of screen range
         for (index, lab) in labels.enumerated() {
-            if lab.center.y - 20 > UIScreen.main.bounds.height {
-                lab.removeFromSuperview()
+            if lab.center.y - 40 > UIScreen.main.bounds.height {
+                lab.text = nil
                 labels.remove(at: index)
+                lab.removeFromSuperview()
             }
         }
+        
         
         // Begin animation for the label
         animate(label: label)

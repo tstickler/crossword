@@ -7,12 +7,12 @@
 //
 
 import AVFoundation
+import AudioToolbox
 
 class MusicPlayer: NSObject, AVAudioPlayerDelegate {
     // 3 music players allow for better concurrent music/sound effects/fade
     static var homeMusicPlayer = AVAudioPlayer()
     static var gameMusicPlayer = AVAudioPlayer()
-    static var soundEffectPlayer = AVAudioPlayer()
     
     private override init() {}
     
@@ -20,6 +20,14 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
         // Find our music file
         let path = Bundle.main.path(forResource: musicTitle, ofType: ext)!
         let url = URL(fileURLWithPath: path)
+        
+        do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
+            try AVAudioSession.sharedInstance().setActive(true)
+        } catch {
+            print(error)
+        }
+        
         var musicPlayer = AVAudioPlayer()
         
         do {
@@ -29,7 +37,7 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
             musicPlayer.volume = 0
             musicPlayer.prepareToPlay()
             musicPlayer.play()
-            musicPlayer.setVolume(1, fadeDuration: 1.0)
+            musicPlayer.setVolume(0.15, fadeDuration: 1.0)
             
             // Choose the player to play on based on the song sent
             if musicTitle == "home" {
@@ -39,6 +47,16 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
             }
         } catch {
             print(error)
+        }
+    }
+    
+    static func playSoundEffect(of sound: String) {
+        if let soundURL = Bundle.main.url(forResource: sound, withExtension: "wav") {
+            var soundID: SystemSoundID = 0
+            
+            AudioServicesCreateSystemSoundID(soundURL as CFURL, &soundID)
+            
+            AudioServicesPlaySystemSound(soundID)
         }
     }
 }

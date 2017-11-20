@@ -50,7 +50,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         // Play the home music
         MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 1.0)
         if Settings.musicEnabled {
-            MusicPlayer.homeMusicPlayer.setVolume(1.0, fadeDuration: 1.0)
+            MusicPlayer.homeMusicPlayer.setVolume(0.15, fadeDuration: 1.0)
         }
     }
     
@@ -76,7 +76,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         // Flipping the switch should immediately start or stop the music
         if musicSwitch.isOn == true {
             Settings.musicEnabled = true
-            MusicPlayer.gameMusicPlayer.setVolume(1.0, fadeDuration: 1.0)
+            MusicPlayer.gameMusicPlayer.setVolume(0.15, fadeDuration: 1.0)
         } else {
             Settings.musicEnabled = false
             MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 1.0)

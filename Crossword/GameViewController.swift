@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import AudioToolbox
 
 class GameViewController: UIViewController {
     // Total number of levels
@@ -411,6 +412,8 @@ class GameViewController: UIViewController {
 
     var erasing = false
     @IBAction func eraseButtonTapped(_ sender: Any) {
+        MusicPlayer.playSoundEffect(of: "erase")
+        
         // Get current square
         let currentSquareTitle = boardSpaces[indexOfButton].title(for: .normal)
         
@@ -886,7 +889,7 @@ class GameViewController: UIViewController {
                 } else {
                     defaults.set(1, forKey: "userLevel")
                 }
-
+                MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 2.0)
                 gameTimer.invalidate()
                 resetDefaults()
                 showGameOverView()
@@ -912,6 +915,7 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func keyboardButtonPressed(_ sender: UIButton) {
+        MusicPlayer.playSoundEffect(of: "click")
         // Each key of the keyboard has a tag from 1-26. The tag tells which key was pressed.
         // Keyboard is standard qwerty and tags start at Q(1) and end at M(26)
         var letter: Character!
@@ -1029,6 +1033,7 @@ class GameViewController: UIViewController {
                         defaults.set(1, forKey: "userLevel")
                     }
 
+                    MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 2.0)
                     resetDefaults()
 
                     showGameOverView()
