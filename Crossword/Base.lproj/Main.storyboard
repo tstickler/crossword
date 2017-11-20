@@ -31,7 +31,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ekd-hd-Wcd" userLabel="Play Button">
-                                <rect key="frame" x="46" y="388" width="228" height="60"/>
+                                <rect key="frame" x="46" y="338" width="228" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Ekd-hd-Wcd" secondAttribute="height" multiplier="3.8:1" id="3tm-6k-XxK"/>
                                     <constraint firstAttribute="height" constant="60" id="5kj-8s-riT"/>
@@ -49,18 +49,8 @@
                                     <constraint firstAttribute="width" secondItem="9dT-DP-0kx" secondAttribute="height" multiplier="359:255" id="oxn-RH-HCI"/>
                                 </constraints>
                             </imageView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="detailDisclosure" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CZm-Vr-Qnq">
-                                <rect key="frame" x="290" y="538" width="22" height="22"/>
-                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                <state key="normal">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                                <connections>
-                                    <segue destination="dOf-1j-VPJ" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="PTg-YG-gvu"/>
-                                </connections>
-                            </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="9x3-fH-e0u">
-                                <rect key="frame" x="137.5" y="458" width="45" height="45"/>
+                                <rect key="frame" x="137.5" y="408" width="45" height="45"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="45" id="Bev-EP-xss"/>
                                     <constraint firstAttribute="width" constant="45" id="kRH-tY-inm"/>
@@ -70,23 +60,45 @@
                                     <action selector="muteButtonTapped:" destination="BYZ-38-t0r" eventType="touchUpInside" id="U4y-r7-dQ5"/>
                                 </connections>
                             </button>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="mgP-Ir-n9J" customClass="GADBannerView">
+                                <rect key="frame" x="0.0" y="518" width="320" height="50"/>
+                                <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="l3c-Cu-ueQ"/>
+                                </constraints>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="detailDisclosure" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CZm-Vr-Qnq">
+                                <rect key="frame" x="290" y="488" width="22" height="22"/>
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <segue destination="dOf-1j-VPJ" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="PTg-YG-gvu"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="9dT-DP-0kx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="48I-61-enV"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="CZm-Vr-Qnq" secondAttribute="bottom" constant="8" id="6H3-fh-vnM"/>
                             <constraint firstItem="9x3-fH-e0u" firstAttribute="top" secondItem="Ekd-hd-Wcd" secondAttribute="bottom" constant="10" id="MJ4-ne-NAl"/>
                             <constraint firstItem="9dT-DP-0kx" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="-40" id="PN3-kt-CAi"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="9dT-DP-0kx" secondAttribute="trailing" constant="8" id="POe-qa-5QM"/>
+                            <constraint firstItem="mgP-Ir-n9J" firstAttribute="top" secondItem="CZm-Vr-Qnq" secondAttribute="bottom" constant="8" id="SKc-ah-7Zm"/>
                             <constraint firstItem="Ekd-hd-Wcd" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Zzh-AF-fP1"/>
-                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Ekd-hd-Wcd" secondAttribute="bottom" constant="120" id="bjC-MK-MwA"/>
+                            <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="Ekd-hd-Wcd" secondAttribute="bottom" constant="170" id="bjC-MK-MwA"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="CZm-Vr-Qnq" secondAttribute="trailing" constant="8" id="e8A-el-ygl"/>
+                            <constraint firstItem="mgP-Ir-n9J" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="ier-At-Pfj"/>
+                            <constraint firstItem="mgP-Ir-n9J" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="jNg-5J-iGG"/>
+                            <constraint firstItem="mgP-Ir-n9J" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="nhA-W9-ZyX"/>
+                            <constraint firstItem="mgP-Ir-n9J" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="o4r-tl-vyN"/>
                             <constraint firstItem="9x3-fH-e0u" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="o8V-nj-43o"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" id="BLE-mK-kMU"/>
                     <connections>
+                        <outlet property="bannerAd" destination="mgP-Ir-n9J" id="XmE-x4-Igu"/>
                         <outlet property="muteButton" destination="9x3-fH-e0u" id="Vxl-Hz-sP0"/>
                     </connections>
                 </viewController>

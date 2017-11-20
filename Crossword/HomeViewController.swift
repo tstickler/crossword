@@ -8,6 +8,7 @@
 
 import UIKit
 import AVFoundation
+import Firebase
 
 class HomeViewController: UIViewController {
     @IBAction func unwindSegue(_ sender: UIStoryboardSegue) {
@@ -43,8 +44,18 @@ class HomeViewController: UIViewController {
     // Home screen music enabling/disabling button
     @IBOutlet var muteButton: UIButton!
     
+    @IBOutlet var bannerAd: GADBannerView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        let request = GADRequest()
+        request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
+        bannerAd.adSize = kGADAdSizeSmartBannerPortrait
+        bannerAd.adUnitID = "ca-app-pub-1164601417724423/6161128687"
+        bannerAd.rootViewController = self
+        bannerAd.load(request)
+        
         loadSettings()
                 
         animator = UIDynamicAnimator(referenceView: self.view)
