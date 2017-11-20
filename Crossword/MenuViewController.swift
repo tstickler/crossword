@@ -47,6 +47,11 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBAction func homeButtonTapped(_ sender: Any) {
         // Uses an unwind segue to go back to the home screen
         
+        // Invalidate the timer
+        if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
+            parentVC.gameTimer.invalidate()
+        }
+        
         // Play the home music
         MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 1.0)
         if Settings.musicEnabled {

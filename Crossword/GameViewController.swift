@@ -1973,7 +1973,7 @@ class GameViewController: UIViewController {
         // Set the user's cheat counts
         cheatCount = defaults.integer(forKey: "cheatCount")
         if cheatCount == 0 {
-            cheatCount = 10
+            cheatCount = 10000
         }
     }
     
