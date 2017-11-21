@@ -1,0 +1,6 @@
+framework module Pods_CrosswordTests {
+  umbrella header "Pods-CrosswordTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
