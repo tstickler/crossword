@@ -49,6 +49,7 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Banner ad
         let request = GADRequest()
         request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
         bannerAd.adSize = kGADAdSizeSmartBannerPortrait

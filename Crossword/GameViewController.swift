@@ -9,8 +9,9 @@
 import UIKit
 import AVFoundation
 import AudioToolbox
+import Firebase
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, GADInterstitialDelegate {
     // Total number of levels
     let maxNumOfLevels = 2
     
@@ -99,6 +100,10 @@ class GameViewController: UIViewController {
     
     // Wrong view should only be shown once
     var wrongViewShown = false
+    
+    // Ad
+    var interstitialAd: GADInterstitial!
+    var inGame = false
     
     
     /*****************************************
@@ -1056,15 +1061,11 @@ class GameViewController: UIViewController {
             // Return so we go to the first spot in the next phrase and not the second
             return
         } else if allSquaresFilled() {
-            // If the user isn't right, tell them how many wrong
-            clueLabel.textColor = .white
-            
             if !wrongViewShown {
                 showGameOverView()
                 wrongViewShown = true
             }
             
-            //return
         } else {
             // This checks the other direction at an intersection but the original
             // direction is not completely correct.
@@ -1089,6 +1090,15 @@ class GameViewController: UIViewController {
             moveToNextAcross()
         } else {
             moveToNextDown()
+        }
+        
+        if interstitialAd.isReady {
+            interstitialAd.present(fromRootViewController: self)
+            interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-1164601417724423/5546885166")
+            interstitialAd.delegate = self
+            let request = GADRequest()
+            request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
+            interstitialAd.load(request)
         }
     }
     
@@ -1376,7 +1386,6 @@ class GameViewController: UIViewController {
      *                                        *
      *****************************************/
     func highlight(selectedSpaces: [Int], atSquare: Int, prevSquare: Int) {
-        
         // Sets the border for the spaces
         for i in selectedSpaces {
             // CAShapeLayer allows us to put the border outside of the button, giving the button more space
@@ -1673,7 +1682,7 @@ class GameViewController: UIViewController {
         
         // Highlight the row or column selected
         if indexOfButton != previousButton {
-            self.boardSpaces[previousButton].layer.removeAllAnimations()
+            boardSpaces[previousButton].layer.removeAllAnimations()
         }
         
         // Converts the board spaces to a set to make all entries unique, then back to an array
@@ -1684,6 +1693,8 @@ class GameViewController: UIViewController {
     }
     
     func initialHighlight() {
+        let prev = previousButton
+        
         // Start the user on whatever 1 is available (prefers 1 across)
         for i in 0...168 {
             // If there is no 1 across, start vertical
@@ -1692,7 +1703,15 @@ class GameViewController: UIViewController {
                     across = false
                 }
                 
-                boardSpaces[i].sendActions(for: .touchUpInside)
+                boardButtonTapped(boardSpaces[i])
+                if inGame {
+                    // If we're coming back from an ad or the background
+                    // perform a tap to go to the right spot
+                    boardButtonTapped(boardSpaces[prev])
+                    boardButtonTapped(boardSpaces[prev])
+                    return
+                }
+                inGame = true
                 break
             }
         }
@@ -1806,6 +1825,13 @@ class GameViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        
+        interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-1164601417724423/5546885166")
+        interstitialAd.delegate = self
+        let request = GADRequest()
+        request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
+        interstitialAd.load(request)
         
         // Initialize from defaults
         readFromDefaults()
@@ -1827,7 +1853,6 @@ class GameViewController: UIViewController {
         clueAreaSetup()
         startTimer()
         
-        
         // Start playing game music
         MusicPlayer.start(musicTitle: "game", ext: "mp3")
         if !Settings.musicEnabled {
@@ -1842,7 +1867,7 @@ class GameViewController: UIViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.gameViewController = self
         
-        // Our initial click
+        // Our initial tap
         initialHighlight()
     }
         
@@ -2000,20 +2025,32 @@ class GameViewController: UIViewController {
     }
     
     func newLevel() {
-        // Creates a new board and pushes it onto the navigation stack
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
-        
-        // Gives a nice animation to the next view
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        transition.type = kCATransitionFade
-        self.navigationController?.view.layer.add(transition, forKey: nil)
-        
-        self.navigationController?.pushViewController(vc, animated: false)
-        
-        // Tosses the last game, we don't need it taking up memory on the stack
-        self.navigationController?.viewControllers.remove(at: 1)
+        if interstitialAd.isReady {
+            interstitialAd.present(fromRootViewController: self)
+        }
+    }
+    
+    func interstitialDidDismissScreen(_ ad: GADInterstitial) {
+        if gameOver() {
+            // Creates a new board and pushes it onto the navigation stack
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
+            
+            // Gives a nice animation to the next view
+            let transition = CATransition()
+            transition.duration = 0.5
+            transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+            transition.type = kCATransitionFade
+            self.navigationController?.view.layer.add(transition, forKey: nil)
+            
+            self.navigationController?.pushViewController(vc, animated: false)
+            
+            // Tosses the last game, we don't need it taking up memory on the stack
+            self.navigationController?.viewControllers.remove(at: 1)
+        } else {
+            if across {
+            } else {
+            }
+        }
     }
 }
