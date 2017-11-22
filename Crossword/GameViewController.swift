@@ -13,7 +13,7 @@ import Firebase
 
 class GameViewController: UIViewController, GADInterstitialDelegate {
     // Total number of levels
-    let maxNumOfLevels = 2
+    let maxNumOfLevels = 4
     
     // Containers for button properties
     var buttonLetterArray: [Character]!
@@ -103,7 +103,12 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     
     // Ad
     var interstitialAd: GADInterstitial!
+    var shouldShowAdCounter = 0
+    var showAdAfterNumCorrect = 6
     var inGame = false
+    
+    // Initial load of game
+    var loadedBefore = false
     
     
     /*****************************************
@@ -883,20 +888,48 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             if Settings.correctAnim {
                 highlightCorrectAnswer()
             }
+            
+            checkAdProgress()
+        }
+        
+        // We also need to check if correct answer was entered at an intersection.
+        // This occurs when one letter of across is left and one letter of down is left.
+        // If the correct answer is entered, then we need to highlight both the across
+        // and down spaces.
+        // So send a press for the current button to flip orientation, then check if
+        // that was is correct and highlight if it is.
+        if (across && buttonDownArray[indexOfButton] != "00d") ||
+            (!across && buttonAcrossArray[indexOfButton] != "00a") {
+            boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
+            if correctAnswerEntered() {
+                highlightCorrectAnswer()
+                
+                checkAdProgress()
+            }
+            
+            // Then we'll flip back to our original orientation
+            boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
         }
         
         if allSquaresFilled() {
             // See if the user has entered all the right answers
             if gameOver() {
+                
                 // If they do, perform game over actions
                 if userLevel < maxNumOfLevels {
                     defaults.set(userLevel + 1, forKey: "userLevel")
                 } else {
                     defaults.set(1, forKey: "userLevel")
                 }
+                
                 MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 2.0)
                 gameTimer.invalidate()
                 resetDefaults()
+                
+                // User gets another cheat for completing a level
+                defaults.set(cheatCount + 1, forKey: "cheatCount")
+                
+                // Show the game over view
                 showGameOverView()
                 
                 return
@@ -907,7 +940,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                     showGameOverView()
                     wrongViewShown = true
                 }
-                //return
             }
         }
         
@@ -920,6 +952,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     }
     
     @IBAction func keyboardButtonPressed(_ sender: UIButton) {
+
+        
         MusicPlayer.playSoundEffect(of: "click")
         // Each key of the keyboard has a tag from 1-26. The tag tells which key was pressed.
         // Keyboard is standard qwerty and tags start at Q(1) and end at M(26)
@@ -1016,13 +1050,16 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 // and down spaces.
                 // So send a press for the current button to flip orientation, then check if
                 // that was is correct and highlight if it is.
-                boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
-                if correctAnswerEntered() {
-                    highlightCorrectAnswer()
+                if (across && buttonDownArray[indexOfButton] != "00d") ||
+                    (!across && buttonAcrossArray[indexOfButton] != "00a") {
+                    boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
+                    if correctAnswerEntered() {
+                        highlightCorrectAnswer()
+                    }
+                    
+                    // Then we'll flip back to our original orientation
+                    boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
                 }
-                
-                // Then we'll flip back to our original orientation
-                boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
             }
             
             // See if all the squares have been filled
@@ -1040,6 +1077,9 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
 
                     MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 2.0)
                     resetDefaults()
+                    
+                    // User gets another cheat for completing the level
+                    defaults.set(cheatCount + 1, forKey: "cheatCount")
 
                     showGameOverView()
 
@@ -1056,6 +1096,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                     nextPhraseButton.sendActions(for: .touchUpInside)
                 }
             } else {
+                checkAdProgress()
+                
                 nextPhraseButton.sendActions(for: .touchUpInside)
             }
             // Return so we go to the first spot in the next phrase and not the second
@@ -1092,14 +1134,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             moveToNextDown()
         }
         
-        if interstitialAd.isReady {
-            interstitialAd.present(fromRootViewController: self)
-            interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-1164601417724423/5546885166")
-            interstitialAd.delegate = self
-            let request = GADRequest()
-            request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
-            interstitialAd.load(request)
-        }
+
     }
     
     func gameOver() -> Bool {
@@ -1693,8 +1728,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     }
     
     func initialHighlight() {
-        let prev = previousButton
-        
         // Start the user on whatever 1 is available (prefers 1 across)
         for i in 0...168 {
             // If there is no 1 across, start vertical
@@ -1704,14 +1737,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 }
                 
                 boardButtonTapped(boardSpaces[i])
-                if inGame {
-                    // If we're coming back from an ad or the background
-                    // perform a tap to go to the right spot
-                    boardButtonTapped(boardSpaces[prev])
-                    boardButtonTapped(boardSpaces[prev])
-                    return
-                }
-                inGame = true
                 break
             }
         }
@@ -1863,12 +1888,34 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Begins animation when coming from background
-        let appDelegate = UIApplication.shared.delegate as! AppDelegate
-        appDelegate.gameViewController = self
+        if !inGame {
+            inGame = true
+            // Begins animation when coming from background
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.gameViewController = self
         
-        // Our initial tap
-        initialHighlight()
+            // Our initial tap
+            initialHighlight()
+        } else {
+            // Fixes animation when coming back from an ad
+            if across {
+                if indexOfButton != 168 {
+                    boardButtonTapped(boardSpaces[indexOfButton + 1])
+                    boardButtonTapped(boardSpaces[indexOfButton - 1])
+                } else {
+                    boardButtonTapped(boardSpaces[indexOfButton - 1])
+                    boardButtonTapped(boardSpaces[indexOfButton + 1])
+                }
+            } else {
+                if indexOfButton < 156 {
+                    boardButtonTapped(boardSpaces[indexOfButton + 13])
+                    boardButtonTapped(boardSpaces[indexOfButton - 13])
+                } else {
+                    boardButtonTapped(boardSpaces[indexOfButton - 13])
+                    boardButtonTapped(boardSpaces[indexOfButton + 13])
+                }
+            }
+        }
     }
         
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -1995,10 +2042,17 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         minutesCounter = defaults.integer(forKey: "minutes")
         hoursCounter = defaults.integer(forKey: "hours")
         
-        // Set the user's cheat counts
-        cheatCount = defaults.integer(forKey: "cheatCount")
-        if cheatCount == 0 {
+        
+        loadedBefore = defaults.bool(forKey: "firstTime")
+
+        if !loadedBefore {
             cheatCount = 10000
+            defaults.set(cheatCount, forKey: "cheatCount")
+            defaults.set(true, forKey: "firstTime")
+            loadedBefore = true
+        } else {
+            // Set the user's cheat counts
+            cheatCount = defaults.integer(forKey: "cheatCount")
         }
     }
     
@@ -2030,6 +2084,18 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
     }
     
+    func checkAdProgress() {
+        shouldShowAdCounter += 1
+        if interstitialAd.isReady && shouldShowAdCounter % showAdAfterNumCorrect == 0 && !allSquaresFilled() {
+            interstitialAd.present(fromRootViewController: self)
+            interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-1164601417724423/5546885166")
+            interstitialAd.delegate = self
+            let request = GADRequest()
+            request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
+            interstitialAd.load(request)
+        }
+    }
+    
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
         if gameOver() {
             // Creates a new board and pushes it onto the navigation stack
@@ -2047,10 +2113,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             
             // Tosses the last game, we don't need it taking up memory on the stack
             self.navigationController?.viewControllers.remove(at: 1)
-        } else {
-            if across {
-            } else {
-            }
         }
     }
 }
