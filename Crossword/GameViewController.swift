@@ -13,7 +13,7 @@ import Firebase
 
 class GameViewController: UIViewController, GADInterstitialDelegate {
     // Total number of levels
-    let maxNumOfLevels = 4
+    let maxNumOfLevels = 6
     
     // Containers for button properties
     var buttonLetterArray: [Character]!
