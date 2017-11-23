@@ -13,7 +13,7 @@ import Firebase
 
 class GameViewController: UIViewController, GADInterstitialDelegate {
     // Total number of levels
-    let maxNumOfLevels = 6
+    let maxNumOfLevels = 10
     
     // Containers for button properties
     var buttonLetterArray: [Character]!
@@ -297,7 +297,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 boardSpaces[i].setSuperScriptLabel(number: String(number))
                 
                 // If the next character is a number as well, append it to the space label (so we can represent 2 digit numbers)
-                if gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)] != "-" {
+                if gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)] != "-" &&
+                    numbersIterator > 13 && boardSpaces[i].superscriptLabel.text == "1" {
                     boardSpaces[i].superscriptLabel.text?.append(gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)])
                     
                     // Need serperate iterator because sometimes we need to take 2 from the string
@@ -1798,7 +1799,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                                 info[i]["Hint"]!,
                                 info[i]["# of words"]!))
         }
-
+        
         // Construct the level arrays
         let levelArray = getInfoFromPlist(level: userLevel)
         for i in 1..<levelArray.count{
@@ -1806,7 +1807,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             // hint, and number of words related to it
 
             if levelArray[i]["Across"]! != "" {
-                for j in 1..<masterClues.count {
+                for j in 0..<masterClues.count {
                     if levelArray[i]["Phrase"] == masterClues[j].Phrase {
                     acrossClues.append((levelArray[i]["Across"]!,
                     masterClues[j].Clue,
@@ -1817,7 +1818,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             }
             
             if levelArray[i]["Down"]! != "" {
-                for j in 1..<masterClues.count {
+                for j in 0..<masterClues.count {
                     if levelArray[i]["Phrase"] == masterClues[j].Phrase {
                         downClues.append((levelArray[i]["Down"]!,
                                             masterClues[j].Clue,
@@ -2029,7 +2030,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
         
         // Get the user level
-        userLevel = defaults.integer(forKey: "userLevel")
+        userLevel = maxNumOfLevels//defaults.integer(forKey: "userLevel")
         if userLevel == 0 {
             // Defaults returns 0 if there is no corresponding key.
             // In this case, it is the user's first time and we start
