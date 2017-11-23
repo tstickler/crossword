@@ -203,7 +203,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     
     func clueAreaSetup() {
         // Set border width, shape, and color for the clue label, advancement buttons, timer and clue buttons
-        clueLabel.layer.borderWidth = 2
+        clueLabel.layer.masksToBounds = true
+        clueLabel.layer.borderWidth = 5
         clueLabel.layer.cornerRadius = 10
         clueLabel.layer.borderColor = blueColorCG
         
@@ -223,9 +224,9 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         fillSquareButton.layer.cornerRadius = 5
         fillSquareButton.layer.backgroundColor = orangeColorCG
         
-        hintEnabledButton.layer.cornerRadius = 12.5
-        hintEnabledButton.layer.borderColor = UIColor.white.cgColor
-        hintEnabledButton.layer.borderWidth = 1
+        hintEnabledButton.layer.cornerRadius = 14
+        hintEnabledButton.layer.borderColor = UIColor.black.cgColor
+        hintEnabledButton.layer.borderWidth = 0
         
         let attributedString = NSAttributedString(string: "\(cheatCount)")
         let textRange = NSMakeRange(0, attributedString.length)
@@ -1729,6 +1730,14 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     }
     
     func initialHighlight() {
+        // Ensures that animation will always be active when coming back from background
+        for i in 0...168 {
+            if !boardSpaces[i].isEnabled {
+                previousButton = i
+                break
+            }
+        }
+        
         // Start the user on whatever 1 is available (prefers 1 across)
         for i in 0...168 {
             // If there is no 1 across, start vertical
@@ -2044,13 +2053,13 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         hoursCounter = defaults.integer(forKey: "hours")
         
         
-        loadedBefore = defaults.bool(forKey: "firstTime")
+        loadedBefore = defaults.bool(forKey: "loadedBefore")
 
         if !loadedBefore {
-            cheatCount = 10000
+            cheatCount = 10
             defaults.set(cheatCount, forKey: "cheatCount")
-            defaults.set(true, forKey: "firstTime")
             loadedBefore = true
+            defaults.set(loadedBefore, forKey: "loadedBefore")
         } else {
             // Set the user's cheat counts
             cheatCount = defaults.integer(forKey: "cheatCount")
