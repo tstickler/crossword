@@ -2030,7 +2030,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
         
         // Get the user level
-        userLevel = maxNumOfLevels//defaults.integer(forKey: "userLevel")
+        userLevel = defaults.integer(forKey: "userLevel")
         if userLevel == 0 {
             // Defaults returns 0 if there is no corresponding key.
             // In this case, it is the user's first time and we start
