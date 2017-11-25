@@ -57,9 +57,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     @IBOutlet var fillSquareButton: UIButton!
     @IBOutlet weak var cheatCountLabel: UILabel!
     @IBOutlet var hintEnabledButton: UIButton!
-    
-    var cheatCount: Int = 10
-    
+        
     // Iterator to prevent inifinte loop
     var checkAllDirectionFilledIterator = 0
 
@@ -106,9 +104,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     var shouldShowAdCounter = 0
     var showAdAfterNumCorrect = 6
     var inGame = false
-    
-    // Initial load of game
-    var loadedBefore = false
     
     
     /*****************************************
@@ -228,13 +223,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         hintEnabledButton.layer.borderColor = UIColor.black.cgColor
         hintEnabledButton.layer.borderWidth = 0
         
-        let attributedString = NSAttributedString(string: "\(cheatCount)")
-        let textRange = NSMakeRange(0, attributedString.length)
-        let underlinedMessage = NSMutableAttributedString(attributedString: attributedString)
-        underlinedMessage.addAttribute(NSAttributedStringKey.underlineStyle,
-                                       value:NSUnderlineStyle.styleSingle.rawValue,
-                                       range: textRange)
-        cheatCountLabel.attributedText = underlinedMessage
+        cheatCountLabel.text = String(Settings.cheatCount)
 
         levelLabel.text = "Level \(userLevel)"
         
@@ -799,7 +788,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
 
     @IBAction func hintButtonTapped(_ sender: Any) {
         // If the user is out of cheats, don't do anything
-        if cheatCount == 0 {
+        if Settings.cheatCount == 0 {
+            showIAPView()
             return
         }
         
@@ -825,23 +815,17 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         hintButton.backgroundColor = .gray
         
         // Remove a cheat and save to defaults
-        cheatCount -= 1
-        defaults.set(cheatCount, forKey: "cheatCount")
+        Settings.cheatCount -= 1
+        defaults.set(Settings.cheatCount, forKey: "cheatCount")
         
         // If the user is out of cheats, gray out the buttons
-        if cheatCount == 0 {
+        if Settings.cheatCount == 0 {
             fillSquareButton.backgroundColor = .gray
             hintButton.backgroundColor = .gray
         }
         
         // Update the cheatlabel
-        let stringToUnderline = NSAttributedString(string: "\(cheatCount)")
-        let textRange = NSMakeRange(0, stringToUnderline.length)
-        let underlinedCount = NSMutableAttributedString(attributedString: stringToUnderline)
-        underlinedCount.addAttribute(NSAttributedStringKey.underlineStyle,
-                                     value:NSUnderlineStyle.styleSingle.rawValue,
-                                     range: textRange)
-        cheatCountLabel.attributedText = underlinedCount
+        cheatCountLabel.text = String(Settings.cheatCount)
         
         // Don't allow hitting the button again without moving
         hintButton.isEnabled = false
@@ -849,7 +833,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     
     @IBAction func fillSquareButtonTapped(_ sender: Any) {
         // If the user is out of cheats, don't do anything
-        if cheatCount == 0 {
+        if Settings.cheatCount == 0 {
+            showIAPView()
             return
         }
         
@@ -868,22 +853,16 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         boardSpaces[indexOfButton].backgroundColor = UIColor.init(cgColor: orangeColorCG)
         
         // Remove a cheat and save to defaults
-        cheatCount -= 1
-        defaults.set(cheatCount, forKey: "cheatCount")
+        Settings.cheatCount -= 1
+        defaults.set(Settings.cheatCount, forKey: "cheatCount")
         
-        if cheatCount == 0 {
+        if Settings.cheatCount == 0 {
             fillSquareButton.backgroundColor = .gray
             hintButton.backgroundColor = .gray
         }
         
         // Update the cheatlabel
-        let stringToUnderline = NSAttributedString(string: "\(cheatCount)")
-        let textRange = NSMakeRange(0, stringToUnderline.length)
-        let underlinedCount = NSMutableAttributedString(attributedString: stringToUnderline)
-        underlinedCount.addAttribute(NSAttributedStringKey.underlineStyle,
-                                       value:NSUnderlineStyle.styleSingle.rawValue,
-                                       range: textRange)
-        cheatCountLabel.attributedText = underlinedCount
+        cheatCountLabel.text = String(Settings.cheatCount)
 
         // Check if cheat completed a word and animate if it is correct
         if correctAnswerEntered() {
@@ -929,7 +908,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 resetDefaults()
                 
                 // User gets another cheat for completing a level
-                defaults.set(cheatCount + 1, forKey: "cheatCount")
+                defaults.set(Settings.cheatCount + 1, forKey: "cheatCount")
                 
                 // Show the game over view
                 showGameOverView()
@@ -955,7 +934,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     
     @IBAction func keyboardButtonPressed(_ sender: UIButton) {
 
-        
         MusicPlayer.playSoundEffect(of: "click")
         // Each key of the keyboard has a tag from 1-26. The tag tells which key was pressed.
         // Keyboard is standard qwerty and tags start at Q(1) and end at M(26)
@@ -1081,7 +1059,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                     resetDefaults()
                     
                     // User gets another cheat for completing the level
-                    defaults.set(cheatCount + 1, forKey: "cheatCount")
+                    defaults.set(Settings.cheatCount + 1, forKey: "cheatCount")
 
                     showGameOverView()
 
@@ -1858,93 +1836,15 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         return (storedInfoArray as? Array<Dictionary<String, String>>)!
     }
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        
-        interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-1164601417724423/5546885166")
-        interstitialAd.delegate = self
-        let request = GADRequest()
-        request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
-        interstitialAd.load(request)
-        
-        // Initialize from defaults
-        readFromDefaults()
-        
-        // This is the board that needs to be set up
-        // board[1] contains the letters in their locations
-        // board[2] contains numbers superscripts for across/down
-        // board[3] contains across/down information for each individual square
-        let board = [getInfoFromPlist(level: userLevel)[1]["Board"]!,
-                     getInfoFromPlist(level: userLevel)[2]["Board"]!,
-                     getInfoFromPlist(level: userLevel)[3]["Board"]!]
-        
-        
-        // Set everything up
-        formatter.minimumIntegerDigits = 2
-        fillAcrossDownArrays()
-        makeClueArrays()
-        setUpBoard(board: board)
-        clueAreaSetup()
-        startTimer()
-        
-        // Start playing game music
-        MusicPlayer.start(musicTitle: "game", ext: "mp3")
-        if !Settings.musicEnabled {
-            MusicPlayer.gameMusicPlayer.volume = 0
-        }
-    }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        if !inGame {
-            inGame = true
-            // Begins animation when coming from background
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.gameViewController = self
-        
-            // Our initial tap
-            initialHighlight()
-        } else {
-            // Fixes animation when coming back from an ad
-            if across {
-                if indexOfButton != 168 {
-                    boardButtonTapped(boardSpaces[indexOfButton + 1])
-                    boardButtonTapped(boardSpaces[indexOfButton - 1])
-                } else {
-                    boardButtonTapped(boardSpaces[indexOfButton - 1])
-                    boardButtonTapped(boardSpaces[indexOfButton + 1])
-                }
-            } else {
-                if indexOfButton < 156 {
-                    boardButtonTapped(boardSpaces[indexOfButton + 13])
-                    boardButtonTapped(boardSpaces[indexOfButton - 13])
-                } else {
-                    boardButtonTapped(boardSpaces[indexOfButton - 13])
-                    boardButtonTapped(boardSpaces[indexOfButton + 13])
-                }
-            }
-        }
-    }
-        
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // When the setting button is clicked, give the view information needed
-        // to set the switches to their initial positions which can then be modified
-        // by the user.
-        if segue.identifier == "hintSegue" {
-            if let hintVC = segue.destination as? HintViewController {
-                hintVC.emoji = getSpotInfo(indexOfButton: indexOfButton, info: "Clue")
-                hintVC.wordCount = getSpotInfo(indexOfButton: indexOfButton, info: "WordCt")
-                hintVC.hint = getSpotInfo(indexOfButton: indexOfButton, info: "Hint")
-                hintVC.clueNumber = directionLabel.text!
-                hintVC.screenSize = screenSize
-                hintVC.letterCount = String(selectedBoardSpaces.count)
-            }
-        }
-    }
+     /*****************************************
+     *                                        *
+     *             Utility functions          *
+     *                                        *
+     *****************************************/
     
     func startTimer() {
+        // Start counting how long the user has been on the level
         gameTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateTimerLabel), userInfo: nil, repeats: true)
     }
     
@@ -2051,29 +1951,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         secondsCounter = defaults.integer(forKey: "seconds")
         minutesCounter = defaults.integer(forKey: "minutes")
         hoursCounter = defaults.integer(forKey: "hours")
-        
-        
-        loadedBefore = defaults.bool(forKey: "loadedBefore")
-
-        if !loadedBefore {
-            cheatCount = 10
-            defaults.set(cheatCount, forKey: "cheatCount")
-            loadedBefore = true
-            defaults.set(loadedBefore, forKey: "loadedBefore")
-        } else {
-            // Set the user's cheat counts
-            cheatCount = defaults.integer(forKey: "cheatCount")
-        }
-    }
-    
-    func showGameOverView() {
-        // Gave over view has to be presented programmatically because there is no specific
-        // button to trigger its segue
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let GOVC = storyboard.instantiateViewController(withIdentifier: "GOVC")
-        GOVC.modalTransitionStyle = .crossDissolve
-        GOVC.modalPresentationStyle = .overCurrentContext
-        self.present(GOVC, animated: true, completion: nil)
     }
     
     func resetDefaults() {
@@ -2088,15 +1965,15 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         defaults.set(0, forKey: "hours")
     }
     
-    func newLevel() {
-        if interstitialAd.isReady {
-            interstitialAd.present(fromRootViewController: self)
-        }
-    }
-    
     func checkAdProgress() {
+        // Ad shows if:
+        // 1. Ready to show
+        // 2. The ad counter has hit the number allowed before it should show
+        // 3. The user hasn't filled all the squares (interferes with game over)
+        // 4. The user has not purchased the removal of ads
         shouldShowAdCounter += 1
-        if interstitialAd.isReady && shouldShowAdCounter % showAdAfterNumCorrect == 0 && !allSquaresFilled() {
+        if interstitialAd.isReady && shouldShowAdCounter % showAdAfterNumCorrect == 0
+            && !allSquaresFilled() && !Settings.adsDisabled {
             interstitialAd.present(fromRootViewController: self)
             interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-1164601417724423/5546885166")
             interstitialAd.delegate = self
@@ -2106,23 +1983,142 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
     }
     
-    func interstitialDidDismissScreen(_ ad: GADInterstitial) {
-        if gameOver() {
-            // Creates a new board and pushes it onto the navigation stack
-            let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            let vc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
-            
-            // Gives a nice animation to the next view
-            let transition = CATransition()
-            transition.duration = 0.5
-            transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-            transition.type = kCATransitionFade
-            self.navigationController?.view.layer.add(transition, forKey: nil)
-            
-            self.navigationController?.pushViewController(vc, animated: false)
-            
-            // Tosses the last game, we don't need it taking up memory on the stack
-            self.navigationController?.viewControllers.remove(at: 1)
+     /*****************************************
+     *                                        *
+     *                 Segues                 *
+     *                                        *
+     *****************************************/
+    
+    func showGameOverView() {
+        // Gave over view has to be presented programmatically because there is no specific
+        // button to trigger its segue
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let GOVC = storyboard.instantiateViewController(withIdentifier: "GOVC")
+        GOVC.modalTransitionStyle = .crossDissolve
+        GOVC.modalPresentationStyle = .overCurrentContext
+        self.present(GOVC, animated: true, completion: nil)
+    }
+    
+    func showIAPView() {
+        // InAppPurchase view is shown through the user hitting one of the cheat buttons
+        // when the user is out of cheats or from the menu.
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let IAP = storyboard.instantiateViewController(withIdentifier: "IAP")
+        IAP.modalTransitionStyle = .crossDissolve
+        IAP.modalPresentationStyle = .overCurrentContext
+        self.present(IAP, animated: true, completion: nil)
+    }
+
+    func newLevel() {
+        // Present an ad when showing a new level
+        if interstitialAd.isReady && !Settings.adsDisabled {
+            interstitialAd.present(fromRootViewController: self)
+        }
+        
+        // Creates a new board and pushes it onto the navigation stack
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        let vc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
+        
+        // Gives a nice animation to the next view
+        let transition = CATransition()
+        transition.duration = 0.5
+        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+        transition.type = kCATransitionFade
+        self.navigationController?.view.layer.add(transition, forKey: nil)
+        
+        self.navigationController?.pushViewController(vc, animated: false)        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // When the setting button is clicked, give the view information needed
+        // to set the switches to their initial positions which can then be modified
+        // by the user.
+        if segue.identifier == "hintSegue" {
+            if let hintVC = segue.destination as? HintViewController {
+                hintVC.emoji = getSpotInfo(indexOfButton: indexOfButton, info: "Clue")
+                hintVC.wordCount = getSpotInfo(indexOfButton: indexOfButton, info: "WordCt")
+                hintVC.hint = getSpotInfo(indexOfButton: indexOfButton, info: "Hint")
+                hintVC.clueNumber = directionLabel.text!
+                hintVC.screenSize = screenSize
+                hintVC.letterCount = String(selectedBoardSpaces.count)
+            }
         }
     }
+    
+    
+     /*****************************************
+     *                                        *
+     *             Load functions             *
+     *                                        *
+     *****************************************/
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-1164601417724423/5546885166")
+        interstitialAd.delegate = self
+        let request = GADRequest()
+        request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
+        interstitialAd.load(request)
+        
+        // Initialize from defaults
+        readFromDefaults()
+        
+        // This is the board that needs to be set up
+        // board[1] contains the letters in their locations
+        // board[2] contains numbers superscripts for across/down
+        // board[3] contains across/down information for each individual square
+        let board = [getInfoFromPlist(level: userLevel)[1]["Board"]!,
+                     getInfoFromPlist(level: userLevel)[2]["Board"]!,
+                     getInfoFromPlist(level: userLevel)[3]["Board"]!]
+        
+        
+        // Set everything up
+        formatter.minimumIntegerDigits = 2
+        fillAcrossDownArrays()
+        makeClueArrays()
+        setUpBoard(board: board)
+        clueAreaSetup()
+        startTimer()
+        
+        // Start playing game music
+        MusicPlayer.start(musicTitle: "game", ext: "mp3")
+        if !Settings.musicEnabled {
+            MusicPlayer.gameMusicPlayer.volume = 0
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if !inGame {
+            inGame = true
+            // Begins animation when coming from background
+            let appDelegate = UIApplication.shared.delegate as! AppDelegate
+            appDelegate.gameViewController = self
+            
+            // Our initial tap
+            initialHighlight()
+        } else {
+            // Fixes animation when coming back from an ad
+            if across {
+                if indexOfButton != 168 {
+                    boardButtonTapped(boardSpaces[indexOfButton + 1])
+                    boardButtonTapped(boardSpaces[indexOfButton - 1])
+                } else {
+                    boardButtonTapped(boardSpaces[indexOfButton - 1])
+                    boardButtonTapped(boardSpaces[indexOfButton + 1])
+                }
+            } else {
+                if indexOfButton < 156 {
+                    boardButtonTapped(boardSpaces[indexOfButton + 13])
+                    boardButtonTapped(boardSpaces[indexOfButton - 13])
+                } else {
+                    boardButtonTapped(boardSpaces[indexOfButton - 13])
+                    boardButtonTapped(boardSpaces[indexOfButton + 13])
+                }
+            }
+        }
+    }
+
 }

@@ -28,14 +28,17 @@
 		2F35EC751F9B1C07000014E5 /* CrosswordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F35EC741F9B1C07000014E5 /* CrosswordTests.swift */; };
 		2F35EC801F9B1C07000014E5 /* CrosswordUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F35EC7F1F9B1C07000014E5 /* CrosswordUITests.swift */; };
 		2F36BED71FBE03AE00095519 /* GameOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F36BED61FBE03AE00095519 /* GameOverViewController.swift */; };
-		2F3A57511FC38D88002C1C13 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F3A57501FC38D88002C1C13 /* GoogleService-Info.plist */; };
 		2F4DB9BC1FC4F6AE00D488A0 /* level_3.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F4DB9BB1FC4F6AE00D488A0 /* level_3.plist */; };
 		2F4DB9BE1FC5F62E00D488A0 /* level_4.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F4DB9BD1FC5F62E00D488A0 /* level_4.plist */; };
 		2F5D9E701FA1522B004A2AB5 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D9E6F1FA1522B004A2AB5 /* MenuViewController.swift */; };
+		2F705BBE1FC7CE17005E77F3 /* PurchasesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F705BBD1FC7CE17005E77F3 /* PurchasesViewController.swift */; };
 		2F7CC5F61FB8D04A00ABA677 /* HintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7CC5F51FB8D04A00ABA677 /* HintViewController.swift */; };
 		2F9CD68F1FC22A400091B834 /* level_1.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F9CD68D1FC22A400091B834 /* level_1.plist */; };
 		2F9CD6901FC22A400091B834 /* level_2.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F9CD68E1FC22A400091B834 /* level_2.plist */; };
 		2FA3F60C1FA2D8AD006938E2 /* BoardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA3F60B1FA2D8AD006938E2 /* BoardButton.swift */; };
+		2FADDA891FC8CFD00069AAF0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FADDA881FC8CFD00069AAF0 /* StoreKit.framework */; };
+		2FADDA8B1FC8D16A0069AAF0 /* InAppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FADDA8A1FC8D16A0069AAF0 /* InAppPurchase.swift */; };
+		2FBBA93A1FC9FDD600483C7D /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FBBA9391FC9FDD600483C7D /* GoogleService-Info.plist */; };
 		2FDC7C371FAFA4A200A3EABE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */; };
 		2FDD0A571FC622A8001D64F2 /* level_10.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDD0A551FC622A7001D64F2 /* level_10.plist */; };
 		2FDD0A581FC622A8001D64F2 /* level_6.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDD0A561FC622A8001D64F2 /* level_6.plist */; };
@@ -91,14 +94,17 @@
 		2F35EC7F1F9B1C07000014E5 /* CrosswordUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrosswordUITests.swift; sourceTree = "<group>"; };
 		2F35EC811F9B1C07000014E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F36BED61FBE03AE00095519 /* GameOverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverViewController.swift; sourceTree = "<group>"; };
-		2F3A57501FC38D88002C1C13 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2F4DB9BB1FC4F6AE00D488A0 /* level_3.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_3.plist; sourceTree = "<group>"; };
 		2F4DB9BD1FC5F62E00D488A0 /* level_4.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_4.plist; sourceTree = "<group>"; };
 		2F5D9E6F1FA1522B004A2AB5 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		2F705BBD1FC7CE17005E77F3 /* PurchasesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesViewController.swift; sourceTree = "<group>"; };
 		2F7CC5F51FB8D04A00ABA677 /* HintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintViewController.swift; sourceTree = "<group>"; };
 		2F9CD68D1FC22A400091B834 /* level_1.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_1.plist; sourceTree = "<group>"; };
 		2F9CD68E1FC22A400091B834 /* level_2.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_2.plist; sourceTree = "<group>"; };
 		2FA3F60B1FA2D8AD006938E2 /* BoardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardButton.swift; sourceTree = "<group>"; };
+		2FADDA881FC8CFD00069AAF0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		2FADDA8A1FC8D16A0069AAF0 /* InAppPurchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchase.swift; sourceTree = "<group>"; };
+		2FBBA9391FC9FDD600483C7D /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = "GoogleService-Info.plist"; path = "../../../GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		2FDD0A551FC622A7001D64F2 /* level_10.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_10.plist; sourceTree = "<group>"; };
 		2FDD0A561FC622A8001D64F2 /* level_6.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_6.plist; sourceTree = "<group>"; };
@@ -115,6 +121,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				0483390F0D53909975165B9E /* Pods_Crossword.framework in Frameworks */,
+				2FADDA891FC8CFD00069AAF0 /* StoreKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -180,14 +187,16 @@
 				2F5D9E6F1FA1522B004A2AB5 /* MenuViewController.swift */,
 				2F7CC5F51FB8D04A00ABA677 /* HintViewController.swift */,
 				2F36BED61FBE03AE00095519 /* GameOverViewController.swift */,
+				2F705BBD1FC7CE17005E77F3 /* PurchasesViewController.swift */,
 				2F07758C1FBA391C001C9ABD /* MusicPlayer.swift */,
 				2F07758E1FBA4404001C9ABD /* Settings.swift */,
+				2FADDA8A1FC8D16A0069AAF0 /* InAppPurchase.swift */,
 				2FA3F60B1FA2D8AD006938E2 /* BoardButton.swift */,
 				2F35EC631F9B1C06000014E5 /* Main.storyboard */,
 				2F35EC661F9B1C06000014E5 /* Assets.xcassets */,
 				2F35EC681F9B1C06000014E5 /* LaunchScreen.storyboard */,
 				2F35EC6B1F9B1C06000014E5 /* Info.plist */,
-				2F3A57501FC38D88002C1C13 /* GoogleService-Info.plist */,
+				2FBBA9391FC9FDD600483C7D /* GoogleService-Info.plist */,
 				2F2EA6921FC698DB006670A8 /* master.plist */,
 				2F39E1311FBE714400FC123C /* Levels */,
 				2F111B121FB964E200DBA3EE /* Music */,
@@ -233,6 +242,7 @@
 		B249A63E633C3F3DD0AEE31F /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				2FADDA881FC8CFD00069AAF0 /* StoreKit.framework */,
 				2E38B94886BCE987325CBEFF /* Pods_Crossword.framework */,
 				8BA7F006000A0E6EB67A386E /* Pods_CrosswordTests.framework */,
 				E7A1F12BD8469BEB52DD6297 /* Pods_CrosswordUITests.framework */,
@@ -331,6 +341,11 @@
 					2F35EC5B1F9B1C06000014E5 = {
 						CreatedOnToolsVersion = 9.0.1;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.InAppPurchase = {
+								enabled = 1;
+							};
+						};
 					};
 					2F35EC6F1F9B1C07000014E5 = {
 						CreatedOnToolsVersion = 9.0.1;
@@ -380,8 +395,8 @@
 				2FDD0A581FC622A8001D64F2 /* level_6.plist in Resources */,
 				2F1029981FC2436D0053096D /* erase.wav in Resources */,
 				2F9CD68F1FC22A400091B834 /* level_1.plist in Resources */,
+				2FBBA93A1FC9FDD600483C7D /* GoogleService-Info.plist in Resources */,
 				2F1029991FC2436D0053096D /* click.wav in Resources */,
-				2F3A57511FC38D88002C1C13 /* GoogleService-Info.plist in Resources */,
 				2F4DB9BC1FC4F6AE00D488A0 /* level_3.plist in Resources */,
 				2F35EC651F9B1C06000014E5 /* Main.storyboard in Resources */,
 				2F2EA6891FC662ED006670A8 /* level_8.plist in Resources */,
@@ -564,10 +579,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2F705BBE1FC7CE17005E77F3 /* PurchasesViewController.swift in Sources */,
 				2FDC7C371FAFA4A200A3EABE /* HomeViewController.swift in Sources */,
 				2F7CC5F61FB8D04A00ABA677 /* HintViewController.swift in Sources */,
 				2F07758F1FBA4404001C9ABD /* Settings.swift in Sources */,
 				2FA3F60C1FA2D8AD006938E2 /* BoardButton.swift in Sources */,
+				2FADDA8B1FC8D16A0069AAF0 /* InAppPurchase.swift in Sources */,
 				2F0929E01FC0A6EF00EA18B2 /* InfoViewController.swift in Sources */,
 				2F35EC621F9B1C06000014E5 /* GameViewController.swift in Sources */,
 				2F07758D1FBA391C001C9ABD /* MusicPlayer.swift in Sources */,
@@ -745,7 +762,7 @@
 				INFOPLIST_FILE = Crossword/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tstick.Crossword;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tstick.Crossmoji;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;
@@ -762,7 +779,7 @@
 				INFOPLIST_FILE = Crossword/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
-				PRODUCT_BUNDLE_IDENTIFIER = com.tstick.Crossword;
+				PRODUCT_BUNDLE_IDENTIFIER = com.tstick.Crossmoji;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = 1;

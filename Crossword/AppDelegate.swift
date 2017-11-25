@@ -21,7 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         FirebaseApp.configure()
         GADMobileAds.configure(withApplicationID: "ca-app-pub-1164601417724423~7678881026")
-
+        
+        InAppPurchase.shared.getProducts()
         return true
     }
 
@@ -37,8 +38,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
-        
-        gameViewController.initialHighlight()
+        if let wd = UIApplication.shared.delegate?.window {
+            var vc = wd!.rootViewController
+            if(vc is UINavigationController){
+                vc = (vc as! UINavigationController).visibleViewController
+                
+            }
+            
+            if(vc is GameViewController){
+                gameViewController.initialHighlight()
+            }
+        }
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {

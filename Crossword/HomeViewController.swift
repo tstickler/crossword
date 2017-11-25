@@ -44,19 +44,15 @@ class HomeViewController: UIViewController {
     // Home screen music enabling/disabling button
     @IBOutlet var muteButton: UIButton!
     
+    // Banner ad
     @IBOutlet var bannerAd: GADBannerView!
+    @IBOutlet var bannerHeightConstraint: NSLayoutConstraint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Banner ad
-        let request = GADRequest()
-        request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
-        bannerAd.adSize = kGADAdSizeSmartBannerPortrait
-        bannerAd.adUnitID = "ca-app-pub-1164601417724423/6161128687"
-        bannerAd.rootViewController = self
-        bannerAd.load(request)
-        
+        // Load the user selected settings
+        // If its the first time, loads default settings
         loadSettings()
                 
         animator = UIDynamicAnimator(referenceView: self.view)
@@ -98,6 +94,24 @@ class HomeViewController: UIViewController {
         
         // Don't need the navigation bar
         self.navigationController?.isNavigationBarHidden = true
+        
+        // Display ads if the user hasn't paid to turn them off
+        if !Settings.adsDisabled {
+            // Banner ad
+            bannerAd.isHidden = false
+            bannerHeightConstraint.constant = 50
+
+            let request = GADRequest()
+            request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
+            bannerAd.adSize = kGADAdSizeSmartBannerPortrait
+            bannerAd.adUnitID = "ca-app-pub-1164601417724423/6161128687"
+            bannerAd.rootViewController = self
+            bannerAd.load(request)
+        } else {
+            // If the user has turned off ads through IAP, hide the banner
+            bannerAd.isHidden = true
+            bannerHeightConstraint.constant = 0
+        }
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -114,7 +128,7 @@ class HomeViewController: UIViewController {
     }
 
     @IBAction func muteButtonTapped(_ sender: Any) {
-        var image: UIImage
+        var musicButtonImage: UIImage
         
         if Settings.musicEnabled {
             // If tapping when music is enabled, disable it
@@ -122,7 +136,7 @@ class HomeViewController: UIViewController {
             Settings.soundEffects = false
             
             // Set the image of the button to muted music
-            image = UIImage(named: "no_music-1.png")!
+            musicButtonImage = UIImage(named: "no_music-1.png")!
             
             // Actually mute the music
             MusicPlayer.homeMusicPlayer.setVolume(0, fadeDuration: 1.0)
@@ -132,7 +146,7 @@ class HomeViewController: UIViewController {
             Settings.soundEffects = true
             
             // Set the image of the button to unmuted music
-            image = UIImage(named: "music-1.png")!
+            musicButtonImage = UIImage(named: "music-1.png")!
             
             // Play the music
             MusicPlayer.homeMusicPlayer.setVolume(0.15, fadeDuration: 1.0)
@@ -141,7 +155,7 @@ class HomeViewController: UIViewController {
         // Save the user settings
         defaults.set(Settings.musicEnabled, forKey: "musicEnabled")
         defaults.set(Settings.soundEffects, forKey: "soundEffects")
-        muteButton.setBackgroundImage(image, for: .normal)
+        muteButton.setBackgroundImage(musicButtonImage, for: .normal)
     }
     
     
@@ -172,7 +186,6 @@ class HomeViewController: UIViewController {
         view.addSubview(label)
         view.sendSubview(toBack: label)
         
-        
         // Remove any labels that are out of screen range
         for (index, lab) in labels.enumerated() {
             if lab.center.y - 40 > UIScreen.main.bounds.height {
@@ -181,7 +194,6 @@ class HomeViewController: UIViewController {
                 lab.removeFromSuperview()
             }
         }
-        
         
         // Begin animation for the label
         animate(label: label)
@@ -210,6 +222,8 @@ class HomeViewController: UIViewController {
             Settings.skipFilledSquares = defaults.bool(forKey: "skipFilledSquares")
             Settings.lockCorrect = defaults.bool(forKey: "lockCorrect")
             Settings.correctAnim = defaults.bool(forKey: "correctAnim")
+            Settings.adsDisabled = defaults.bool(forKey: "adsDisabled")
+            Settings.cheatCount = defaults.integer(forKey: "cheatCount")
         } else {
             // If this is the user's first time, start all the settings as enabled.
             // This must happen because loading from defaults when there is no key associated
@@ -224,12 +238,18 @@ class HomeViewController: UIViewController {
             defaults.set(true, forKey: "lockCorrect")
             defaults.set(true, forKey: "correctAnim")
             
+            defaults.set(false, forKey: "adsDisabled")
+            
+            Settings.cheatCount = 10
+            defaults.set(Settings.cheatCount, forKey: "cheatCount")
+            
             Settings.musicEnabled = true
             Settings.soundEffects = true
             Settings.showTimer   = true
             Settings.skipFilledSquares = true
             Settings.lockCorrect = true
             Settings.correctAnim = true
+            Settings.adsDisabled = false
         }
     }
 }

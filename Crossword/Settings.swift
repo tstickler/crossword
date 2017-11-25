@@ -17,4 +17,6 @@ class Settings {
     static var lockCorrect: Bool!
     static var correctAnim: Bool!
     static var launchedBefore: Bool!
+    static var cheatCount = 0
+    static var adsDisabled: Bool!
 }

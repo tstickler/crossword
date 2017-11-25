@@ -19,6 +19,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     // Navigation buttons. Back goes to the game, home goes to homescreen.
     @IBOutlet var backButton: UIButton!
     @IBOutlet var homeButton: UIButton!
+    @IBOutlet var buyHintsButton: UIButton!
     
     // Switches to adjust preferences
     @IBOutlet var musicSwitch: UISwitch!
@@ -59,7 +60,15 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         }
     }
     
-
+    @IBAction func buyHintsTapped(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+        
+        // Show the IAP menu
+        if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
+            parentVC.showIAPView()
+        }
+    }
+    
     // Close the view and return back to the game
     @IBAction func backButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
@@ -190,5 +199,9 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         homeButton.layer.borderWidth = 1
         homeButton.layer.cornerRadius = 3
         homeButton.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
+        
+        buyHintsButton.layer.borderWidth = 1
+        buyHintsButton.layer.cornerRadius = 3
+        buyHintsButton.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
     }
 }

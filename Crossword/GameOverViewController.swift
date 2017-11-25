@@ -99,11 +99,11 @@ class GameOverViewController: UIViewController {
                 titleLabel.text = "Nice Job!"
                 
                 if hours > 0 {
-                    messageLabel.text = "You finished in \(hours!) hours, \(minutes!) minutes, and \(seconds!) seconds!"
+                    messageLabel.text = "You finished in \(hours!) hours, \(minutes!) minutes, and \(seconds!) seconds and gained a hint!"
                 } else if parentVC.minutesCounter > 0 {
-                    messageLabel.text = "You finished in \(minutes!) minutes and \(seconds!) seconds!"
+                    messageLabel.text = "You finished in \(minutes!) minutes and \(seconds!) seconds and gained a hint!"
                 } else {
-                    messageLabel.text = "You finished in \(seconds!) seconds!"
+                    messageLabel.text = "You finished in \(seconds!) seconds and gained a hint!"
                 }
                 
                 topButton.setTitle("Next Level", for: .normal)
