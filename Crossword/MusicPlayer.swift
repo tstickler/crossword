@@ -21,16 +21,12 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
         let path = Bundle.main.path(forResource: musicTitle, ofType: ext)!
         let url = URL(fileURLWithPath: path)
         
-        do {
-            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback)
-            try AVAudioSession.sharedInstance().setActive(true)
-        } catch {
-            print(error)
-        }
-        
         var musicPlayer = AVAudioPlayer()
         
         do {
+            try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient)
+            try AVAudioSession.sharedInstance().setActive(true)
+            
             // Play the music
             musicPlayer = try AVAudioPlayer(contentsOf: url)
             musicPlayer.numberOfLoops = -1

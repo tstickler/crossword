@@ -153,16 +153,16 @@ extension InAppPurchase: SKPaymentTransactionObserver {
                 // A restored transaction should restore the user purchase and inform
                 // of the completon
                 self.handlePurchase(purchase: transaction.payment.productIdentifier)
+                queue.finishTransaction(transaction)
                 alert.title = "Purchase restored"
                 alert.message = "All previous purchases have been restored."
                 presentingController.present(alert, animated: true, completion: nil)
-                queue.finishTransaction(transaction)
             case .failed:
                 // A failed transaction should inform the user that their purchase failed
                 alert.title = "Transaction Failed"
                 alert.message = "The transaction could not be completed at this time."
-                presentingController.present(alert, animated: true, completion: nil)
                 queue.finishTransaction(transaction)
+                presentingController.present(alert, animated: true, completion: nil)
             case .deferred:
                 queue.finishTransaction(transaction)
             }

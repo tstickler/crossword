@@ -11,7 +11,7 @@ import AVFoundation
 import AudioToolbox
 import Firebase
 
-class GameViewController: UIViewController, GADInterstitialDelegate {
+class GameViewController: UIViewController {
     // Total number of levels
     let maxNumOfLevels = 10
     
@@ -933,7 +933,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     }
     
     @IBAction func keyboardButtonPressed(_ sender: UIButton) {
-
         MusicPlayer.playSoundEffect(of: "click")
         // Each key of the keyboard has a tag from 1-26. The tag tells which key was pressed.
         // Keyboard is standard qwerty and tags start at Q(1) and end at M(26)
@@ -1976,7 +1975,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             && !allSquaresFilled() && !Settings.adsDisabled {
             interstitialAd.present(fromRootViewController: self)
             interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-1164601417724423/5546885166")
-            interstitialAd.delegate = self
             let request = GADRequest()
             request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
             interstitialAd.load(request)
@@ -2056,7 +2054,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         super.viewDidLoad()
         
         interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-1164601417724423/5546885166")
-        interstitialAd.delegate = self
         let request = GADRequest()
         request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
         interstitialAd.load(request)
@@ -2120,5 +2117,4 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             }
         }
     }
-
 }
