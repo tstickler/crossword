@@ -420,7 +420,7 @@ class GameViewController: UIViewController {
         
         // If the square has text, erase it and stay there
         if currentSquareTitle != nil && (buttonLockedForCorrect[indexOfButton] == false || !Settings.lockCorrect) && !buttonRevealedByHelper[indexOfButton] {
-            boardSpaces[indexOfButton].setTitle(nil, for: .normal)
+            boardSpaces[indexOfButton].setTitleWithOutAnimation(title: nil)
             buttonTitleArray[indexOfButton] = ""
             defaults.set(buttonTitleArray, forKey: "buttonTitles")
             
@@ -459,7 +459,7 @@ class GameViewController: UIViewController {
             
             // Erase the selected square
             if (buttonLockedForCorrect[indexOfButton] == false || !Settings.lockCorrect) && !buttonRevealedByHelper[indexOfButton] {
-                boardSpaces[indexOfButton].setTitle(nil, for: .normal)
+                boardSpaces[indexOfButton].setTitleWithOutAnimation(title: nil)
                 buttonTitleArray[indexOfButton] = ""
                 defaults.set(buttonTitleArray, forKey: "buttonTitles")
 
@@ -846,7 +846,7 @@ class GameViewController: UIViewController {
         
         // Set the title equal to the correct answer
         // Set the background to indicate a cheat was used at that square
-        boardSpaces[indexOfButton].setTitle(String(buttonLetterArray[indexOfButton]).uppercased(), for: .normal)
+        boardSpaces[indexOfButton].setTitleWithOutAnimation(title: String(buttonLetterArray[indexOfButton]).uppercased())
         buttonTitleArray[indexOfButton] = String(buttonLetterArray[indexOfButton]).uppercased()
         defaults.set(buttonTitleArray, forKey: "buttonTitles")
 
@@ -1003,7 +1003,7 @@ class GameViewController: UIViewController {
                 buttonLockedForCorrect[indexOfButton] = false
                 defaults.set(buttonLockedForCorrect, forKey: "lockCorrect")
             }
-            boardSpaces[indexOfButton].setTitle(String(letter).uppercased(), for: .normal)
+            boardSpaces[indexOfButton].setTitleWithOutAnimation(title: String(letter).uppercased())
             buttonTitleArray[indexOfButton] = String(letter).uppercased()
             defaults.set(buttonTitleArray, forKey: "buttonTitles")
         } else {
@@ -1882,7 +1882,7 @@ class GameViewController: UIViewController {
             buttonTitleArray = (savedAnswers as? [String])!
             for i in 0...168 {
                 if buttonTitleArray[i] != "" {
-                    boardSpaces[i].setTitle(buttonTitleArray[i], for: .normal)
+                    boardSpaces[i].setTitleWithOutAnimation(title: buttonTitleArray[i])
                 }
             }
         } else {

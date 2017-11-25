@@ -58,4 +58,14 @@ class BoardButton: UIButton {
 
         NSLayoutConstraint.activate(numberConstraints)
     }
+    
+    func setTitleWithOutAnimation(title: String?) {
+        // Removes animation when setting button titles
+        UIView.setAnimationsEnabled(false)
+        
+        setTitle(title, for: .normal)
+        
+        layoutIfNeeded()
+        UIView.setAnimationsEnabled(true)
+    }
 }
