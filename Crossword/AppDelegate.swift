@@ -42,7 +42,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             var vc = wd!.rootViewController
             if(vc is UINavigationController){
                 vc = (vc as! UINavigationController).visibleViewController
-                
             }
             
             if(vc is GameViewController){

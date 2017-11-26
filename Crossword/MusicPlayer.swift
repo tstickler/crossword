@@ -13,6 +13,7 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
     // 3 music players allow for better concurrent music/sound effects/fade
     static var homeMusicPlayer = AVAudioPlayer()
     static var gameMusicPlayer = AVAudioPlayer()
+    static var endOfGameMusicPlayer = AVAudioPlayer()
     
     private override init() {}
     
@@ -40,14 +41,18 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
                 homeMusicPlayer = musicPlayer
             } else if musicTitle == "game" {
                 gameMusicPlayer = musicPlayer
+            } else if musicTitle == "gameOver" || musicTitle == "errors" || musicTitle == "correct" {
+                musicPlayer.numberOfLoops = 0
+                musicPlayer.volume = 0.3
+                endOfGameMusicPlayer = musicPlayer
             }
         } catch {
             print(error)
         }
     }
     
-    static func playSoundEffect(of sound: String) {
-        if let soundURL = Bundle.main.url(forResource: sound, withExtension: "wav") {
+    static func playSoundEffect(of sound: String, ext: String) {
+        if let soundURL = Bundle.main.url(forResource: sound, withExtension: ext) {
             var soundID: SystemSoundID = 0
             
             AudioServicesCreateSystemSoundID(soundURL as CFURL, &soundID)

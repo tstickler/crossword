@@ -35,6 +35,7 @@ class GameOverViewController: UIViewController {
         // is used to display which letters are wrong on the board.
         if gameOver == true {
             if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
+                Settings.userLevel! += 1
                 parentVC.newLevel()
             }
         } else {
@@ -106,11 +107,17 @@ class GameOverViewController: UIViewController {
                     messageLabel.text = "You finished in \(seconds!) seconds and gained a hint!"
                 }
                 
-                topButton.setTitle("Next Level", for: .normal)
-                topButton.layer.backgroundColor = UIColor.green.cgColor
-                topButton.setTitleColor(.black, for: .normal)
-                topButton.layer.borderWidth = 1
-                topButton.layer.cornerRadius = 5
+                if Settings.userLevel == Settings.maxNumOfLevels {
+                    topButton.isHidden = true
+                    titleLabel.text = "Thats all for now!"
+                    messageLabel.text = "Stay tuned for more levels coming soon!"
+                } else {
+                    topButton.setTitle("Next Level", for: .normal)
+                    topButton.layer.backgroundColor = UIColor.green.cgColor
+                    topButton.setTitleColor(.black, for: .normal)
+                    topButton.layer.borderWidth = 1
+                    topButton.layer.cornerRadius = 5
+                }
                 
                 bottomButton.layer.backgroundColor = UIColor.lightGray.cgColor
                 bottomButton.setTitleColor(.black, for: .normal)

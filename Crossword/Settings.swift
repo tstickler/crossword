@@ -19,4 +19,7 @@ class Settings {
     static var launchedBefore: Bool!
     static var cheatCount = 0
     static var adsDisabled: Bool!
+    static var userLevel: Int!
+    // Total number of levels
+    static let maxNumOfLevels = 10
 }

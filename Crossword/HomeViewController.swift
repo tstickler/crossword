@@ -54,6 +54,8 @@ class HomeViewController: UIViewController {
         // Load the user selected settings
         // If its the first time, loads default settings
         loadSettings()
+        
+        Settings.cheatCount = 10000
                 
         animator = UIDynamicAnimator(referenceView: self.view)
         
@@ -224,6 +226,7 @@ class HomeViewController: UIViewController {
             Settings.correctAnim = defaults.bool(forKey: "correctAnim")
             Settings.adsDisabled = defaults.bool(forKey: "adsDisabled")
             Settings.cheatCount = defaults.integer(forKey: "cheatCount")
+            Settings.userLevel = defaults.integer(forKey: "userLevel")
         } else {
             // If this is the user's first time, start all the settings as enabled.
             // This must happen because loading from defaults when there is no key associated
@@ -250,6 +253,9 @@ class HomeViewController: UIViewController {
             Settings.lockCorrect = true
             Settings.correctAnim = true
             Settings.adsDisabled = false
+            
+            Settings.userLevel = 1
+            defaults.set(Settings.userLevel, forKey: "userLevel")
         }
     }
 }

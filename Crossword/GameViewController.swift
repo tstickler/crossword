@@ -12,9 +12,8 @@ import AudioToolbox
 import Firebase
 
 class GameViewController: UIViewController {
-    // Total number of levels
-    let maxNumOfLevels = 10
-    
+    var animator: UIDynamicAnimator!
+
     // Containers for button properties
     var buttonLetterArray: [Character]!
     var buttonTitleArray = Array(repeating: "", count: 169)
@@ -38,7 +37,6 @@ class GameViewController: UIViewController {
 
     var selectedBoardSpaces = [Int]()
     var across = true
-    var userLevel = 1
     var indexOfButton: Int!
     var acrossNumbers = [Int]()
     var downNumbers = [Int]()
@@ -225,7 +223,7 @@ class GameViewController: UIViewController {
         
         cheatCountLabel.text = String(Settings.cheatCount)
 
-        levelLabel.text = "Level \(userLevel)"
+        levelLabel.text = "Level \(Settings.userLevel!)"
         
         if !Settings.showTimer {
             timerStack.isHidden = true
@@ -413,7 +411,9 @@ class GameViewController: UIViewController {
 
     var erasing = false
     @IBAction func eraseButtonTapped(_ sender: Any) {
-        MusicPlayer.playSoundEffect(of: "erase")
+        if Settings.soundEffects {
+            MusicPlayer.playSoundEffect(of: "erase", ext: "wav")
+        }
         
         // Get current square
         let currentSquareTitle = boardSpaces[indexOfButton].title(for: .normal)
@@ -838,6 +838,10 @@ class GameViewController: UIViewController {
             return
         }
         
+        if Settings.soundEffects {
+            MusicPlayer.playSoundEffect(of: "click", ext: "wav")
+        }
+        
         // A square revealed by a cheat should never be able to be erased or changed
         buttonRevealedByHelper[indexOfButton] = true
         buttonLockedForCorrect[indexOfButton] = true
@@ -867,7 +871,7 @@ class GameViewController: UIViewController {
         // Check if cheat completed a word and animate if it is correct
         if correctAnswerEntered() {
             if Settings.correctAnim {
-                highlightCorrectAnswer()
+                highlightCorrectAnswer(withDuration: 0.45)
             }
             
             checkAdProgress()
@@ -883,7 +887,7 @@ class GameViewController: UIViewController {
             (!across && buttonAcrossArray[indexOfButton] != "00a") {
             boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
             if correctAnswerEntered() {
-                highlightCorrectAnswer()
+                highlightCorrectAnswer(withDuration: 0.45)
                 
                 checkAdProgress()
             }
@@ -895,10 +899,14 @@ class GameViewController: UIViewController {
         if allSquaresFilled() {
             // See if the user has entered all the right answers
             if gameOver() {
+                fillSquareButton.isEnabled = false
+                for key in keys {
+                    key.isEnabled = false
+                }
                 
                 // If they do, perform game over actions
-                if userLevel < maxNumOfLevels {
-                    defaults.set(userLevel + 1, forKey: "userLevel")
+                if Settings.userLevel < Settings.maxNumOfLevels {
+                    defaults.set(Settings.userLevel, forKey: "userLevel")
                 } else {
                     defaults.set(1, forKey: "userLevel")
                 }
@@ -908,16 +916,20 @@ class GameViewController: UIViewController {
                 resetDefaults()
                 
                 // User gets another cheat for completing a level
-                defaults.set(Settings.cheatCount + 1, forKey: "cheatCount")
+                Settings.cheatCount += 1
+                cheatCountLabel.text = "\(Settings.cheatCount)"
+                defaults.set(Settings.cheatCount, forKey: "cheatCount")
                 
-                // Show the game over view
-                showGameOverView()
-                
+                animateGameOver()
+            
                 return
             } else {
                 // If the user isn't right, don't finish game
                 // Show them view displaying how many they got incorrect
                 if !wrongViewShown {
+                    if Settings.soundEffects {
+                        MusicPlayer.start(musicTitle: "errors", ext: "mp3")
+                    }
                     showGameOverView()
                     wrongViewShown = true
                 }
@@ -933,7 +945,9 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func keyboardButtonPressed(_ sender: UIButton) {
-        MusicPlayer.playSoundEffect(of: "click")
+        if Settings.soundEffects {
+            MusicPlayer.playSoundEffect(of: "click", ext: "wav")
+        }
         // Each key of the keyboard has a tag from 1-26. The tag tells which key was pressed.
         // Keyboard is standard qwerty and tags start at Q(1) and end at M(26)
         var letter: Character!
@@ -1021,8 +1035,8 @@ class GameViewController: UIViewController {
         // Otherwise, skip to the next square.
         if correctAnswerEntered() {
             if Settings.correctAnim {
-                highlightCorrectAnswer()
-                
+                highlightCorrectAnswer(withDuration: 0.45)
+
                 // We also need to check if correct answer was entered at an intersection.
                 // This occurs when one letter of across is left and one letter of down is left.
                 // If the correct answer is entered, then we need to highlight both the across
@@ -1033,7 +1047,7 @@ class GameViewController: UIViewController {
                     (!across && buttonAcrossArray[indexOfButton] != "00a") {
                     boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
                     if correctAnswerEntered() {
-                        highlightCorrectAnswer()
+                        highlightCorrectAnswer(withDuration: 0.45)
                     }
                     
                     // Then we'll flip back to our original orientation
@@ -1048,8 +1062,13 @@ class GameViewController: UIViewController {
                     // If the user is right, perform game over actions
                     gameTimer.invalidate()
                     
-                    if userLevel < maxNumOfLevels {
-                        defaults.set(userLevel + 1, forKey: "userLevel")
+                    fillSquareButton.isEnabled = false
+                    for key in keys {
+                        key.isEnabled = false
+                    }
+                    
+                    if Settings.userLevel < Settings.maxNumOfLevels {
+                        defaults.set(Settings.userLevel, forKey: "userLevel")
                     } else {
                         defaults.set(1, forKey: "userLevel")
                     }
@@ -1058,15 +1077,20 @@ class GameViewController: UIViewController {
                     resetDefaults()
                     
                     // User gets another cheat for completing the level
-                    defaults.set(Settings.cheatCount + 1, forKey: "cheatCount")
+                    Settings.cheatCount += 1
+                    cheatCountLabel.text = "\(Settings.cheatCount)"
+                    defaults.set(Settings.cheatCount, forKey: "cheatCount")
 
-                    showGameOverView()
-
+                    animateGameOver()
+                    
                     return
                 } else {
                     // If the user isn't right, don't finish game
                     // Show them view displaying how many they got incorrect
                     if !wrongViewShown {
+                        if Settings.soundEffects {
+                            MusicPlayer.start(musicTitle: "errors", ext: "mp3")
+                        }
                         showGameOverView()
                         wrongViewShown = true
                     }
@@ -1083,6 +1107,9 @@ class GameViewController: UIViewController {
             return
         } else if allSquaresFilled() {
             if !wrongViewShown {
+                if Settings.soundEffects {
+                    MusicPlayer.start(musicTitle: "errors", ext: "mp3")
+                }
                 showGameOverView()
                 wrongViewShown = true
             }
@@ -1099,7 +1126,7 @@ class GameViewController: UIViewController {
             
             // See if that direction is correct and highlight if it is
             if correctAnswerEntered() {
-                highlightCorrectAnswer()
+                highlightCorrectAnswer(withDuration: 0.45)
             }
             
             // Go back to the original direction
@@ -1168,6 +1195,10 @@ class GameViewController: UIViewController {
         for space in selectedBoardSpaces {
             buttonLockedForCorrect[space] = true
             defaults.set(buttonLockedForCorrect, forKey: "lockCorrect")
+        }
+        
+        if !allSquaresFilled() && Settings.soundEffects {
+            MusicPlayer.start(musicTitle: "correct", ext: "mp3")
         }
         return true
     }
@@ -1448,7 +1479,7 @@ class GameViewController: UIViewController {
         }
     }
     
-    func highlightCorrectAnswer() {
+    func highlightCorrectAnswer(withDuration amount: Double) {
         // Sets the border for the spaces
         for i in selectedBoardSpaces {
             // CAShapeLayer allows us to put the border outside of the button, giving the button more space
@@ -1478,7 +1509,7 @@ class GameViewController: UIViewController {
             
             // Animation to be played on the border. Grows quickly then shrinks.
             let animation = CABasicAnimation(keyPath: "lineWidth")
-            animation.duration = 0.45
+            animation.duration = amount
             animation.fromValue = 0
             animation.toValue = 4
             animation.autoreverses = true
@@ -1729,6 +1760,54 @@ class GameViewController: UIViewController {
         }
     }
     
+    func animateGameOver() {
+        if Settings.soundEffects {
+            MusicPlayer.start(musicTitle: "gameOver", ext: "mp3")
+        }
+        
+        selectedBoardSpaces.removeAll()
+        for i in 0...168 {
+            if boardSpaces[i].isEnabled {
+                selectedBoardSpaces.append(i)
+            }
+        }
+        highlightCorrectAnswer(withDuration: 1.5)
+        UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveLinear, animations: {
+            () -> Void in
+            for i in 0...168 {
+                if self.boardSpaces[i].isEnabled {
+                    self.boardSpaces[i].layer.zPosition = 1000
+                    self.boardSpaces[i].transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+                }
+            }})
+        
+        UIView.animate(withDuration: 1.0, delay: 0.95, options: .curveLinear,animations: {
+            () -> Void in
+            for i in 0...168 {
+                if self.boardSpaces[i].isEnabled {
+                    self.boardSpaces[i].layer.zPosition = 1000
+                    self.boardSpaces[i].transform = CGAffineTransform(rotationAngle: CGFloat.pi * 2)
+                }
+            }
+        }, completion: { (Void) in
+            for i in 0...168 {
+                if self.boardSpaces[i].isEnabled {
+                    self.boardSpaces[i].layer.zPosition = -1
+                    let push = UIPushBehavior(items: [self.boardSpaces[i]], mode: .continuous)
+                    push.setAngle(.pi/2.0, magnitude: CGFloat(Double(arc4random_uniform(11)) + 20) / 100)
+                    
+                    // Begin animation
+                    self.animator?.addBehavior(push)
+                } else {
+                    self.boardSpaces[i].layer.zPosition = -2
+                }
+            }
+            
+            // Show the game over view
+            self.showGameOverView()
+        })
+    }
+    
     
      /*****************************************
      *                                        *
@@ -1754,9 +1833,9 @@ class GameViewController: UIViewController {
     
     func fillAcrossDownArrays() {
         // Grab across and down numbers from the plist and append them to the array
-        for i in 1..<getInfoFromPlist(level: userLevel).count {
-            let ac = getInfoFromPlist(level: userLevel)[i]["Across"]!
-            let down = getInfoFromPlist(level: userLevel)[i]["Down"]!
+        for i in 1..<getInfoFromPlist(level: Settings.userLevel).count {
+            let ac = getInfoFromPlist(level: Settings.userLevel)[i]["Across"]!
+            let down = getInfoFromPlist(level: Settings.userLevel)[i]["Down"]!
             if ac != "" {
                 acrossNumbers.append(Int(ac)!)
             }
@@ -1787,7 +1866,7 @@ class GameViewController: UIViewController {
         }
         
         // Construct the level arrays
-        let levelArray = getInfoFromPlist(level: userLevel)
+        let levelArray = getInfoFromPlist(level: Settings.userLevel)
         for i in 1..<levelArray.count{
             // Find the phrase in the master plist and grab the clue,
             // hint, and number of words related to it
@@ -1937,15 +2016,6 @@ class GameViewController: UIViewController {
             buttonRevealedByHelper = Array(repeating: false, count: 169)
         }
         
-        // Get the user level
-        userLevel = defaults.integer(forKey: "userLevel")
-        if userLevel == 0 {
-            // Defaults returns 0 if there is no corresponding key.
-            // In this case, it is the user's first time and we start
-            // them at level 1
-            userLevel = 1
-        }
-        
         // Set the timing counters, they are 0 if there is no corresponding key
         secondsCounter = defaults.integer(forKey: "seconds")
         minutesCounter = defaults.integer(forKey: "minutes")
@@ -2065,9 +2135,9 @@ class GameViewController: UIViewController {
         // board[1] contains the letters in their locations
         // board[2] contains numbers superscripts for across/down
         // board[3] contains across/down information for each individual square
-        let board = [getInfoFromPlist(level: userLevel)[1]["Board"]!,
-                     getInfoFromPlist(level: userLevel)[2]["Board"]!,
-                     getInfoFromPlist(level: userLevel)[3]["Board"]!]
+        let board = [getInfoFromPlist(level: Settings.userLevel)[1]["Board"]!,
+                     getInfoFromPlist(level: Settings.userLevel)[2]["Board"]!,
+                     getInfoFromPlist(level: Settings.userLevel)[3]["Board"]!]
         
         
         // Set everything up
@@ -2083,6 +2153,8 @@ class GameViewController: UIViewController {
         if !Settings.musicEnabled {
             MusicPlayer.gameMusicPlayer.volume = 0
         }
+        
+        animator = UIDynamicAnimator(referenceView: self.view)
     }
     
     override func viewWillAppear(_ animated: Bool) {
