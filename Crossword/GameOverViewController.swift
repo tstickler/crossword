@@ -109,8 +109,9 @@ class GameOverViewController: UIViewController {
                 
                 if Settings.userLevel == Settings.maxNumOfLevels {
                     topButton.isHidden = true
-                    titleLabel.text = "Thats all for now!"
+                    titleLabel.text = "That's all for now!"
                     messageLabel.text = "Stay tuned for more levels coming soon!"
+                    Settings.userLevel = 1
                 } else {
                     topButton.setTitle("Next Level", for: .normal)
                     topButton.layer.backgroundColor = UIColor.green.cgColor

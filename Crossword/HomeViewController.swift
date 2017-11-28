@@ -54,9 +54,7 @@ class HomeViewController: UIViewController {
         // Load the user selected settings
         // If its the first time, loads default settings
         loadSettings()
-        
-        Settings.cheatCount = 10000
-                
+                        
         animator = UIDynamicAnimator(referenceView: self.view)
         
         // Possible emojis that will randomly fall from the top (160 to choose from)

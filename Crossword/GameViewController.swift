@@ -900,13 +900,14 @@ class GameViewController: UIViewController {
             // See if the user has entered all the right answers
             if gameOver() {
                 fillSquareButton.isEnabled = false
+                hintButton.isEnabled = false
                 for key in keys {
                     key.isEnabled = false
                 }
                 
                 // If they do, perform game over actions
                 if Settings.userLevel < Settings.maxNumOfLevels {
-                    defaults.set(Settings.userLevel, forKey: "userLevel")
+                    defaults.set(Settings.userLevel + 1, forKey: "userLevel")
                 } else {
                     defaults.set(1, forKey: "userLevel")
                 }
@@ -1062,13 +1063,14 @@ class GameViewController: UIViewController {
                     // If the user is right, perform game over actions
                     gameTimer.invalidate()
                     
+                    hintButton.isEnabled = false
                     fillSquareButton.isEnabled = false
                     for key in keys {
                         key.isEnabled = false
                     }
                     
                     if Settings.userLevel < Settings.maxNumOfLevels {
-                        defaults.set(Settings.userLevel, forKey: "userLevel")
+                        defaults.set(Settings.userLevel + 1, forKey: "userLevel")
                     } else {
                         defaults.set(1, forKey: "userLevel")
                     }
@@ -2094,7 +2096,7 @@ class GameViewController: UIViewController {
         transition.type = kCATransitionFade
         self.navigationController?.view.layer.add(transition, forKey: nil)
         
-        self.navigationController?.pushViewController(vc, animated: false)        
+        self.navigationController?.pushViewController(vc, animated: false)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {

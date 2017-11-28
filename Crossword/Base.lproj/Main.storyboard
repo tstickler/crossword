@@ -2817,7 +2817,7 @@
                                         </subviews>
                                     </stackView>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="aFH-pT-3J6">
-                                        <rect key="frame" x="8" y="264" width="254" height="35"/>
+                                        <rect key="frame" x="8" y="307" width="254" height="35"/>
                                         <subviews>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BOZ-8o-3mr">
                                                 <rect key="frame" x="0.0" y="0.0" width="122" height="35"/>
@@ -2846,10 +2846,11 @@
                                         </constraints>
                                     </stackView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oTH-NM-ojx">
-                                        <rect key="frame" x="74" y="307" width="122" height="35"/>
+                                        <rect key="frame" x="74" y="264" width="122" height="35"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="35" id="Xmh-Xa-JXR"/>
                                         </constraints>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="15"/>
                                         <state key="normal" title="Buy Hints">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
@@ -2864,21 +2865,21 @@
                                     <constraint firstItem="oTH-NM-ojx" firstAttribute="centerX" secondItem="k5z-WE-cLh" secondAttribute="centerX" id="3qS-vm-11q"/>
                                     <constraint firstAttribute="trailing" secondItem="aFH-pT-3J6" secondAttribute="trailing" constant="8" id="BrN-6R-SBg"/>
                                     <constraint firstItem="vFx-nw-FBG" firstAttribute="centerY" secondItem="2AJ-Ra-50n" secondAttribute="centerY" id="EcC-nJ-PnL"/>
+                                    <constraint firstAttribute="bottom" secondItem="aFH-pT-3J6" secondAttribute="bottom" constant="8" id="GV0-dg-pUH"/>
                                     <constraint firstAttribute="trailing" secondItem="tT4-xb-IXj" secondAttribute="trailing" constant="15" id="Jwl-s0-4zi"/>
                                     <constraint firstItem="oTH-NM-ojx" firstAttribute="width" secondItem="4Jp-n0-bO7" secondAttribute="width" id="Kbl-rR-oeu"/>
-                                    <constraint firstItem="oTH-NM-ojx" firstAttribute="top" secondItem="aFH-pT-3J6" secondAttribute="bottom" constant="8" id="MB2-FV-aHu"/>
                                     <constraint firstItem="C2d-ff-GK3" firstAttribute="leading" secondItem="k5z-WE-cLh" secondAttribute="leading" constant="15" id="NjX-Yl-ZQq"/>
+                                    <constraint firstItem="oTH-NM-ojx" firstAttribute="top" secondItem="C2d-ff-GK3" secondAttribute="bottom" constant="8" id="Rdq-W6-0A6"/>
                                     <constraint firstAttribute="trailing" secondItem="xVN-9E-NrB" secondAttribute="trailing" constant="15" id="Ubh-tO-Cpi"/>
                                     <constraint firstItem="PGb-eY-8cZ" firstAttribute="centerY" secondItem="DVk-kM-fzF" secondAttribute="centerY" id="VZU-H6-SzV"/>
                                     <constraint firstAttribute="trailing" secondItem="dcL-fn-8MQ" secondAttribute="trailing" constant="15" id="X2r-Ug-7Xu"/>
                                     <constraint firstAttribute="height" constant="350" id="Y09-6L-qpk"/>
                                     <constraint firstItem="C2d-ff-GK3" firstAttribute="top" secondItem="k5z-WE-cLh" secondAttribute="top" constant="10" id="arr-LP-Hha"/>
                                     <constraint firstAttribute="trailing" secondItem="0Xp-21-HT5" secondAttribute="trailing" constant="15" id="bIb-7m-ebn"/>
-                                    <constraint firstAttribute="bottom" secondItem="oTH-NM-ojx" secondAttribute="bottom" constant="8" id="dpd-k2-lSV"/>
                                     <constraint firstItem="aFH-pT-3J6" firstAttribute="leading" secondItem="k5z-WE-cLh" secondAttribute="leading" constant="8" id="i2R-Q1-3H4"/>
+                                    <constraint firstItem="aFH-pT-3J6" firstAttribute="top" secondItem="oTH-NM-ojx" secondAttribute="bottom" constant="8" id="mKp-xD-mJ0"/>
                                     <constraint firstAttribute="trailing" secondItem="PGb-eY-8cZ" secondAttribute="trailing" constant="15" id="mUC-e6-dKg"/>
                                     <constraint firstItem="xVN-9E-NrB" firstAttribute="centerY" secondItem="nVy-48-1ia" secondAttribute="centerY" id="vH3-JP-WcK"/>
-                                    <constraint firstItem="aFH-pT-3J6" firstAttribute="top" secondItem="C2d-ff-GK3" secondAttribute="bottom" constant="8" id="wJu-14-2Gu"/>
                                     <constraint firstAttribute="trailing" secondItem="vFx-nw-FBG" secondAttribute="trailing" constant="15" id="wZy-D9-6Xk"/>
                                     <constraint firstItem="dcL-fn-8MQ" firstAttribute="centerY" secondItem="Z98-Pe-rFy" secondAttribute="centerY" id="waS-N1-lDL"/>
                                     <constraint firstItem="tT4-xb-IXj" firstAttribute="centerY" secondItem="vfn-Cr-iI3" secondAttribute="centerY" id="zDG-Ht-sl9"/>
