@@ -411,6 +411,7 @@ class GameViewController: UIViewController {
 
     var erasing = false
     @IBAction func eraseButtonTapped(_ sender: Any) {
+        // Play an erasing sound
         if Settings.soundEffects {
             MusicPlayer.playSoundEffect(of: "erase", ext: "wav")
         }
@@ -838,6 +839,7 @@ class GameViewController: UIViewController {
             return
         }
         
+        // Play a keyboard click sound
         if Settings.soundEffects {
             MusicPlayer.playSoundEffect(of: "click", ext: "wav")
         }
@@ -899,6 +901,9 @@ class GameViewController: UIViewController {
         if allSquaresFilled() {
             // See if the user has entered all the right answers
             if gameOver() {
+                
+                // Disable buttons to prevent messing up animation
+                // or the next view being presented
                 fillSquareButton.isEnabled = false
                 hintButton.isEnabled = false
                 for key in keys {
@@ -912,8 +917,13 @@ class GameViewController: UIViewController {
                     defaults.set(1, forKey: "userLevel")
                 }
                 
+                // Fade out the game music
                 MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 2.0)
+                
+                // Stop the timer
                 gameTimer.invalidate()
+                
+                // Prepare for the next game
                 resetDefaults()
                 
                 // User gets another cheat for completing a level
@@ -921,6 +931,7 @@ class GameViewController: UIViewController {
                 cheatCountLabel.text = "\(Settings.cheatCount)"
                 defaults.set(Settings.cheatCount, forKey: "cheatCount")
                 
+                // Perform game over animation
                 animateGameOver()
             
                 return
@@ -928,6 +939,7 @@ class GameViewController: UIViewController {
                 // If the user isn't right, don't finish game
                 // Show them view displaying how many they got incorrect
                 if !wrongViewShown {
+                    // Play error sound
                     if Settings.soundEffects {
                         MusicPlayer.start(musicTitle: "errors", ext: "mp3")
                     }
@@ -946,9 +958,11 @@ class GameViewController: UIViewController {
     }
     
     @IBAction func keyboardButtonPressed(_ sender: UIButton) {
+        // Play a click sound when the keys are tapped
         if Settings.soundEffects {
             MusicPlayer.playSoundEffect(of: "click", ext: "wav")
         }
+        
         // Each key of the keyboard has a tag from 1-26. The tag tells which key was pressed.
         // Keyboard is standard qwerty and tags start at Q(1) and end at M(26)
         var letter: Character!
@@ -1060,22 +1074,29 @@ class GameViewController: UIViewController {
             if allSquaresFilled() {
                 // If all squares are filled, see if the user is right
                 if gameOver(){
-                    // If the user is right, perform game over actions
+                    
+                    // Stop the timer
                     gameTimer.invalidate()
                     
+                    // Disable buttons to prevent messing up animation
+                    // or game over view presentation
                     hintButton.isEnabled = false
                     fillSquareButton.isEnabled = false
                     for key in keys {
                         key.isEnabled = false
                     }
                     
+                    // Increase the user level
                     if Settings.userLevel < Settings.maxNumOfLevels {
                         defaults.set(Settings.userLevel + 1, forKey: "userLevel")
                     } else {
                         defaults.set(1, forKey: "userLevel")
                     }
 
+                    // Turn off game music
                     MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 2.0)
+                    
+                    // Prepare for next level
                     resetDefaults()
                     
                     // User gets another cheat for completing the level
@@ -1083,6 +1104,7 @@ class GameViewController: UIViewController {
                     cheatCountLabel.text = "\(Settings.cheatCount)"
                     defaults.set(Settings.cheatCount, forKey: "cheatCount")
 
+                    // Perform the game over animation
                     animateGameOver()
                     
                     return
@@ -1090,6 +1112,7 @@ class GameViewController: UIViewController {
                     // If the user isn't right, don't finish game
                     // Show them view displaying how many they got incorrect
                     if !wrongViewShown {
+                        // Play a error sound
                         if Settings.soundEffects {
                             MusicPlayer.start(musicTitle: "errors", ext: "mp3")
                         }
@@ -1109,6 +1132,7 @@ class GameViewController: UIViewController {
             return
         } else if allSquaresFilled() {
             if !wrongViewShown {
+                // Play an error sound
                 if Settings.soundEffects {
                     MusicPlayer.start(musicTitle: "errors", ext: "mp3")
                 }
@@ -1763,26 +1787,37 @@ class GameViewController: UIViewController {
     }
     
     func animateGameOver() {
+        // Play the game over music
         if Settings.soundEffects {
             MusicPlayer.start(musicTitle: "gameOver", ext: "mp3")
         }
         
+        // Set all active buttons as our selected spaces so we can highlight them
         selectedBoardSpaces.removeAll()
         for i in 0...168 {
             if boardSpaces[i].isEnabled {
                 selectedBoardSpaces.append(i)
             }
         }
+        
+        // Highlight all active buttons
         highlightCorrectAnswer(withDuration: 1.5)
+        
+        // Perform the spin animation
         UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveLinear, animations: {
             () -> Void in
             for i in 0...168 {
+                // For every enabled button, if its enabled, make it spin
                 if self.boardSpaces[i].isEnabled {
+                    // Put z postion high to spin over the black squares
                     self.boardSpaces[i].layer.zPosition = 1000
+                    
+                    // Go 180 degrees
                     self.boardSpaces[i].transform = CGAffineTransform(rotationAngle: CGFloat.pi)
                 }
             }})
         
+        // Perform second spin to get from 180 degrees back to original position
         UIView.animate(withDuration: 1.0, delay: 0.95, options: .curveLinear,animations: {
             () -> Void in
             for i in 0...168 {
@@ -1791,9 +1826,13 @@ class GameViewController: UIViewController {
                     self.boardSpaces[i].transform = CGAffineTransform(rotationAngle: CGFloat.pi * 2)
                 }
             }
-        }, completion: { (Void) in
+        }, completion: {
+            Void in
+            
+            // After completion of spin, let the board spaces fall off screen
             for i in 0...168 {
                 if self.boardSpaces[i].isEnabled {
+                    // z position at -1 lets spaces go behind the keyboard
                     self.boardSpaces[i].layer.zPosition = -1
                     let push = UIPushBehavior(items: [self.boardSpaces[i]], mode: .continuous)
                     push.setAngle(.pi/2.0, magnitude: CGFloat(Double(arc4random_uniform(11)) + 20) / 100)
@@ -1801,6 +1840,7 @@ class GameViewController: UIViewController {
                     // Begin animation
                     self.animator?.addBehavior(push)
                 } else {
+                    // z position lower than enabled buttons to be behind the falling pieces
                     self.boardSpaces[i].layer.zPosition = -2
                 }
             }

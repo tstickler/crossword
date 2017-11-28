@@ -42,6 +42,7 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
             } else if musicTitle == "game" {
                 gameMusicPlayer = musicPlayer
             } else if musicTitle == "gameOver" || musicTitle == "errors" || musicTitle == "correct" {
+                // These sound effects don't repeat
                 musicPlayer.numberOfLoops = 0
                 musicPlayer.volume = 0.3
                 endOfGameMusicPlayer = musicPlayer
