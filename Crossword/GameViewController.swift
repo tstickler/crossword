@@ -12,6 +12,7 @@ import AudioToolbox
 import Firebase
 
 class GameViewController: UIViewController {
+    // Allows us to animate fall of boardspaces at the end of the level
     var animator: UIDynamicAnimator!
 
     // Containers for button properties
@@ -1223,7 +1224,12 @@ class GameViewController: UIViewController {
             defaults.set(buttonLockedForCorrect, forKey: "lockCorrect")
         }
         
-        if !allSquaresFilled() && Settings.soundEffects {
+        // Should only play correct sound effect if 3 conditions are met
+        // 1. All squares are not filled
+        // 2. Sound effects are enabled
+        // 3. Correct animations are enabled (If user has turned off the animation,
+        //    they most likely don't want confirmation at all of any right answers)
+        if !allSquaresFilled() && Settings.soundEffects && Settings.correctAnim {
             MusicPlayer.start(musicTitle: "correct", ext: "mp3")
         }
         return true
@@ -1752,7 +1758,9 @@ class GameViewController: UIViewController {
         }
         
         // Highlight the row or column selected
-        if indexOfButton != previousButton {
+        // previousButton is only < 0 during initial highlighting. This prevents
+        // animation from being removed when we actually want it.
+        if indexOfButton != previousButton && previousButton >= 0 {
             boardSpaces[previousButton].layer.removeAllAnimations()
         }
         
@@ -1765,11 +1773,14 @@ class GameViewController: UIViewController {
     
     func initialHighlight() {
         // Ensures that animation will always be active when coming back from background
-        for i in 0...168 {
-            if !boardSpaces[i].isEnabled {
-                previousButton = i
-                break
-            }
+        previousButton = -1
+        
+        if inGame {
+            // inGame is set at the initial viewWillAppear, this allows us to jump
+            // to the right spot and animate it after coming from background or
+            // coming from an ad.
+            boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
+            return
         }
         
         // Start the user on whatever 1 is available (prefers 1 across)
@@ -2202,33 +2213,12 @@ class GameViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if !inGame {
-            inGame = true
             // Begins animation when coming from background
             let appDelegate = UIApplication.shared.delegate as! AppDelegate
             appDelegate.gameViewController = self
             
             // Our initial tap
             initialHighlight()
-        } else {
-            // Fixes animation when coming back from an ad
-            if across {
-                if indexOfButton != 168 {
-                    boardButtonTapped(boardSpaces[indexOfButton + 1])
-                    boardButtonTapped(boardSpaces[indexOfButton - 1])
-                } else {
-                    boardButtonTapped(boardSpaces[indexOfButton - 1])
-                    boardButtonTapped(boardSpaces[indexOfButton + 1])
-                }
-            } else {
-                if indexOfButton < 156 {
-                    boardButtonTapped(boardSpaces[indexOfButton + 13])
-                    boardButtonTapped(boardSpaces[indexOfButton - 13])
-                } else {
-                    boardButtonTapped(boardSpaces[indexOfButton - 13])
-                    boardButtonTapped(boardSpaces[indexOfButton + 13])
-                }
-            }
-        }
+            inGame = true
     }
 }

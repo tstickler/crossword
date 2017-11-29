@@ -18,10 +18,14 @@ class InfoViewController: UIViewController, UIGestureRecognizerDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        // Hidden for now, used for support later
         twitterButton.isHidden = true
         mailButton.isHidden = true
         
+        // The version of the app
         versionLabel.text = "Version \(version)"
+        
         // Gives the background border a nice color/shape
         infoBackground.layer.cornerRadius = 15
         infoBackground.layer.borderWidth = 3

@@ -109,6 +109,8 @@ class HomeViewController: UIViewController {
             bannerAd.load(request)
         } else {
             // If the user has turned off ads through IAP, hide the banner
+            // The banner height at 0 allows for the information button
+            // to be in its proper location
             bannerAd.isHidden = true
             bannerHeightConstraint.constant = 0
         }
@@ -244,6 +246,9 @@ class HomeViewController: UIViewController {
             Settings.cheatCount = 10
             defaults.set(Settings.cheatCount, forKey: "cheatCount")
             
+            Settings.userLevel = 1
+            defaults.set(Settings.userLevel, forKey: "userLevel")
+            
             Settings.musicEnabled = true
             Settings.soundEffects = true
             Settings.showTimer   = true
@@ -251,9 +256,6 @@ class HomeViewController: UIViewController {
             Settings.lockCorrect = true
             Settings.correctAnim = true
             Settings.adsDisabled = false
-            
-            Settings.userLevel = 1
-            defaults.set(Settings.userLevel, forKey: "userLevel")
         }
     }
 }

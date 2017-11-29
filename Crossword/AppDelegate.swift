@@ -22,6 +22,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         FirebaseApp.configure()
         GADMobileAds.configure(withApplicationID: "ca-app-pub-1164601417724423~7678881026")
         
+        // IAP observer is set here
         InAppPurchase.shared.getProducts()
         return true
     }
@@ -38,13 +39,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the active state; here you can undo many of the changes made on entering the background.
+        
+        // Performs highlight when coming back from background if we're in a game
+        // Otherwise, nothing needs to happen.
         if let wd = UIApplication.shared.delegate?.window {
             var vc = wd!.rootViewController
             if(vc is UINavigationController){
                 vc = (vc as! UINavigationController).visibleViewController
             }
             
-            if(vc is GameViewController){
+            if(vc is GameViewController || vc is HintViewController || vc is MenuViewController || vc is PurchasesViewController){
                 gameViewController.initialHighlight()
             }
         }
