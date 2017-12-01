@@ -87,9 +87,9 @@ class HomeViewController: UIViewController {
         if !Settings.musicEnabled {
             // Music is always playing but only if it's enabled should the volume be > 0
             MusicPlayer.homeMusicPlayer.volume = 0
-            muteButton.setBackgroundImage(UIImage(named: "no_music-1.png"), for: .normal)
+            muteButton.setBackgroundImage(UIImage(named: "no_music.png"), for: .normal)
         } else {
-            muteButton.setBackgroundImage(UIImage(named: "music-1.png"), for: .normal)
+            muteButton.setBackgroundImage(UIImage(named: "music.png"), for: .normal)
         }
         
         // Don't need the navigation bar
@@ -172,9 +172,10 @@ class HomeViewController: UIViewController {
         if xLocation + 50 > UIScreen.main.bounds.width {
             xLocation -= 30
         }
-        label.frame = CGRect(x: xLocation, y: -50, width: 40, height: 40)
+        label.frame = CGRect(x: xLocation, y: -50, width: 40, height: 50)
         label.text = emoji
-        label.font = UIFont(name: "Arial", size: 35)
+        label.font = UIFont(name: "EmojiOne", size: 40)
+
         
         // Give labels a random rotation between -pi/4 and pi/4
         var rotation = Double(arc4random_uniform(77)) / 100

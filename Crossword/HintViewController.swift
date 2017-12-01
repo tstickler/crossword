@@ -51,11 +51,11 @@ class HintViewController: UIViewController, UIGestureRecognizerDelegate {
         // Size of the emoji label should depend on screen size
         switch screenSize.height {
         case 568:
-            emojiLabel.font = emojiLabel.font.withSize(40)
+            emojiLabel.font = UIFont(name: "EmojiOne", size: 42)
         case 667, 812:
-            emojiLabel.font = emojiLabel.font.withSize(50)
+            emojiLabel.font = UIFont(name: "EmojiOne", size: 50)
         case 736:
-            emojiLabel.font = emojiLabel.font.withSize(55)
+            emojiLabel.font = UIFont(name: "EmojiOne", size: 55)
         default:
             emojiLabel.font = emojiLabel.font.withSize(50)
         }

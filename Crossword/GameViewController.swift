@@ -74,10 +74,12 @@ class GameViewController: UIViewController {
     
     // Clue area labels and buttons
     @IBOutlet var clueLabel: UILabel!
+    @IBOutlet weak var emojiClue: UILabel!
     @IBOutlet var directionLabel: UILabel!
     @IBOutlet var backPhraseButton: UIButton!
     @IBOutlet var nextPhraseButton: UIButton!
     @IBOutlet weak var levelLabel: UILabel!
+    @IBOutlet weak var emojiClueConstraint: NSLayoutConstraint!
     @IBOutlet var clueHeightConstraint: NSLayoutConstraint!
     
     // To know where the user last was
@@ -131,6 +133,9 @@ class GameViewController: UIViewController {
             bottomRowLeading.constant = 45
             bottomRowTrailing.constant = 45
             
+            emojiClue.font = clueLabel.font.withSize(32)
+            emojiClueConstraint.constant = 9
+            
         // Sets constraints for iPhone
         case 667:
             topKeysHeight.constant = iphoneKeysHeight
@@ -140,8 +145,9 @@ class GameViewController: UIViewController {
             bottomRowLeading.constant = 52.5
             bottomRowTrailing.constant = 52.5
             
-            clueLabel.font = clueLabel.font.withSize(40)
+            emojiClue.font = clueLabel.font.withSize(37)
             clueHeightConstraint.constant = 55
+            emojiClueConstraint.constant = 9
             keyboardBackHeight.constant = 175
             
         // Sets constraints for iPhone Plus
@@ -155,7 +161,9 @@ class GameViewController: UIViewController {
             
             keyboardBackHeight.constant = 185
             clueHeightConstraint.constant = 70
-            clueLabel.font = clueLabel.font.withSize(45)
+            emojiClueConstraint.constant = 11
+
+            emojiClue.font = clueLabel.font.withSize(45)
             
         // Sets constraints for iPhone X
         case 812:
@@ -169,7 +177,8 @@ class GameViewController: UIViewController {
             keyboardBackHeight.constant = 190
             
             clueHeightConstraint.constant = 75
-            clueLabel.font = clueLabel.font.withSize(40)
+            emojiClueConstraint.constant = 16
+            emojiClue.font = clueLabel.font.withSize(43)
             
         default:
             break
@@ -377,7 +386,7 @@ class GameViewController: UIViewController {
         rowAndColumnDetermination(indexOfButton: indexOfButton)
         
         // Set the label for the clueLabel
-        clueLabel.text = getSpotInfo(indexOfButton: indexOfButton, info: "Clue")
+        emojiClue.text = getSpotInfo(indexOfButton: indexOfButton, info: "Clue")
         
         // Set the label for the direction
         determineDirectionText(indexOfButton: indexOfButton)

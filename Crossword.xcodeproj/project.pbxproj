@@ -13,6 +13,7 @@
 		2F07758D1FBA391C001C9ABD /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F07758C1FBA391C001C9ABD /* MusicPlayer.swift */; };
 		2F07758F1FBA4404001C9ABD /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F07758E1FBA4404001C9ABD /* Settings.swift */; };
 		2F0929E01FC0A6EF00EA18B2 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0929DF1FC0A6EF00EA18B2 /* InfoViewController.swift */; };
+		2F0E24D61FD10BC50030E0C2 /* emojione.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F0E24D51FD10BC50030E0C2 /* emojione.ttf */; };
 		2F1029981FC2436D0053096D /* erase.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F1029961FC2436D0053096D /* erase.wav */; };
 		2F1029991FC2436D0053096D /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F1029971FC2436D0053096D /* click.wav */; };
 		2F1B2F811FC633AB00C6991A /* level_7.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F1B2F801FC633AB00C6991A /* level_7.plist */; };
@@ -76,6 +77,7 @@
 		2F07758C1FBA391C001C9ABD /* MusicPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
 		2F07758E1FBA4404001C9ABD /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		2F0929DF1FC0A6EF00EA18B2 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
+		2F0E24D51FD10BC50030E0C2 /* emojione.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = emojione.ttf; sourceTree = "<group>"; };
 		2F1029961FC2436D0053096D /* erase.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = erase.wav; sourceTree = "<group>"; };
 		2F1029971FC2436D0053096D /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
 		2F1B2F801FC633AB00C6991A /* level_7.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_7.plist; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				2F35EC6B1F9B1C06000014E5 /* Info.plist */,
 				2F789C971FCE0F17000139A3 /* GoogleService-Info.plist */,
 				2F2EA6921FC698DB006670A8 /* master.plist */,
+				2F0E24D51FD10BC50030E0C2 /* emojione.ttf */,
 				2F39E1311FBE714400FC123C /* Levels */,
 				2F111B121FB964E200DBA3EE /* Music */,
 			);
@@ -414,6 +417,7 @@
 				2F1D354B1FCB500D00D1172F /* errors.mp3 in Resources */,
 				2F789C981FCE0F17000139A3 /* GoogleService-Info.plist in Resources */,
 				2F07758A1FBA3713001C9ABD /* home.mp3 in Resources */,
+				2F0E24D61FD10BC50030E0C2 /* emojione.ttf in Resources */,
 				2FDD0A571FC622A8001D64F2 /* level_10.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

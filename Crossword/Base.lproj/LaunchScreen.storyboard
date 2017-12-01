@@ -19,7 +19,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="title_smaller" translatesAutoresizingMaskIntoConstraints="NO" id="zN9-2a-kOl" userLabel="Title Image">
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="title" translatesAutoresizingMaskIntoConstraints="NO" id="zN9-2a-kOl" userLabel="Title Image">
                                 <rect key="frame" x="8" y="-20" width="359" height="255.5"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="zN9-2a-kOl" secondAttribute="height" multiplier="359:255" id="UFL-R7-q7M"/>
@@ -41,6 +41,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="title_smaller" width="4859" height="1922"/>
+        <image name="title" width="1621" height="642"/>
     </resources>
 </document>
