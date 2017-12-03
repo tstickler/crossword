@@ -52,8 +52,27 @@ class InAppPurchase: NSObject {
         // Saves the view sent the request
         presentingController = view
         
+        if products.count <= 0 {
+            // Gives a dialog if there are no available products
+            let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            alert.title = "Product retrieval failed"
+            alert.message = "There product is not available at this time."
+            
+            presentingController.present(alert, animated: true, completion: nil)
+            return
+        }
+        
         // If the product is the one we're looking for, set it for purchase
         guard let productToPurchase = products.filter({$0.productIdentifier == product.rawValue}).first else {
+            // Gives a dialog if the selected product was not found
+            let alert = UIAlertController(title: "", message: "", preferredStyle: .alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: .default, handler: nil))
+            alert.title = "Product not found"
+            alert.message = "We could not find a product matching the one you are trying to purchase."
+            
+            presentingController.present(alert, animated: true, completion: nil)
+
             return
         }
         

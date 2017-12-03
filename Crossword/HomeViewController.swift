@@ -138,7 +138,7 @@ class HomeViewController: UIViewController {
             Settings.soundEffects = false
             
             // Set the image of the button to muted music
-            musicButtonImage = UIImage(named: "no_music-1.png")!
+            musicButtonImage = UIImage(named: "no_music.png")!
             
             // Actually mute the music
             MusicPlayer.homeMusicPlayer.setVolume(0, fadeDuration: 1.0)
@@ -148,10 +148,10 @@ class HomeViewController: UIViewController {
             Settings.soundEffects = true
             
             // Set the image of the button to unmuted music
-            musicButtonImage = UIImage(named: "music-1.png")!
+            musicButtonImage = UIImage(named: "music.png")!
             
             // Play the music
-            MusicPlayer.homeMusicPlayer.setVolume(0.15, fadeDuration: 1.0)
+            MusicPlayer.homeMusicPlayer.setVolume(0.25, fadeDuration: 1.0)
         }
         
         // Save the user settings
