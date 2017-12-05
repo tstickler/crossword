@@ -106,6 +106,30 @@ class GameViewController: UIViewController {
     var showAdAfterNumCorrect = 6
     var inGame = false
     
+    // Help labels, dimmers, and buttons
+    var helpNum: Int!
+    @IBOutlet var topBarDimmer: UIView!
+    @IBOutlet var boardDimmer: UIView!
+    @IBOutlet var clueDimmer: UIView!
+    @IBOutlet var keysDimmer: UIView!
+    @IBOutlet var bottomDimmer: UIView!
+    @IBOutlet var menuDimmer: UIView!
+    
+    @IBOutlet var hintHelpArrow: UIImageView!
+    @IBOutlet var boardHelpArrow: UIImageView!
+    @IBOutlet var clueHelpArrow: UIImageView!
+    @IBOutlet var menuHelpArrow: UIImageView!
+    
+    @IBOutlet var hintHelpLabel: UILabel!
+    @IBOutlet var boardHelpLabel: UILabel!
+    @IBOutlet var clueHelpLabel: UILabel!
+    @IBOutlet var menuHelpLabel: UILabel!
+    
+    @IBOutlet var helpFinishedButton: UIButton!
+    @IBOutlet var nextHelpButton: UIButton!
+    
+    @IBOutlet var helpNumIndicator: UIImageView!
+    
     
     /*****************************************
     *                                        *
@@ -2222,12 +2246,274 @@ class GameViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-            // Begins animation when coming from background
-            let appDelegate = UIApplication.shared.delegate as! AppDelegate
-            appDelegate.gameViewController = self
+        // Begins animation when coming from background
+        let appDelegate = UIApplication.shared.delegate as! AppDelegate
+        appDelegate.gameViewController = self
+        
+        // Our initial tap
+        initialHighlight()
+        inGame = true
+        
+        // Help screen should show first time the user plays
+        // If they want to display it again, its available in the menu
+        if !defaults.bool(forKey: "helpShownBefore") {
+            helpSetupAndDisplay()
+        }
+    }
+    
+    func helpSetupAndDisplay() {
+        // Start at the first help display
+        helpNum = 1
+        
+        // Dimmers are UIViews on top of everything. They are black with opacity at 80%.
+        // The gameboard and elements are slightly visible. These will be modified to emphasize
+        // which elements on the board have help info being displayed.
+        //
+        // zPosition ensures that the help elements show above the pulsing, selected square
+        topBarDimmer.isHidden = false
+        topBarDimmer.layer.zPosition = 1001
+        boardDimmer.isHidden = false
+        boardDimmer.layer.zPosition = 1001
+        clueDimmer.isHidden = false
+        clueDimmer.layer.zPosition = 1001
+        keysDimmer.isHidden = false
+        keysDimmer.layer.zPosition = 1001
+        bottomDimmer.isHidden = false
+        bottomDimmer.layer.zPosition = 1001
+        menuDimmer.isHidden = false
+        menuDimmer.layer.zPosition = 1001
+        
+        // Arrows that point to undimmed element. Makes things look nice.
+        hintHelpArrow.isHidden = true
+        hintHelpArrow.layer.zPosition = 1001
+        boardHelpArrow.isHidden = true
+        boardHelpArrow.layer.zPosition = 1001
+        clueHelpArrow.isHidden = true
+        clueHelpArrow.layer.zPosition = 1001
+        menuHelpArrow.isHidden = true
+        menuHelpArrow.layer.zPosition = 1001
+        
+        // These labels explain the undimmed elements purpose and actions
+        hintHelpLabel.isHidden = true
+        hintHelpLabel.layer.zPosition = 1001
+        boardHelpLabel.isHidden = true
+        boardHelpLabel.layer.zPosition = 1001
+        clueHelpLabel.isHidden = true
+        clueHelpLabel.layer.zPosition = 1001
+        menuHelpLabel.isHidden = true
+        menuHelpLabel.layer.zPosition = 1001
+        
+        // Used to close the help views at the end
+        helpFinishedButton.isHidden = true
+        helpFinishedButton.layer.zPosition = 1001
+        
+        // Used to move to next help screen
+        nextHelpButton.isHidden = false
+        nextHelpButton.layer.zPosition = 1001
+        
+        // Image to display which of the 4 help pages we're on
+        helpNumIndicator.isHidden = false
+        helpNumIndicator.layer.zPosition = 1001
+        helpNumIndicator.image = UIImage(named: "help1.png")
+        
+        // Makes the buttons look nice
+        helpFinishedButton.layer.borderColor = blueColorCG
+        helpFinishedButton.layer.borderWidth = 2
+        helpFinishedButton.layer.cornerRadius = 10
+        
+        nextHelpButton.layer.borderColor = blueColorCG
+        nextHelpButton.layer.borderWidth = 2
+        nextHelpButton.layer.cornerRadius = 10
+        
+        // Pick which help should show
+        helpScreenPicker()
+    }
+    
+    func hideAllHelp() {
+        // Hide all the elements involved in hints
+        topBarDimmer.isHidden = true
+        boardDimmer.isHidden = true
+        clueDimmer.isHidden = true
+        keysDimmer.isHidden = true
+        bottomDimmer.isHidden = true
+        menuDimmer.isHidden = true
+        
+        hintHelpArrow.isHidden = true
+        boardHelpArrow.isHidden = true
+        clueHelpArrow.isHidden = true
+        menuHelpArrow.isHidden = true
+        
+        hintHelpLabel.isHidden = true
+        boardHelpLabel.isHidden = true
+        clueHelpLabel.isHidden = true
+        menuHelpLabel.isHidden = true
+        
+        helpFinishedButton.isHidden = true
+        nextHelpButton.isHidden = true
+        helpNumIndicator.isHidden = true
+        
+        helpFinishedButton.isHidden = true
+        nextHelpButton.isHidden = true
+        helpNumIndicator.isHidden = true
+    }
+    
+    func helpScreenPicker() {
+        
+        // Handles which element to highlight
+        switch helpNum {
+        case 1:
+            topBarDimmer.isHidden = true
+            hintHelpArrow.isHidden = false
+            hintHelpArrow.alpha = 0
+            hintHelpArrow.fadeIn(withDuration: 0.5)
+            hintHelpLabel.isHidden = false
+            hintHelpLabel.alpha = 0
+            hintHelpLabel.fadeIn(withDuration: 0.5)
+
+            boardDimmer.isHidden = false
+            boardHelpArrow.isHidden = true
+            boardHelpLabel.isHidden = true
             
-            // Our initial tap
-            initialHighlight()
-            inGame = true
+            clueDimmer.isHidden = false
+            clueHelpArrow.isHidden = true
+            clueHelpLabel.isHidden = true
+            
+            menuDimmer.isHidden = false
+            menuHelpArrow.isHidden = true
+            menuHelpLabel.isHidden = true
+            
+            helpNumIndicator.image = UIImage(named: "help1.png")
+            
+            helpNum! += 1
+        case 2:
+            topBarDimmer.isHidden = false
+            hintHelpArrow.isHidden = true
+            hintHelpLabel.isHidden = true
+            
+            boardDimmer.isHidden = true
+            boardHelpArrow.isHidden = false
+            boardHelpArrow.alpha = 0
+            boardHelpArrow.fadeIn(withDuration: 0.5)
+
+            boardHelpLabel.isHidden = false
+            boardHelpLabel.alpha = 0
+            boardHelpLabel.fadeIn(withDuration: 0.5)
+
+            
+            clueDimmer.isHidden = false
+            clueHelpArrow.isHidden = true
+            clueHelpLabel.isHidden = true
+            
+            menuDimmer.isHidden = false
+            menuHelpArrow.isHidden = true
+            menuHelpLabel.isHidden = true
+
+            helpNumIndicator.image = UIImage(named: "help2.png")
+            
+            helpNum! += 1
+        case 3:
+            topBarDimmer.isHidden = false
+            hintHelpArrow.isHidden = true
+            hintHelpLabel.isHidden = true
+            
+            boardDimmer.isHidden = false
+            boardHelpArrow.isHidden = true
+            boardHelpLabel.isHidden = true
+            
+            clueDimmer.isHidden = true
+            clueHelpArrow.isHidden = false
+            clueHelpArrow.alpha = 0
+            clueHelpArrow.fadeIn(withDuration: 0.5)
+            clueHelpLabel.isHidden = false
+            clueHelpLabel.alpha = 0
+            clueHelpLabel.fadeIn(withDuration: 0.5)
+            
+            menuDimmer.isHidden = false
+            menuHelpArrow.isHidden = true
+            menuHelpLabel.isHidden = true
+            
+            helpNumIndicator.image = UIImage(named: "help3.png")
+            
+            helpNum! += 1
+        case 4:
+            topBarDimmer.isHidden = false
+            hintHelpArrow.isHidden = true
+            hintHelpLabel.isHidden = true
+            
+            boardDimmer.isHidden = false
+            boardHelpArrow.isHidden = true
+            boardHelpLabel.isHidden = true
+            
+            clueDimmer.isHidden = false
+            clueHelpArrow.isHidden = true
+            clueHelpLabel.isHidden = true
+            
+            menuDimmer.isHidden = true
+            menuHelpArrow.isHidden = false
+            menuHelpArrow.alpha = 0
+            menuHelpArrow.fadeIn(withDuration: 0.5)
+
+            menuHelpLabel.isHidden = false
+            
+            menuHelpLabel.alpha = 0
+            menuHelpLabel.fadeIn(withDuration: 0.5)
+
+            
+            helpFinishedButton.isHidden = false
+            helpFinishedButton.alpha = 0
+            helpFinishedButton.fadeIn(withDuration: 0.2)
+
+            nextHelpButton.isHidden = true
+            
+            helpNumIndicator.image = UIImage(named: "help4.png")
+            helpNum = 1
+        default:
+            topBarDimmer.isHidden = true
+            hintHelpArrow.isHidden = false
+            hintHelpLabel.isHidden = false
+            
+            boardDimmer.isHidden = false
+            boardHelpArrow.isHidden = true
+            boardHelpLabel.isHidden = true
+            
+            clueDimmer.isHidden = false
+            clueHelpArrow.isHidden = true
+            clueHelpLabel.isHidden = true
+            
+            menuDimmer.isHidden = false
+            menuHelpArrow.isHidden = true
+            menuHelpLabel.isHidden = true
+
+            helpNumIndicator.image = UIImage(named: "help1.png")
+        }
+    }
+    
+    @IBAction func helpFinishedTapped(_ sender: Any) {
+        // Set default so we know that we've seen help before
+        // Don't need to show user every time they play, just the first time
+        defaults.set(true, forKey: "helpShownBefore")
+        
+        // Dimiss all the help elements
+        hideAllHelp()
+    }
+    @IBAction func nextHelpTapped(_ sender: Any) {
+        
+        // Move to the next element in the help items
+        helpScreenPicker()
+    }
+    
+}
+
+extension UIView {
+    
+    // Used to fade in a view
+    // Used in help screens
+    func fadeIn(withDuration duration: Double) {
+        UIView.animate(withDuration: duration, animations: {
+            () -> Void in
+            
+            self.alpha = 1
+            
+            })
     }
 }

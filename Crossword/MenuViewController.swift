@@ -16,10 +16,12 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     // Frame to display the settings
     @IBOutlet var menuBackground: UIView!
     
-    // Navigation buttons. Back goes to the game, home goes to homescreen.
+    // Navigation buttons. Back goes to the game, home goes to homescreen
+    // buy hints goes to IAP view, help button shows help display
     @IBOutlet var backButton: UIButton!
     @IBOutlet var homeButton: UIButton!
     @IBOutlet var buyHintsButton: UIButton!
+    @IBOutlet var helpButton: UIButton!
     
     // Switches to adjust preferences
     @IBOutlet var musicSwitch: UISwitch!
@@ -71,6 +73,15 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     
     // Close the view and return back to the game
     @IBAction func backButtonTapped(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
+    
+    @IBAction func helpButtonTapped(_ sender: Any) {
+        // Begin showing help displays
+        if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
+            parentVC.helpSetupAndDisplay()
+        }
+        
         dismiss(animated: true, completion: nil)
     }
     
@@ -203,5 +214,9 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         buyHintsButton.layer.borderWidth = 1
         buyHintsButton.layer.cornerRadius = 3
         buyHintsButton.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
+        
+        helpButton.layer.borderWidth = 1
+        helpButton.layer.cornerRadius = 3
+        helpButton.layer.borderColor = UIColor.init(red: 96/255, green: 199/255, blue: 255/255, alpha: 1).cgColor
     }
 }
