@@ -2977,7 +2977,7 @@
                                         </connections>
                                     </switch>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xVN-9E-NrB" userLabel="Correct Animation Switch">
-                                        <rect key="frame" x="261" y="215" width="51" height="41"/>
+                                        <rect key="frame" x="261" y="220" width="51" height="31"/>
                                         <color key="onTintColor" red="0.37647058820000001" green="0.78039215689999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
@@ -3036,7 +3036,6 @@
                                                 </state>
                                                 <connections>
                                                     <action selector="homeButtonTapped:" destination="Ppb-1U-1o0" eventType="touchUpInside" id="xyL-Cw-9Co"/>
-                                                    <segue destination="wJP-nG-4rE" kind="unwind" unwindAction="unwindSegue:" id="hez-XQ-BpZ"/>
                                                 </connections>
                                             </button>
                                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4Jp-n0-bO7">
@@ -3084,8 +3083,8 @@
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstItem="0Xp-21-HT5" firstAttribute="centerY" secondItem="DxJ-Ec-ORj" secondAttribute="centerY" id="0Gi-QJ-EHL"/>
-                                    <constraint firstItem="QyF-u9-cOv" firstAttribute="top" secondItem="xVN-9E-NrB" secondAttribute="bottom" constant="8" id="93U-vJ-3is"/>
                                     <constraint firstAttribute="trailing" secondItem="aFH-pT-3J6" secondAttribute="trailing" constant="8" id="BrN-6R-SBg"/>
+                                    <constraint firstItem="QyF-u9-cOv" firstAttribute="top" secondItem="C2d-ff-GK3" secondAttribute="bottom" constant="8" id="DEq-eG-pcn"/>
                                     <constraint firstItem="QyF-u9-cOv" firstAttribute="trailing" secondItem="4Jp-n0-bO7" secondAttribute="trailing" id="EJn-76-8Ci"/>
                                     <constraint firstItem="vFx-nw-FBG" firstAttribute="centerY" secondItem="2AJ-Ra-50n" secondAttribute="centerY" id="EcC-nJ-PnL"/>
                                     <constraint firstItem="QyF-u9-cOv" firstAttribute="leading" secondItem="4Jp-n0-bO7" secondAttribute="leading" id="GEs-ll-Fkd"/>
@@ -3136,6 +3135,7 @@
                         <outlet property="skipFilledSwitch" destination="tT4-xb-IXj" id="kBZ-KE-zf4"/>
                         <outlet property="soundEffectsSwitch" destination="vFx-nw-FBG" id="KgG-Fl-Iyd"/>
                         <outlet property="timerSwitch" destination="0Xp-21-HT5" id="tzW-6M-hqc"/>
+                        <segue destination="wJP-nG-4rE" kind="unwind" identifier="unwindSegue" unwindAction="unwindSegue:" id="bqN-y0-rBu"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="JHX-9c-LU2" userLabel="First Responder" sceneMemberID="firstResponder"/>

@@ -48,9 +48,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     }
     
     @IBAction func homeButtonTapped(_ sender: Any) {
-        // Uses an unwind segue to go back to the home screen
-        
-        // Invalidate the timer
+        // Invalidate the game timer
         if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
             parentVC.gameTimer.invalidate()
         }
@@ -60,6 +58,9 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         if Settings.musicEnabled {
             MusicPlayer.homeMusicPlayer.setVolume(0.25, fadeDuration: 1.0)
         }
+        
+        // Uses an unwind segue to go back to the home screen
+        performSegue(withIdentifier: "unwindSegue", sender: self)
     }
     
     @IBAction func buyHintsTapped(_ sender: Any) {

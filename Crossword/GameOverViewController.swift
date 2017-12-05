@@ -64,6 +64,9 @@ class GameOverViewController: UIViewController {
                 MusicPlayer.homeMusicPlayer.setVolume(1.0, fadeDuration: 1.0)
             }
             
+            // Increase user level since they successfully completed it
+            Settings.userLevel! += 1
+            
             // unwind to home screen
             performSegue(withIdentifier: "unwindSegue", sender: self)
         } 
