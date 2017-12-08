@@ -99,15 +99,32 @@ class GameOverViewController: UIViewController {
                 minutes = parentVC.minutesCounter
                 seconds = parentVC.secondsCounter
                 
+                var hoursPlural = "hours"
+                var minutesPlural = "minutes"
+                var secondsPlural = "seconds"
+                
+                if hours == 1 {
+                    hoursPlural = "hour"
+                }
+                
+                if minutes == 1 {
+                    minutesPlural = "minute"
+                }
+                
+                if seconds == 1 {
+                    secondsPlural = "second"
+                }
+                
+                
                 viewBackground.layer.borderColor = UIColor.green.cgColor
                 titleLabel.text = "Nice Job!"
                 
                 if hours > 0 {
-                    messageLabel.text = "You finished in \(hours!) hours, \(minutes!) minutes, and \(seconds!) seconds!"
+                    messageLabel.text = "You finished in \(hours!) \(hoursPlural), \(minutes!) \(minutesPlural), and \(seconds!) \(secondsPlural) and unlocked a new level!"
                 } else if parentVC.minutesCounter > 0 {
-                    messageLabel.text = "You finished in \(minutes!) minutes and \(seconds!) seconds!"
+                    messageLabel.text = "You finished in \(minutes!) \(minutesPlural) and \(seconds!) \(secondsPlural) and unlocked a new level!"
                 } else {
-                    messageLabel.text = "You finished in \(seconds!) seconds!"
+                    messageLabel.text = "You finished in \(seconds!) \(secondsPlural) and unlocked a new level!"
                 }
                 
                 if Settings.userLevel == Settings.maxNumOfLevels {

@@ -54,7 +54,7 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
     
     static func playSoundEffect(of sound: String, ext: String) {
         if let soundURL = Bundle.main.url(forResource: sound, withExtension: ext) {
-            var soundID: SystemSoundID = 0
+            var soundID: SystemSoundID = 1
             
             AudioServicesCreateSystemSoundID(soundURL as CFURL, &soundID)
             

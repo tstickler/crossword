@@ -99,6 +99,10 @@ class LevelsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        for level in Settings.newLevels {
+            levelButtons[level - 1].setNewIndicator()
+        }
+        
         switch UIScreen.main.bounds.height {
         case 568:
             firstStackWidth.constant = 220
@@ -129,9 +133,6 @@ class LevelsViewController: UIViewController {
         secondStackLeading.constant = view.frame.width
         
         setUpLevelStatusArrays()
-        print(Settings.completedLevels)
-        print(Settings.uncompletedLevels)
-        print(Settings.lockedLevels)
         
         for i in 1...Settings.maxNumOfLevels {
             levelButtons[i - 1].setBackgroundImage(UIImage(named: "num_\(i)"), for: .normal)
@@ -266,7 +267,7 @@ class LevelsViewController: UIViewController {
                                      13,14,15,16,17,18,19,20,21,22,23,24]
         }
         
-        while Settings.uncompletedLevels.count < 24 && !Settings.lockedLevels.isEmpty {
+        while Settings.uncompletedLevels.count < 10 && !Settings.lockedLevels.isEmpty {
             let num = Settings.lockedLevels[0]
             Settings.uncompletedLevels.append(num)
             Settings.lockedLevels.remove(at: 0)

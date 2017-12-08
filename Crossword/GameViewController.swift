@@ -462,7 +462,7 @@ class GameViewController: UIViewController {
             // Erasing a correct answer should make it uncorrect again
             if buttonLockedForCorrect[indexOfButton] {
                 buttonLockedForCorrect[indexOfButton] = false
-                defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockCorrect")
+                defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockedCorrect")
             }
         } else {
             // Otherwise, if the square is empty see if we're at the beginning of
@@ -501,7 +501,7 @@ class GameViewController: UIViewController {
                 // If it was locked, we need to unlock it since it is being erased
                 if buttonLockedForCorrect[indexOfButton] == true {
                     buttonLockedForCorrect[indexOfButton] = false
-                    defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockCorrect")
+                    defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockedCorrect")
                 }
             }
         }
@@ -882,7 +882,7 @@ class GameViewController: UIViewController {
         buttonRevealedByHelper[indexOfButton] = true
         buttonLockedForCorrect[indexOfButton] = true
         defaults.set(buttonRevealedByHelper, forKey: "\(Settings.userLevel)_revealed")
-        defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockCorrect")
+        defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockedCorrect")
         
         // Set the title equal to the correct answer
         // Set the background to indicate a cheat was used at that square
@@ -965,8 +965,14 @@ class GameViewController: UIViewController {
                         Settings.completedLevels.append(Settings.userLevel)
                         Settings.uncompletedLevels.remove(at: i)
                         
+                        if !Settings.lockedLevels.isEmpty {
+                            Settings.uncompletedLevels.append(Settings.lockedLevels[0])
+                            Settings.lockedLevels.remove(at: 0)
+                        }
+                        
                         defaults.set(Settings.completedLevels, forKey: "completedLevels")
                         defaults.set(Settings.uncompletedLevels, forKey: "uncompletedLevels")
+                        defaults.set(Settings.lockedLevels, forKey: "lockedLevels")
                         
                         // User gets another cheat for completing the level
                         // Only needs to happen when the level is completed the first time
@@ -1077,7 +1083,7 @@ class GameViewController: UIViewController {
             if buttonLockedForCorrect[indexOfButton] &&
                 letter != buttonLetterArray[indexOfButton] {
                 buttonLockedForCorrect[indexOfButton] = false
-                defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockCorrect")
+                defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockedCorrect")
             }
             boardSpaces[indexOfButton].setTitleWithOutAnimation(title: String(letter).uppercased())
             buttonTitleArray[indexOfButton] = String(letter).uppercased()
@@ -1153,12 +1159,15 @@ class GameViewController: UIViewController {
                             Settings.completedLevels.append(Settings.userLevel)
                             Settings.uncompletedLevels.remove(at: i)
                             
+                            if !Settings.lockedLevels.isEmpty {
+                                Settings.uncompletedLevels.append(Settings.lockedLevels[0])
+                                Settings.lockedLevels.remove(at: 0)
+                            }
+                            
                             defaults.set(Settings.completedLevels, forKey: "completedLevels")
                             defaults.set(Settings.uncompletedLevels, forKey: "uncompletedLevels")
-                            
-                            print(Settings.completedLevels)
-                            print(Settings.uncompletedLevels)
-                            
+                            defaults.set(Settings.lockedLevels, forKey: "lockedLevels")
+                                                        
                             // User gets another cheat for completing the level
                             // Only needs to happen when the level is completed the first time
                             Settings.cheatCount += 1
@@ -1284,7 +1293,7 @@ class GameViewController: UIViewController {
         // Disallow changing of letters after correct answer entered
         for space in selectedBoardSpaces {
             buttonLockedForCorrect[space] = true
-            defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockCorrect")
+            defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockedCorrect")
         }
         
         // Should only play correct sound effect if 3 conditions are met

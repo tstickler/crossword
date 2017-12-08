@@ -22,32 +22,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Crossword/GameViewController.swift"
-            timestampString = "534412305.308644"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1008"
-            endingLineNumber = "1008"
-            landmarkName = "keyboardButtonPressed(_:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Crossword/GameViewController.swift"
-            timestampString = "534412305.309033"
+            timestampString = "534447375.28638"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1075"
-            endingLineNumber = "1075"
-            landmarkName = "keyboardButtonPressed(_:)"
+            startingLineNumber = "2350"
+            endingLineNumber = "2350"
+            landmarkName = "readFromDefaults()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

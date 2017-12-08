@@ -2050,7 +2050,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🐦💬" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LKf-Be-Bi1">
-                                <rect key="frame" x="147.5" y="468" width="80" height="53.5"/>
+                                <rect key="frame" x="147.5" y="468" width="80" height="48"/>
                                 <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="40"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>

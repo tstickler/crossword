@@ -47,6 +47,9 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Start playing music
+        MusicPlayer.start(musicTitle: "home", ext: "mp3")
+        
         // Load the user selected settings
         // If its the first time, loads default settings
         loadSettings()
@@ -77,8 +80,6 @@ class HomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Start playing music
-        MusicPlayer.start(musicTitle: "home", ext: "mp3")
         
         if !Settings.musicEnabled {
             // Music is always playing but only if it's enabled should the volume be > 0
