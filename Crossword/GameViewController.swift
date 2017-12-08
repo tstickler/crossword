@@ -457,12 +457,12 @@ class GameViewController: UIViewController {
         if currentSquareTitle != nil && (buttonLockedForCorrect[indexOfButton] == false || !Settings.lockCorrect) && !buttonRevealedByHelper[indexOfButton] {
             boardSpaces[indexOfButton].setTitleWithOutAnimation(title: nil)
             buttonTitleArray[indexOfButton] = ""
-            defaults.set(buttonTitleArray, forKey: "buttonTitles")
+            defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel)_buttonTitles")
             
             // Erasing a correct answer should make it uncorrect again
             if buttonLockedForCorrect[indexOfButton] {
                 buttonLockedForCorrect[indexOfButton] = false
-                defaults.set(buttonLockedForCorrect, forKey: "lockCorrect")
+                defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockCorrect")
             }
         } else {
             // Otherwise, if the square is empty see if we're at the beginning of
@@ -496,12 +496,12 @@ class GameViewController: UIViewController {
             if (buttonLockedForCorrect[indexOfButton] == false || !Settings.lockCorrect) && !buttonRevealedByHelper[indexOfButton] {
                 boardSpaces[indexOfButton].setTitleWithOutAnimation(title: nil)
                 buttonTitleArray[indexOfButton] = ""
-                defaults.set(buttonTitleArray, forKey: "buttonTitles")
+                defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel)_buttonTitles")
 
                 // If it was locked, we need to unlock it since it is being erased
                 if buttonLockedForCorrect[indexOfButton] == true {
                     buttonLockedForCorrect[indexOfButton] = false
-                    defaults.set(buttonLockedForCorrect, forKey: "lockCorrect")
+                    defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockCorrect")
                 }
             }
         }
@@ -835,11 +835,11 @@ class GameViewController: UIViewController {
         for index in selectedBoardSpaces {
             if across {
                 buttonHintAcrossEnabled[index] = true
-                defaults.set(buttonHintAcrossEnabled, forKey: "hintAcross")
+                defaults.set(buttonHintAcrossEnabled, forKey: "\(Settings.userLevel)_hintAcross")
                 boardSpaces[index].showHintLabel()
             } else {
                 buttonHintDownEnabled[index] = true
-                defaults.set(buttonHintDownEnabled, forKey: "hintDown")
+                defaults.set(buttonHintDownEnabled, forKey: "\(Settings.userLevel)_hintDown")
                 boardSpaces[index].showHintLabel()
             }
         }
@@ -881,14 +881,14 @@ class GameViewController: UIViewController {
         // A square revealed by a cheat should never be able to be erased or changed
         buttonRevealedByHelper[indexOfButton] = true
         buttonLockedForCorrect[indexOfButton] = true
-        defaults.set(buttonRevealedByHelper, forKey: "revealed")
-        defaults.set(buttonLockedForCorrect, forKey: "lockCorrect")
+        defaults.set(buttonRevealedByHelper, forKey: "\(Settings.userLevel)_revealed")
+        defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockCorrect")
         
         // Set the title equal to the correct answer
         // Set the background to indicate a cheat was used at that square
         boardSpaces[indexOfButton].setTitleWithOutAnimation(title: String(buttonLetterArray[indexOfButton]).uppercased())
         buttonTitleArray[indexOfButton] = String(buttonLetterArray[indexOfButton]).uppercased()
-        defaults.set(buttonTitleArray, forKey: "buttonTitles")
+        defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel)_buttonTitles")
 
         boardSpaces[indexOfButton].backgroundColor = UIColor.init(cgColor: orangeColorCG)
         
@@ -960,10 +960,23 @@ class GameViewController: UIViewController {
                 // Prepare for the next game
                 resetDefaults()
                 
-                // User gets another cheat for completing a level
-                Settings.cheatCount += 1
-                cheatCountLabel.text = "\(Settings.cheatCount)"
-                defaults.set(Settings.cheatCount, forKey: "cheatCount")
+                for i in 0..<Settings.uncompletedLevels.count {
+                    if Settings.uncompletedLevels[i] == Settings.userLevel {
+                        Settings.completedLevels.append(Settings.userLevel)
+                        Settings.uncompletedLevels.remove(at: i)
+                        
+                        defaults.set(Settings.completedLevels, forKey: "completedLevels")
+                        defaults.set(Settings.uncompletedLevels, forKey: "uncompletedLevels")
+                        
+                        // User gets another cheat for completing the level
+                        // Only needs to happen when the level is completed the first time
+                        Settings.cheatCount += 1
+                        cheatCountLabel.text = "\(Settings.cheatCount)"
+                        defaults.set(Settings.cheatCount, forKey: "cheatCount")
+                        
+                        break
+                    }
+                }
                 
                 // Perform game over animation
                 animateGameOver()
@@ -1059,16 +1072,16 @@ class GameViewController: UIViewController {
         }
         
         // Sets the board space to display the uppercase letter if the space isn't locked
-        if !buttonLockedForCorrect[indexOfButton] || !Settings.lockCorrect && !buttonRevealedByHelper[indexOfButton]{
+        if (!buttonLockedForCorrect[indexOfButton] || !Settings.lockCorrect) && !buttonRevealedByHelper[indexOfButton]{
             // If the space was a correct answer but was changed, indicate that square is wrong
             if buttonLockedForCorrect[indexOfButton] &&
                 letter != buttonLetterArray[indexOfButton] {
                 buttonLockedForCorrect[indexOfButton] = false
-                defaults.set(buttonLockedForCorrect, forKey: "lockCorrect")
+                defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockCorrect")
             }
             boardSpaces[indexOfButton].setTitleWithOutAnimation(title: String(letter).uppercased())
             buttonTitleArray[indexOfButton] = String(letter).uppercased()
-            defaults.set(buttonTitleArray, forKey: "buttonTitles")
+            defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel)_buttonTitles")
         } else {
             // If the space is locked, lets just move to the next square
             if across {
@@ -1133,10 +1146,27 @@ class GameViewController: UIViewController {
                     // Prepare for next level
                     resetDefaults()
                     
-                    // User gets another cheat for completing the level
-                    Settings.cheatCount += 1
-                    cheatCountLabel.text = "\(Settings.cheatCount)"
-                    defaults.set(Settings.cheatCount, forKey: "cheatCount")
+                    
+                    
+                    for i in 0..<Settings.uncompletedLevels.count {
+                        if Settings.uncompletedLevels[i] == Settings.userLevel {
+                            Settings.completedLevels.append(Settings.userLevel)
+                            Settings.uncompletedLevels.remove(at: i)
+                            
+                            defaults.set(Settings.completedLevels, forKey: "completedLevels")
+                            defaults.set(Settings.uncompletedLevels, forKey: "uncompletedLevels")
+                            
+                            print(Settings.completedLevels)
+                            print(Settings.uncompletedLevels)
+                            
+                            // User gets another cheat for completing the level
+                            // Only needs to happen when the level is completed the first time
+                            Settings.cheatCount += 1
+                            cheatCountLabel.text = "\(Settings.cheatCount)"
+                            defaults.set(Settings.cheatCount, forKey: "cheatCount")
+                            break
+                        }
+                    }
 
                     // Perform the game over animation
                     animateGameOver()
@@ -1254,7 +1284,7 @@ class GameViewController: UIViewController {
         // Disallow changing of letters after correct answer entered
         for space in selectedBoardSpaces {
             buttonLockedForCorrect[space] = true
-            defaults.set(buttonLockedForCorrect, forKey: "lockCorrect")
+            defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockCorrect")
         }
         
         // Should only play correct sound effect if 3 conditions are met
@@ -1488,6 +1518,254 @@ class GameViewController: UIViewController {
         
         return numberWrongCounter
     }
+    
+    /*****************************************
+     *                                        *
+     *             Help functions             *
+     *                                        *
+     *****************************************/
+    
+    func helpSetupAndDisplay() {
+        // Start at the first help display
+        helpNum = 1
+        
+        // Dimmers are UIViews on top of everything. They are black with opacity at 80%.
+        // The gameboard and elements are slightly visible. These will be modified to emphasize
+        // which elements on the board have help info being displayed.
+        //
+        // zPosition ensures that the help elements show above the pulsing, selected square
+        topBarDimmer.isHidden = false
+        topBarDimmer.layer.zPosition = 1001
+        boardDimmer.isHidden = false
+        boardDimmer.layer.zPosition = 1001
+        clueDimmer.isHidden = false
+        clueDimmer.layer.zPosition = 1001
+        keysDimmer.isHidden = false
+        keysDimmer.layer.zPosition = 1001
+        bottomDimmer.isHidden = false
+        bottomDimmer.layer.zPosition = 1001
+        menuDimmer.isHidden = false
+        menuDimmer.layer.zPosition = 1001
+        
+        // Arrows that point to undimmed element. Makes things look nice.
+        hintHelpArrow.isHidden = true
+        hintHelpArrow.layer.zPosition = 1001
+        boardHelpArrow.isHidden = true
+        boardHelpArrow.layer.zPosition = 1001
+        clueHelpArrow.isHidden = true
+        clueHelpArrow.layer.zPosition = 1001
+        menuHelpArrow.isHidden = true
+        menuHelpArrow.layer.zPosition = 1001
+        
+        // These labels explain the undimmed elements purpose and actions
+        hintHelpLabel.isHidden = true
+        hintHelpLabel.layer.zPosition = 1001
+        boardHelpLabel.isHidden = true
+        boardHelpLabel.layer.zPosition = 1001
+        clueHelpLabel.isHidden = true
+        clueHelpLabel.layer.zPosition = 1001
+        menuHelpLabel.isHidden = true
+        menuHelpLabel.layer.zPosition = 1001
+        
+        // Used to close the help views at the end
+        helpFinishedButton.isHidden = true
+        helpFinishedButton.layer.zPosition = 1001
+        
+        // Used to move to next help screen
+        nextHelpButton.isHidden = false
+        nextHelpButton.layer.zPosition = 1001
+        
+        // Image to display which of the 4 help pages we're on
+        helpNumIndicator.isHidden = false
+        helpNumIndicator.layer.zPosition = 1001
+        helpNumIndicator.image = UIImage(named: "help1.png")
+        
+        // Makes the buttons look nice
+        helpFinishedButton.layer.borderColor = blueColorCG
+        helpFinishedButton.layer.borderWidth = 2
+        helpFinishedButton.layer.cornerRadius = 10
+        
+        nextHelpButton.layer.borderColor = blueColorCG
+        nextHelpButton.layer.borderWidth = 2
+        nextHelpButton.layer.cornerRadius = 10
+        
+        // Pick which help should show
+        helpScreenPicker()
+    }
+    
+    func hideAllHelp() {
+        // Hide all the elements involved in hints
+        topBarDimmer.isHidden = true
+        boardDimmer.isHidden = true
+        clueDimmer.isHidden = true
+        keysDimmer.isHidden = true
+        bottomDimmer.isHidden = true
+        menuDimmer.isHidden = true
+        
+        hintHelpArrow.isHidden = true
+        boardHelpArrow.isHidden = true
+        clueHelpArrow.isHidden = true
+        menuHelpArrow.isHidden = true
+        
+        hintHelpLabel.isHidden = true
+        boardHelpLabel.isHidden = true
+        clueHelpLabel.isHidden = true
+        menuHelpLabel.isHidden = true
+        
+        helpFinishedButton.isHidden = true
+        nextHelpButton.isHidden = true
+        helpNumIndicator.isHidden = true
+        
+        helpFinishedButton.isHidden = true
+        nextHelpButton.isHidden = true
+        helpNumIndicator.isHidden = true
+    }
+    
+    func helpScreenPicker() {
+        
+        // Handles which element to highlight
+        switch helpNum {
+        case 1:
+            topBarDimmer.isHidden = true
+            hintHelpArrow.isHidden = false
+            hintHelpArrow.alpha = 0
+            hintHelpArrow.fadeIn(withDuration: 0.5)
+            hintHelpLabel.isHidden = false
+            hintHelpLabel.alpha = 0
+            hintHelpLabel.fadeIn(withDuration: 0.5)
+            
+            boardDimmer.isHidden = false
+            boardHelpArrow.isHidden = true
+            boardHelpLabel.isHidden = true
+            
+            clueDimmer.isHidden = false
+            clueHelpArrow.isHidden = true
+            clueHelpLabel.isHidden = true
+            
+            menuDimmer.isHidden = false
+            menuHelpArrow.isHidden = true
+            menuHelpLabel.isHidden = true
+            
+            helpNumIndicator.image = UIImage(named: "help1.png")
+            
+            helpNum! += 1
+        case 2:
+            topBarDimmer.isHidden = false
+            hintHelpArrow.isHidden = true
+            hintHelpLabel.isHidden = true
+            
+            boardDimmer.isHidden = true
+            boardHelpArrow.isHidden = false
+            boardHelpArrow.alpha = 0
+            boardHelpArrow.fadeIn(withDuration: 0.5)
+            
+            boardHelpLabel.isHidden = false
+            boardHelpLabel.alpha = 0
+            boardHelpLabel.fadeIn(withDuration: 0.5)
+            
+            
+            clueDimmer.isHidden = false
+            clueHelpArrow.isHidden = true
+            clueHelpLabel.isHidden = true
+            
+            menuDimmer.isHidden = false
+            menuHelpArrow.isHidden = true
+            menuHelpLabel.isHidden = true
+            
+            helpNumIndicator.image = UIImage(named: "help2.png")
+            
+            helpNum! += 1
+        case 3:
+            topBarDimmer.isHidden = false
+            hintHelpArrow.isHidden = true
+            hintHelpLabel.isHidden = true
+            
+            boardDimmer.isHidden = false
+            boardHelpArrow.isHidden = true
+            boardHelpLabel.isHidden = true
+            
+            clueDimmer.isHidden = true
+            clueHelpArrow.isHidden = false
+            clueHelpArrow.alpha = 0
+            clueHelpArrow.fadeIn(withDuration: 0.5)
+            clueHelpLabel.isHidden = false
+            clueHelpLabel.alpha = 0
+            clueHelpLabel.fadeIn(withDuration: 0.5)
+            
+            menuDimmer.isHidden = false
+            menuHelpArrow.isHidden = true
+            menuHelpLabel.isHidden = true
+            
+            helpNumIndicator.image = UIImage(named: "help3.png")
+            
+            helpNum! += 1
+        case 4:
+            topBarDimmer.isHidden = false
+            hintHelpArrow.isHidden = true
+            hintHelpLabel.isHidden = true
+            
+            boardDimmer.isHidden = false
+            boardHelpArrow.isHidden = true
+            boardHelpLabel.isHidden = true
+            
+            clueDimmer.isHidden = false
+            clueHelpArrow.isHidden = true
+            clueHelpLabel.isHidden = true
+            
+            menuDimmer.isHidden = true
+            menuHelpArrow.isHidden = false
+            menuHelpArrow.alpha = 0
+            menuHelpArrow.fadeIn(withDuration: 0.5)
+            
+            menuHelpLabel.isHidden = false
+            
+            menuHelpLabel.alpha = 0
+            menuHelpLabel.fadeIn(withDuration: 0.5)
+            
+            
+            helpFinishedButton.isHidden = false
+            helpFinishedButton.alpha = 0
+            helpFinishedButton.fadeIn(withDuration: 1)
+            
+            nextHelpButton.isHidden = true
+            
+            helpNumIndicator.image = UIImage(named: "help4.png")
+            helpNum = 1
+        default:
+            topBarDimmer.isHidden = true
+            hintHelpArrow.isHidden = false
+            hintHelpLabel.isHidden = false
+            
+            boardDimmer.isHidden = false
+            boardHelpArrow.isHidden = true
+            boardHelpLabel.isHidden = true
+            
+            clueDimmer.isHidden = false
+            clueHelpArrow.isHidden = true
+            clueHelpLabel.isHidden = true
+            
+            menuDimmer.isHidden = false
+            menuHelpArrow.isHidden = true
+            menuHelpLabel.isHidden = true
+            
+            helpNumIndicator.image = UIImage(named: "help1.png")
+        }
+    }
+    
+    @IBAction func helpFinishedTapped(_ sender: Any) {
+        // Set default so we know that we've seen help before
+        // Don't need to show user every time they play, just the first time
+        defaults.set(true, forKey: "helpShownBefore")
+        
+        // Dimiss all the help elements
+        hideAllHelp()
+    }
+    @IBAction func nextHelpTapped(_ sender: Any) {
+        
+        // Move to the next element in the help items
+        helpScreenPicker()
+    }
+    
     
     
      /*****************************************
@@ -2036,14 +2314,14 @@ class GameViewController: UIViewController {
         hoursLabel.text = "\(hoursCounter)"
         
         // Save the timer every time through
-        defaults.set(secondsCounter, forKey: "seconds")
-        defaults.set(minutesCounter, forKey: "minutes")
-        defaults.set(hoursCounter, forKey: "hours")
+        defaults.set(secondsCounter, forKey: "\(Settings.userLevel)_seconds")
+        defaults.set(minutesCounter, forKey: "\(Settings.userLevel)_minutes")
+        defaults.set(hoursCounter, forKey: "\(Settings.userLevel)_hours")
     }
     
     func readFromDefaults() {
         // If there are saved answers, then we want to display those
-        if let savedAnswers = defaults.array(forKey: "buttonTitles") {
+        if let savedAnswers = defaults.array(forKey: "\(Settings.userLevel)_buttonTitles") {
             buttonTitleArray = (savedAnswers as? [String])!
             for i in 0...168 {
                 if buttonTitleArray[i] != "" {
@@ -2056,7 +2334,7 @@ class GameViewController: UIViewController {
         }
         
         // If there are locked answers, then we want to set those
-        if let locked = defaults.array(forKey: "lockedCorrect") {
+        if let locked = defaults.array(forKey: "\(Settings.userLevel)_lockedCorrect") {
             buttonLockedForCorrect = (locked as? [Bool])!
         } else {
             // Otherwise, start new
@@ -2064,7 +2342,7 @@ class GameViewController: UIViewController {
         }
         
         // If there are squares with hints, then we want to display those
-        if let acrossHint = defaults.array(forKey: "hintAcross") {
+        if let acrossHint = defaults.array(forKey: "\(Settings.userLevel)_hintAcross") {
             buttonHintAcrossEnabled = (acrossHint as? [Bool])!
             for i in 0...168 {
                 if buttonHintAcrossEnabled[i] == true {
@@ -2077,7 +2355,7 @@ class GameViewController: UIViewController {
         }
         
         // If there are squares with hints, then we want to display those
-        if let downHint = defaults.array(forKey: "hintDown") {
+        if let downHint = defaults.array(forKey: "\(Settings.userLevel)_hintDown") {
             buttonHintDownEnabled = (downHint as? [Bool])!
             for i in 0...168 {
                 if buttonHintDownEnabled[i] == true {
@@ -2090,11 +2368,24 @@ class GameViewController: UIViewController {
         }
         
         // If there are squares revealed, then we want to display those
-        if let revealed = defaults.array(forKey: "revealed") {
+        if let revealed = defaults.array(forKey: "\(Settings.userLevel)_revealed") {
             buttonRevealedByHelper = (revealed as? [Bool])!
             for i in 0...168 {
                 if buttonRevealedByHelper[i] == true {
+                    // Set the background to indicate a cheat was used at that square
                     boardSpaces[i].backgroundColor = UIColor.init(cgColor: orangeColorCG)
+                    if buttonTitleArray[i] == "" {
+                        // Set the title equal to the correct answer
+                        boardSpaces[i].setTitleWithOutAnimation(title: String(buttonLetterArray[i]).uppercased())
+                        buttonTitleArray[i] = String(buttonLetterArray[i]).uppercased()
+                        
+                        // Lock the correct
+                        buttonLockedForCorrect[i] = true
+                        
+                        // Save it into the arrays
+                        defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockedCorrect")
+                        defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel)_buttonTitles")
+                    }
                 }
             }
         } else {
@@ -2103,21 +2394,24 @@ class GameViewController: UIViewController {
         }
         
         // Set the timing counters, they are 0 if there is no corresponding key
-        secondsCounter = defaults.integer(forKey: "seconds")
-        minutesCounter = defaults.integer(forKey: "minutes")
-        hoursCounter = defaults.integer(forKey: "hours")
+        secondsCounter = defaults.integer(forKey: "\(Settings.userLevel)_seconds")
+        minutesCounter = defaults.integer(forKey: "\(Settings.userLevel)_minutes")
+        hoursCounter = defaults.integer(forKey: "\(Settings.userLevel)_hours")
     }
     
     func resetDefaults() {
         // Set level specific board states back to initial board
-        defaults.set(Array(repeating: "", count: 169), forKey: "buttonTitles")
-        defaults.set(Array(repeating: false, count: 169), forKey: "lockedCorrect")
-        defaults.set(Array(repeating: false, count: 169), forKey: "hintAcross")
-        defaults.set(Array(repeating: false, count: 169), forKey: "hintDown")
-        defaults.set(Array(repeating: false, count: 169), forKey: "revealed")
-        defaults.set(0, forKey: "seconds")
-        defaults.set(0, forKey: "minutes")
-        defaults.set(0, forKey: "hours")
+        defaults.set(Array(repeating: "", count: 169), forKey: "\(Settings.userLevel)_buttonTitles")
+        defaults.set(Array(repeating: false, count: 169), forKey: "\(Settings.userLevel)_lockedCorrect")
+        
+        // These no longer need to be emptied since the user can come back to the level
+        //defaults.set(Array(repeating: false, count: 169), forKey: "\(Settings.userLevel)_hintAcross")
+        //defaults.set(Array(repeating: false, count: 169), forKey: "\(Settings.userLevel)_hintDown")
+        //defaults.set(Array(repeating: false, count: 169), forKey: "\(Settings.userLevel)_revealed")
+        
+        defaults.set(0, forKey: "\(Settings.userLevel)_seconds")
+        defaults.set(0, forKey: "\(Settings.userLevel)_minutes")
+        defaults.set(0, forKey: "\(Settings.userLevel)_hours")
     }
     
     func checkAdProgress() {
@@ -2214,8 +2508,7 @@ class GameViewController: UIViewController {
         request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
         interstitialAd.load(request)
         
-        // Initialize from defaults
-        readFromDefaults()
+
         
         // This is the board that needs to be set up
         // board[1] contains the letters in their locations
@@ -2231,7 +2524,6 @@ class GameViewController: UIViewController {
         fillAcrossDownArrays()
         makeClueArrays()
         setUpBoard(board: board)
-        clueAreaSetup()
         startTimer()
         
         // Start playing game music
@@ -2241,6 +2533,10 @@ class GameViewController: UIViewController {
         }
         
         animator = UIDynamicAnimator(referenceView: self.view)
+        
+        // Initialize from defaults
+        readFromDefaults()
+        clueAreaSetup()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -2261,247 +2557,8 @@ class GameViewController: UIViewController {
         }
     }
     
-    func helpSetupAndDisplay() {
-        // Start at the first help display
-        helpNum = 1
-        
-        // Dimmers are UIViews on top of everything. They are black with opacity at 80%.
-        // The gameboard and elements are slightly visible. These will be modified to emphasize
-        // which elements on the board have help info being displayed.
-        //
-        // zPosition ensures that the help elements show above the pulsing, selected square
-        topBarDimmer.isHidden = false
-        topBarDimmer.layer.zPosition = 1001
-        boardDimmer.isHidden = false
-        boardDimmer.layer.zPosition = 1001
-        clueDimmer.isHidden = false
-        clueDimmer.layer.zPosition = 1001
-        keysDimmer.isHidden = false
-        keysDimmer.layer.zPosition = 1001
-        bottomDimmer.isHidden = false
-        bottomDimmer.layer.zPosition = 1001
-        menuDimmer.isHidden = false
-        menuDimmer.layer.zPosition = 1001
-        
-        // Arrows that point to undimmed element. Makes things look nice.
-        hintHelpArrow.isHidden = true
-        hintHelpArrow.layer.zPosition = 1001
-        boardHelpArrow.isHidden = true
-        boardHelpArrow.layer.zPosition = 1001
-        clueHelpArrow.isHidden = true
-        clueHelpArrow.layer.zPosition = 1001
-        menuHelpArrow.isHidden = true
-        menuHelpArrow.layer.zPosition = 1001
-        
-        // These labels explain the undimmed elements purpose and actions
-        hintHelpLabel.isHidden = true
-        hintHelpLabel.layer.zPosition = 1001
-        boardHelpLabel.isHidden = true
-        boardHelpLabel.layer.zPosition = 1001
-        clueHelpLabel.isHidden = true
-        clueHelpLabel.layer.zPosition = 1001
-        menuHelpLabel.isHidden = true
-        menuHelpLabel.layer.zPosition = 1001
-        
-        // Used to close the help views at the end
-        helpFinishedButton.isHidden = true
-        helpFinishedButton.layer.zPosition = 1001
-        
-        // Used to move to next help screen
-        nextHelpButton.isHidden = false
-        nextHelpButton.layer.zPosition = 1001
-        
-        // Image to display which of the 4 help pages we're on
-        helpNumIndicator.isHidden = false
-        helpNumIndicator.layer.zPosition = 1001
-        helpNumIndicator.image = UIImage(named: "help1.png")
-        
-        // Makes the buttons look nice
-        helpFinishedButton.layer.borderColor = blueColorCG
-        helpFinishedButton.layer.borderWidth = 2
-        helpFinishedButton.layer.cornerRadius = 10
-        
-        nextHelpButton.layer.borderColor = blueColorCG
-        nextHelpButton.layer.borderWidth = 2
-        nextHelpButton.layer.cornerRadius = 10
-        
-        // Pick which help should show
-        helpScreenPicker()
-    }
     
-    func hideAllHelp() {
-        // Hide all the elements involved in hints
-        topBarDimmer.isHidden = true
-        boardDimmer.isHidden = true
-        clueDimmer.isHidden = true
-        keysDimmer.isHidden = true
-        bottomDimmer.isHidden = true
-        menuDimmer.isHidden = true
-        
-        hintHelpArrow.isHidden = true
-        boardHelpArrow.isHidden = true
-        clueHelpArrow.isHidden = true
-        menuHelpArrow.isHidden = true
-        
-        hintHelpLabel.isHidden = true
-        boardHelpLabel.isHidden = true
-        clueHelpLabel.isHidden = true
-        menuHelpLabel.isHidden = true
-        
-        helpFinishedButton.isHidden = true
-        nextHelpButton.isHidden = true
-        helpNumIndicator.isHidden = true
-        
-        helpFinishedButton.isHidden = true
-        nextHelpButton.isHidden = true
-        helpNumIndicator.isHidden = true
-    }
-    
-    func helpScreenPicker() {
-        
-        // Handles which element to highlight
-        switch helpNum {
-        case 1:
-            topBarDimmer.isHidden = true
-            hintHelpArrow.isHidden = false
-            hintHelpArrow.alpha = 0
-            hintHelpArrow.fadeIn(withDuration: 0.5)
-            hintHelpLabel.isHidden = false
-            hintHelpLabel.alpha = 0
-            hintHelpLabel.fadeIn(withDuration: 0.5)
 
-            boardDimmer.isHidden = false
-            boardHelpArrow.isHidden = true
-            boardHelpLabel.isHidden = true
-            
-            clueDimmer.isHidden = false
-            clueHelpArrow.isHidden = true
-            clueHelpLabel.isHidden = true
-            
-            menuDimmer.isHidden = false
-            menuHelpArrow.isHidden = true
-            menuHelpLabel.isHidden = true
-            
-            helpNumIndicator.image = UIImage(named: "help1.png")
-            
-            helpNum! += 1
-        case 2:
-            topBarDimmer.isHidden = false
-            hintHelpArrow.isHidden = true
-            hintHelpLabel.isHidden = true
-            
-            boardDimmer.isHidden = true
-            boardHelpArrow.isHidden = false
-            boardHelpArrow.alpha = 0
-            boardHelpArrow.fadeIn(withDuration: 0.5)
-
-            boardHelpLabel.isHidden = false
-            boardHelpLabel.alpha = 0
-            boardHelpLabel.fadeIn(withDuration: 0.5)
-
-            
-            clueDimmer.isHidden = false
-            clueHelpArrow.isHidden = true
-            clueHelpLabel.isHidden = true
-            
-            menuDimmer.isHidden = false
-            menuHelpArrow.isHidden = true
-            menuHelpLabel.isHidden = true
-
-            helpNumIndicator.image = UIImage(named: "help2.png")
-            
-            helpNum! += 1
-        case 3:
-            topBarDimmer.isHidden = false
-            hintHelpArrow.isHidden = true
-            hintHelpLabel.isHidden = true
-            
-            boardDimmer.isHidden = false
-            boardHelpArrow.isHidden = true
-            boardHelpLabel.isHidden = true
-            
-            clueDimmer.isHidden = true
-            clueHelpArrow.isHidden = false
-            clueHelpArrow.alpha = 0
-            clueHelpArrow.fadeIn(withDuration: 0.5)
-            clueHelpLabel.isHidden = false
-            clueHelpLabel.alpha = 0
-            clueHelpLabel.fadeIn(withDuration: 0.5)
-            
-            menuDimmer.isHidden = false
-            menuHelpArrow.isHidden = true
-            menuHelpLabel.isHidden = true
-            
-            helpNumIndicator.image = UIImage(named: "help3.png")
-            
-            helpNum! += 1
-        case 4:
-            topBarDimmer.isHidden = false
-            hintHelpArrow.isHidden = true
-            hintHelpLabel.isHidden = true
-            
-            boardDimmer.isHidden = false
-            boardHelpArrow.isHidden = true
-            boardHelpLabel.isHidden = true
-            
-            clueDimmer.isHidden = false
-            clueHelpArrow.isHidden = true
-            clueHelpLabel.isHidden = true
-            
-            menuDimmer.isHidden = true
-            menuHelpArrow.isHidden = false
-            menuHelpArrow.alpha = 0
-            menuHelpArrow.fadeIn(withDuration: 0.5)
-
-            menuHelpLabel.isHidden = false
-            
-            menuHelpLabel.alpha = 0
-            menuHelpLabel.fadeIn(withDuration: 0.5)
-
-            
-            helpFinishedButton.isHidden = false
-            helpFinishedButton.alpha = 0
-            helpFinishedButton.fadeIn(withDuration: 0.2)
-
-            nextHelpButton.isHidden = true
-            
-            helpNumIndicator.image = UIImage(named: "help4.png")
-            helpNum = 1
-        default:
-            topBarDimmer.isHidden = true
-            hintHelpArrow.isHidden = false
-            hintHelpLabel.isHidden = false
-            
-            boardDimmer.isHidden = false
-            boardHelpArrow.isHidden = true
-            boardHelpLabel.isHidden = true
-            
-            clueDimmer.isHidden = false
-            clueHelpArrow.isHidden = true
-            clueHelpLabel.isHidden = true
-            
-            menuDimmer.isHidden = false
-            menuHelpArrow.isHidden = true
-            menuHelpLabel.isHidden = true
-
-            helpNumIndicator.image = UIImage(named: "help1.png")
-        }
-    }
-    
-    @IBAction func helpFinishedTapped(_ sender: Any) {
-        // Set default so we know that we've seen help before
-        // Don't need to show user every time they play, just the first time
-        defaults.set(true, forKey: "helpShownBefore")
-        
-        // Dimiss all the help elements
-        hideAllHelp()
-    }
-    @IBAction func nextHelpTapped(_ sender: Any) {
-        
-        // Move to the next element in the help items
-        helpScreenPicker()
-    }
-    
 }
 
 extension UIView {

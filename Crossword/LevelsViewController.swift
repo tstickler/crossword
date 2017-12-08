@@ -1,32 +1,32 @@
 //
-//  HomeViewController.swift
+//  LevelsViewController.swift
 //  Crossword
 //
-//  Created by Tyler Stickler on 11/5/17.
+//  Created by Tyler Stickler on 12/5/17.
 //  Copyright © 2017 tstick. All rights reserved.
 //
 
 import UIKit
 import Firebase
 
-class HomeViewController: UIViewController {
-    @IBAction func unwindSegue(_ sender: UIStoryboardSegue) {
-        // Unwind segue allows jumping from the menu or game over view controllers
-        // all the way back to home.
-        
-        // Gives a nice animation
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        transition.type = kCATransitionFade
-        self.navigationController?.view.layer.add(transition, forKey: nil)
-        _ = self.navigationController?.popToRootViewController(animated: false)
-    }
-
+class LevelsViewController: UIViewController {
     override var prefersStatusBarHidden: Bool {
         // No status bar allows for more board room
         return true
     }
+    
+    @IBOutlet var levelButtons: [LevelButton]!
+    @IBOutlet var backLevels: UIButton!
+    @IBOutlet var nextLevels: UIButton!
+        
+    @IBOutlet var firstStackCenterX: NSLayoutConstraint!
+    @IBOutlet var firstStackWidth: NSLayoutConstraint!
+    @IBOutlet var secondStackLeading: NSLayoutConstraint!
+    @IBOutlet var secondStackWidth: NSLayoutConstraint!
+    
+    // Banner ad
+    @IBOutlet var bannerAd: GADBannerView!
+    @IBOutlet var bannerHeightConstraint: NSLayoutConstraint!
     
     // Allows storing and reading from the disk
     let defaults = UserDefaults.standard
@@ -37,20 +37,99 @@ class HomeViewController: UIViewController {
     var animator: UIDynamicAnimator!
     var timer: Timer!
     
-    // Home screen music enabling/disabling button
-    @IBOutlet var muteButton: UIButton!
+    var pageNum: Int!
+    var maxNumOfPages = 2
     
-    // Banner ad
-    @IBOutlet var bannerAd: GADBannerView!
-    @IBOutlet var bannerHeightConstraint: NSLayoutConstraint!
+    @IBAction func levelButtonTapped(_ sender: UIButton) {
+        
+        for level in Settings.lockedLevels {
+            // GIVE A NOTIFICATION OF LOCKED LEVEL HERE
+            if sender.tag == level {
+                return
+            }
+        }
+        
+        // Go to the selected level
+        Settings.userLevel = sender.tag
+        performSegue(withIdentifier: "gameSegue", sender: self)
+        
+        // Fade out the home music
+        MusicPlayer.homeMusicPlayer.setVolume(0, fadeDuration: 1.0)
+    }
+    
+    @IBAction func nextLevelsTapped(_ sender: Any) {
+        // Move the stacks left
+        firstStackCenterX.constant += -view.frame.width
+        
+        // pageNum determines what arrows should be shown
+        pageNum! += 1
+        backLevels.isHidden = false
+        if pageNum == maxNumOfPages {
+            nextLevels.isHidden = true
+        }
+        
+        // Animate the switch between level pages
+        UIView.animate(withDuration: 0.25, animations: {
+            self.view.layoutIfNeeded()
+        })
+    }
+    
+    @IBAction func previousLevelsTapped(_ sender: Any) {
+        // Move the stacks right
+        firstStackCenterX.constant += view.frame.width
+        
+        // pageNum determines what arrows should be shown
+        pageNum! -= 1
+        nextLevels.isHidden = false
+        if pageNum == 1 {
+            backLevels.isHidden = true
+        }
+        
+        // Animate the switch between level pages
+        UIView.animate(withDuration: 0.25, animations: {
+            self.view.layoutIfNeeded()
+        })
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Load the user selected settings
-        // If its the first time, loads default settings
-        loadSettings()
-                        
+        switch UIScreen.main.bounds.height {
+        case 568:
+            firstStackWidth.constant = 220
+            secondStackWidth.constant = 220
+        case 667:
+            firstStackWidth.constant = 260
+            secondStackWidth.constant = 260
+        case 736:
+            firstStackWidth.constant = 280
+            secondStackWidth.constant = 260
+        case 812:
+            firstStackWidth.constant = 260
+            secondStackWidth.constant = 260
+        default:
+            firstStackWidth.constant = 280
+        }
+        
+        
+        pageNum = 1
+        backLevels.isHidden = true
+        
+        secondStackLeading.constant = view.frame.width
+        
+        setUpLevelStatusArrays()
+        print(Settings.completedLevels)
+        print(Settings.uncompletedLevels)
+        print(Settings.lockedLevels)
+        
+        for i in 1...Settings.maxNumOfLevels {
+            levelButtons[i - 1].setBackgroundImage(UIImage(named: "num_\(i)"), for: .normal)
+            levelButtons[i - 1].layer.backgroundColor = UIColor.clear.cgColor
+            levelButtons[i - 1].setTitle(nil, for: .normal)
+        }
+
+        
         animator = UIDynamicAnimator(referenceView: self.view)
         
         // Possible emojis that will randomly fall from the top (160 to choose from)
@@ -70,37 +149,20 @@ class HomeViewController: UIViewController {
                           "🎨", "🎤", "🎷", "🎳", "🚗", "✈️", "🚀", "🗽", "🏝", "📱",
                           "📸", "☎️", "💡", "💵", "💎", "💣", "🔮", "🔑", "✉️", "❤️",
                           "💔", "💘", "⚠️", "🌀", "🃏", "🤞🏻", "👏🏼", "👌🏻", "👉🏼", "👍🏻"]
-
+        
         // When timer fires, will create a new label to be dropped from the view
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // Start playing music
-        MusicPlayer.start(musicTitle: "home", ext: "mp3")
-        
-        if !Settings.musicEnabled {
-            // Music is always playing but only if it's enabled should the volume be > 0
-            MusicPlayer.homeMusicPlayer.volume = 0
-            muteButton.setBackgroundImage(UIImage(named: "no_music.png"), for: .normal)
-        } else {
-            muteButton.setBackgroundImage(UIImage(named: "music.png"), for: .normal)
-        }
-        
-        // Don't need the navigation bar
-        self.navigationController?.isNavigationBarHidden = true
         
         // Display ads if the user hasn't paid to turn them off
         if !Settings.adsDisabled {
             // Banner ad
             bannerAd.isHidden = false
             bannerHeightConstraint.constant = 50
-
+            
             let request = GADRequest()
             request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
             bannerAd.adSize = kGADAdSizeSmartBannerPortrait
-            bannerAd.adUnitID = "ca-app-pub-1164601417724423/6161128687"
+            bannerAd.adUnitID = "ca-app-pub-1164601417724423/6884757223"
             bannerAd.rootViewController = self
             bannerAd.load(request)
         } else {
@@ -111,9 +173,10 @@ class HomeViewController: UIViewController {
             bannerHeightConstraint.constant = 0
         }
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-                
+        
         // Gives a nice animation to the next view
         let transition = CATransition()
         transition.duration = 0.5
@@ -121,38 +184,6 @@ class HomeViewController: UIViewController {
         transition.type = kCATransitionFade
         self.navigationController?.view.layer.add(transition, forKey: nil)
     }
-
-    @IBAction func muteButtonTapped(_ sender: Any) {
-        var musicButtonImage: UIImage
-        
-        if Settings.musicEnabled {
-            // If tapping when music is enabled, disable it
-            Settings.musicEnabled = false
-            Settings.soundEffects = false
-            
-            // Set the image of the button to muted music
-            musicButtonImage = UIImage(named: "no_music.png")!
-            
-            // Actually mute the music
-            MusicPlayer.homeMusicPlayer.setVolume(0, fadeDuration: 1.0)
-        } else {
-            // If tapping when music is disabled, enable it
-            Settings.musicEnabled = true
-            Settings.soundEffects = true
-            
-            // Set the image of the button to unmuted music
-            musicButtonImage = UIImage(named: "music.png")!
-            
-            // Play the music
-            MusicPlayer.homeMusicPlayer.setVolume(0.25, fadeDuration: 1.0)
-        }
-        
-        // Save the user settings
-        defaults.set(Settings.musicEnabled, forKey: "musicEnabled")
-        defaults.set(Settings.soundEffects, forKey: "soundEffects")
-        muteButton.setBackgroundImage(musicButtonImage, for: .normal)
-    }
-    
     
     @objc func update() {
         // Create the emoji and add it to a label
@@ -168,7 +199,7 @@ class HomeViewController: UIViewController {
         label.frame = CGRect(x: xLocation, y: -50, width: 40, height: 50)
         label.text = emoji
         label.font = UIFont(name: "EmojiOne", size: 40)
-
+        
         
         // Give labels a random rotation between -pi/4 and pi/4
         var rotation = Double(arc4random_uniform(77)) / 100
@@ -177,7 +208,7 @@ class HomeViewController: UIViewController {
             rotation = -rotation
         }
         label.transform = CGAffineTransform(rotationAngle: CGFloat(rotation))
-
+        
         // Add the label to the behind the rest of the view
         view.addSubview(label)
         view.sendSubview(toBack: label)
@@ -205,52 +236,43 @@ class HomeViewController: UIViewController {
         animator?.addBehavior(push)
     }
     
-    func loadSettings() {
-        // Determine if this is the first time the user has used the app
-        Settings.launchedBefore = defaults.bool(forKey: "launchedBefore")
-        
-        // If the user has used the app, set to their preferred settings
-        if Settings.launchedBefore {
-            Settings.launchedBefore = defaults.bool(forKey: "launchedBefore")
-            Settings.musicEnabled = defaults.bool(forKey: "musicEnabled")
-            Settings.soundEffects = defaults.bool(forKey: "soundEffects")
-            Settings.showTimer = defaults.bool(forKey: "showTimer")
-            Settings.skipFilledSquares = defaults.bool(forKey: "skipFilledSquares")
-            Settings.lockCorrect = defaults.bool(forKey: "lockCorrect")
-            Settings.correctAnim = defaults.bool(forKey: "correctAnim")
-            Settings.adsDisabled = defaults.bool(forKey: "adsDisabled")
-            Settings.cheatCount = defaults.integer(forKey: "cheatCount")
-            Settings.userLevel = defaults.integer(forKey: "userLevel")
+    func setUpLevelStatusArrays() {
+        if let completeLevels = defaults.array(forKey: "completedLevels") {
+            Settings.completedLevels = completeLevels as! [Int]
         } else {
-            // If this is the user's first time, start all the settings as enabled.
-            // This must happen because loading from defaults when there is no key associated
-            // with the setting, it will just return false.
-            // If the user decides they don't like a setting, they can change it later
-            defaults.set(true, forKey: "launchedBefore")
-            
-            defaults.set(true, forKey: "musicEnabled")
-            defaults.set(true, forKey: "soundEffects")
-            defaults.set(true, forKey: "showTimer")
-            defaults.set(true, forKey: "skipFilledSquares")
-            defaults.set(true, forKey: "lockCorrect")
-            defaults.set(true, forKey: "correctAnim")
-            
-            defaults.set(false, forKey: "adsDisabled")
-                        
-            Settings.cheatCount = 10
-            defaults.set(Settings.cheatCount, forKey: "cheatCount")
-            
-            Settings.userLevel = 1
-            defaults.set(Settings.userLevel, forKey: "userLevel")
-            
-            Settings.musicEnabled = true
-            Settings.soundEffects = true
-            Settings.showTimer   = true
-            Settings.skipFilledSquares = true
-            Settings.lockCorrect = true
-            Settings.correctAnim = true
-            Settings.adsDisabled = false
-            
+            Settings.completedLevels = []
         }
+        
+        if let uncompleteLevels = defaults.array(forKey: "uncompletedLevels") {
+            Settings.uncompletedLevels = uncompleteLevels as! [Int]
+        } else {
+            Settings.uncompletedLevels = []
+        }
+        
+        if let lockedLevels = defaults.array(forKey: "lockedLevels") {
+            Settings.lockedLevels = lockedLevels as! [Int]
+        } else {
+            Settings.lockedLevels = [1,2,3,4,5,6,7,8,9,10,11,12,
+                                     13,14,15,16,17,18,19,20,21,22,23,24]
+        }
+        
+        // Set back to < 12 before launch
+        while Settings.uncompletedLevels.count < 14 && !Settings.lockedLevels.isEmpty {
+            let num = Settings.lockedLevels[0]
+            Settings.uncompletedLevels.append(num)
+            Settings.lockedLevels.remove(at: 0)
+        }
+        
+        for i in 0..<Settings.lockedLevels.count {
+            levelButtons[Settings.lockedLevels[i] - 1].setLevelStatus("locked")
+        }
+        
+        for i in 0..<Settings.completedLevels.count {
+            levelButtons[Settings.completedLevels[i] - 1].setLevelStatus("complete")
+        }
+        
+        defaults.set(Settings.completedLevels, forKey: "completedLevels")
+        defaults.set(Settings.uncompletedLevels, forKey: "uncompletedLevels")
+        defaults.set(Settings.lockedLevels, forKey: "lockedLevels")
     }
 }

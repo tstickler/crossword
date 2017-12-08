@@ -20,5 +20,8 @@ class Settings {
     static var cheatCount = 0
     static var adsDisabled: Bool!
     static var userLevel: Int!
-    static let maxNumOfLevels = 10
+    static let maxNumOfLevels = 24
+    static var completedLevels = [Int]()
+    static var uncompletedLevels = [Int]()
+    static var lockedLevels = [Int]()
 }

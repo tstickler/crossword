@@ -103,11 +103,11 @@ class GameOverViewController: UIViewController {
                 titleLabel.text = "Nice Job!"
                 
                 if hours > 0 {
-                    messageLabel.text = "You finished in \(hours!) hours, \(minutes!) minutes, and \(seconds!) seconds and gained a hint!"
+                    messageLabel.text = "You finished in \(hours!) hours, \(minutes!) minutes, and \(seconds!) seconds!"
                 } else if parentVC.minutesCounter > 0 {
-                    messageLabel.text = "You finished in \(minutes!) minutes and \(seconds!) seconds and gained a hint!"
+                    messageLabel.text = "You finished in \(minutes!) minutes and \(seconds!) seconds!"
                 } else {
-                    messageLabel.text = "You finished in \(seconds!) seconds and gained a hint!"
+                    messageLabel.text = "You finished in \(seconds!) seconds!"
                 }
                 
                 if Settings.userLevel == Settings.maxNumOfLevels {

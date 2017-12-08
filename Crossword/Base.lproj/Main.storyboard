@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13529" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pef-Zr-PGB">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="pef-Zr-PGB">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -46,7 +46,7 @@
                                     <color key="titleColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="CQO-aK-gww" kind="show" identifier="playSegue" animates="NO" id="1Av-9k-s1M"/>
+                                    <segue destination="dOH-94-Hki" kind="show" animates="NO" id="S5o-c1-cDH"/>
                                 </connections>
                             </button>
                             <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="title" translatesAutoresizingMaskIntoConstraints="NO" id="9dT-DP-0kx" userLabel="Title Image">
@@ -2050,7 +2050,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🐦💬" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LKf-Be-Bi1">
-                                <rect key="frame" x="147.5" y="468" width="80" height="48"/>
+                                <rect key="frame" x="147.5" y="468" width="80" height="53.5"/>
                                 <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="40"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -2109,14 +2109,15 @@
                                 </constraints>
                             </imageView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xsu-U9-FC7">
-                                <rect key="frame" x="10" y="88" width="257" height="104.5"/>
-                                <string key="text">These are your cheats. Use the orange button to fill in a square with the correct letter. Use the pink button to get extra information about the phrase.</string>
+                                <rect key="frame" x="10" y="67" width="257" height="146"/>
+                                <string key="text">These are your cheats. The orange button reveals the correct letter for the selected space. The pink button gives extra information about the selected phrase. Completing levels will gain you more cheats.</string>
                                 <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Move around the board by tapping any sqaure. The selected space will pulse. Tap again at an intersection to change direction." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ap-xK-0hw">
-                                <rect key="frame" x="98" y="495.5" width="267" height="83.5"/>
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="7ap-xK-0hw">
+                                <rect key="frame" x="98" y="485" width="267" height="104.5"/>
+                                <string key="text">Move around the board by tapping any square. The selected space will pulse. Tap again at an intersection to change across/down orientation.</string>
                                 <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -2128,14 +2129,14 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use the menu to modify settings to the way you prefer, buy more hints, or return to the home screen." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cwF-FE-x0m">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use the menu to modify game settings, get more hints, or return to the home screen." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cwF-FE-x0m">
                                 <rect key="frame" x="65" y="549" width="300" height="63"/>
                                 <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="XvG-ru-a2P">
-                                <rect key="frame" x="57" y="295.5" width="260" height="75"/>
+                                <rect key="frame" x="57.5" y="296" width="260" height="75"/>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="260" id="tEj-1f-D5s"/>
@@ -2515,6 +2516,414 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Qj3-tv-BFu" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2192.8000000000002" y="139.880059970015"/>
+        </scene>
+        <!--Levels View Controller-->
+        <scene sceneID="yXW-nm-IDQ">
+            <objects>
+                <viewController id="dOH-94-Hki" customClass="LevelsViewController" customModule="Crossword" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleAspectFill" id="b8x-dg-Yq6">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="P3k-9Q-H2q" userLabel="Levels 13-24">
+                                <rect key="frame" x="47.5" y="143.5" width="280" height="380.5"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="x9D-C8-iO6" userLabel="Top">
+                                        <rect key="frame" x="0.0" y="0.0" width="280" height="84"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="13" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NXW-Oj-OeH" userLabel="1" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="83.5" height="84"/>
+                                                <color key="backgroundColor" red="0.51508969069999999" green="0.26023170350000002" blue="0.99971157310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="6dl-Dy-kJQ"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="14" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="R7e-wU-U4l" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="98.5" y="0.0" width="83" height="84"/>
+                                                <color key="backgroundColor" red="0.51508969069999999" green="0.26023170350000002" blue="0.99971157310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="yLg-XR-byl"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="15" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lyn-jc-BMF" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="196.5" y="0.0" width="83.5" height="84"/>
+                                                <color key="backgroundColor" red="0.51508969069999999" green="0.26023170350000002" blue="0.99971157310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="1LB-tf-nmm"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="LxZ-su-JAV" userLabel="Middle1">
+                                        <rect key="frame" x="0.0" y="99" width="280" height="84"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="16" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="iHv-dq-TP4" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="83.5" height="84"/>
+                                                <color key="backgroundColor" red="0.51508969069999999" green="0.26023170350000002" blue="0.99971157310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="Utb-Pi-c5e"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="17" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i9n-5T-ytx" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="98.5" y="0.0" width="83" height="84"/>
+                                                <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="cUb-lV-nn3"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="18" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ICc-ZM-Lin" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="196.5" y="0.0" width="83.5" height="84"/>
+                                                <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="6">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="Cr4-WK-9D4"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="NnF-JU-WDT" userLabel="Middle2">
+                                        <rect key="frame" x="0.0" y="198" width="280" height="83.5"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="19" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T9v-GP-dCR" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="83.5" height="83.5"/>
+                                                <color key="backgroundColor" red="0.51508969069999999" green="0.26023170350000002" blue="0.99971157310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="7">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="l3Y-JN-G3N"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="20" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3NE-Ul-y1v" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="98.5" y="0.0" width="83" height="83.5"/>
+                                                <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="8">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="ejh-YH-ofW"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="21" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bSp-d0-rd6" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="196.5" y="0.0" width="83.5" height="83.5"/>
+                                                <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="9">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="N0T-49-dB9"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="ynP-ky-nFh" userLabel="Bottom">
+                                        <rect key="frame" x="0.0" y="296.5" width="280" height="84"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="22" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x3p-HB-cXt" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="83.5" height="84"/>
+                                                <color key="backgroundColor" red="0.51508969069999999" green="0.26023170350000002" blue="0.99971157310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="10">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="hsE-75-ea6"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="23" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xky-l5-sNQ" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="98.5" y="0.0" width="83" height="84"/>
+                                                <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="11">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="rvs-Hv-bDy"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="24" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bXD-kF-XWV" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="196.5" y="0.0" width="83.5" height="84"/>
+                                                <color key="backgroundColor" red="0.40000000000000002" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <state key="normal" title="12">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="Weu-1q-U6p"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="280" id="A1x-4B-Qfh"/>
+                                    <constraint firstAttribute="width" secondItem="P3k-9Q-H2q" secondAttribute="height" multiplier="14:19" id="hrR-3y-C4k"/>
+                                </constraints>
+                            </stackView>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="57R-ab-1Ax" userLabel="Levels 1-12">
+                                <rect key="frame" x="47.5" y="143.5" width="280" height="380.5"/>
+                                <subviews>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="r40-m3-Mog" userLabel="Top">
+                                        <rect key="frame" x="0.0" y="0.0" width="280" height="84"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fL8-EW-gbw" userLabel="1" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="83.5" height="84"/>
+                                                <state key="normal" backgroundImage="num_1">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="wVQ-Zb-FQi"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="2" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4n1-o0-iNG" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="98.5" y="0.0" width="83" height="84"/>
+                                                <color key="backgroundColor" red="0.5133962988403743" green="0.25687689472229214" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" backgroundImage="num_2">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="uPN-MR-v3u"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="3" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="fVY-yE-QSU" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="196.5" y="0.0" width="83.5" height="84"/>
+                                                <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" backgroundImage="num_3">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="BXA-vf-82P"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="ZvM-nA-frg" userLabel="Middle1">
+                                        <rect key="frame" x="0.0" y="99" width="280" height="84"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="4" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x6L-aJ-D7r" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="83.5" height="84"/>
+                                                <color key="backgroundColor" red="0.51508969069999999" green="0.26023170350000002" blue="0.99971157310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" backgroundImage="num_4">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="aoU-dy-lMQ"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="5" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="u88-AT-ptE" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="98.5" y="0.0" width="83" height="84"/>
+                                                <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" backgroundImage="num_5">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="4Sp-J7-VYs"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="6" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="lcz-r1-tHZ" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="196.5" y="0.0" width="83.5" height="84"/>
+                                                <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="6">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="13L-0B-4OH"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="1f9-Fe-GhT" userLabel="Middle2">
+                                        <rect key="frame" x="0.0" y="198" width="280" height="83.5"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="7" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jPG-vF-P84" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="83.5" height="83.5"/>
+                                                <color key="backgroundColor" red="0.51508969069999999" green="0.26023170350000002" blue="0.99971157310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="7">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="fMk-n2-0e2"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="8" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NiS-lf-Cxi" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="98.5" y="0.0" width="83" height="83.5"/>
+                                                <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="8">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="wSh-Vq-poF"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="9" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5y1-Gk-IoF" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="196.5" y="0.0" width="83.5" height="83.5"/>
+                                                <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="9">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="wP5-zo-8dx"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="dnh-Aq-JuD" userLabel="Bottom">
+                                        <rect key="frame" x="0.0" y="296.5" width="280" height="84"/>
+                                        <subviews>
+                                            <button opaque="NO" tag="10" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IMO-US-40Q" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="0.0" y="0.0" width="83.5" height="84"/>
+                                                <color key="backgroundColor" red="0.51508969069999999" green="0.26023170350000002" blue="0.99971157310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="10">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="an8-M0-ul3"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ayG-Ss-COX" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="98.5" y="0.0" width="83" height="84"/>
+                                                <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                <state key="normal" title="11">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="BF2-qk-olb"/>
+                                                </connections>
+                                            </button>
+                                            <button opaque="NO" tag="12" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="SSQ-D7-Hn4" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="196.5" y="0.0" width="83.5" height="84"/>
+                                                <color key="backgroundColor" red="0.40000000000000002" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <state key="normal" title="12">
+                                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                </state>
+                                                <connections>
+                                                    <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="5Sa-Cv-od3"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="width" secondItem="57R-ab-1Ax" secondAttribute="height" multiplier="14:19" id="3A5-2I-aRe"/>
+                                    <constraint firstAttribute="width" constant="280" id="wCC-Er-fcX"/>
+                                </constraints>
+                            </stackView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="wfb-mk-qpa" customClass="GADBannerView">
+                                <rect key="frame" x="0.0" y="617" width="375" height="50"/>
+                                <color key="backgroundColor" red="0.40779560804367065" green="0.40787053108215332" blue="0.40779092907905579" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="jUh-oU-e9z"/>
+                                </constraints>
+                            </view>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="levels" translatesAutoresizingMaskIntoConstraints="NO" id="T3X-Ys-msH">
+                                <rect key="frame" x="16" y="20" width="343" height="110"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="110" id="TPm-AD-593"/>
+                                </constraints>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="l4y-Xs-oJ8">
+                                <rect key="frame" x="8" y="308" width="30" height="51"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                <state key="normal" title="←">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="previousLevelsTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="slC-wr-wzr"/>
+                                </connections>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VtB-DO-jmu">
+                                <rect key="frame" x="337" y="308" width="30" height="51"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="32"/>
+                                <state key="normal" title="→">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                                <connections>
+                                    <action selector="nextLevelsTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="hvy-Io-E3D"/>
+                                </connections>
+                            </button>
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Je5-Et-zzd">
+                                <rect key="frame" x="16" y="113" width="135" height="33"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
+                                <state key="normal" title="← Back To Home">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="P3k-9Q-H2q" firstAttribute="centerY" secondItem="b8x-dg-Yq6" secondAttribute="centerY" id="0Wy-xY-N2n"/>
+                            <constraint firstItem="VtB-DO-jmu" firstAttribute="centerY" secondItem="b8x-dg-Yq6" secondAttribute="centerY" id="8Vv-Wq-CPa"/>
+                            <constraint firstItem="T3X-Ys-msH" firstAttribute="leading" secondItem="3Om-h0-sCg" secondAttribute="leading" constant="16" id="8lm-St-TRp"/>
+                            <constraint firstItem="l4y-Xs-oJ8" firstAttribute="leading" secondItem="3Om-h0-sCg" secondAttribute="leading" constant="8" id="8qP-NI-i9w"/>
+                            <constraint firstItem="3Om-h0-sCg" firstAttribute="trailing" secondItem="VtB-DO-jmu" secondAttribute="trailing" constant="8" id="CER-As-wPX"/>
+                            <constraint firstItem="wfb-mk-qpa" firstAttribute="leading" secondItem="3Om-h0-sCg" secondAttribute="leading" id="DYZ-D5-RgU"/>
+                            <constraint firstItem="57R-ab-1Ax" firstAttribute="centerY" secondItem="b8x-dg-Yq6" secondAttribute="centerY" id="IRa-Km-txV"/>
+                            <constraint firstItem="P3k-9Q-H2q" firstAttribute="leading" secondItem="57R-ab-1Ax" secondAttribute="leading" id="Pzf-bo-UNO"/>
+                            <constraint firstItem="P3k-9Q-H2q" firstAttribute="width" secondItem="P3k-9Q-H2q" secondAttribute="height" multiplier="14:19" id="Rws-8l-sLr"/>
+                            <constraint firstItem="T3X-Ys-msH" firstAttribute="top" secondItem="3Om-h0-sCg" secondAttribute="top" id="Uzd-dU-Fzi"/>
+                            <constraint firstItem="57R-ab-1Ax" firstAttribute="centerX" secondItem="b8x-dg-Yq6" secondAttribute="centerX" id="dHe-nu-hv4"/>
+                            <constraint firstAttribute="bottom" secondItem="wfb-mk-qpa" secondAttribute="bottom" id="fXt-RE-kDF"/>
+                            <constraint firstItem="3Om-h0-sCg" firstAttribute="trailing" secondItem="wfb-mk-qpa" secondAttribute="trailing" id="h1q-tz-Uby"/>
+                            <constraint firstItem="l4y-Xs-oJ8" firstAttribute="centerY" secondItem="b8x-dg-Yq6" secondAttribute="centerY" id="lmm-mB-cFh"/>
+                            <constraint firstItem="T3X-Ys-msH" firstAttribute="trailing" secondItem="3Om-h0-sCg" secondAttribute="trailing" constant="-16" id="qkV-Ql-WV1"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="3Om-h0-sCg"/>
+                    </view>
+                    <nil key="simulatedTopBarMetrics"/>
+                    <connections>
+                        <outlet property="backLevels" destination="l4y-Xs-oJ8" id="iWq-Og-JET"/>
+                        <outlet property="bannerAd" destination="wfb-mk-qpa" id="KF0-jd-cBm"/>
+                        <outlet property="bannerHeightConstraint" destination="jUh-oU-e9z" id="337-dN-eCV"/>
+                        <outlet property="firstStackCenterX" destination="dHe-nu-hv4" id="sj7-3h-baE"/>
+                        <outlet property="firstStackWidth" destination="wCC-Er-fcX" id="xow-GV-aP5"/>
+                        <outlet property="nextLevels" destination="VtB-DO-jmu" id="kyi-OQ-fLc"/>
+                        <outlet property="secondStackLeading" destination="Pzf-bo-UNO" id="HOa-27-2lC"/>
+                        <outlet property="secondStackWidth" destination="A1x-4B-Qfh" id="odQ-Td-FMm"/>
+                        <outletCollection property="levelButtons" destination="fL8-EW-gbw" collectionClass="NSMutableArray" id="K7s-eV-BIv"/>
+                        <outletCollection property="levelButtons" destination="4n1-o0-iNG" collectionClass="NSMutableArray" id="V1s-tm-AMH"/>
+                        <outletCollection property="levelButtons" destination="fVY-yE-QSU" collectionClass="NSMutableArray" id="UDq-Bt-hQ6"/>
+                        <outletCollection property="levelButtons" destination="x6L-aJ-D7r" collectionClass="NSMutableArray" id="QVk-mS-edL"/>
+                        <outletCollection property="levelButtons" destination="u88-AT-ptE" collectionClass="NSMutableArray" id="j34-gl-nRw"/>
+                        <outletCollection property="levelButtons" destination="lcz-r1-tHZ" collectionClass="NSMutableArray" id="lzO-tA-Pe0"/>
+                        <outletCollection property="levelButtons" destination="jPG-vF-P84" collectionClass="NSMutableArray" id="SRS-mT-1bn"/>
+                        <outletCollection property="levelButtons" destination="NiS-lf-Cxi" collectionClass="NSMutableArray" id="GB4-RF-V33"/>
+                        <outletCollection property="levelButtons" destination="5y1-Gk-IoF" collectionClass="NSMutableArray" id="EKc-pY-RnW"/>
+                        <outletCollection property="levelButtons" destination="IMO-US-40Q" collectionClass="NSMutableArray" id="aqy-3Z-RWs"/>
+                        <outletCollection property="levelButtons" destination="ayG-Ss-COX" collectionClass="NSMutableArray" id="ACW-oQ-tcT"/>
+                        <outletCollection property="levelButtons" destination="SSQ-D7-Hn4" collectionClass="NSMutableArray" id="Opx-Q1-Jhq"/>
+                        <outletCollection property="levelButtons" destination="NXW-Oj-OeH" collectionClass="NSMutableArray" id="TWF-eX-R4S"/>
+                        <outletCollection property="levelButtons" destination="R7e-wU-U4l" collectionClass="NSMutableArray" id="IRS-oC-7KI"/>
+                        <outletCollection property="levelButtons" destination="lyn-jc-BMF" collectionClass="NSMutableArray" id="7kY-mK-o6e"/>
+                        <outletCollection property="levelButtons" destination="iHv-dq-TP4" collectionClass="NSMutableArray" id="3mi-PP-XCJ"/>
+                        <outletCollection property="levelButtons" destination="i9n-5T-ytx" collectionClass="NSMutableArray" id="n42-3l-Pjo"/>
+                        <outletCollection property="levelButtons" destination="ICc-ZM-Lin" collectionClass="NSMutableArray" id="rlb-27-v8R"/>
+                        <outletCollection property="levelButtons" destination="T9v-GP-dCR" collectionClass="NSMutableArray" id="nmw-Ye-SMC"/>
+                        <outletCollection property="levelButtons" destination="3NE-Ul-y1v" collectionClass="NSMutableArray" id="Roa-fo-eE5"/>
+                        <outletCollection property="levelButtons" destination="bSp-d0-rd6" collectionClass="NSMutableArray" id="bKd-6j-ela"/>
+                        <outletCollection property="levelButtons" destination="x3p-HB-cXt" collectionClass="NSMutableArray" id="i7n-QN-31z"/>
+                        <outletCollection property="levelButtons" destination="Xky-l5-sNQ" collectionClass="NSMutableArray" id="Xea-D8-IUt"/>
+                        <outletCollection property="levelButtons" destination="bXD-kF-XWV" collectionClass="NSMutableArray" id="RHJ-ln-rWL"/>
+                        <segue destination="CQO-aK-gww" kind="show" identifier="gameSegue" animates="NO" id="gz9-x0-X3G"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="21r-zy-hX4" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="569" y="140"/>
         </scene>
         <!--Purchases View Controller-->
         <scene sceneID="xLI-TR-YRX">
@@ -3175,8 +3584,14 @@
         <image name="erase arrow" width="459" height="459"/>
         <image name="fill_square2-1" width="439" height="438"/>
         <image name="help1" width="2270" height="509"/>
+        <image name="levels" width="5839" height="943"/>
         <image name="line2-1" width="4193" height="22"/>
         <image name="music" width="315" height="315"/>
+        <image name="num_1" width="939" height="939"/>
+        <image name="num_2" width="939" height="939"/>
+        <image name="num_3" width="939" height="939"/>
+        <image name="num_4" width="939" height="939"/>
+        <image name="num_5" width="939" height="939"/>
         <image name="play-1" width="3969" height="1041"/>
         <image name="settings" width="624" height="614"/>
         <image name="title" width="1621" height="642"/>
