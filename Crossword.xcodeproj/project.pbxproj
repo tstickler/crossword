@@ -35,7 +35,11 @@
 		2F35EC751F9B1C07000014E5 /* CrosswordTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F35EC741F9B1C07000014E5 /* CrosswordTests.swift */; };
 		2F35EC801F9B1C07000014E5 /* CrosswordUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F35EC7F1F9B1C07000014E5 /* CrosswordUITests.swift */; };
 		2F36BED71FBE03AE00095519 /* GameOverViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F36BED61FBE03AE00095519 /* GameOverViewController.swift */; };
-		2F426D031FDA1E130003452D /* master.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F426D021FDA1E130003452D /* master.plist */; };
+		2F3E1EDF1FDA47DA0071BF01 /* level_15.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F3E1EDE1FDA47DA0071BF01 /* level_15.plist */; };
+		2F3E1EE51FDA58320071BF01 /* level_16.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F3E1EE41FDA58320071BF01 /* level_16.plist */; };
+		2F3E1EEC1FDA6A1D0071BF01 /* level_18.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F3E1EEA1FDA6A1D0071BF01 /* level_18.plist */; };
+		2F3E1EED1FDA6A1D0071BF01 /* level_17.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F3E1EEB1FDA6A1D0071BF01 /* level_17.plist */; };
+		2F3E1EF11FDA6C1C0071BF01 /* master.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F3E1EF01FDA6C1C0071BF01 /* master.plist */; };
 		2F4DB9BC1FC4F6AE00D488A0 /* level_3.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F4DB9BB1FC4F6AE00D488A0 /* level_3.plist */; };
 		2F4DB9BE1FC5F62E00D488A0 /* level_4.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F4DB9BD1FC5F62E00D488A0 /* level_4.plist */; };
 		2F5A66C71FD7A3AB001502F5 /* LevelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A66C61FD7A3AB001502F5 /* LevelsViewController.swift */; };
@@ -111,7 +115,11 @@
 		2F35EC7F1F9B1C07000014E5 /* CrosswordUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CrosswordUITests.swift; sourceTree = "<group>"; };
 		2F35EC811F9B1C07000014E5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2F36BED61FBE03AE00095519 /* GameOverViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameOverViewController.swift; sourceTree = "<group>"; };
-		2F426D021FDA1E130003452D /* master.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = master.plist; sourceTree = "<group>"; };
+		2F3E1EDE1FDA47DA0071BF01 /* level_15.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_15.plist; sourceTree = "<group>"; };
+		2F3E1EE41FDA58320071BF01 /* level_16.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_16.plist; sourceTree = "<group>"; };
+		2F3E1EEA1FDA6A1D0071BF01 /* level_18.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_18.plist; sourceTree = "<group>"; };
+		2F3E1EEB1FDA6A1D0071BF01 /* level_17.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_17.plist; sourceTree = "<group>"; };
+		2F3E1EF01FDA6C1C0071BF01 /* master.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = master.plist; sourceTree = "<group>"; };
 		2F4DB9BB1FC4F6AE00D488A0 /* level_3.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_3.plist; sourceTree = "<group>"; };
 		2F4DB9BD1FC5F62E00D488A0 /* level_4.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_4.plist; sourceTree = "<group>"; };
 		2F5A66C61FD7A3AB001502F5 /* LevelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelsViewController.swift; sourceTree = "<group>"; };
@@ -220,9 +228,9 @@
 				2F35EC631F9B1C06000014E5 /* Main.storyboard */,
 				2F35EC661F9B1C06000014E5 /* Assets.xcassets */,
 				2F35EC681F9B1C06000014E5 /* LaunchScreen.storyboard */,
+				2F3E1EF01FDA6C1C0071BF01 /* master.plist */,
 				2F35EC6B1F9B1C06000014E5 /* Info.plist */,
 				2F789C971FCE0F17000139A3 /* GoogleService-Info.plist */,
-				2F426D021FDA1E130003452D /* master.plist */,
 				2F0E24D51FD10BC50030E0C2 /* emojione.ttf */,
 				2F39E1311FBE714400FC123C /* Levels */,
 				2F111B121FB964E200DBA3EE /* Music */,
@@ -265,6 +273,10 @@
 				2F101E191FDA09A300BBFEA6 /* level_12.plist */,
 				2F101E271FDA1D1A00BBFEA6 /* level_13.plist */,
 				2F101E211FDA141800BBFEA6 /* level_14.plist */,
+				2F3E1EDE1FDA47DA0071BF01 /* level_15.plist */,
+				2F3E1EE41FDA58320071BF01 /* level_16.plist */,
+				2F3E1EEB1FDA6A1D0071BF01 /* level_17.plist */,
+				2F3E1EEA1FDA6A1D0071BF01 /* level_18.plist */,
 			);
 			path = Levels;
 			sourceTree = "<group>";
@@ -416,6 +428,7 @@
 			files = (
 				2F101E221FDA141900BBFEA6 /* level_14.plist in Resources */,
 				2F1D35491FCB49F800D1172F /* gameOver.mp3 in Resources */,
+				2F3E1EEC1FDA6A1D0071BF01 /* level_18.plist in Resources */,
 				2F9CD6901FC22A400091B834 /* level_2.plist in Resources */,
 				2F35EC6A1F9B1C06000014E5 /* LaunchScreen.storyboard in Resources */,
 				2F07758B1FBA3713001C9ABD /* game.mp3 in Resources */,
@@ -423,10 +436,11 @@
 				2F4DB9BE1FC5F62E00D488A0 /* level_4.plist in Resources */,
 				2F1B2F811FC633AB00C6991A /* level_7.plist in Resources */,
 				2F101E1A1FDA09A400BBFEA6 /* level_12.plist in Resources */,
-				2F426D031FDA1E130003452D /* master.plist in Resources */,
+				2F3E1EED1FDA6A1D0071BF01 /* level_17.plist in Resources */,
 				2F35EC671F9B1C06000014E5 /* Assets.xcassets in Resources */,
 				2F1D354D1FCB587000D1172F /* correct.mp3 in Resources */,
 				2FDD0A581FC622A8001D64F2 /* level_6.plist in Resources */,
+				2F3E1EE51FDA58320071BF01 /* level_16.plist in Resources */,
 				2F1029981FC2436D0053096D /* erase.wav in Resources */,
 				2F9CD68F1FC22A400091B834 /* level_1.plist in Resources */,
 				2F1029991FC2436D0053096D /* click.wav in Resources */,
@@ -434,7 +448,9 @@
 				2F35EC651F9B1C06000014E5 /* Main.storyboard in Resources */,
 				2F2EA6891FC662ED006670A8 /* level_8.plist in Resources */,
 				2F101E121FD9FCDF00BBFEA6 /* level_11.plist in Resources */,
+				2F3E1EF11FDA6C1C0071BF01 /* master.plist in Resources */,
 				2F2EA68D1FC66A06006670A8 /* level_9.plist in Resources */,
+				2F3E1EDF1FDA47DA0071BF01 /* level_15.plist in Resources */,
 				2F1D354B1FCB500D00D1172F /* errors.mp3 in Resources */,
 				2F789C981FCE0F17000139A3 /* GoogleService-Info.plist in Resources */,
 				2F101E281FDA1D1A00BBFEA6 /* level_13.plist in Resources */,

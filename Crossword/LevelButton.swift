@@ -18,7 +18,7 @@ class LevelButton: UIButton {
     func setLevelStatus(_ status: String) {
         self.addSubview(levelStatus)
         
-        levelStatus.layer.opacity = 0.7
+        levelStatus.layer.opacity = 0.85
         levelStatus.image = UIImage(named: "\(status).png")
         levelStatus.contentMode = .scaleAspectFit
         levelStatus.translatesAutoresizingMaskIntoConstraints = false

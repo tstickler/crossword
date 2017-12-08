@@ -19,6 +19,7 @@ class LevelsViewController: UIViewController {
     @IBOutlet var backLevels: UIButton!
     @IBOutlet var nextLevels: UIButton!
         
+    @IBOutlet var backHomeWidth: NSLayoutConstraint!
     @IBOutlet var firstStackCenterX: NSLayoutConstraint!
     @IBOutlet var firstStackWidth: NSLayoutConstraint!
     @IBOutlet var secondStackLeading: NSLayoutConstraint!
@@ -91,6 +92,9 @@ class LevelsViewController: UIViewController {
         })
     }
     
+    @IBAction func backHomeTapped(_ sender: Any) {
+        navigationController?.popViewController(animated: false)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -99,17 +103,23 @@ class LevelsViewController: UIViewController {
         case 568:
             firstStackWidth.constant = 220
             secondStackWidth.constant = 220
+            backHomeWidth.constant = 70
         case 667:
             firstStackWidth.constant = 260
             secondStackWidth.constant = 260
+            backHomeWidth.constant = 75
         case 736:
             firstStackWidth.constant = 280
-            secondStackWidth.constant = 260
+            secondStackWidth.constant = 280
+            backHomeWidth.constant = 80
         case 812:
             firstStackWidth.constant = 260
             secondStackWidth.constant = 260
+            backHomeWidth.constant = 80
         default:
-            firstStackWidth.constant = 280
+            firstStackWidth.constant = 260
+            secondStackWidth.constant = 260
+            backHomeWidth.constant = 80
         }
         
         
@@ -256,8 +266,7 @@ class LevelsViewController: UIViewController {
                                      13,14,15,16,17,18,19,20,21,22,23,24]
         }
         
-        // Set back to < 12 before launch
-        while Settings.uncompletedLevels.count < 14 && !Settings.lockedLevels.isEmpty {
+        while Settings.uncompletedLevels.count < 24 && !Settings.lockedLevels.isEmpty {
             let num = Settings.lockedLevels[0]
             Settings.uncompletedLevels.append(num)
             Settings.lockedLevels.remove(at: 0)

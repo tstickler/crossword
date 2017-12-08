@@ -198,7 +198,7 @@ class GameViewController: UIViewController {
             bottomRowLeading.constant = 52.5
             bottomRowTrailing.constant = 52.5
             
-            keyboardBackHeight.constant = 190
+            keyboardBackHeight.constant = 223
             
             clueHeightConstraint.constant = 75
             emojiClueConstraint.constant = 16
