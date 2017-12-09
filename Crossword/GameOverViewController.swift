@@ -147,20 +147,6 @@ class GameOverViewController: UIViewController {
                     messageLabel.text = "You finished in \(seconds!) \(secondsPlural)\(newLevelText)"
                 }
                 
-                // If the user has completed all the levels, then tell them
-                // that there will be more levels coming
-                if Settings.completedLevels.count == Settings.maxNumOfLevels {
-                    topButton.isHidden = true
-                    titleLabel.text = "That's all for now!"
-                    messageLabel.text = "Stay tuned for more levels coming soon!"
-                } else {
-                    topButton.setTitle("Next Level", for: .normal)
-                    topButton.layer.backgroundColor = UIColor.green.cgColor
-                    topButton.setTitleColor(.black, for: .normal)
-                    topButton.layer.borderWidth = 1
-                    topButton.layer.cornerRadius = 5
-                }
-                
                 bottomButton.layer.backgroundColor = UIColor.lightGray.cgColor
                 bottomButton.setTitleColor(.black, for: .normal)
                 bottomButton.layer.borderWidth = 1
@@ -197,6 +183,20 @@ class GameOverViewController: UIViewController {
                         
                         break
                     }
+                }
+                
+                // If the user has completed all the levels, then tell them
+                // that there will be more levels coming
+                if Settings.completedLevels.count == Settings.maxNumOfLevels {
+                    topButton.isHidden = true
+                    titleLabel.text = "That's all for now!"
+                    messageLabel.text = "Stay tuned for more levels coming soon!"
+                } else {
+                    topButton.setTitle("Next Level", for: .normal)
+                    topButton.layer.backgroundColor = UIColor.green.cgColor
+                    topButton.setTitleColor(.black, for: .normal)
+                    topButton.layer.borderWidth = 1
+                    topButton.layer.cornerRadius = 5
                 }
             } else {
                 // If we came through a full board with at least 1 wrong letter, set the view accordingly
