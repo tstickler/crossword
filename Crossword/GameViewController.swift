@@ -115,6 +115,7 @@ class GameViewController: UIViewController {
     @IBOutlet var keysDimmer: UIView!
     @IBOutlet var bottomDimmer: UIView!
     @IBOutlet var menuDimmer: UIView!
+    @IBOutlet var ipxDimmer: UIView!
     
     @IBOutlet var hintHelpArrow: UIImageView!
     @IBOutlet var boardHelpArrow: UIImageView!
@@ -1489,13 +1490,26 @@ class GameViewController: UIViewController {
         return numberWrongCounter
     }
     
-    /*****************************************
+     /*****************************************
      *                                        *
      *             Help functions             *
      *                                        *
      *****************************************/
     
+    @IBOutlet var nextHelpWidth: NSLayoutConstraint!
     func helpSetupAndDisplay() {
+        if screenSize.height == 568 {
+            hintHelpLabel.font = hintHelpLabel.font.withSize(15)
+            boardHelpLabel.font = hintHelpLabel.font.withSize(15)
+            clueHelpLabel.font = hintHelpLabel.font.withSize(15)
+            menuHelpLabel.font = hintHelpLabel.font.withSize(15)
+            nextHelpWidth.constant = 55
+            nextHelpButton.titleLabel?.font = nextHelpButton.titleLabel?.font.withSize(55)
+        } else if screenSize.height == 667 || screenSize.height == 812 {
+            nextHelpWidth.constant = 60
+            nextHelpButton.titleLabel?.font = nextHelpButton.titleLabel?.font.withSize(60)
+        }
+        
         // Start at the first help display
         helpNum = 1
         
@@ -1552,11 +1566,11 @@ class GameViewController: UIViewController {
         
         // Makes the buttons look nice
         helpFinishedButton.layer.borderColor = blueColorCG
-        helpFinishedButton.layer.borderWidth = 2
+        helpFinishedButton.layer.borderWidth = 3
         helpFinishedButton.layer.cornerRadius = 10
         
         nextHelpButton.layer.borderColor = blueColorCG
-        nextHelpButton.layer.borderWidth = 2
+        nextHelpButton.layer.borderWidth = 3
         nextHelpButton.layer.cornerRadius = 10
         
         // Pick which help should show
@@ -1571,6 +1585,7 @@ class GameViewController: UIViewController {
         keysDimmer.isHidden = true
         bottomDimmer.isHidden = true
         menuDimmer.isHidden = true
+        ipxDimmer.isHidden = true
         
         hintHelpArrow.isHidden = true
         boardHelpArrow.isHidden = true
@@ -1592,6 +1607,7 @@ class GameViewController: UIViewController {
     }
     
     func helpScreenPicker() {
+        ipxDimmer.isHidden = false
         
         // Handles which element to highlight
         switch helpNum {
