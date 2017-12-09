@@ -1905,6 +1905,13 @@
                                         <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <imageView hidden="YES" userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="complete" translatesAutoresizingMaskIntoConstraints="NO" id="pvb-mN-77S">
+                                        <rect key="frame" x="54" y="9.5" width="40" height="21"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" secondItem="pvb-mN-77S" secondAttribute="height" multiplier="15:8" id="2sA-xb-QcT"/>
+                                            <constraint firstAttribute="width" constant="40" id="wMd-U8-m1C"/>
+                                        </constraints>
+                                    </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gRj-CF-uVH">
                                         <rect key="frame" x="332" y="5" width="40" height="30"/>
                                         <constraints>
@@ -2009,6 +2016,7 @@
                                     <constraint firstItem="gRj-CF-uVH" firstAttribute="top" secondItem="pgr-oj-KNO" secondAttribute="top" constant="5" id="FMq-Qx-BMa"/>
                                     <constraint firstItem="WDw-4S-cLn" firstAttribute="top" secondItem="pgr-oj-KNO" secondAttribute="top" constant="5" id="GLK-oh-TnJ"/>
                                     <constraint firstAttribute="bottom" secondItem="VcI-Uz-Ctc" secondAttribute="bottom" id="Hda-tm-Zrn"/>
+                                    <constraint firstItem="pvb-mN-77S" firstAttribute="centerY" secondItem="pgr-oj-KNO" secondAttribute="centerY" id="Lru-nR-XoN"/>
                                     <constraint firstItem="FBW-3F-Xbr" firstAttribute="top" secondItem="pgr-oj-KNO" secondAttribute="top" constant="10" id="PsV-Fp-FaZ"/>
                                     <constraint firstItem="anP-6j-nQf" firstAttribute="top" secondItem="pgr-oj-KNO" secondAttribute="top" constant="5" id="W7f-1f-mQp"/>
                                     <constraint firstAttribute="height" constant="40" id="dEB-FP-SAx"/>
@@ -2017,6 +2025,7 @@
                                     <constraint firstItem="VcI-Uz-Ctc" firstAttribute="leading" secondItem="pgr-oj-KNO" secondAttribute="leading" constant="-1" id="h0i-Zc-2CQ"/>
                                     <constraint firstAttribute="bottom" secondItem="WDw-4S-cLn" secondAttribute="bottom" constant="5" id="ldb-Qi-0Pl"/>
                                     <constraint firstAttribute="bottom" secondItem="2jV-Os-jYS" secondAttribute="bottom" constant="5" id="n8w-vm-hIO"/>
+                                    <constraint firstItem="pvb-mN-77S" firstAttribute="leading" secondItem="WDw-4S-cLn" secondAttribute="trailing" constant="8" id="oAv-qm-LX0"/>
                                     <constraint firstAttribute="bottom" secondItem="FBW-3F-Xbr" secondAttribute="bottom" constant="10" id="qNn-9h-Kt5"/>
                                     <constraint firstAttribute="bottom" secondItem="gRj-CF-uVH" secondAttribute="bottom" constant="5" id="rGU-cC-usN"/>
                                     <constraint firstItem="FBW-3F-Xbr" firstAttribute="leading" secondItem="anP-6j-nQf" secondAttribute="trailing" constant="9" id="w5L-cT-m8V"/>
@@ -2289,6 +2298,7 @@
                         <outlet property="clueHelpArrow" destination="90s-1e-1RX" id="G37-sc-cs5"/>
                         <outlet property="clueHelpLabel" destination="E5g-KQ-zde" id="prX-d2-co4"/>
                         <outlet property="clueLabel" destination="NEQ-gs-OeF" id="GGQ-Jv-vav"/>
+                        <outlet property="completeIndicator" destination="pvb-mN-77S" id="Rdu-RP-iG7"/>
                         <outlet property="directionLabel" destination="e4j-ak-fNL" id="K8V-4S-326"/>
                         <outlet property="emojiClue" destination="LKf-Be-Bi1" id="mq2-lg-eDa"/>
                         <outlet property="emojiClueConstraint" destination="W44-9V-c4b" id="Av0-Ro-dmD"/>
@@ -2517,6 +2527,87 @@
             </objects>
             <point key="canvasLocation" x="2192.8000000000002" y="139.880059970015"/>
         </scene>
+        <!--Locked View Controller-->
+        <scene sceneID="crW-7Q-vWW">
+            <objects>
+                <viewController id="Qal-NV-Gj1" customClass="LockedViewController" customModule="Crossword" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Zto-Gk-3XQ">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="u3Q-vq-3qv">
+                                <rect key="frame" x="39.5" y="218" width="295" height="230"/>
+                                <subviews>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="locked" translatesAutoresizingMaskIntoConstraints="NO" id="XYI-a0-UhW">
+                                        <rect key="frame" x="73" y="8" width="150" height="80"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="150" id="NWq-Yx-ewv"/>
+                                            <constraint firstAttribute="width" secondItem="XYI-a0-UhW" secondAttribute="height" multiplier="15:8" id="Rlw-Am-4dX"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="This level is locked. Complete other ________ levels to unlock this level." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hNn-r7-f39">
+                                        <rect key="frame" x="16" y="89" width="263" height="90"/>
+                                        <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hSZ-iD-OIC">
+                                        <rect key="frame" x="117.5" y="187" width="60" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="NPT-qB-Ntk"/>
+                                            <constraint firstAttribute="height" constant="35" id="W0f-vW-usb"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <state key="normal" title="Okay">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="okayButtonTapped:" destination="Qal-NV-Gj1" eventType="touchUpInside" id="IeX-uQ-aEv"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="hNn-r7-f39" secondAttribute="trailing" constant="16" id="FK7-kI-QsG"/>
+                                    <constraint firstItem="XYI-a0-UhW" firstAttribute="centerX" secondItem="u3Q-vq-3qv" secondAttribute="centerX" id="M54-uE-u3R"/>
+                                    <constraint firstAttribute="bottom" secondItem="hSZ-iD-OIC" secondAttribute="bottom" constant="8" id="Od8-zC-kTA"/>
+                                    <constraint firstItem="hSZ-iD-OIC" firstAttribute="top" secondItem="hNn-r7-f39" secondAttribute="bottom" constant="8" id="b4d-uG-4dq"/>
+                                    <constraint firstItem="hSZ-iD-OIC" firstAttribute="centerX" secondItem="u3Q-vq-3qv" secondAttribute="centerX" id="bnC-jl-JvN"/>
+                                    <constraint firstItem="hNn-r7-f39" firstAttribute="leading" secondItem="u3Q-vq-3qv" secondAttribute="leading" constant="16" id="jcA-hb-luI"/>
+                                    <constraint firstAttribute="height" constant="230" id="oS5-Dw-PT5"/>
+                                    <constraint firstAttribute="width" constant="295" id="ohi-Jr-fws"/>
+                                    <constraint firstItem="XYI-a0-UhW" firstAttribute="top" secondItem="u3Q-vq-3qv" secondAttribute="top" constant="8" id="ytd-nM-AMw"/>
+                                    <constraint firstItem="hNn-r7-f39" firstAttribute="top" secondItem="XYI-a0-UhW" secondAttribute="bottom" constant="1" id="zIA-C2-uJQ"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.70382063360000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="u3Q-vq-3qv" firstAttribute="centerY" secondItem="Zto-Gk-3XQ" secondAttribute="centerY" id="a5R-17-WFp"/>
+                            <constraint firstItem="u3Q-vq-3qv" firstAttribute="centerX" secondItem="Zto-Gk-3XQ" secondAttribute="centerX" id="apW-gB-ulU"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="7pc-Z9-LBz"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="Ulx-pA-Xlg" appends="YES" id="toS-sl-qB7"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="backButton" destination="hSZ-iD-OIC" id="hXW-Ka-PL2"/>
+                        <outlet property="background" destination="u3Q-vq-3qv" id="cf0-82-Z79"/>
+                        <outlet property="lockedLabel" destination="hNn-r7-f39" id="32X-yi-NjA"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FhC-fM-Chi" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="Ulx-pA-Xlg">
+                    <connections>
+                        <action selector="backgroundTapped:" destination="Qal-NV-Gj1" id="wVs-U7-wvO"/>
+                        <outlet property="delegate" destination="Qal-NV-Gj1" id="hX1-k0-iSE"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="-94" y="912"/>
+        </scene>
         <!--Levels View Controller-->
         <scene sceneID="yXW-nm-IDQ">
             <objects>
@@ -2601,8 +2692,8 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="NnF-JU-WDT" userLabel="Middle2">
                                         <rect key="frame" x="0.0" y="198" width="280" height="83.5"/>
                                         <subviews>
-                                            <button opaque="NO" tag="19" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T9v-GP-dCR" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="83.5" height="83.5"/>
+                                            <button hidden="YES" opaque="NO" tag="19" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="T9v-GP-dCR" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="-47.5" y="-341.5" width="0.0" height="30"/>
                                                 <color key="backgroundColor" red="0.51508969069999999" green="0.26023170350000002" blue="0.99971157310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="7">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2611,8 +2702,8 @@
                                                     <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="l3Y-JN-G3N"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" tag="20" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3NE-Ul-y1v" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
-                                                <rect key="frame" x="98.5" y="0.0" width="83" height="83.5"/>
+                                            <button hidden="YES" opaque="NO" tag="20" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3NE-Ul-y1v" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="-47.5" y="-341.5" width="0.0" height="30"/>
                                                 <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="8">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2621,8 +2712,8 @@
                                                     <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="ejh-YH-ofW"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" tag="21" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bSp-d0-rd6" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
-                                                <rect key="frame" x="196.5" y="0.0" width="83.5" height="83.5"/>
+                                            <button hidden="YES" opaque="NO" tag="21" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bSp-d0-rd6" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="-47.5" y="-341.5" width="0.0" height="30"/>
                                                 <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="9">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2636,8 +2727,8 @@
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="ynP-ky-nFh" userLabel="Bottom">
                                         <rect key="frame" x="0.0" y="296.5" width="280" height="84"/>
                                         <subviews>
-                                            <button opaque="NO" tag="22" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x3p-HB-cXt" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="83.5" height="84"/>
+                                            <button hidden="YES" opaque="NO" tag="22" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="x3p-HB-cXt" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="-47.5" y="-440" width="0.0" height="30"/>
                                                 <color key="backgroundColor" red="0.51508969069999999" green="0.26023170350000002" blue="0.99971157310000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="10">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2646,8 +2737,8 @@
                                                     <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="hsE-75-ea6"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" tag="23" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xky-l5-sNQ" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
-                                                <rect key="frame" x="98.5" y="0.0" width="83" height="84"/>
+                                            <button hidden="YES" opaque="NO" tag="23" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Xky-l5-sNQ" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="-47.5" y="-440" width="0.0" height="30"/>
                                                 <color key="backgroundColor" red="0.51339629880000004" green="0.25687689470000002" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <state key="normal" title="11">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2656,8 +2747,8 @@
                                                     <action selector="levelButtonTapped:" destination="dOH-94-Hki" eventType="touchUpInside" id="rvs-Hv-bDy"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" tag="24" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bXD-kF-XWV" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
-                                                <rect key="frame" x="196.5" y="0.0" width="83.5" height="84"/>
+                                            <button hidden="YES" opaque="NO" tag="24" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bXD-kF-XWV" customClass="LevelButton" customModule="Crossword" customModuleProvider="target">
+                                                <rect key="frame" x="-47.5" y="-440" width="0.0" height="30"/>
                                                 <color key="backgroundColor" red="0.40000000000000002" green="0.0" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <state key="normal" title="12">
                                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -2928,6 +3019,7 @@
                         <outletCollection property="levelButtons" destination="Xky-l5-sNQ" collectionClass="NSMutableArray" id="Xea-D8-IUt"/>
                         <outletCollection property="levelButtons" destination="bXD-kF-XWV" collectionClass="NSMutableArray" id="RHJ-ln-rWL"/>
                         <segue destination="CQO-aK-gww" kind="show" identifier="gameSegue" animates="NO" id="gz9-x0-X3G"/>
+                        <segue destination="Qal-NV-Gj1" kind="presentation" identifier="lockedSegue" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="p5Y-vR-FDT"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="21r-zy-hX4" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -3589,6 +3681,7 @@
     <resources>
         <image name="Twitter_white-1" width="400" height="400"/>
         <image name="back_home" width="1687" height="608"/>
+        <image name="complete" width="1169" height="596"/>
         <image name="down_arrow" width="534" height="909"/>
         <image name="down_arrow2" width="913" height="536"/>
         <image name="erase arrow" width="459" height="459"/>
@@ -3596,6 +3689,7 @@
         <image name="help1" width="2270" height="509"/>
         <image name="levels" width="5839" height="943"/>
         <image name="line2-1" width="4193" height="22"/>
+        <image name="locked" width="1169" height="596"/>
         <image name="music" width="315" height="315"/>
         <image name="num_1" width="939" height="939"/>
         <image name="num_2" width="939" height="939"/>

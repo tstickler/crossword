@@ -53,6 +53,7 @@
 		2FA3F60C1FA2D8AD006938E2 /* BoardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA3F60B1FA2D8AD006938E2 /* BoardButton.swift */; };
 		2FADDA891FC8CFD00069AAF0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FADDA881FC8CFD00069AAF0 /* StoreKit.framework */; };
 		2FADDA8B1FC8D16A0069AAF0 /* InAppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FADDA8A1FC8D16A0069AAF0 /* InAppPurchase.swift */; };
+		2FD413761FDB72E600B0D1A0 /* LockedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD413751FDB72E600B0D1A0 /* LockedViewController.swift */; };
 		2FDC7C371FAFA4A200A3EABE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */; };
 		2FDD0A571FC622A8001D64F2 /* level_10.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDD0A551FC622A7001D64F2 /* level_10.plist */; };
 		2FDD0A581FC622A8001D64F2 /* level_6.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FDD0A561FC622A8001D64F2 /* level_6.plist */; };
@@ -133,6 +134,7 @@
 		2FA3F60B1FA2D8AD006938E2 /* BoardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardButton.swift; sourceTree = "<group>"; };
 		2FADDA881FC8CFD00069AAF0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		2FADDA8A1FC8D16A0069AAF0 /* InAppPurchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchase.swift; sourceTree = "<group>"; };
+		2FD413751FDB72E600B0D1A0 /* LockedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockedViewController.swift; sourceTree = "<group>"; };
 		2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		2FDD0A551FC622A7001D64F2 /* level_10.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_10.plist; sourceTree = "<group>"; };
 		2FDD0A561FC622A8001D64F2 /* level_6.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_6.plist; sourceTree = "<group>"; };
@@ -215,6 +217,7 @@
 				2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */,
 				2F0929DF1FC0A6EF00EA18B2 /* InfoViewController.swift */,
 				2F5A66C61FD7A3AB001502F5 /* LevelsViewController.swift */,
+				2FD413751FDB72E600B0D1A0 /* LockedViewController.swift */,
 				2F35EC611F9B1C06000014E5 /* GameViewController.swift */,
 				2F5D9E6F1FA1522B004A2AB5 /* MenuViewController.swift */,
 				2F7CC5F51FB8D04A00ABA677 /* HintViewController.swift */,
@@ -634,6 +637,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				2F705BBE1FC7CE17005E77F3 /* PurchasesViewController.swift in Sources */,
+				2FD413761FDB72E600B0D1A0 /* LockedViewController.swift in Sources */,
 				2FDC7C371FAFA4A200A3EABE /* HomeViewController.swift in Sources */,
 				2F5A66C71FD7A3AB001502F5 /* LevelsViewController.swift in Sources */,
 				2F7CC5F61FB8D04A00ABA677 /* HintViewController.swift in Sources */,

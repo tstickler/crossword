@@ -25,6 +25,9 @@ class GameOverViewController: UIViewController {
     // Should always end up being 1 but this is safer
     var indexOfPresenter: Int!
     
+    // Lets us assign completed/uncompleted/locked levels
+    let defaults = UserDefaults.standard
+    
     @IBAction func topButtonTapped(_ sender: Any) {
         dismiss(animated: true, completion: nil)
         
@@ -35,7 +38,11 @@ class GameOverViewController: UIViewController {
         // is used to display which letters are wrong on the board.
         if gameOver == true {
             if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
-                Settings.userLevel! += 1
+                // Find the next level to go to
+                // Should be the next sequential, uncompleted level
+                // If there are no levels > the current level, find the min
+                // uncompleted level and go there
+                Settings.userLevel = determineNextLevel()
                 parentVC.newLevel()
             }
         } else {
@@ -102,7 +109,9 @@ class GameOverViewController: UIViewController {
                 var hoursPlural = "hours"
                 var minutesPlural = "minutes"
                 var secondsPlural = "seconds"
+                var newLevelText = ""
                 
+                // Determines if hours/mins/seconds should be plural
                 if hours == 1 {
                     hoursPlural = "hour"
                 }
@@ -119,19 +128,31 @@ class GameOverViewController: UIViewController {
                 viewBackground.layer.borderColor = UIColor.green.cgColor
                 titleLabel.text = "Nice Job!"
                 
-                if hours > 0 {
-                    messageLabel.text = "You finished in \(hours!) \(hoursPlural), \(minutes!) \(minutesPlural), and \(seconds!) \(secondsPlural) and unlocked a new level!"
-                } else if parentVC.minutesCounter > 0 {
-                    messageLabel.text = "You finished in \(minutes!) \(minutesPlural) and \(seconds!) \(secondsPlural) and unlocked a new level!"
+                // Determines if we should tell the user a new level was unlocked
+                // If there are no levels to unlock, then we don't want to tell
+                // the user they unlocked a level
+                if !Settings.lockedLevels.isEmpty {
+                    newLevelText = " and unlocked a new level!"
                 } else {
-                    messageLabel.text = "You finished in \(seconds!) \(secondsPlural) and unlocked a new level!"
+                    newLevelText = "!"
                 }
                 
-                if Settings.userLevel == Settings.maxNumOfLevels {
+                // Report to the user how well they did
+                // Alert a new level opened if there were levels available
+                if hours > 0 {
+                    messageLabel.text = "You finished in \(hours!) \(hoursPlural), \(minutes!) \(minutesPlural), and \(seconds!) \(secondsPlural)\(newLevelText)"
+                } else if parentVC.minutesCounter > 0 {
+                    messageLabel.text = "You finished in \(minutes!) \(minutesPlural) and \(seconds!) \(secondsPlural)\(newLevelText)"
+                } else {
+                    messageLabel.text = "You finished in \(seconds!) \(secondsPlural)\(newLevelText)"
+                }
+                
+                // If the user has completed all the levels, then tell them
+                // that there will be more levels coming
+                if Settings.completedLevels.count == Settings.maxNumOfLevels {
                     topButton.isHidden = true
                     titleLabel.text = "That's all for now!"
                     messageLabel.text = "Stay tuned for more levels coming soon!"
-                    Settings.userLevel = 1
                 } else {
                     topButton.setTitle("Next Level", for: .normal)
                     topButton.layer.backgroundColor = UIColor.green.cgColor
@@ -145,6 +166,38 @@ class GameOverViewController: UIViewController {
                 bottomButton.layer.borderWidth = 1
                 bottomButton.layer.cornerRadius = 5
                 bottomButton.setTitle("Home", for: .normal)
+                
+                // Modify our level arrays
+                for i in 0..<Settings.uncompletedLevels.count {
+                    // Go until we find the current level in uncompleted
+                    // levels
+                    if Settings.uncompletedLevels[i] == Settings.userLevel {
+                        
+                        // Put the level into the completed levels and remove from
+                        // uncompleted levels
+                        Settings.completedLevels.append(Settings.userLevel)
+                        Settings.uncompletedLevels.remove(at: i)
+                        
+                        // Move a locked level into the uncompleted levels
+                        if !Settings.lockedLevels.isEmpty {
+                            Settings.uncompletedLevels.append(Settings.lockedLevels[0])
+                            Settings.lockedLevels.remove(at: 0)
+                        }
+                        
+                        // Save the state of the level arrays
+                        defaults.set(Settings.completedLevels, forKey: "completedLevels")
+                        defaults.set(Settings.uncompletedLevels, forKey: "uncompletedLevels")
+                        defaults.set(Settings.lockedLevels, forKey: "lockedLevels")
+                        
+                        // User gets another cheat for completing the level
+                        // Only needs to happen when the level is completed the first time
+                        Settings.cheatCount += 1
+                        parentVC.cheatCountLabel.text = "\(Settings.cheatCount)"
+                        defaults.set(Settings.cheatCount, forKey: "cheatCount")
+                        
+                        break
+                    }
+                }
             } else {
                 // If we came through a full board with at least 1 wrong letter, set the view accordingly
                 gameOver = false
@@ -171,5 +224,35 @@ class GameOverViewController: UIViewController {
                 bottomButton.setTitle("Continue", for: .normal)
             }
         }
+    }
+    
+    func determineNextLevel() -> Int {
+        // Determine what level to go the next
+        var nextLevel = Settings.userLevel + 1
+        
+        // Potential levels to go to
+        var potentialNextLevels = [Int]()
+        
+        // Find the next available level greater than current level
+        for level in Settings.uncompletedLevels {
+            if level > Settings.userLevel {
+                potentialNextLevels.append(level)
+            }
+        }
+        
+        // If no greater level was found, get all the levels less than current
+        // level
+        if potentialNextLevels.isEmpty {
+            for level in Settings.uncompletedLevels {
+                if level < Settings.userLevel {
+                    potentialNextLevels.append(level)
+                }
+            }
+        }
+        
+        // Go to the lowest found potential level
+        nextLevel = potentialNextLevels.min()!
+        
+        return nextLevel
     }
 }

@@ -15,6 +15,8 @@ class LevelsViewController: UIViewController {
         return true
     }
     
+    var selectedLevel: Int!
+    
     @IBOutlet var levelButtons: [LevelButton]!
     @IBOutlet var backLevels: UIButton!
     @IBOutlet var nextLevels: UIButton!
@@ -42,10 +44,11 @@ class LevelsViewController: UIViewController {
     var maxNumOfPages = 2
     
     @IBAction func levelButtonTapped(_ sender: UIButton) {
-        
+        selectedLevel = sender.tag
         for level in Settings.lockedLevels {
-            // GIVE A NOTIFICATION OF LOCKED LEVEL HERE
-            if sender.tag == level {
+            
+            if selectedLevel == level {
+                performSegue(withIdentifier: "lockedSegue", sender: self)
                 return
             }
         }
@@ -99,10 +102,12 @@ class LevelsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Indicate if a level is new or not
         for level in Settings.newLevels {
             levelButtons[level - 1].setNewIndicator()
         }
         
+        // Set how big the level should display depending on the user device
         switch UIScreen.main.bounds.height {
         case 568:
             firstStackWidth.constant = 220
@@ -126,14 +131,16 @@ class LevelsViewController: UIViewController {
             backHomeWidth.constant = 80
         }
         
-        
+        // Page num is which level stack is displayed
         pageNum = 1
         backLevels.isHidden = true
         
+        // Start the second stack off page
         secondStackLeading.constant = view.frame.width
         
         setUpLevelStatusArrays()
         
+        // Set the images for each level button
         for i in 1...Settings.maxNumOfLevels {
             levelButtons[i - 1].setBackgroundImage(UIImage(named: "num_\(i)"), for: .normal)
             levelButtons[i - 1].layer.backgroundColor = UIColor.clear.cgColor
@@ -248,41 +255,62 @@ class LevelsViewController: UIViewController {
     }
     
     func setUpLevelStatusArrays() {
+        // Set up completed levels
+        // If there are none saved, start empty
         if let completeLevels = defaults.array(forKey: "completedLevels") {
             Settings.completedLevels = completeLevels as! [Int]
         } else {
             Settings.completedLevels = []
         }
         
+        // Set up uncompleted levels
+        // If there are none saved, start with 1-10 (original levels)
         if let uncompleteLevels = defaults.array(forKey: "uncompletedLevels") {
             Settings.uncompletedLevels = uncompleteLevels as! [Int]
         } else {
-            Settings.uncompletedLevels = []
+            Settings.uncompletedLevels = [1,2,3,4,5,6,7,8,9,10]
         }
         
+        // Set up locked levels
+        // If there are none saved, start empty and add new levels
         if let lockedLevels = defaults.array(forKey: "lockedLevels") {
             Settings.lockedLevels = lockedLevels as! [Int]
+            addNewLevels()
         } else {
-            Settings.lockedLevels = [1,2,3,4,5,6,7,8,9,10,11,12,
-                                     13,14,15,16,17,18,19,20,21,22,23,24]
+            Settings.lockedLevels = []
+            addNewLevels()
         }
         
-        while Settings.uncompletedLevels.count < 10 && !Settings.lockedLevels.isEmpty {
+        // Fill the uncompleted levels from the locked levels if there are less than 12
+        // uncompleted levels and the locked levels aren't empty
+        while Settings.uncompletedLevels.count < 12 && !Settings.lockedLevels.isEmpty {
             let num = Settings.lockedLevels[0]
             Settings.uncompletedLevels.append(num)
             Settings.lockedLevels.remove(at: 0)
         }
         
+        // Set a lock image on locked levels
         for i in 0..<Settings.lockedLevels.count {
             levelButtons[Settings.lockedLevels[i] - 1].setLevelStatus("locked")
         }
         
+        // Set a check image on completed levels
         for i in 0..<Settings.completedLevels.count {
             levelButtons[Settings.completedLevels[i] - 1].setLevelStatus("complete")
         }
         
+        // Save the state of the level arrays
         defaults.set(Settings.completedLevels, forKey: "completedLevels")
         defaults.set(Settings.uncompletedLevels, forKey: "uncompletedLevels")
         defaults.set(Settings.lockedLevels, forKey: "lockedLevels")
+    }
+    
+    func addNewLevels() {
+        // If the user hasn't got the 1.1 levels, add them.
+        if !defaults.bool(forKey: "1.1_update_levels") {
+            let levels = [11,12,13,14,15,16,17,18]
+            Settings.lockedLevels.append(contentsOf: levels)
+            defaults.set(true, forKey: "1.1_update_levels")
+        }
     }
 }

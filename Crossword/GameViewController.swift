@@ -72,7 +72,7 @@ class GameViewController: UIViewController {
     @IBOutlet var bottomRowLeading: NSLayoutConstraint!
     @IBOutlet var bottomRowTrailing: NSLayoutConstraint!
     
-    // Clue area labels and buttons
+    // Clue area and top bar labels and buttons
     @IBOutlet var clueLabel: UILabel!
     @IBOutlet weak var emojiClue: UILabel!
     @IBOutlet var directionLabel: UILabel!
@@ -81,6 +81,7 @@ class GameViewController: UIViewController {
     @IBOutlet weak var levelLabel: UILabel!
     @IBOutlet weak var emojiClueConstraint: NSLayoutConstraint!
     @IBOutlet var clueHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var completeIndicator: UIImageView!
     
     // To know where the user last was
     var previousButton = 0
@@ -271,6 +272,14 @@ class GameViewController: UIViewController {
         secondsLabel.text = ":\(secs!)"
         minutesLabel.text = ":\(mins!)"
         hoursLabel.text = "\(hoursCounter)"
+        
+        // Indicates to the user that the leve they're on has already been
+        // completed
+        for level in Settings.completedLevels {
+            if level == Settings.userLevel {
+                completeIndicator.isHidden = false
+            } 
+        }
     }
     
     func giveBoardSpacesProperties(board: [String]) {
@@ -960,29 +969,6 @@ class GameViewController: UIViewController {
                 // Prepare for the next game
                 resetDefaults()
                 
-                for i in 0..<Settings.uncompletedLevels.count {
-                    if Settings.uncompletedLevels[i] == Settings.userLevel {
-                        Settings.completedLevels.append(Settings.userLevel)
-                        Settings.uncompletedLevels.remove(at: i)
-                        
-                        if !Settings.lockedLevels.isEmpty {
-                            Settings.uncompletedLevels.append(Settings.lockedLevels[0])
-                            Settings.lockedLevels.remove(at: 0)
-                        }
-                        
-                        defaults.set(Settings.completedLevels, forKey: "completedLevels")
-                        defaults.set(Settings.uncompletedLevels, forKey: "uncompletedLevels")
-                        defaults.set(Settings.lockedLevels, forKey: "lockedLevels")
-                        
-                        // User gets another cheat for completing the level
-                        // Only needs to happen when the level is completed the first time
-                        Settings.cheatCount += 1
-                        cheatCountLabel.text = "\(Settings.cheatCount)"
-                        defaults.set(Settings.cheatCount, forKey: "cheatCount")
-                        
-                        break
-                    }
-                }
                 
                 // Perform game over animation
                 animateGameOver()
@@ -1151,31 +1137,6 @@ class GameViewController: UIViewController {
                     
                     // Prepare for next level
                     resetDefaults()
-                    
-                    
-                    
-                    for i in 0..<Settings.uncompletedLevels.count {
-                        if Settings.uncompletedLevels[i] == Settings.userLevel {
-                            Settings.completedLevels.append(Settings.userLevel)
-                            Settings.uncompletedLevels.remove(at: i)
-                            
-                            if !Settings.lockedLevels.isEmpty {
-                                Settings.uncompletedLevels.append(Settings.lockedLevels[0])
-                                Settings.lockedLevels.remove(at: 0)
-                            }
-                            
-                            defaults.set(Settings.completedLevels, forKey: "completedLevels")
-                            defaults.set(Settings.uncompletedLevels, forKey: "uncompletedLevels")
-                            defaults.set(Settings.lockedLevels, forKey: "lockedLevels")
-                                                        
-                            // User gets another cheat for completing the level
-                            // Only needs to happen when the level is completed the first time
-                            Settings.cheatCount += 1
-                            cheatCountLabel.text = "\(Settings.cheatCount)"
-                            defaults.set(Settings.cheatCount, forKey: "cheatCount")
-                            break
-                        }
-                    }
 
                     // Perform the game over animation
                     animateGameOver()
