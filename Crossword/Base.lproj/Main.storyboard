@@ -28,6 +28,90 @@
         </array>
     </customFonts>
     <scenes>
+        <!--Notification View Controller-->
+        <scene sceneID="nQO-tX-oJV">
+            <objects>
+                <viewController id="D62-me-3rC" customClass="NotificationViewController" customModule="Crossword" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="vVh-55-Jdy">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="G47-K6-xtY">
+                                <rect key="frame" x="39.5" y="218" width="295" height="230"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="jhp-hh-Cfa">
+                                        <rect key="frame" x="117.5" y="183" width="60" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="35" id="1j7-X1-K8W"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="eG5-pi-8M3"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <state key="normal" title="Okay">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="okayButtonTapped:" destination="D62-me-3rC" eventType="touchUpInside" id="iX5-hz-afb"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😇" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wh1-g2-2di">
+                                        <rect key="frame" x="100.5" y="12" width="95" height="125"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="125" id="1dC-wr-q5M"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="95"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Here's __ free hints! Thank you for playing!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M4e-zl-Ecg">
+                                        <rect key="frame" x="16" y="122" width="263" height="61"/>
+                                        <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="M4e-zl-Ecg" firstAttribute="top" secondItem="wh1-g2-2di" secondAttribute="bottom" constant="-15" id="4si-Bs-4kl"/>
+                                    <constraint firstItem="jhp-hh-Cfa" firstAttribute="centerX" secondItem="G47-K6-xtY" secondAttribute="centerX" id="BRT-LV-UgO"/>
+                                    <constraint firstItem="wh1-g2-2di" firstAttribute="top" secondItem="G47-K6-xtY" secondAttribute="top" constant="12" id="CVS-dU-6ne"/>
+                                    <constraint firstAttribute="height" constant="230" id="IT4-iQ-fpp"/>
+                                    <constraint firstAttribute="trailing" secondItem="M4e-zl-Ecg" secondAttribute="trailing" constant="16" id="Nc7-Vp-Zgl"/>
+                                    <constraint firstItem="M4e-zl-Ecg" firstAttribute="leading" secondItem="G47-K6-xtY" secondAttribute="leading" constant="16" id="XG1-X2-ovy"/>
+                                    <constraint firstItem="wh1-g2-2di" firstAttribute="centerX" secondItem="G47-K6-xtY" secondAttribute="centerX" id="c7f-0z-AKi"/>
+                                    <constraint firstItem="jhp-hh-Cfa" firstAttribute="top" secondItem="M4e-zl-Ecg" secondAttribute="bottom" id="fnb-jH-1Z0"/>
+                                    <constraint firstAttribute="width" constant="295" id="lY1-nZ-zbf"/>
+                                    <constraint firstItem="M4e-zl-Ecg" firstAttribute="centerX" secondItem="G47-K6-xtY" secondAttribute="centerX" id="oAX-9o-4Yw"/>
+                                    <constraint firstAttribute="bottom" secondItem="jhp-hh-Cfa" secondAttribute="bottom" constant="12" id="qft-fC-A44"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.70382063360000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="G47-K6-xtY" firstAttribute="centerY" secondItem="vVh-55-Jdy" secondAttribute="centerY" id="tjj-3R-mcz"/>
+                            <constraint firstItem="G47-K6-xtY" firstAttribute="centerX" secondItem="vVh-55-Jdy" secondAttribute="centerX" id="wt2-2r-eVw"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="49z-oM-Hmw"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="zPX-0V-dhf" appends="YES" id="yEV-X3-aXa"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="background" destination="G47-K6-xtY" id="Fxn-Uh-Ccu"/>
+                        <outlet property="notificationLabel" destination="M4e-zl-Ecg" id="DhH-5J-Itx"/>
+                        <outlet property="okayButton" destination="jhp-hh-Cfa" id="NXN-Ge-zY7"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="0U9-Ql-35z" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="zPX-0V-dhf">
+                    <connections>
+                        <action selector="backgroundTapped:" destination="D62-me-3rC" id="hFY-vK-JVK"/>
+                        <outlet property="delegate" destination="D62-me-3rC" id="Hfo-cR-0oG"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="2192.8000000000002" y="-1390.2548725637182"/>
+        </scene>
         <!--Home View Controller-->
         <scene sceneID="tne-QT-ifu">
             <objects>
@@ -107,6 +191,7 @@
                         <outlet property="bannerAd" destination="mgP-Ir-n9J" id="XmE-x4-Igu"/>
                         <outlet property="bannerHeightConstraint" destination="l3c-Cu-ueQ" id="Lo9-mc-Swq"/>
                         <outlet property="muteButton" destination="9x3-fH-e0u" id="Vxl-Hz-sP0"/>
+                        <segue destination="D62-me-3rC" kind="presentation" identifier="notificationSegue" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="k0q-DY-wEY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
@@ -2059,7 +2144,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="🐦💬" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LKf-Be-Bi1">
-                                <rect key="frame" x="147.5" y="468" width="80" height="48"/>
+                                <rect key="frame" x="147.5" y="468" width="80" height="53.5"/>
                                 <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="40"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -2554,7 +2639,7 @@
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hSZ-iD-OIC">
                                         <rect key="frame" x="117.5" y="187" width="60" height="35"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="60" id="NPT-qB-Ntk"/>
+                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="60" id="NPT-qB-Ntk"/>
                                             <constraint firstAttribute="height" constant="35" id="W0f-vW-usb"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>

@@ -24,6 +24,7 @@
 		2F1D35491FCB49F800D1172F /* gameOver.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2F1D35481FCB49F700D1172F /* gameOver.mp3 */; };
 		2F1D354B1FCB500D00D1172F /* errors.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2F1D354A1FCB500D00D1172F /* errors.mp3 */; };
 		2F1D354D1FCB587000D1172F /* correct.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2F1D354C1FCB587000D1172F /* correct.mp3 */; };
+		2F1E54A21FDB9BE600A72EDB /* NotificationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F1E54A11FDB9BE600A72EDB /* NotificationViewController.swift */; };
 		2F2EA6891FC662ED006670A8 /* level_8.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F2EA6881FC662ED006670A8 /* level_8.plist */; };
 		2F2EA68D1FC66A06006670A8 /* level_9.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F2EA68C1FC66A06006670A8 /* level_9.plist */; };
 		2F2EA6911FC69736006670A8 /* level_5.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F2EA6901FC69736006670A8 /* level_5.plist */; };
@@ -99,6 +100,7 @@
 		2F1D35481FCB49F700D1172F /* gameOver.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gameOver.mp3; sourceTree = "<group>"; };
 		2F1D354A1FCB500D00D1172F /* errors.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = errors.mp3; sourceTree = "<group>"; };
 		2F1D354C1FCB587000D1172F /* correct.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = correct.mp3; sourceTree = "<group>"; };
+		2F1E54A11FDB9BE600A72EDB /* NotificationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationViewController.swift; sourceTree = "<group>"; };
 		2F2EA6881FC662ED006670A8 /* level_8.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_8.plist; sourceTree = "<group>"; };
 		2F2EA68C1FC66A06006670A8 /* level_9.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_9.plist; sourceTree = "<group>"; };
 		2F2EA6901FC69736006670A8 /* level_5.plist */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = level_5.plist; sourceTree = "<group>"; };
@@ -216,6 +218,7 @@
 				2F35EC5F1F9B1C06000014E5 /* AppDelegate.swift */,
 				2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */,
 				2F0929DF1FC0A6EF00EA18B2 /* InfoViewController.swift */,
+				2F1E54A11FDB9BE600A72EDB /* NotificationViewController.swift */,
 				2F5A66C61FD7A3AB001502F5 /* LevelsViewController.swift */,
 				2FD413751FDB72E600B0D1A0 /* LockedViewController.swift */,
 				2F35EC611F9B1C06000014E5 /* GameViewController.swift */,
@@ -638,6 +641,7 @@
 			files = (
 				2F705BBE1FC7CE17005E77F3 /* PurchasesViewController.swift in Sources */,
 				2FD413761FDB72E600B0D1A0 /* LockedViewController.swift in Sources */,
+				2F1E54A21FDB9BE600A72EDB /* NotificationViewController.swift in Sources */,
 				2FDC7C371FAFA4A200A3EABE /* HomeViewController.swift in Sources */,
 				2F5A66C71FD7A3AB001502F5 /* LevelsViewController.swift in Sources */,
 				2F7CC5F61FB8D04A00ABA677 /* HintViewController.swift in Sources */,
