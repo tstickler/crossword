@@ -2449,6 +2449,9 @@ class GameViewController: UIViewController {
             interstitialAd.present(fromRootViewController: self)
         }
         
+        // Remove the falling animation
+        animator.removeAllBehaviors()
+        
         // Creates a new board and pushes it onto the navigation stack
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         let vc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
@@ -2542,13 +2545,9 @@ class GameViewController: UIViewController {
             helpSetupAndDisplay()
         }
     }
-    
-    
-
 }
 
 extension UIView {
-    
     // Used to fade in a view
     // Used in help screens
     func fadeIn(withDuration duration: Double) {

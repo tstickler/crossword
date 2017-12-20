@@ -79,13 +79,13 @@ class HomeViewController: UIViewController {
                           "🎨", "🎤", "🎷", "🎳", "🚗", "✈️", "🚀", "🗽", "🏝", "📱",
                           "📸", "☎️", "💡", "💵", "💎", "💣", "🔮", "🔑", "✉️", "❤️",
                           "💔", "💘", "⚠️", "🌀", "🃏", "🤞🏻", "👏🏼", "👌🏻", "👉🏼", "👍🏻"]
-
-        // When timer fires, will create a new label to be dropped from the view
-        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // When timer fires, will create a new label to be dropped from the view
+        timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
         
         if !Settings.musicEnabled {
             // Music is always playing but only if it's enabled should the volume be > 0
@@ -120,6 +120,16 @@ class HomeViewController: UIViewController {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        
+        // Remove the labels
+        for lab in labels {
+            lab.text = nil
+            lab.removeFromSuperview()
+        }
+        
+        // Stop falling animation
+        timer.invalidate()
+        animator.removeAllBehaviors()
                 
         // Gives a nice animation to the next view
         let transition = CATransition()
@@ -190,10 +200,9 @@ class HomeViewController: UIViewController {
         view.sendSubview(toBack: label)
         
         // Remove any labels that are out of screen range
-        for (index, lab) in labels.enumerated() {
+        for lab in labels {
             if lab.center.y - 40 > UIScreen.main.bounds.height {
                 lab.text = nil
-                labels.remove(at: index)
                 lab.removeFromSuperview()
             }
         }
