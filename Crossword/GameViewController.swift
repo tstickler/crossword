@@ -941,8 +941,8 @@ class GameViewController: UIViewController {
         // and down spaces.
         // So send a press for the current button to flip orientation, then check if
         // that was is correct and highlight if it is.
-        if (across && buttonDownArray[indexOfButton] != "00d") ||
-            (!across && buttonAcrossArray[indexOfButton] != "00a") {
+        if ((across && buttonDownArray[indexOfButton] != "00d") ||
+            (!across && buttonAcrossArray[indexOfButton] != "00a")) && Settings.correctAnim {
             boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
             if correctAnswerEntered() {
                 highlightCorrectAnswer(withDuration: 0.45)
@@ -1198,7 +1198,7 @@ class GameViewController: UIViewController {
             boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
             
             // See if that direction is correct and highlight if it is
-            if correctAnswerEntered() {
+            if correctAnswerEntered() && Settings.correctAnim {
                 highlightCorrectAnswer(withDuration: 0.45)
             }
             

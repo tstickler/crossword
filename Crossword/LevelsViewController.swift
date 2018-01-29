@@ -326,5 +326,11 @@ class LevelsViewController: UIViewController {
             Settings.lockedLevels.append(contentsOf: levels)
             defaults.set(true, forKey: "1.1_update_levels")
         }
+        
+        if !defaults.bool(forKey: "1.1.1_update_levels") {
+            let levels = [19,20,21,22,23,24]
+            Settings.lockedLevels.append(contentsOf: levels)
+            defaults.set(true, forKey: "1.1.1_update_levels")
+        }
     }
 }

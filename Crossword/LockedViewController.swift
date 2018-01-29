@@ -37,7 +37,11 @@ class LockedViewController: UIViewController, UIGestureRecognizerDelegate {
         }
         
         // Set the label properly
-        lockedLabel.text = "Level \(selectedLockedLevel!) is locked! Complete \(countNeededToUnlock) other levels to unlock this level."
+        if countNeededToUnlock == 1 {
+            lockedLabel.text = "Level \(selectedLockedLevel!) is locked! Complete \(countNeededToUnlock) other level to unlock this level."
+        } else {
+            lockedLabel.text = "Level \(selectedLockedLevel!) is locked! Complete \(countNeededToUnlock) other levels to unlock this level."
+        }
 
         background.layer.borderColor = UIColor.red.cgColor
         background.layer.borderWidth = 3

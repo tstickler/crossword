@@ -20,9 +20,16 @@ class NotificationViewController: UIViewController, UIGestureRecognizerDelegate 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let freeHints = 10
+        // For 1.1 *REMOVED*
+        // freeHints(number: 10)
+        
+        
+    }
+    
+    func freeHints(number numOfHints: Int) {
+        let freeHints = numOfHints
         Settings.cheatCount += freeHints
-
+        
         notificationLabel.text = "Here's \(freeHints) free hints to help you out! Thank you for playing!"
         
         background.layer.borderColor = UIColor.init(red: 255/255, green: 150/255, blue: 176/255, alpha: 1).cgColor

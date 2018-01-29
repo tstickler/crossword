@@ -54,11 +54,13 @@ class HomeViewController: UIViewController {
         // If its the first time, loads default settings
         loadSettings()
         
+        /* Removing the free hints for 1.1
         if !defaults.bool(forKey: "freeHintsFor1.1"){
             performSegue(withIdentifier: "notificationSegue", sender: self)
             defaults.set(true, forKey: "freeHintsFor1.1")
             defaults.set(Settings.cheatCount, forKey: "cheatCount")
         }
+        */
                         
         animator = UIDynamicAnimator(referenceView: self.view)
         
