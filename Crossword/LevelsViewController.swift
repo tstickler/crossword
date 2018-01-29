@@ -281,6 +281,7 @@ class LevelsViewController: UIViewController {
         if let uncompleteLevels = defaults.array(forKey: "uncompletedLevels") {
             Settings.uncompletedLevels = uncompleteLevels as! [Int]
         } else {
+            // The initial levels
             Settings.uncompletedLevels = [1,2,3,4,5,6,7,8,9,10]
         }
         

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import StoreKit
 
 class GameOverViewController: UIViewController {
     // UI elements
@@ -38,6 +39,16 @@ class GameOverViewController: UIViewController {
         // is used to display which letters are wrong on the board.
         if gameOver == true {
             if let parentVC = self.presentingViewController?.childViewControllers[indexOfPresenter] as? GameViewController {
+                
+                // Prompt the user to leave a review in the app store
+                // Only display after 4, 8, 16, or 20 completed levels
+                if Settings.completedLevels.count == 4 ||
+                    Settings.completedLevels.count == 8 ||
+                    Settings.completedLevels.count == 16 ||
+                    Settings.completedLevels.count == 20 {
+                    SKStoreReviewController.requestReview()
+                }
+                
                 // Find the next level to go to
                 // Should be the next sequential, uncompleted level
                 // If there are no levels > the current level, find the min

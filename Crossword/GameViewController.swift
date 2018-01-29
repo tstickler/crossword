@@ -33,7 +33,18 @@ class GameViewController: UIViewController {
     
     override var prefersStatusBarHidden: Bool {
         // No status bar allows for more board room
+        
+        if screenSize.height == 812 {
+            // Only show status bar if the user has an iphone X
+            return false
+        }
+        
         return true
+    }
+    
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        // If the status bar is shown, we want white text
+        return .lightContent
     }
 
     var selectedBoardSpaces = [Int]()
@@ -140,13 +151,14 @@ class GameViewController: UIViewController {
     *****************************************/
     
     func setUpBoard(board: [String]) {
-        let iphoneSEkeysHeight: CGFloat = 45
-        let iphoneKeysHeight: CGFloat = 52.5
-        let iphonePlusKeysHeight: CGFloat = 55
+        let iphoneSEkeysHeight: CGFloat = 42
+        let iphoneKeysHeight: CGFloat = 49.5
+        let iphonePlusKeysHeight: CGFloat = 53
+        let iphoneXKeysHeight: CGFloat = 55
         
         // Gives buttons a nice rounded corner
         for button in keys {
-            button.layer.cornerRadius = 5
+            button.layer.cornerRadius = 7
         }
         
         switch screenSize.height {
@@ -161,7 +173,7 @@ class GameViewController: UIViewController {
             
             emojiClue.font = clueLabel.font.withSize(32)
             emojiClueConstraint.constant = 9
-            
+                        
         // Sets constraints for iPhone
         case 667:
             topKeysHeight.constant = iphoneKeysHeight
@@ -193,9 +205,9 @@ class GameViewController: UIViewController {
             
         // Sets constraints for iPhone X
         case 812:
-            topKeysHeight.constant = 57
-            middleKeysHeight.constant = 57
-            bottomKeysHeight.constant = 57
+            topKeysHeight.constant = iphoneXKeysHeight
+            middleKeysHeight.constant = iphoneXKeysHeight
+            bottomKeysHeight.constant = iphoneXKeysHeight
             
             bottomRowLeading.constant = 52.5
             bottomRowTrailing.constant = 52.5

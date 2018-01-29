@@ -7,7 +7,6 @@
 //
 
 import UIKit
-import StoreKit
 
 class PurchasesViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet weak var viewBackground: UIView!
