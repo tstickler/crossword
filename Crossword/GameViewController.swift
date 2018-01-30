@@ -2220,7 +2220,7 @@ class GameViewController: UIViewController {
         // without needing to modify each level plist
         let info = getInfoFromMasterFile()
         var masterClues = [(Phrase: String, Clue: String, Hint: String, WordCt: String)]()
-        for i in 1..<getInfoFromMasterFile().count {
+        for i in 0..<getInfoFromMasterFile().count {
             masterClues.append((info[i]["Phrase"]!,
                                 info[i]["Clue"]!,
                                 info[i]["Hint"]!,
@@ -2229,7 +2229,7 @@ class GameViewController: UIViewController {
         
         // Construct the level arrays
         let levelArray = getInfoFromPlist(level: Settings.userLevel)
-        for i in 1..<levelArray.count{
+        for i in 0..<levelArray.count{
             // Find the phrase in the master plist and grab the clue,
             // hint, and number of words related to it
 
@@ -2512,12 +2512,12 @@ class GameViewController: UIViewController {
 
         
         // This is the board that needs to be set up
-        // board[1] contains the letters in their locations
-        // board[2] contains numbers superscripts for across/down
-        // board[3] contains across/down information for each individual square
-        let board = [getInfoFromPlist(level: Settings.userLevel)[1]["Board"]!,
-                     getInfoFromPlist(level: Settings.userLevel)[2]["Board"]!,
-                     getInfoFromPlist(level: Settings.userLevel)[3]["Board"]!]
+        // board[0] contains the letters in their locations
+        // board[1] contains numbers superscripts for across/down
+        // board[2] contains across/down information for each individual square
+        let board = [getInfoFromPlist(level: Settings.userLevel)[0]["Board"]!,
+                     getInfoFromPlist(level: Settings.userLevel)[1]["Board"]!,
+                     getInfoFromPlist(level: Settings.userLevel)[2]["Board"]!]
         
         
         // Set everything up

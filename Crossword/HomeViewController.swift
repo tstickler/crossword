@@ -259,7 +259,7 @@ class HomeViewController: UIViewController {
             Settings.skipFilledSquares = defaults.bool(forKey: "skipFilledSquares")
             Settings.lockCorrect = defaults.bool(forKey: "lockCorrect")
             Settings.correctAnim = defaults.bool(forKey: "correctAnim")
-            Settings.adsDisabled = true//defaults.bool(forKey: "adsDisabled")
+            Settings.adsDisabled = defaults.bool(forKey: "adsDisabled")
             Settings.cheatCount = defaults.integer(forKey: "cheatCount")
             Settings.userLevel = defaults.integer(forKey: "userLevel")
         } else {

@@ -39,7 +39,7 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
             // Choose the player to play on based on the song sent
             if musicTitle == "home" {
                 homeMusicPlayer = musicPlayer
-            } else if musicTitle.hasPrefix("game") {
+            } else if musicTitle.hasPrefix("game_") {
                 gameMusicPlayer = musicPlayer
             } else if musicTitle == "gameOver" || musicTitle == "errors" || musicTitle == "correct" {
                 // These sound effects don't repeat
