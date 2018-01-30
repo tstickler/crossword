@@ -33,8 +33,8 @@ class HomeViewController: UIViewController {
     
     // Falling objects
     var labels = [UILabel]()
+    var animators = [UIDynamicAnimator]()
     var emojisToChoose = [String]()
-    var animator: UIDynamicAnimator!
     var timer: Timer!
     
     // Home screen music enabling/disabling button
@@ -61,8 +61,6 @@ class HomeViewController: UIViewController {
             defaults.set(Settings.cheatCount, forKey: "cheatCount")
         }
         */
-                        
-        animator = UIDynamicAnimator(referenceView: self.view)
         
         // Possible emojis that will randomly fall from the top (160 to choose from)
         emojisToChoose = ["😄", "😇", "😂", "🤣", "🙂", "🙃", "😍", "😘", "😋", "😜",
@@ -131,8 +129,10 @@ class HomeViewController: UIViewController {
         
         // Stop falling animation
         timer.invalidate()
-        animator.removeAllBehaviors()
-                
+        for anim in animators {
+            anim.removeAllBehaviors()
+        }
+        
         // Gives a nice animation to the next view
         let transition = CATransition()
         transition.duration = 0.5
@@ -163,7 +163,7 @@ class HomeViewController: UIViewController {
             musicButtonImage = UIImage(named: "music.png")!
             
             // Play the music
-            MusicPlayer.homeMusicPlayer.setVolume(0.25, fadeDuration: 1.0)
+            MusicPlayer.homeMusicPlayer.setVolume(0.1, fadeDuration: 1.0)
         }
         
         // Save the user settings
@@ -178,6 +178,9 @@ class HomeViewController: UIViewController {
         let emoji = emojisToChoose[Int(arc4random_uniform(160))]
         let label = UILabel()
         labels.append(label)
+        
+        let anim: UIDynamicAnimator = UIDynamicAnimator(referenceView: self.view)
+        animators.append(anim)
         
         // Choose a random location at the top of the screen for the emoji to fall
         var xLocation = CGFloat(arc4random_uniform(UInt32(UIScreen.main.bounds.width)))
@@ -201,7 +204,25 @@ class HomeViewController: UIViewController {
         view.addSubview(label)
         view.sendSubview(toBack: label)
         
+        // Begin animation for the label
+        animate(label: label, anim: anim)
+
         // Remove any labels that are out of screen range
+        removeEmojis()
+    }
+    
+    func animate(label: UILabel, anim: UIDynamicAnimator) {
+        // Set the push animation
+        // Choose a random magnitude between .15 and .35 to vary speeds
+        let push = UIPushBehavior(items: [label], mode: .instantaneous)
+        push.setAngle(.pi/2.0, magnitude: CGFloat(Double(arc4random_uniform(16)) + 25) / 100)
+        
+        // Begin animation
+        anim.addBehavior(push)
+    }
+    
+    func removeEmojis() {
+        // Set the label text to nil and remove from super view
         for lab in labels {
             if lab.center.y - 40 > UIScreen.main.bounds.height {
                 lab.text = nil
@@ -209,18 +230,20 @@ class HomeViewController: UIViewController {
             }
         }
         
-        // Begin animation for the label
-        animate(label: label)
-    }
-    
-    func animate(label: UILabel) {
-        // Set the push animation
-        // Choose a random magnitude between .15 and .35 to vary speeds
-        let push = UIPushBehavior(items: [label], mode: .instantaneous)
-        push.setAngle(.pi/2.0, magnitude: CGFloat(Double(arc4random_uniform(16)) + 25) / 100)
+        // Remove animation from labels that have left the view
+        let bounds = CGRect(x: 0.0,y: 0.0,width: view.bounds.width,height: view.bounds.height + 2000)
+        for i in 0..<animators.count {
+            if !animators[i].items(in: bounds).isEmpty && animators[i].items(in: bounds)[0].center.y - 40 > view.bounds.height {
+                animators[i].removeAllBehaviors()
+            }
+        }
         
-        // Begin animation
-        animator?.addBehavior(push)
+        // Keep our arrays a manageable size and remove emojis/animations that have left the screen
+        // Therefore, our loops won't be giant if the user keeps app at the homescreen
+        if animators.count > 50 {
+            animators.removeSubrange(0...25)
+            labels.removeSubrange(0...25)
+        }
     }
     
     func loadSettings() {
@@ -236,7 +259,7 @@ class HomeViewController: UIViewController {
             Settings.skipFilledSquares = defaults.bool(forKey: "skipFilledSquares")
             Settings.lockCorrect = defaults.bool(forKey: "lockCorrect")
             Settings.correctAnim = defaults.bool(forKey: "correctAnim")
-            Settings.adsDisabled = defaults.bool(forKey: "adsDisabled")
+            Settings.adsDisabled = true//defaults.bool(forKey: "adsDisabled")
             Settings.cheatCount = defaults.integer(forKey: "cheatCount")
             Settings.userLevel = defaults.integer(forKey: "userLevel")
         } else {

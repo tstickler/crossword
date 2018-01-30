@@ -37,7 +37,7 @@ class LevelsViewController: UIViewController {
     // Falling objects
     var labels = [UILabel]()
     var emojisToChoose = [String]()
-    var animator: UIDynamicAnimator!
+    var animators = [UIDynamicAnimator]()
     var timer: Timer!
     
     var pageNum: Int!
@@ -147,9 +147,6 @@ class LevelsViewController: UIViewController {
             levelButtons[i - 1].setTitle(nil, for: .normal)
         }
 
-        
-        animator = UIDynamicAnimator(referenceView: self.view)
-        
         // Possible emojis that will randomly fall from the top (160 to choose from)
         emojisToChoose = ["😄", "😇", "😂", "🤣", "🙂", "🙃", "😍", "😘", "😋", "😜",
                           "🤪", "🤩", "😎", "🤓", "😏", "😭", "😤", "😢", "😡", "🤬",
@@ -205,9 +202,14 @@ class LevelsViewController: UIViewController {
             lab.removeFromSuperview()
         }
         
+        // Stop falling animation
+        timer.invalidate()
+        for anim in animators {
+            anim.removeAllBehaviors()
+        }
+        
         // Stop the falling animation
         timer.invalidate()
-        animator.removeAllBehaviors()
         
         // Gives a nice animation to the next view
         let transition = CATransition()
@@ -222,6 +224,9 @@ class LevelsViewController: UIViewController {
         let emoji = emojisToChoose[Int(arc4random_uniform(160))]
         let label = UILabel()
         labels.append(label)
+        
+        let anim: UIDynamicAnimator = UIDynamicAnimator(referenceView: self.view)
+        animators.append(anim)
         
         // Choose a random location at the top of the screen for the emoji to fall
         var xLocation = CGFloat(arc4random_uniform(UInt32(UIScreen.main.bounds.width)))
@@ -254,17 +259,45 @@ class LevelsViewController: UIViewController {
         }
         
         // Begin animation for the label
-        animate(label: label)
+        animate(label: label, anim: anim)
+        
+        // Remove any labels that are out of screen range
+        removeEmojis()
     }
     
-    func animate(label: UILabel) {
+    func animate(label: UILabel, anim: UIDynamicAnimator) {
         // Set the push animation
         // Choose a random magnitude between .15 and .35 to vary speeds
         let push = UIPushBehavior(items: [label], mode: .instantaneous)
         push.setAngle(.pi/2.0, magnitude: CGFloat(Double(arc4random_uniform(16)) + 25) / 100)
         
         // Begin animation
-        animator?.addBehavior(push)
+        anim.addBehavior(push)
+    }
+    
+    func removeEmojis() {
+        // Set the label text to nil and remove from super view
+        for lab in labels {
+            if lab.center.y - 40 > UIScreen.main.bounds.height {
+                lab.text = nil
+                lab.removeFromSuperview()
+            }
+        }
+        
+        // Remove animation from labels that have left the view
+        let bounds = CGRect(x: 0.0,y: 0.0,width: view.bounds.width,height: view.bounds.height + 2000)
+        for i in 0..<animators.count {
+            if !animators[i].items(in: bounds).isEmpty && animators[i].items(in: bounds)[0].center.y - 40 > view.bounds.height {
+                animators[i].removeAllBehaviors()
+            }
+        }
+        
+        // Keep our arrays a manageable size and remove emojis/animations that have left the screen
+        // Therefore, our loops won't be giant if the user keeps app at the homescreen
+        if animators.count > 50 {
+            animators.removeSubrange(0...25)
+            labels.removeSubrange(0...25)
+        }
     }
     
     func setUpLevelStatusArrays() {

@@ -1803,7 +1803,7 @@ class GameViewController: UIViewController {
         // Gives the selected button a pulsing animation
         if atSquare != prevSquare {
             let pulse = CABasicAnimation(keyPath: "transform.scale")
-            pulse.duration = 1.2
+            pulse.duration = 1.3
             pulse.autoreverses = true
             pulse.repeatCount = .infinity
             pulse.fromValue = 1
@@ -2456,7 +2456,7 @@ class GameViewController: UIViewController {
     }
 
     func newLevel() {
-        // Present an ad when showing a new level
+        // Present an ad when going to a new level
         if interstitialAd.isReady && !Settings.adsDisabled {
             interstitialAd.present(fromRootViewController: self)
         }
@@ -2528,7 +2528,7 @@ class GameViewController: UIViewController {
         startTimer()
         
         // Start playing game music
-        MusicPlayer.start(musicTitle: "game", ext: "mp3")
+        MusicPlayer.start(musicTitle: "game_\(Settings.userLevel!)", ext: "mp3")
         if !Settings.musicEnabled {
             MusicPlayer.gameMusicPlayer.volume = 0
         }

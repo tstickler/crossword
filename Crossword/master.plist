@@ -1888,6 +1888,174 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>🏃🏻‍♂️⚽️🥅</string>
+		<key>Phrase</key>
+		<string>soccer</string>
+		<key>Hint</key>
+		<string>Around the world, this sport is known as football</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>⛹🏻‍♂️🏀</string>
+		<key>Phrase</key>
+		<string>basketball</string>
+		<key>Hint</key>
+		<string>This popular sport requires you to dribble if you want to move</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>👦🏻👑</string>
+		<key>Phrase</key>
+		<string>prince</string>
+		<key>Hint</key>
+		<string>Popular 1980s music artist</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🏇🏻🏑</string>
+		<key>Phrase</key>
+		<string>polo</string>
+		<key>Hint</key>
+		<string>This sport is also a type of shirt</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🎳🍺</string>
+		<key>Phrase</key>
+		<string>bowling</string>
+		<key>Hint</key>
+		<string>The objective of this sport is to knock down all ten pins</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🏒⛸🍁</string>
+		<key>Phrase</key>
+		<string>hockey</string>
+		<key>Hint</key>
+		<string>This sport can be played on ice, in a field, or on air</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>👨🏻👑</string>
+		<key>Phrase</key>
+		<string>king</string>
+		<key>Hint</key>
+		<string>Male ruler</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>👩🏻👑</string>
+		<key>Phrase</key>
+		<string>queen</string>
+		<key>Hint</key>
+		<string>Female ruler</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>👶🏻🐈</string>
+		<key>Phrase</key>
+		<string>kitten</string>
+		<key>Hint</key>
+		<string>A baby cat</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>👶🏻🐔</string>
+		<key>Phrase</key>
+		<string>chick</string>
+		<key>Hint</key>
+		<string>A newly hatched chicken</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>👧🏼👑</string>
+		<key>Phrase</key>
+		<string>princess</string>
+		<key>Hint</key>
+		<string>Cinderella, Snow White, Ariel, Belle, Jasmine</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🥞🍳🥓</string>
+		<key>Phrase</key>
+		<string>breakfast</string>
+		<key>Hint</key>
+		<string>The first meal of the day</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🌊🏄🏻‍♂️🏖</string>
+		<key>Phrase</key>
+		<string>surfing</string>
+		<key>Hint</key>
+		<string>This could be done on water, on the web, or on a crowd</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>👶🏻🦁</string>
+		<key>Phrase</key>
+		<string>cub</string>
+		<key>Hint</key>
+		<string>Their smaller counterparts are known as kittens</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>💨📬</string>
 		<key>Phrase</key>
 		<string>airmail</string>
@@ -2180,7 +2348,7 @@
 		<key>Phrase</key>
 		<string>bible</string>
 		<key>Hint</key>
-		<string>Holy book of Christianity and Judaism</string>
+		<string>Holy book of Christianity</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>

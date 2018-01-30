@@ -34,12 +34,12 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
             musicPlayer.volume = 0
             musicPlayer.prepareToPlay()
             musicPlayer.play()
-            musicPlayer.setVolume(0.25, fadeDuration: 1.0)
+            musicPlayer.setVolume(0.1, fadeDuration: 1.0)
             
             // Choose the player to play on based on the song sent
             if musicTitle == "home" {
                 homeMusicPlayer = musicPlayer
-            } else if musicTitle == "game" {
+            } else if musicTitle.hasPrefix("game") {
                 gameMusicPlayer = musicPlayer
             } else if musicTitle == "gameOver" || musicTitle == "errors" || musicTitle == "correct" {
                 // These sound effects don't repeat
