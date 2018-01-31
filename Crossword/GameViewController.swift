@@ -1896,13 +1896,16 @@ class GameViewController: UIViewController {
             animation.repeatCount = 5
             border.add(animation, forKey: "")
             border.zPosition = 1000
+            
+            // MARK: maybe do this?
+            boardSpaces[i].backgroundColor = .red
         }
     }
     
     func determineDirectionText(indexOfButton: Int) {
         // This text is displayed in the clue bar. Extra indicator of where the user is and what
         // direction they are currently inputting text for.
-        // eg Displays "1↓" for one down
+        // ex: Displays "1↓" for one down
         
         var number: Int
         var direction: Character

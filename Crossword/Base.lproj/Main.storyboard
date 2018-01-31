@@ -2257,7 +2257,6 @@
                                 <constraints>
                                     <constraint firstAttribute="width" constant="70" id="1Gg-ga-ulm"/>
                                     <constraint firstAttribute="height" constant="90" id="TJH-Ty-SBx"/>
-                                    <constraint firstAttribute="width" secondItem="EN3-7R-zbT" secondAttribute="height" multiplier="7:9" id="yC3-9l-6ra"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="70"/>
                                 <state key="normal" title="→">
