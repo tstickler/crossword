@@ -61,6 +61,7 @@ class GameViewController: UIViewController {
     let redColorCG = UIColor.init(red: 255/255, green: 150/255, blue: 176/255, alpha: 1).cgColor
     let orangeColorCG = UIColor.init(red: 255/255, green: 197/255, blue: 126/255, alpha: 1).cgColor
     let yellowColorCG = UIColor.init(red: 249/255, green: 255/255, blue: 140/255, alpha: 1).cgColor
+    let greenColorCG = UIColor.init(red: 73/255, green: 222/255, blue: 124/255, alpha: 1).cgColor
     
     // Cheat Buttons
     @IBOutlet var hintButton: UIButton!
@@ -2198,7 +2199,7 @@ class GameViewController: UIViewController {
     
     func fillAcrossDownArrays() {
         // Grab across and down numbers from the plist and append them to the array
-        for i in 1..<getInfoFromPlist(level: Settings.userLevel).count {
+        for i in 0..<getInfoFromPlist(level: Settings.userLevel).count {
             let ac = getInfoFromPlist(level: Settings.userLevel)[i]["Across"]!
             let down = getInfoFromPlist(level: Settings.userLevel)[i]["Down"]!
             if ac != "" {

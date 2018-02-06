@@ -34,7 +34,7 @@ class MusicPlayer: NSObject, AVAudioPlayerDelegate {
             musicPlayer.volume = 0
             musicPlayer.prepareToPlay()
             musicPlayer.play()
-            musicPlayer.setVolume(0.1, fadeDuration: 1.0)
+            musicPlayer.setVolume(0.2, fadeDuration: 1.0)
             
             // Choose the player to play on based on the song sent
             if musicTitle == "home" {
