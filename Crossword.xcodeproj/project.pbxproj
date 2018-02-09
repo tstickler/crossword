@@ -83,6 +83,8 @@
 		2FA4E5C9202A59E8008C9668 /* master.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FA4E5C8202A59E7008C9668 /* master.plist */; };
 		2FADDA891FC8CFD00069AAF0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FADDA881FC8CFD00069AAF0 /* StoreKit.framework */; };
 		2FADDA8B1FC8D16A0069AAF0 /* InAppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FADDA8A1FC8D16A0069AAF0 /* InAppPurchase.swift */; };
+		2FD03D93202E2E9800E60613 /* level_24.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FD03D91202E2E9700E60613 /* level_24.plist */; };
+		2FD03D94202E2E9800E60613 /* level_23.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FD03D92202E2E9800E60613 /* level_23.plist */; };
 		2FD413761FDB72E600B0D1A0 /* LockedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD413751FDB72E600B0D1A0 /* LockedViewController.swift */; };
 		2FDC7C371FAFA4A200A3EABE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */; };
 		DD47337F967C59A1196B08C3 /* Pods_CrosswordUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A1F12BD8469BEB52DD6297 /* Pods_CrosswordUITests.framework */; };
@@ -192,6 +194,8 @@
 		2FA4E5C8202A59E7008C9668 /* master.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = master.plist; sourceTree = "<group>"; };
 		2FADDA881FC8CFD00069AAF0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		2FADDA8A1FC8D16A0069AAF0 /* InAppPurchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchase.swift; sourceTree = "<group>"; };
+		2FD03D91202E2E9700E60613 /* level_24.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_24.plist; sourceTree = "<group>"; };
+		2FD03D92202E2E9800E60613 /* level_23.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_23.plist; sourceTree = "<group>"; };
 		2FD413751FDB72E600B0D1A0 /* LockedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockedViewController.swift; sourceTree = "<group>"; };
 		2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		4A3278F256C80F5572606B93 /* Pods-CrosswordUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CrosswordUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CrosswordUITests/Pods-CrosswordUITests.release.xcconfig"; sourceTree = "<group>"; };
@@ -364,6 +368,8 @@
 				2F7CAB8420211542001A23CE /* level_20.plist */,
 				2FA4E5C5202A56B4008C9668 /* level_21.plist */,
 				2FA4E5C4202A56B4008C9668 /* level_22.plist */,
+				2FD03D92202E2E9800E60613 /* level_23.plist */,
+				2FD03D91202E2E9700E60613 /* level_24.plist */,
 			);
 			path = Levels;
 			sourceTree = "<group>";
@@ -529,6 +535,7 @@
 				2F35EC6A1F9B1C06000014E5 /* LaunchScreen.storyboard in Resources */,
 				2F07758B1FBA3713001C9ABD /* game_1.mp3 in Resources */,
 				2F3986252020E9160057F7D9 /* game_9.mp3 in Resources */,
+				2FD03D94202E2E9800E60613 /* level_23.plist in Resources */,
 				2F7CAB9720211543001A23CE /* level_2.plist in Resources */,
 				2F3986212020E9160057F7D9 /* game_16.mp3 in Resources */,
 				2F7CAB8E20211543001A23CE /* level_18.plist in Resources */,
@@ -537,6 +544,7 @@
 				2F7CAB9020211543001A23CE /* level_6.plist in Resources */,
 				2F7CAB9B20211543001A23CE /* level_11.plist in Resources */,
 				2F7CAB9920211543001A23CE /* level_13.plist in Resources */,
+				2FD03D93202E2E9800E60613 /* level_24.plist in Resources */,
 				2FA4E5C6202A56B5008C9668 /* level_22.plist in Resources */,
 				2F3986132020E9160057F7D9 /* game_14.mp3 in Resources */,
 				2F7CAB9520211543001A23CE /* level_17.plist in Resources */,
