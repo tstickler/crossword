@@ -80,9 +80,9 @@
 		2FA3F60C1FA2D8AD006938E2 /* BoardButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FA3F60B1FA2D8AD006938E2 /* BoardButton.swift */; };
 		2FA4E5C6202A56B5008C9668 /* level_22.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FA4E5C4202A56B4008C9668 /* level_22.plist */; };
 		2FA4E5C7202A56B5008C9668 /* level_21.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FA4E5C5202A56B4008C9668 /* level_21.plist */; };
-		2FA4E5C9202A59E8008C9668 /* master.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FA4E5C8202A59E7008C9668 /* master.plist */; };
 		2FADDA891FC8CFD00069AAF0 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2FADDA881FC8CFD00069AAF0 /* StoreKit.framework */; };
 		2FADDA8B1FC8D16A0069AAF0 /* InAppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FADDA8A1FC8D16A0069AAF0 /* InAppPurchase.swift */; };
+		2FAFE8EC202E2F2D005BD9D3 /* master.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FAFE8EB202E2F2D005BD9D3 /* master.plist */; };
 		2FD03D93202E2E9800E60613 /* level_24.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FD03D91202E2E9700E60613 /* level_24.plist */; };
 		2FD03D94202E2E9800E60613 /* level_23.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FD03D92202E2E9800E60613 /* level_23.plist */; };
 		2FD413761FDB72E600B0D1A0 /* LockedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD413751FDB72E600B0D1A0 /* LockedViewController.swift */; };
@@ -191,9 +191,9 @@
 		2FA3F60B1FA2D8AD006938E2 /* BoardButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BoardButton.swift; sourceTree = "<group>"; };
 		2FA4E5C4202A56B4008C9668 /* level_22.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_22.plist; sourceTree = "<group>"; };
 		2FA4E5C5202A56B4008C9668 /* level_21.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_21.plist; sourceTree = "<group>"; };
-		2FA4E5C8202A59E7008C9668 /* master.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = master.plist; sourceTree = "<group>"; };
 		2FADDA881FC8CFD00069AAF0 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		2FADDA8A1FC8D16A0069AAF0 /* InAppPurchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchase.swift; sourceTree = "<group>"; };
+		2FAFE8EB202E2F2D005BD9D3 /* master.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = master.plist; sourceTree = "<group>"; };
 		2FD03D91202E2E9700E60613 /* level_24.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_24.plist; sourceTree = "<group>"; };
 		2FD03D92202E2E9800E60613 /* level_23.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_23.plist; sourceTree = "<group>"; };
 		2FD413751FDB72E600B0D1A0 /* LockedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockedViewController.swift; sourceTree = "<group>"; };
@@ -315,9 +315,9 @@
 				2F35EC631F9B1C06000014E5 /* Main.storyboard */,
 				2F35EC661F9B1C06000014E5 /* Assets.xcassets */,
 				2F35EC681F9B1C06000014E5 /* LaunchScreen.storyboard */,
-				2FA4E5C8202A59E7008C9668 /* master.plist */,
 				2F35EC6B1F9B1C06000014E5 /* Info.plist */,
 				2F789C971FCE0F17000139A3 /* GoogleService-Info.plist */,
+				2FAFE8EB202E2F2D005BD9D3 /* master.plist */,
 				2F0E24D51FD10BC50030E0C2 /* emojione.ttf */,
 				2F39E1311FBE714400FC123C /* Levels */,
 				2F111B121FB964E200DBA3EE /* Music */,
@@ -561,6 +561,7 @@
 				2F3986182020E9160057F7D9 /* game_20.mp3 in Resources */,
 				2F7CAB8F20211543001A23CE /* level_5.plist in Resources */,
 				2F7CAB8C20211543001A23CE /* level_14.plist in Resources */,
+				2FAFE8EC202E2F2D005BD9D3 /* master.plist in Resources */,
 				2F39861F2020E9160057F7D9 /* game_22.mp3 in Resources */,
 				2F7CAB9820211543001A23CE /* level_20.plist in Resources */,
 				2F1029991FC2436D0053096D /* click.wav in Resources */,
@@ -571,7 +572,6 @@
 				2F39861B2020E9160057F7D9 /* game_2.mp3 in Resources */,
 				2F1D354B1FCB500D00D1172F /* errors.mp3 in Resources */,
 				2F789C981FCE0F17000139A3 /* GoogleService-Info.plist in Resources */,
-				2FA4E5C9202A59E8008C9668 /* master.plist in Resources */,
 				2F7CAB8A20211543001A23CE /* level_9.plist in Resources */,
 				2F7CAB9D20211543001A23CE /* level_12.plist in Resources */,
 				2F07758A1FBA3713001C9ABD /* home.mp3 in Resources */,

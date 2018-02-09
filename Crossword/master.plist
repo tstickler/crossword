@@ -4,11 +4,95 @@
 <array>
 	<dict>
 		<key>Clue</key>
+		<string>👶🏻🧒🏻👨🏻👴🏻</string>
+		<key>Phrase</key>
+		<string>aging</string>
+		<key>Hint</key>
+		<string>The process of growing older</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🇺🇸✈️1</string>
+		<key>Phrase</key>
+		<string>airforceone</string>
+		<key>Hint</key>
+		<string>This plane that carries the President of the United States is also a shoe made by Nike</string>
+		<key># of words</key>
+		<string>3</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>💨👨🏻</string>
+		<key>Phrase</key>
+		<string>airhead</string>
+		<key>Hint</key>
+		<string>This brand of candy can also refer to someone who isn’t too smart</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>💨🛏</string>
+		<key>Phrase</key>
+		<string>airmattress</string>
+		<key>Hint</key>
+		<string>This type of mattress is filled with a pump</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>😡😠</string>
+		<key>Phrase</key>
+		<string>angry</string>
+		<key>Hint</key>
+		<string>Annoyed, displeasured, unhappy, hostile, etc.</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>👶🏻💣💥</string>
+		<key>Phrase</key>
+		<string>babyboom</string>
+		<key>Hint</key>
+		<string>An increase in the birth rate</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>👶🏻🎂🎂</string>
 		<key>Phrase</key>
 		<string>babycakes</string>
 		<key>Hint</key>
 		<string>Affectionate term for someone you are close with</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>⚾️👦🏻</string>
+		<key>Phrase</key>
+		<string>ballboy</string>
+		<key>Hint</key>
+		<string>A person who retrieves or supplies balls during professional sports</string>
 		<key># of words</key>
 		<string>2</string>
 		<key>Used</key>
@@ -52,6 +136,30 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>🏖🌊🏐</string>
+		<key>Phrase</key>
+		<string>beach</string>
+		<key>Hint</key>
+		<string>Where land meets ocean</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>⏰🛏</string>
+		<key>Phrase</key>
+		<string>bedtime</string>
+		<key>Hint</key>
+		<string>The time that someone goes to sleep</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>🐝💎</string>
 		<key>Phrase</key>
 		<string>bejeweled</string>
@@ -76,11 +184,35 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
-		<string>😗💨🔫</string>
+		<string>🐦🤒</string>
 		<key>Phrase</key>
-		<string>blowgun</string>
+		<string>birdflu</string>
 		<key>Hint</key>
-		<string>A narrow tube that can shoot light projectiles</string>
+		<string>Also known as avian influenza</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>⚫️🥋</string>
+		<key>Phrase</key>
+		<string>blackbelt</string>
+		<key>Hint</key>
+		<string>People with high competence of martial arts are awarded this sash</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>⚫️📋</string>
+		<key>Phrase</key>
+		<string>blacklist</string>
+		<key>Hint</key>
+		<string>Things to be ignored</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>
@@ -88,11 +220,47 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
-		<string>😗💨☝🏻</string>
+		<string>⚫️📬</string>
 		<key>Phrase</key>
-		<string>blowup</string>
+		<string>blackmail</string>
 		<key>Hint</key>
-		<string>An explosion</string>
+		<string>Threatening to tell secret information if someone doesn’t do what you ask</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>❌👀</string>
+		<key>Phrase</key>
+		<string>blind</string>
+		<key>Hint</key>
+		<string>The inability to see</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🎮🖥❄️🌨</string>
+		<key>Phrase</key>
+		<string>blizzard</string>
+		<key>Hint</key>
+		<string>This game development company created World of Warcraft, Diablo, and Starcraft</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>😗💨🔫</string>
+		<key>Phrase</key>
+		<string>blowgun</string>
+		<key>Hint</key>
+		<string>A narrow tube that can shoot light projectiles</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>
@@ -220,11 +388,35 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>👨🏻‍🍳🔪🐖🐄</string>
+		<key>Phrase</key>
+		<string>butcher</string>
+		<key>Hint</key>
+		<string>A person who cuts and sells meat for a living</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>👋🏻💃🏼</string>
 		<key>Phrase</key>
 		<string>byefelicia</string>
 		<key>Hint</key>
 		<string>Expression to dismiss someone who is irritating or annoying</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🍬🌽</string>
+		<key>Phrase</key>
+		<string>candycorn</string>
+		<key>Hint</key>
+		<string>These orange, white, and yellow sweets are popular around Halloween</string>
 		<key># of words</key>
 		<string>2</string>
 		<key>Used</key>
@@ -256,6 +448,18 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>🏥🆓</string>
+		<key>Phrase</key>
+		<string>carefree</string>
+		<key>Hint</key>
+		<string>Without worry</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>🚗🤢</string>
 		<key>Phrase</key>
 		<string>carsick</string>
@@ -268,13 +472,25 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
-		<string>🛒👨🏻</string>
+		<string>🏰🤴🏻👸🏻</string>
 		<key>Phrase</key>
-		<string>cartman</string>
+		<string>castle</string>
 		<key>Hint</key>
-		<string>One of South Park’s main characters</string>
+		<string>A medieval house for royal family</string>
 		<key># of words</key>
 		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🐱🍛</string>
+		<key>Phrase</key>
+		<string>catfood</string>
+		<key>Hint</key>
+		<string>Meow Mix</string>
+		<key># of words</key>
+		<string>2</string>
 		<key>Used</key>
 		<string>FALSE</string>
 	</dict>
@@ -323,6 +539,18 @@
 		<string>2007 viral video</string>
 		<key># of words</key>
 		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>⚽️👨🏻‍💼🗣</string>
+		<key>Phrase</key>
+		<string>coach</string>
+		<key>Hint</key>
+		<string>Instructor of an athletic team</string>
+		<key># of words</key>
+		<string>1</string>
 		<key>Used</key>
 		<string>FALSE</string>
 	</dict>
@@ -400,11 +628,71 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>📅💡☀️</string>
+		<key>Phrase</key>
+		<string>daylight</string>
+		<key>Hint</key>
+		<string>This type of light comes from the sun</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>💀➖</string>
+		<key>Phrase</key>
+		<string>deadline</string>
+		<key>Hint</key>
+		<string>A date or time something must be finished</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🍨🍰🍪🍮</string>
+		<key>Phrase</key>
+		<string>dessert</string>
+		<key>Hint</key>
+		<string>The final course of a meal</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>📜🎓</string>
+		<key>Phrase</key>
+		<string>diploma</string>
+		<key>Hint</key>
+		<string>Certificate indicating completion of a course of study</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>💾🚗</string>
 		<key>Phrase</key>
 		<string>diskdrive</string>
 		<key>Hint</key>
 		<string>A computer storage device</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🐶🍛</string>
+		<key>Phrase</key>
+		<string>dogfood</string>
+		<key>Hint</key>
+		<string>What you feed your dog</string>
 		<key># of words</key>
 		<string>2</string>
 		<key>Used</key>
@@ -496,23 +784,35 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
-		<string>➡️🏖</string>
-		<key>Phrase</key>
-		<string>eastcoast</string>
-		<key>Hint</key>
-		<string>There are 14 states that reside here, bordering the Atlantic Ocean</string>
-		<key># of words</key>
-		<string>2</string>
-		<key>Used</key>
-		<string>FALSE</string>
-	</dict>
-	<dict>
-		<key>Clue</key>
 		<string>🥚👴🏻</string>
 		<key>Phrase</key>
 		<string>egghead</string>
 		<key>Hint</key>
 		<string>Slang for describing a brainiac</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🍳🌿</string>
+		<key>Phrase</key>
+		<string>eggplant</string>
+		<key>Hint</key>
+		<string>This purple fruit is a species of nightshade</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🖥✉️🌐</string>
+		<key>Phrase</key>
+		<string>email</string>
+		<key>Hint</key>
+		<string>A method of exchanging messages online</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>
@@ -537,6 +837,54 @@
 		<string>facepalm</string>
 		<key>Hint</key>
 		<string>Used to convey disbelief, shame, or embarrassment</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🐮🐷🐔👨🏻‍🌾</string>
+		<key>Phrase</key>
+		<string>farm</string>
+		<key>Hint</key>
+		<string>An area of land devoted mainly to agriculture</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🏃🏻‍♂️💨🌮🍔</string>
+		<key>Phrase</key>
+		<string>fastfood</string>
+		<key>Hint</key>
+		<string>Food served very quickly</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>👊🏻♣️</string>
+		<key>Phrase</key>
+		<string>fightclub</string>
+		<key>Hint</key>
+		<string>The first rule: Don’t talk about it</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>☝🏻🖨</string>
+		<key>Phrase</key>
+		<string>fingerprint</string>
+		<key>Hint</key>
+		<string>Can be forensic evidence or a biometric password to unlock your phone</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>
@@ -628,6 +976,30 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>🔥🌲🌲🌲</string>
+		<key>Phrase</key>
+		<string>forestfire</string>
+		<key>Hint</key>
+		<string>This type of fire erupts mainly in heavily vegetated areas</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>⛲️🖋</string>
+		<key>Phrase</key>
+		<string>fountainpen</string>
+		<key>Hint</key>
+		<string>A nib pen with an internal reservoir of ink</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>🆓🐳</string>
 		<key>Phrase</key>
 		<string>freewilly</string>
@@ -645,6 +1017,54 @@
 		<string>frogprince</string>
 		<key>Hint</key>
 		<string>A kiss from a princess may turn it into a man</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🏟⚽️📅</string>
+		<key>Phrase</key>
+		<string>gameday</string>
+		<key>Hint</key>
+		<string>The day that a sporting event occurs</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🎮❌</string>
+		<key>Phrase</key>
+		<string>gameover</string>
+		<key>Hint</key>
+		<string>This message appears when you’ve used all your lives in a video game</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🏙🦖🇯🇵🏯</string>
+		<key>Phrase</key>
+		<string>godzilla</string>
+		<key>Hint</key>
+		<string>He is the King of the Monsters</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>⛳️♣️</string>
+		<key>Phrase</key>
+		<string>golfclub</string>
+		<key>Hint</key>
+		<string>The thing a golfer swings</string>
 		<key># of words</key>
 		<string>2</string>
 		<key>Used</key>
@@ -784,6 +1204,30 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>❄️💔</string>
+		<key>Phrase</key>
+		<string>icebreaker</string>
+		<key>Hint</key>
+		<string>An activity used to begin dialogue</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>👁🤷🏻‍♂️</string>
+		<key>Phrase</key>
+		<string>idk</string>
+		<key>Hint</key>
+		<string>I don’t know</string>
+		<key># of words</key>
+		<string>abv.</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>🇬🇧007</string>
 		<key>Phrase</key>
 		<string>jamesbond</string>
@@ -844,6 +1288,18 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>👩🏻📚🏛</string>
+		<key>Phrase</key>
+		<string>librarian</string>
+		<key>Hint</key>
+		<string>A person who works in a library</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>🔦🏠</string>
 		<key>Phrase</key>
 		<string>lighthouse</string>
@@ -868,13 +1324,25 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
-		<string>💕🔺</string>
+		<string>👄🏒</string>
 		<key>Phrase</key>
-		<string>lovetriangle</string>
+		<string>lipstick</string>
 		<key>Hint</key>
-		<string>A romantic relationship involving three people</string>
+		<string>Cosmetic product to apply color, texture, and protection to lips</string>
 		<key># of words</key>
-		<string>2</string>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🧙🏻‍♂️🎩🐰✨</string>
+		<key>Phrase</key>
+		<string>magic</string>
+		<key>Hint</key>
+		<string>The art of performing supernatural feats</string>
+		<key># of words</key>
+		<string>1</string>
 		<key>Used</key>
 		<string>FALSE</string>
 	</dict>
@@ -892,6 +1360,42 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>📺📻📰</string>
+		<key>Phrase</key>
+		<string>media</string>
+		<key>Hint</key>
+		<string>Communication outlets that distribute news, data, or information</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🌃🕛🍕</string>
+		<key>Phrase</key>
+		<string>midnightsnack</string>
+		<key>Hint</key>
+		<string>Eating food late at night</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🥛👋🏻</string>
+		<key>Phrase</key>
+		<string>milkshake</string>
+		<key>Hint</key>
+		<string>This mix of ice cream and milk tends to bring all the boys to the yard</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>🚶🏾🌙</string>
 		<key>Phrase</key>
 		<string>moonwalk</string>
@@ -904,11 +1408,47 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>🎬🌟</string>
+		<key>Phrase</key>
+		<string>moviestar</string>
+		<key>Hint</key>
+		<string>A famous actor who has had starring roles in motion pictures</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>📰🖨</string>
 		<key>Phrase</key>
 		<string>newsprint</string>
 		<key>Hint</key>
 		<string>A type of paper, typically used for newspapers</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🕺🏻🌃🍸</string>
+		<key>Phrase</key>
+		<string>nightlife</string>
+		<key>Hint</key>
+		<string>Entertainment during late evening to early morning</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🌃💡</string>
+		<key>Phrase</key>
+		<string>nightlight</string>
+		<key>Hint</key>
+		<string>Used to illuminate rooms at night time</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>
@@ -940,13 +1480,25 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
-		<string>📃🔪</string>
+		<string>📄✈️</string>
 		<key>Phrase</key>
-		<string>papercut</string>
+		<string>paperplane</string>
 		<key>Hint</key>
-		<string>A small, painful slice of your skin</string>
+		<string>Fold your paper into one of these if you want it to glide</string>
 		<key># of words</key>
 		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🎊🎉🎁</string>
+		<key>Phrase</key>
+		<string>party</string>
+		<key>Hint</key>
+		<string>A social gathering</string>
+		<key># of words</key>
+		<string>1</string>
 		<key>Used</key>
 		<string>FALSE</string>
 	</dict>
@@ -959,6 +1511,18 @@
 		<string>A mobile party</string>
 		<key># of words</key>
 		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>💯⛈</string>
+		<key>Phrase</key>
+		<string>perfectstorm</string>
+		<key>Hint</key>
+		<string>Rare combination of events that create a dramatic storm</string>
+		<key># of words</key>
+		<string>1</string>
 		<key>Used</key>
 		<string>FALSE</string>
 	</dict>
@@ -988,6 +1552,18 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>⚠️🎹🔥</string>
+		<key>Phrase</key>
+		<string>playwithfire</string>
+		<key>Hint</key>
+		<string>Doing something that is very risky</string>
+		<key># of words</key>
+		<string>3</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>🧔🏻🛠🛁🚽</string>
 		<key>Phrase</key>
 		<string>plumber</string>
@@ -1005,6 +1581,18 @@
 		<string>poseidon</string>
 		<key>Hint</key>
 		<string>Greek god of the sea</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🔌🏀💰</string>
+		<key>Phrase</key>
+		<string>powerball</string>
+		<key>Hint</key>
+		<string>If you’re lucky, you could win millions!</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>
@@ -1060,6 +1648,18 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>👑🚽</string>
+		<key>Phrase</key>
+		<string>royalflush</string>
+		<key>Hint</key>
+		<string>10, Jack, Queen, King, and Ace all of the same suit</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>⛱🏰</string>
 		<key>Phrase</key>
 		<string>sandcastle</string>
@@ -1084,11 +1684,95 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>😱🎬</string>
+		<key>Phrase</key>
+		<string>scarymovie</string>
+		<key>Hint</key>
+		<string>Comedy horror series</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🔩⬆️</string>
+		<key>Phrase</key>
+		<string>screwup</string>
+		<key>Hint</key>
+		<string>Mishandling a situation</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>🌊🤮</string>
 		<key>Phrase</key>
 		<string>seasick</string>
 		<key>Hint</key>
 		<string>Nausea caused by waves while on a sea vessel</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🐚🐟</string>
+		<key>Phrase</key>
+		<string>shellfish</string>
+		<key>Hint</key>
+		<string>Clams, oysters, lobster, shrimp, etc.</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🦐🍸</string>
+		<key>Phrase</key>
+		<string>shrimpcocktail</string>
+		<key>Hint</key>
+		<string>A seafood dish served in a glass</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🤒🍂</string>
+		<key>Phrase</key>
+		<string>sickleave</string>
+		<key>Hint</key>
+		<string>Absence due to an illness</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🤚🏻🗣</string>
+		<key>Phrase</key>
+		<string>signlanguage</string>
+		<key>Hint</key>
+		<string>Communication by making hand gestures</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>6👃🏻👀👂🏻</string>
+		<key>Phrase</key>
+		<string>sixthsense</string>
+		<key>Hint</key>
+		<string>The other five are sight, hearing, taste, touch, and smell</string>
 		<key># of words</key>
 		<string>2</string>
 		<key>Used</key>
@@ -1180,18 +1864,6 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
-		<string>⬇️🏞</string>
-		<key>Phrase</key>
-		<string>southpark</string>
-		<key>Hint</key>
-		<string>Home to Stan, Kyle, Cartman, and Kenny</string>
-		<key># of words</key>
-		<string>2</string>
-		<key>Used</key>
-		<string>FALSE</string>
-	</dict>
-	<dict>
-		<key>Clue</key>
 		<string>⬇️⬅️✈️</string>
 		<key>Phrase</key>
 		<string>southwest</string>
@@ -1204,11 +1876,47 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
-		<string>☀️🛀🏻</string>
+		<string>🌷🌱🍃🌳</string>
 		<key>Phrase</key>
-		<string>sunbathe</string>
+		<string>spring</string>
 		<key>Hint</key>
-		<string>Laying out in the sun with the goal of tanning the skin</string>
+		<string>Precedes summer</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🕵🏻‍♂️🔎</string>
+		<key>Phrase</key>
+		<string>spy</string>
+		<key>Hint</key>
+		<string>Someone who secretly collects information</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>♠️♥️♣️♦️</string>
+		<key>Phrase</key>
+		<string>suits</string>
+		<key>Hint</key>
+		<string>On traditional playing cards, these are spades, hearts, clubs, and diamonds</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>☀️⛱🍉🏊🏻‍♂️</string>
+		<key>Phrase</key>
+		<string>summer</string>
+		<key>Hint</key>
+		<string>The warmest season of the year</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>
@@ -1221,18 +1929,6 @@
 		<string>sunburn</string>
 		<key>Hint</key>
 		<string>Skin irritation caused by overexposure to the sun</string>
-		<key># of words</key>
-		<string>1</string>
-		<key>Used</key>
-		<string>FALSE</string>
-	</dict>
-	<dict>
-		<key>Clue</key>
-		<string>☀️📅</string>
-		<key>Phrase</key>
-		<string>sunday</string>
-		<key>Hint</key>
-		<string>The day after saturday</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>
@@ -1300,6 +1996,66 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>🍫🍬🍪😬</string>
+		<key>Phrase</key>
+		<string>sweettooth</string>
+		<key>Hint</key>
+		<string>Loving sweet treats</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🏛🤲🏻💰</string>
+		<key>Phrase</key>
+		<string>taxes</string>
+		<key>Hint</key>
+		<string>Money taken by the government</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>⏰✈️</string>
+		<key>Phrase</key>
+		<string>timeflies</string>
+		<key>Hint</key>
+		<string>This happens when you’re having fun</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>👅🌀</string>
+		<key>Phrase</key>
+		<string>tonguetwister</string>
+		<key>Hint</key>
+		<string>She sells seashells by the seashore</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>😁🖌</string>
+		<key>Phrase</key>
+		<string>toothbrush</string>
+		<key>Hint</key>
+		<string>A special instrument used to clean teeth</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>😁⛏</string>
 		<key>Phrase</key>
 		<string>toothpick</string>
@@ -1312,13 +2068,13 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
-		<string>💛🐦</string>
+		<string>✌🏻⬅️👣</string>
 		<key>Phrase</key>
-		<string>tweety</string>
+		<string>twoleftfeet</string>
 		<key>Hint</key>
-		<string>Add a “Y” to what you send on Twitter and you’ll have this famous birds name</string>
+		<string>A term used to describe someone who is clumsy or awkward, specifically while dancing</string>
 		<key># of words</key>
-		<string>1</string>
+		<string>3</string>
 		<key>Used</key>
 		<string>FALSE</string>
 	</dict>
@@ -1360,11 +2116,23 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
-		<string>🍒👴🏻1💵</string>
+		<string>🖥🐞👾</string>
 		<key>Phrase</key>
-		<string>washington</string>
+		<string>virus</string>
 		<key>Hint</key>
-		<string>The first President of the United States</string>
+		<string>Malicious software program</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>FALSE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>💦🛏</string>
+		<key>Phrase</key>
+		<string>waterbed</string>
+		<key>Hint</key>
+		<string>This type of mattress is filled with liquid</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>
@@ -1612,6 +2380,18 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>🍂🌧☂️⛅️</string>
+		<key>Phrase</key>
+		<string>autumn</string>
+		<key>Hint</key>
+		<string>During this time of year, the leaves will turn brown and fall off trees</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>👶🏼🤒</string>
 		<key>Phrase</key>
 		<string>babyfever</string>
@@ -1773,6 +2553,18 @@
 		<string>bible</string>
 		<key>Hint</key>
 		<string>Holy book of Christianity</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>😗💨☝🏻</string>
+		<key>Phrase</key>
+		<string>blowup</string>
+		<key>Hint</key>
+		<string>An explosion</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>
@@ -1953,6 +2745,18 @@
 		<string>carpool</string>
 		<key>Hint</key>
 		<string>Sharing a ride</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🛒👨🏻</string>
+		<key>Phrase</key>
+		<string>cartman</string>
+		<key>Hint</key>
+		<string>One of South Park’s main characters</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>
@@ -2531,6 +3335,18 @@
 		<string>Commonly found in the soil of your garden</string>
 		<key># of words</key>
 		<string>1</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>➡️🏖</string>
+		<key>Phrase</key>
+		<string>eastcoast</string>
+		<key>Hint</key>
+		<string>There are 14 states that reside here, bordering the Atlantic Ocean</string>
+		<key># of words</key>
+		<string>2</string>
 		<key>Used</key>
 		<string>TRUE</string>
 	</dict>
@@ -3544,6 +4360,18 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>💕🔺</string>
+		<key>Phrase</key>
+		<string>lovetriangle</string>
+		<key>Hint</key>
+		<string>A romantic relationship involving three people</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>🍀🎰</string>
 		<key>Phrase</key>
 		<string>luck</string>
@@ -3585,6 +4413,18 @@
 		<string>madmen</string>
 		<key>Hint</key>
 		<string>AMC hit show with Donald Draper</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>👨🏻⬆️</string>
+		<key>Phrase</key>
+		<string>manup</string>
+		<key>Hint</key>
+		<string>To be brave in a tough situation</string>
 		<key># of words</key>
 		<string>2</string>
 		<key>Used</key>
@@ -3904,6 +4744,18 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>📃🔪</string>
+		<key>Phrase</key>
+		<string>papercut</string>
+		<key>Hint</key>
+		<string>A small, painful slice of your skin</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>🏌🏼⛳️🎯</string>
 		<key>Phrase</key>
 		<string>par</string>
@@ -3971,6 +4823,18 @@
 		<string>Where a kid keeps their money</string>
 		<key># of words</key>
 		<string>2</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>📌💳🏧</string>
+		<key>Phrase</key>
+		<string>pin</string>
+		<key>Hint</key>
+		<string>A code to authenticate a user</string>
+		<key># of words</key>
+		<string>abv.</string>
 		<key>Used</key>
 		<string>TRUE</string>
 	</dict>
@@ -4468,6 +5332,18 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>⬇️🏞</string>
+		<key>Phrase</key>
+		<string>southpark</string>
+		<key>Hint</key>
+		<string>Home to Stan, Kyle, Cartman, and Kenny</string>
+		<key># of words</key>
+		<string>2</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>🧖🏼‍♀️💇🏼‍♀️💆🏼‍♀️💅🏼</string>
 		<key>Phrase</key>
 		<string>spa</string>
@@ -4564,6 +5440,18 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>🔥💧➡️🌫</string>
+		<key>Phrase</key>
+		<string>steam</string>
+		<key>Hint</key>
+		<string>Vapor given off when water is heated</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>🛑⌚️</string>
 		<key>Phrase</key>
 		<string>stopwatch</string>
@@ -4581,6 +5469,30 @@
 		<string>strike</string>
 		<key>Hint</key>
 		<string>Knocking down all ten pins in bowling with the first ball in a frame</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>☀️🛀🏻</string>
+		<key>Phrase</key>
+		<string>sunbathe</string>
+		<key>Hint</key>
+		<string>Laying out in the sun with the goal of tanning the skin</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>☀️📅</string>
+		<key>Phrase</key>
+		<string>sunday</string>
+		<key>Hint</key>
+		<string>The day after saturday</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>
@@ -4816,6 +5728,18 @@
 	</dict>
 	<dict>
 		<key>Clue</key>
+		<string>💛🐦</string>
+		<key>Phrase</key>
+		<string>tweety</string>
+		<key>Hint</key>
+		<string>This famous yellow bird was constantly being chased by Sylvester the Cat</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
 		<string>👧🏼👧🏼</string>
 		<key>Phrase</key>
 		<string>twins</string>
@@ -4905,6 +5829,18 @@
 		<string>venom</string>
 		<key>Hint</key>
 		<string>A toxic substance delivered through stingers or fangs</string>
+		<key># of words</key>
+		<string>1</string>
+		<key>Used</key>
+		<string>TRUE</string>
+	</dict>
+	<dict>
+		<key>Clue</key>
+		<string>🍒👴🏻1💵</string>
+		<key>Phrase</key>
+		<string>washington</string>
+		<key>Hint</key>
+		<string>The first President of the United States</string>
 		<key># of words</key>
 		<string>1</string>
 		<key>Used</key>
