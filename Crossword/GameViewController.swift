@@ -116,7 +116,7 @@ class GameViewController: UIViewController {
     // Ad
     var interstitialAd: GADInterstitial!
     var shouldShowAdCounter = 0
-    var showAdAfterNumCorrect = 6
+    var showAdAfterNumCorrect = 5
     var inGame = false
     
     // Help labels, dimmers, and buttons
@@ -1892,14 +1892,14 @@ class GameViewController: UIViewController {
             let animation = CABasicAnimation(keyPath: "lineWidth")
             animation.duration = 0.45
             animation.fromValue = 0
-            animation.toValue = 4
+            animation.toValue = 5
             animation.autoreverses = true
             animation.repeatCount = 5
             border.add(animation, forKey: "")
             border.zPosition = 1000
             
             // MARK: maybe do this?
-            boardSpaces[i].backgroundColor = .red
+            // boardSpaces[i].backgroundColor = .red
         }
     }
     

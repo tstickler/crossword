@@ -310,12 +310,12 @@ class LevelsViewController: UIViewController {
         }
         
         // Set up uncompleted levels
-        // If there are none saved, start with 1-10 (original levels)
+        // If there are none saved, start with 1-5
         if let uncompleteLevels = defaults.array(forKey: "uncompletedLevels") {
             Settings.uncompletedLevels = uncompleteLevels as! [Int]
         } else {
             // The initial levels
-            Settings.uncompletedLevels = [1,2,3,4,5,6,7,8,9,10]
+            Settings.uncompletedLevels = [1,2,3,4,5]
         }
         
         // Set up locked levels
@@ -324,13 +324,22 @@ class LevelsViewController: UIViewController {
             Settings.lockedLevels = lockedLevels as! [Int]
             addNewLevels()
         } else {
-            Settings.lockedLevels = []
+            Settings.lockedLevels = [6,7,8,9,10,
+                                     11,12,13,14,15,
+                                     16,17,18]
             addNewLevels()
         }
         
-        // Fill the uncompleted levels from the locked levels if there are less than 12
+        // Fill the uncompleted levels from the locked levels if there are less than 5
         // uncompleted levels and the locked levels aren't empty
-        while Settings.uncompletedLevels.count < 12 && !Settings.lockedLevels.isEmpty {
+        // Changed from 12 to 5 at 1.1.1, anyone who had the 1.1 update can stay with 12
+        // since switching them to 5 would mess up the count when pulling out of the locked
+        // levels
+        var levelsAvailable = 5
+        if defaults.bool(forKey: "1.1_update_levels") {
+            levelsAvailable = 12
+        }
+        while Settings.uncompletedLevels.count < levelsAvailable && !Settings.lockedLevels.isEmpty {
             let num = Settings.lockedLevels[0]
             Settings.uncompletedLevels.append(num)
             Settings.lockedLevels.remove(at: 0)
@@ -354,12 +363,14 @@ class LevelsViewController: UIViewController {
     
     func addNewLevels() {
         // If the user hasn't got the 1.1 levels, add them.
-        if !defaults.bool(forKey: "1.1_update_levels") {
-            let levels = [11,12,13,14,15,16,17,18]
-            Settings.lockedLevels.append(contentsOf: levels)
-            defaults.set(true, forKey: "1.1_update_levels")
-        }
+        // Added to the locked levels
+//        if !defaults.bool(forKey: "1.1_update_levels") {
+//            let levels = [11,12,13,14,15,16,17,18]
+//            Settings.lockedLevels.append(contentsOf: levels)
+//            defaults.set(true, forKey: "1.1_update_levels")
+//        }
         
+        // If the user hasn't got the 1.1.1 levels, add them.
         if !defaults.bool(forKey: "1.1.1_update_levels") {
             let levels = [19,20,21,22,23,24]
             Settings.lockedLevels.append(contentsOf: levels)
