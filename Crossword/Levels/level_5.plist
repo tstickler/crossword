@@ -4,43 +4,13 @@
 <array>
 	<dict>
 		<key>Phrase</key>
-		<string>angrybirds</string>
+		<string>oscars</string>
 		<key>Across</key>
-		<string></string>
-		<key>Down</key>
-		<string>5</string>
-		<key>Board</key>
-		<string></string>
-	</dict>
-	<dict>
-		<key>Phrase</key>
-		<string>bathroom</string>
-		<key>Across</key>
-		<string>10</string>
+		<string>1</string>
 		<key>Down</key>
 		<string></string>
 		<key>Board</key>
-		<string></string>
-	</dict>
-	<dict>
-		<key>Phrase</key>
-		<string>corndog</string>
-		<key>Across</key>
-		<string></string>
-		<key>Down</key>
-		<string>3</string>
-		<key>Board</key>
-		<string></string>
-	</dict>
-	<dict>
-		<key>Phrase</key>
-		<string>cornnuts</string>
-		<key>Across</key>
-		<string>12</string>
-		<key>Down</key>
-		<string></string>
-		<key>Board</key>
-		<string></string>
+		<string>------oscars--cupid-e------o----hangry--r-a---s------n-n--hotdog--d-g---n----spoprocks-s--k-g-y-----n--i---bathroom-t---i-----w--t-earthworm--l---d-----a--e---s-cornnuts</string>
 	</dict>
 	<dict>
 		<key>Phrase</key>
@@ -51,16 +21,6 @@
 		<string></string>
 		<key>Board</key>
 		<string>------12------3-----------------4---------5---------------6------------------78--------9-------------------10-----------------------11-----------------------------12-------</string>
-	</dict>
-	<dict>
-		<key>Phrase</key>
-		<string>earthworm</string>
-		<key>Across</key>
-		<string>11</string>
-		<key>Down</key>
-		<string></string>
-		<key>Board</key>
-		<string></string>
 	</dict>
 	<dict>
 		<key>Phrase</key>
@@ -84,21 +44,61 @@
 	</dict>
 	<dict>
 		<key>Phrase</key>
-		<string>oscars</string>
-		<key>Across</key>
-		<string>1</string>
-		<key>Down</key>
-		<string></string>
-		<key>Board</key>
-		<string>------oscars--cupid-e------o----hangry--r-a---s------n-n--hotdog--d-g---n----spoprocks-s--k-g-y-----n--i---bathroom-t---i-----w--t-earthworm--l---d-----a--e---s-cornnuts</string>
-	</dict>
-	<dict>
-		<key>Phrase</key>
 		<string>poprocks</string>
 		<key>Across</key>
 		<string>8</string>
 		<key>Down</key>
 		<string></string>
+		<key>Board</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>Phrase</key>
+		<string>bathroom</string>
+		<key>Across</key>
+		<string>10</string>
+		<key>Down</key>
+		<string></string>
+		<key>Board</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>Phrase</key>
+		<string>earthworm</string>
+		<key>Across</key>
+		<string>11</string>
+		<key>Down</key>
+		<string></string>
+		<key>Board</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>Phrase</key>
+		<string>cornnuts</string>
+		<key>Across</key>
+		<string>12</string>
+		<key>Down</key>
+		<string></string>
+		<key>Board</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>Phrase</key>
+		<string>angrybirds</string>
+		<key>Across</key>
+		<string></string>
+		<key>Down</key>
+		<string>5</string>
+		<key>Board</key>
+		<string></string>
+	</dict>
+	<dict>
+		<key>Phrase</key>
+		<string>corndog</string>
+		<key>Across</key>
+		<string></string>
+		<key>Down</key>
+		<string>3</string>
 		<key>Board</key>
 		<string></string>
 	</dict>

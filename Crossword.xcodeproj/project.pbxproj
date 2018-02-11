@@ -60,7 +60,6 @@
 		2F7CAB8C20211543001A23CE /* level_14.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F7CAB7820211541001A23CE /* level_14.plist */; };
 		2F7CAB8D20211543001A23CE /* level_15.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F7CAB7920211541001A23CE /* level_15.plist */; };
 		2F7CAB8E20211543001A23CE /* level_18.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F7CAB7A20211541001A23CE /* level_18.plist */; };
-		2F7CAB8F20211543001A23CE /* level_5.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F7CAB7B20211541001A23CE /* level_5.plist */; };
 		2F7CAB9020211543001A23CE /* level_6.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F7CAB7C20211541001A23CE /* level_6.plist */; };
 		2F7CAB9120211543001A23CE /* level_10.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F7CAB7D20211541001A23CE /* level_10.plist */; };
 		2F7CAB9220211543001A23CE /* level_7.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F7CAB7E20211541001A23CE /* level_7.plist */; };
@@ -87,6 +86,7 @@
 		2FD03D94202E2E9800E60613 /* level_23.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FD03D92202E2E9800E60613 /* level_23.plist */; };
 		2FD413761FDB72E600B0D1A0 /* LockedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD413751FDB72E600B0D1A0 /* LockedViewController.swift */; };
 		2FDC7C371FAFA4A200A3EABE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */; };
+		2FF98758202FFAF4004142FE /* level_5.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2FF98757202FFAF4004142FE /* level_5.plist */; };
 		DD47337F967C59A1196B08C3 /* Pods_CrosswordUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A1F12BD8469BEB52DD6297 /* Pods_CrosswordUITests.framework */; };
 		FA541F5D310B5B886DF5CBE4 /* Pods_CrosswordTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BA7F006000A0E6EB67A386E /* Pods_CrosswordTests.framework */; };
 /* End PBXBuildFile section */
@@ -171,7 +171,6 @@
 		2F7CAB7820211541001A23CE /* level_14.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_14.plist; sourceTree = "<group>"; };
 		2F7CAB7920211541001A23CE /* level_15.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_15.plist; sourceTree = "<group>"; };
 		2F7CAB7A20211541001A23CE /* level_18.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_18.plist; sourceTree = "<group>"; };
-		2F7CAB7B20211541001A23CE /* level_5.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_5.plist; sourceTree = "<group>"; };
 		2F7CAB7C20211541001A23CE /* level_6.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_6.plist; sourceTree = "<group>"; };
 		2F7CAB7D20211541001A23CE /* level_10.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_10.plist; sourceTree = "<group>"; };
 		2F7CAB7E20211541001A23CE /* level_7.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_7.plist; sourceTree = "<group>"; };
@@ -198,6 +197,7 @@
 		2FD03D92202E2E9800E60613 /* level_23.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_23.plist; sourceTree = "<group>"; };
 		2FD413751FDB72E600B0D1A0 /* LockedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockedViewController.swift; sourceTree = "<group>"; };
 		2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		2FF98757202FFAF4004142FE /* level_5.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = level_5.plist; sourceTree = "<group>"; };
 		4A3278F256C80F5572606B93 /* Pods-CrosswordUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CrosswordUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CrosswordUITests/Pods-CrosswordUITests.release.xcconfig"; sourceTree = "<group>"; };
 		65B4CEE3811F32B335769A9A /* Pods-CrosswordUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CrosswordUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CrosswordUITests/Pods-CrosswordUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		66F51F77CC075E9E76C3D43C /* Pods-CrosswordTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CrosswordTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CrosswordTests/Pods-CrosswordTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -350,7 +350,7 @@
 				2F7CAB8320211542001A23CE /* level_2.plist */,
 				2F7CAB8820211542001A23CE /* level_3.plist */,
 				2F7CAB7F20211541001A23CE /* level_4.plist */,
-				2F7CAB7B20211541001A23CE /* level_5.plist */,
+				2FF98757202FFAF4004142FE /* level_5.plist */,
 				2F7CAB7C20211541001A23CE /* level_6.plist */,
 				2F7CAB7E20211541001A23CE /* level_7.plist */,
 				2F7CAB8020211541001A23CE /* level_8.plist */,
@@ -559,7 +559,6 @@
 				2F1D354D1FCB587000D1172F /* correct.mp3 in Resources */,
 				2F1029981FC2436D0053096D /* erase.wav in Resources */,
 				2F3986182020E9160057F7D9 /* game_20.mp3 in Resources */,
-				2F7CAB8F20211543001A23CE /* level_5.plist in Resources */,
 				2F7CAB8C20211543001A23CE /* level_14.plist in Resources */,
 				2FAFE8EC202E2F2D005BD9D3 /* master.plist in Resources */,
 				2F39861F2020E9160057F7D9 /* game_22.mp3 in Resources */,
@@ -571,6 +570,7 @@
 				2F39861C2020E9160057F7D9 /* game_8.mp3 in Resources */,
 				2F39861B2020E9160057F7D9 /* game_2.mp3 in Resources */,
 				2F1D354B1FCB500D00D1172F /* errors.mp3 in Resources */,
+				2FF98758202FFAF4004142FE /* level_5.plist in Resources */,
 				2F789C981FCE0F17000139A3 /* GoogleService-Info.plist in Resources */,
 				2F7CAB8A20211543001A23CE /* level_9.plist in Resources */,
 				2F7CAB9D20211543001A23CE /* level_12.plist in Resources */,

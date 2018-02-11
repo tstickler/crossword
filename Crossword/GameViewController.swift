@@ -307,7 +307,7 @@ class GameViewController: UIViewController {
         // Board[2] contains down and across information for each square
         let gameBoardDA = board[2]
         
-        // Each string above has different lenghts so iteration jumps are different between
+        // Each string above has different lengths so iteration jumps are different between
         // the strings
         var letterIterator = 0
         var numbersIterator = 0

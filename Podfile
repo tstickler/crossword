@@ -6,8 +6,8 @@ target 'Crossword' do
   use_frameworks!
 
   # Pods for Crossword
-	pod ‘Firebase/Core’
-	pod ‘Firebase/AdMob’
+	pod 'Firebase/Core'
+	pod 'Google-Mobile-Ads-SDK', '7.28.0'
 
   target 'CrosswordTests' do
     inherit! :search_paths
