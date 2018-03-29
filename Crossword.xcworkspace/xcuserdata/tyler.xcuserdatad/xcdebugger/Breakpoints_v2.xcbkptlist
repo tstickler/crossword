@@ -6,16 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Pods/SwiftyStoreKit/SwiftyStoreKit/SwiftyStoreKit.swift"
-            timestampString = "533254113.960913"
+            filePath = "Crossword/GameViewController.swift"
+            timestampString = "544032195.396724"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "49"
-            endingLineNumber = "49"
-            landmarkName = "purchaseProduct(_:quantity:atomically:applicationUsername:completion:)"
+            startingLineNumber = "2354"
+            endingLineNumber = "2354"
+            landmarkName = "readFromDefaults()"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,27 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Crossword/GameViewController.swift"
-            timestampString = "540015362.906823"
+            timestampString = "544032195.397323"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2320"
-            endingLineNumber = "2320"
-            landmarkName = "updateTimerLabel()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Crossword/GameViewController.swift"
-            timestampString = "540015362.907357"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1103"
-            endingLineNumber = "1103"
+            startingLineNumber = "1166"
+            endingLineNumber = "1166"
             landmarkName = "keyboardButtonPressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -58,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Crossword/GameViewController.swift"
-            timestampString = "540015362.907872"
+            timestampString = "544032195.397718"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "944"
-            endingLineNumber = "944"
+            startingLineNumber = "1007"
+            endingLineNumber = "1007"
             landmarkName = "fillSquareButtonTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,13 +58,45 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Crossword/GameViewController.swift"
-            timestampString = "540015362.908183"
+            timestampString = "544032195.3980581"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1383"
-            endingLineNumber = "1383"
-            landmarkName = "GameViewController"
-            landmarkType = "3">
+            startingLineNumber = "1446"
+            endingLineNumber = "1446"
+            landmarkName = "getSpotInfo(indexOfButton:info:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Crossword/GameViewController.swift"
+            timestampString = "544032195.398423"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "362"
+            endingLineNumber = "362"
+            landmarkName = "giveBoardSpacesProperties(board:)"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Crossword/GameViewController.swift"
+            timestampString = "544032195.398725"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "1827"
+            endingLineNumber = "1827"
+            landmarkName = "highlight(selectedSpaces:atSquare:prevSquare:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -90,13 +106,45 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Crossword/GameViewController.swift"
-            timestampString = "540015362.908499"
+            timestampString = "544032195.399018"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "299"
-            endingLineNumber = "299"
-            landmarkName = "giveBoardSpacesProperties(board:)"
+            startingLineNumber = "2119"
+            endingLineNumber = "2119"
+            landmarkName = "animateGameOver()"
             landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Crossword.GameViewController.animateGameOver() -&gt; ()"
+                  moduleName = "Crossword"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Tyler/Desktop/Swift/crossword/Crossword/GameViewController.swift"
+                  timestampString = "543972724.052159"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2115"
+                  endingLineNumber = "2115"
+                  offsetFromSymbolStart = "1116">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in Crossword.GameViewController.animateGameOver() -&gt; ()"
+                  moduleName = "Crossword"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/Tyler/Desktop/Swift/crossword/Crossword/GameViewController.swift"
+                  timestampString = "543972724.053861"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "2117"
+                  endingLineNumber = "2117"
+                  offsetFromSymbolStart = "24">
+               </Location>
+            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

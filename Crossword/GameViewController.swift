@@ -11,7 +11,24 @@ import AVFoundation
 import AudioToolbox
 import Firebase
 
-class GameViewController: UIViewController {
+class GameViewController: UIViewController, GADInterstitialDelegate {
+    // Contraints that will be modified during runtime to fit device
+    @IBOutlet var topMidKeySep: NSLayoutConstraint!
+    @IBOutlet var bottomMidKeySep: NSLayoutConstraint!
+    @IBOutlet var helpButtonsStack: UIStackView!
+    @IBOutlet var nextPhraseWidth: NSLayoutConstraint!
+    @IBOutlet var backPhraseWidth: NSLayoutConstraint!
+    @IBOutlet var topBarHeightConstraint: NSLayoutConstraint!
+    @IBOutlet var middleRowLeading: NSLayoutConstraint!
+    @IBOutlet var middleRowTrailing: NSLayoutConstraint!
+    @IBOutlet var theBoard: UIStackView!
+    @IBOutlet var boardTrailing: NSLayoutConstraint!
+    @IBOutlet var boardLeading: NSLayoutConstraint!
+    @IBOutlet var boardTop: NSLayoutConstraint!
+    @IBOutlet var boardBottom: NSLayoutConstraint!
+    @IBOutlet var hintEnabledHeight: NSLayoutConstraint!
+    
+    
     // Allows us to animate fall of boardspaces at the end of the level
     var animator: UIDynamicAnimator!
 
@@ -152,75 +169,63 @@ class GameViewController: UIViewController {
     *****************************************/
     
     func setUpBoard(board: [String]) {
-        let iphoneSEkeysHeight: CGFloat = 42
-        let iphoneKeysHeight: CGFloat = 49.5
-        let iphonePlusKeysHeight: CGFloat = 53
-        let iphoneXKeysHeight: CGFloat = 55
+        // Top bar should take 5% of screen
+        // If the 5 % is less than 40 points, then the top bar should be 40
+        topBarHeightConstraint.constant = (screenSize.height * 0.05)
+        if topBarHeightConstraint.constant < 35 {
+            topBarHeightConstraint.constant = 35
+        }
+        
+        // Clue area takes up 10% of screen
+        clueHeightConstraint.constant = (screenSize.height * 0.10)
+        
+        // Key background area takes up 22% of screen
+        keyboardBackHeight.constant = (screenSize.height * 0.25)
+        
+        // Each row of keys takes up 28% of the keyboard area
+        topKeysHeight.constant = keyboardBackHeight.constant * 0.275
+        middleKeysHeight.constant = keyboardBackHeight.constant * 0.275
+        
+        if screenSize.height == 812 {
+            bottomKeysHeight.constant = keyboardBackHeight.constant * 0.25
+
+        } else {
+            bottomKeysHeight.constant = keyboardBackHeight.constant * 0.275
+        }
+        // Seperation of the keys should be 4% of the key background area
+        topMidKeySep.constant = keyboardBackHeight.constant * 0.06
+        bottomMidKeySep.constant = keyboardBackHeight.constant * 0.06
+        
+        // Leading and trailing of the bottom row are 10% of the key background area
+        // Gives room for settings and erase buttons
+        bottomRowLeading.constant = keyboardBackHeight.constant * 0.04
+        bottomRowTrailing.constant = keyboardBackHeight.constant * 0.04
+        
+        // Offset for clue is 20% of clue area height
+        emojiClueConstraint.constant = clueHeightConstraint.constant * 0.2
+        
+        // Font size of the clue is 60% of the clue area height
+        emojiClue.font = clueLabel.font.withSize(clueHeightConstraint.constant * 0.6)
+        
+        middleRowLeading.constant = keyboardBackHeight.constant * 0.1
+        middleRowTrailing.constant = keyboardBackHeight.constant * 0.1
+        
+        nextPhraseWidth.constant = clueHeightConstraint.constant * 0.4
+        backPhraseWidth.constant = clueHeightConstraint.constant * 0.4
+        
+        if screenSize.height > 812 {
+            boardLeading.constant = 20
+            boardTrailing.constant = 20
+            boardTop.constant = 10
+            boardBottom.constant = 10
+        }
         
         // Gives buttons a nice rounded corner
         for button in keys {
-            button.layer.cornerRadius = 7
-        }
-        
-        switch screenSize.height {
-        // Sets constraints for iPhone SE
-        case 568:
-            topKeysHeight.constant = iphoneSEkeysHeight
-            middleKeysHeight.constant = iphoneSEkeysHeight
-            bottomKeysHeight.constant = iphoneSEkeysHeight
-            
-            bottomRowLeading.constant = 45
-            bottomRowTrailing.constant = 45
-            
-            emojiClue.font = clueLabel.font.withSize(32)
-            emojiClueConstraint.constant = 9
-                        
-        // Sets constraints for iPhone
-        case 667:
-            topKeysHeight.constant = iphoneKeysHeight
-            middleKeysHeight.constant = iphoneKeysHeight
-            bottomKeysHeight.constant = iphoneKeysHeight
-            
-            bottomRowLeading.constant = 52.5
-            bottomRowTrailing.constant = 52.5
-            
-            emojiClue.font = clueLabel.font.withSize(37)
-            clueHeightConstraint.constant = 55
-            emojiClueConstraint.constant = 9
-            keyboardBackHeight.constant = 175
-            
-        // Sets constraints for iPhone Plus
-        case 736:
-            topKeysHeight.constant = iphonePlusKeysHeight
-            middleKeysHeight.constant = iphonePlusKeysHeight
-            bottomKeysHeight.constant = iphonePlusKeysHeight
-            
-            bottomRowLeading.constant = 55
-            bottomRowTrailing.constant = 55
-            
-            keyboardBackHeight.constant = 185
-            clueHeightConstraint.constant = 70
-            emojiClueConstraint.constant = 11
-
-            emojiClue.font = clueLabel.font.withSize(45)
-            
-        // Sets constraints for iPhone X
-        case 812:
-            topKeysHeight.constant = iphoneXKeysHeight
-            middleKeysHeight.constant = iphoneXKeysHeight
-            bottomKeysHeight.constant = iphoneXKeysHeight
-            
-            bottomRowLeading.constant = 52.5
-            bottomRowTrailing.constant = 52.5
-            
-            keyboardBackHeight.constant = 223
-            
-            clueHeightConstraint.constant = 75
-            emojiClueConstraint.constant = 16
-            emojiClue.font = clueLabel.font.withSize(43)
-            
-        default:
-            break
+            button.layer.cornerRadius = keyboardBackHeight.constant * 0.05
+            if UIDevice.current.model == "iPad" {
+                button.titleLabel?.font = button.titleLabel?.font.withSize(33.0)
+            }
         }
         
         // Set up the board buttons
@@ -228,8 +233,10 @@ class GameViewController: UIViewController {
             // If we are on a smaller screen have a smaller font for letters
             if screenSize.width == 320 {
                 button.titleLabel?.font = button.titleLabel?.font.withSize(9.0)
-            } else {
+            } else if screenSize.height < 813 {
                 button.titleLabel?.font = button.titleLabel?.font.withSize(13.0)
+            } else {
+                button.titleLabel?.font = button.titleLabel?.font.withSize(23.0)
             }
             
             // Button letters should be black
@@ -237,6 +244,9 @@ class GameViewController: UIViewController {
             
             // Give buttons a nice rounded corner
             button.layer.cornerRadius = 2
+            if screenSize.height > 812 {
+                button.layer.cornerRadius = 4
+            }
         }
         
         // Gives each space on the board specific properties depending on how the board is arranged
@@ -263,10 +273,20 @@ class GameViewController: UIViewController {
         hintButton.layer.cornerRadius = 5
         hintButton.layer.backgroundColor = redColorCG
         
+        hintButton.titleLabel!.numberOfLines = 1
+        hintButton.titleLabel?.minimumScaleFactor = 0.5
+        hintButton.titleLabel!.adjustsFontSizeToFitWidth = true
+        hintButton.titleLabel!.baselineAdjustment = .alignCenters
+        
         fillSquareButton.layer.cornerRadius = 5
         fillSquareButton.layer.backgroundColor = orangeColorCG
         
         hintEnabledButton.layer.cornerRadius = 14
+        if UIDevice.current.model == "iPad" {
+            hintEnabledHeight.constant = 42
+            hintEnabledButton.layer.cornerRadius = 21
+            directionLabel.font = directionLabel.font.withSize(24)
+        }
         hintEnabledButton.layer.borderColor = UIColor.black.cgColor
         hintEnabledButton.layer.borderWidth = 0
         
@@ -1010,7 +1030,7 @@ class GameViewController: UIViewController {
         }
     }
     
-    @IBAction func keyboardButtonPressed(_ sender: UIButton) {
+    @IBAction func keyboardButtonPressed(_ sender: UIButton) {        
         // Play a click sound when the keys are tapped
         if Settings.soundEffects {
             MusicPlayer.playSoundEffect(of: "click", ext: "wav")
@@ -1778,23 +1798,14 @@ class GameViewController: UIViewController {
             // CAShapeLayer allows us to put the border outside of the button, giving the button more space
             let border = CAShapeLayer()
             
+            // Sets the properties of the border
             // Give the layer a name so we can remove it when it shouldn't be highlighted
             border.name = "BORDER"
-            
-            // Sets the properties of the border
-            switch screenSize.height{
-            case 568:
-                border.frame = CGRect(x: 0, y: 0, width: 21, height: 21)
-            case 667:
-                border.frame = CGRect(x: 0, y: 0, width: 26, height: 26)
-            case 736:
-                border.frame = CGRect(x: 0, y: 0, width: 29, height: 30)
-            case 812:
-                border.frame = CGRect(x: 0, y: 0, width: 25, height: 28.3)
-            default:
-                border.frame = boardSpaces[i].bounds
-            }
+            border.frame = boardSpaces[i].bounds
             border.lineWidth = 2.5
+            if UIScreen.main.bounds.height > 812 {
+                border.lineWidth = 3.5
+            }
             border.path = UIBezierPath(roundedRect: border.bounds, cornerRadius:3).cgPath
             border.fillColor = UIColor.clear.cgColor
             border.strokeColor = blueColorCG
@@ -1828,18 +1839,7 @@ class GameViewController: UIViewController {
             let border = CAShapeLayer()
             
             // Sets the properties of the border
-            switch screenSize.height{
-            case 568:
-                border.frame = CGRect(x: 0, y: 0, width: 21, height: 21)
-            case 667:
-                border.frame = CGRect(x: 0, y: 0, width: 26, height: 26)
-            case 736:
-                border.frame = CGRect(x: 0, y: 0, width: 29, height: 30)
-            case 812:
-                border.frame = CGRect(x: 0, y: 0, width: 25, height: 28)
-            default:
-                border.frame = boardSpaces[i].bounds
-            }
+            border.frame = boardSpaces[i].bounds
 
             // Width is 0 since we don't want a border left over after the animation
             border.lineWidth = 0
@@ -1853,7 +1853,7 @@ class GameViewController: UIViewController {
             let animation = CABasicAnimation(keyPath: "lineWidth")
             animation.duration = amount
             animation.fromValue = 0
-            animation.toValue = 4
+            animation.toValue = 5
             animation.autoreverses = true
             border.add(animation, forKey: "")
             border.zPosition = 1000
@@ -1867,18 +1867,7 @@ class GameViewController: UIViewController {
             let border = CAShapeLayer()
             
             // Sets the properties of the border
-            switch screenSize.height{
-            case 568:
-                border.frame = CGRect(x: 0, y: 0, width: 21, height: 21)
-            case 667:
-                border.frame = CGRect(x: 0, y: 0, width: 26, height: 26)
-            case 736:
-                border.frame = CGRect(x: 0, y: 0, width: 29, height: 30)
-            case 812:
-                border.frame = CGRect(x: 0, y: 0, width: 25, height: 28)
-            default:
-                border.frame = boardSpaces[i].bounds
-            }
+            border.frame = boardSpaces[i].bounds
             
             // Width is 0 since we don't want a border left over after the animation
             border.lineWidth = 0
@@ -2104,7 +2093,7 @@ class GameViewController: UIViewController {
                     across = false
                 }
                 
-                boardButtonTapped(boardSpaces[i])
+                boardSpaces[i].sendActions(for: .touchUpInside)
                 break
             }
         }
@@ -2416,22 +2405,7 @@ class GameViewController: UIViewController {
         defaults.set(0, forKey: "\(Settings.userLevel)_hours")
     }
     
-    func checkAdProgress() {
-        // Ad shows if:
-        // 1. Ready to show
-        // 2. The ad counter has hit the number allowed before it should show
-        // 3. The user hasn't filled all the squares (interferes with game over)
-        // 4. The user has not purchased the removal of ads
-        shouldShowAdCounter += 1
-        if interstitialAd.isReady && shouldShowAdCounter % showAdAfterNumCorrect == 0
-            && !allSquaresFilled() && !Settings.adsDisabled {
-            interstitialAd.present(fromRootViewController: self)
-            interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-1164601417724423/5546885166")
-            let request = GADRequest()
-            request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
-            interstitialAd.load(request)
-        }
-    }
+
     
      /*****************************************
      *                                        *
@@ -2459,27 +2433,36 @@ class GameViewController: UIViewController {
         self.present(IAP, animated: true, completion: nil)
     }
 
+    var startNewGame = false
     func newLevel() {
+        // When the interstitial ad is closed, the next level will display
+        startNewGame = true
+    
         // Present an ad when going to a new level
-        if interstitialAd.isReady && !Settings.adsDisabled {
+        if false && interstitialAd.isReady && !Settings.adsDisabled {
             interstitialAd.present(fromRootViewController: self)
+        } else {
+            // Will only occur if the ads are disabled
+            if startNewGame {
+                // Remove the falling animation
+                animator.removeAllBehaviors()
+                
+                // Creates a new board and pushes it onto the navigation stack
+                let storyboard = UIStoryboard(name: "Main", bundle: nil)
+                let vc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
+                
+                // Gives a nice animation to the next view
+                let transition = CATransition()
+                transition.duration = 0.5
+                transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+                transition.type = kCATransitionFade
+                self.navigationController?.view.layer.add(transition, forKey: nil)
+                
+                self.navigationController?.pushViewController(vc, animated: false)
+                
+                startNewGame = false
+            }
         }
-        
-        // Remove the falling animation
-        animator.removeAllBehaviors()
-        
-        // Creates a new board and pushes it onto the navigation stack
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let vc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
-        
-        // Gives a nice animation to the next view
-        let transition = CATransition()
-        transition.duration = 0.5
-        transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
-        transition.type = kCATransitionFade
-        self.navigationController?.view.layer.add(transition, forKey: nil)
-        
-        self.navigationController?.pushViewController(vc, animated: false)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -2508,12 +2491,7 @@ class GameViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        interstitialAd = GADInterstitial(adUnitID: "ca-app-pub-1164601417724423/5546885166")
-        let request = GADRequest()
-        request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
-        interstitialAd.load(request)
-        
-
+        interstitialAd = createAndLoadInterstitial()
         
         // This is the board that needs to be set up
         // board[0] contains the letters in their locations
@@ -2551,15 +2529,132 @@ class GameViewController: UIViewController {
         let appDelegate = UIApplication.shared.delegate as! AppDelegate
         appDelegate.gameViewController = self
         
-        // Our initial tap
-        initialHighlight()
-        inGame = true
-        
         // Help screen should show first time the user plays
         // If they want to display it again, its available in the menu
         if !defaults.bool(forKey: "helpShownBefore") {
             helpSetupAndDisplay()
         }
+        
+        if !inGame {
+            // Our initial tap
+            initialHighlight()
+            inGame = true
+        }
+    }
+    
+    var gameStarted = false
+    override func viewDidLayoutSubviews() {
+        if !gameStarted {
+            var height = theBoard.frame.height
+            var width = theBoard.frame.width
+            
+            while width > height {
+                boardLeading.constant += 0.5
+                boardTrailing.constant += 0.5
+                width -= 1
+            }
+            
+            while height > width {
+                boardTop.constant += 0.5
+                boardBottom.constant += 0.5
+                height -= 1
+            }
+            
+            gameStarted = true
+        }
+        
+        // Keeps highlighted word border from breaking
+        boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
+        boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
+    }
+    
+    /*****************************************
+     *                                        *
+     *              Ad functions              *
+     *                                        *
+     *****************************************/
+    
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        if UIDevice.current.orientation.isLandscape {
+            print("Landscape")
+            boardLeading.constant = 200
+            boardTrailing.constant = 200
+        } else {
+            boardLeading.constant = 20
+            boardTrailing.constant = 20
+
+            print("Portrait")
+        }
+    }
+    
+    
+    func interstitialDidDismissScreen(_ ad: GADInterstitial) {
+        interstitialAd = createAndLoadInterstitial()
+        if across {
+            if indexOfButton < 168 {
+                boardSpaces[indexOfButton! + 1].sendActions(for: .touchUpInside)
+                boardSpaces[indexOfButton! - 1].sendActions(for: .touchUpInside)
+            } else {
+                boardSpaces[indexOfButton! - 1].sendActions(for: .touchUpInside)
+                boardSpaces[indexOfButton! + 1].sendActions(for: .touchUpInside)
+            }
+
+            across = true
+        } else {
+            if indexOfButton > 12 {
+                boardSpaces[indexOfButton! - 13].sendActions(for: .touchUpInside)
+                boardSpaces[indexOfButton! + 13].sendActions(for: .touchUpInside)
+            } else {
+                boardSpaces[indexOfButton! + 13].sendActions(for: .touchUpInside)
+                boardSpaces[indexOfButton! - 13].sendActions(for: .touchUpInside)
+            }
+
+            across = false
+        }
+        
+        if startNewGame {
+            // Remove the falling animation
+            animator.removeAllBehaviors()
+            
+            // Creates a new board and pushes it onto the navigation stack
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            let vc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
+            
+            // Gives a nice animation to the next view
+            let transition = CATransition()
+            transition.duration = 0.5
+            transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
+            transition.type = kCATransitionFade
+            self.navigationController?.view.layer.add(transition, forKey: nil)
+            
+            self.navigationController?.pushViewController(vc, animated: false)
+            
+            startNewGame = false
+        }
+        MusicPlayer.gameMusicPlayer.setVolume(0.2, fadeDuration: 0.3)
+    }
+    
+    func checkAdProgress() {
+        // Ad shows if:
+        // 1. Ready to show
+        // 2. The ad counter has hit the number allowed before it should show
+        // 3. The user hasn't filled all the squares (interferes with game over)
+        // 4. The user has not purchased the removal of ads
+        shouldShowAdCounter += 1
+        if interstitialAd.isReady && shouldShowAdCounter % showAdAfterNumCorrect == 0
+            && !allSquaresFilled() && !Settings.adsDisabled {
+            interstitialAd.present(fromRootViewController: self)
+            MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 0.3)
+        }
+    }
+    
+    func createAndLoadInterstitial() -> GADInterstitial {
+        let interstitial = GADInterstitial(adUnitID: "ca-app-pub-1164601417724423/5546885166")
+        let request = GADRequest()
+        request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938", "845b935a0aad6fa7bbc613bea329c30a"]
+        interstitial.delegate = self
+        interstitial.load(request)
+        return interstitial
     }
 }
 

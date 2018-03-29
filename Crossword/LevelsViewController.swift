@@ -179,7 +179,7 @@ class LevelsViewController: UIViewController {
             bannerHeightConstraint.constant = 50
             
             let request = GADRequest()
-            request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
+            request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938", "845b935a0aad6fa7bbc613bea329c30a"]
             bannerAd.adSize = kGADAdSizeSmartBannerPortrait
             bannerAd.adUnitID = "ca-app-pub-1164601417724423/6884757223"
             bannerAd.rootViewController = self
@@ -294,7 +294,7 @@ class LevelsViewController: UIViewController {
         
         // Keep our arrays a manageable size and remove emojis/animations that have left the screen
         // Therefore, our loops won't be giant if the user keeps app at the homescreen
-        if animators.count > 50 {
+        if animators.count > 100 {
             animators.removeSubrange(0...25)
             labels.removeSubrange(0...25)
         }

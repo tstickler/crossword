@@ -24,5 +24,5 @@ class Settings {
     static var completedLevels = [Int]()
     static var uncompletedLevels = [Int]()
     static var lockedLevels = [Int]()
-    static let newLevels = [19,20,21,22,23,24]
+    static let newLevels = [Int]()
 }

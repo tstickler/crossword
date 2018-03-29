@@ -7,7 +7,7 @@ target 'Crossword' do
 
   # Pods for Crossword
 	pod 'Firebase/Core'
-	pod 'Google-Mobile-Ads-SDK', '7.28.0'
+	pod 'Google-Mobile-Ads-SDK', '7.29.0'
 
   target 'CrosswordTests' do
     inherit! :search_paths

@@ -105,7 +105,7 @@ class HomeViewController: UIViewController {
             bannerHeightConstraint.constant = 50
 
             let request = GADRequest()
-            request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938"]
+            request.testDevices = [kGADSimulatorID, "fed0f7a57321fadf217b2e53c6dac938", "845b935a0aad6fa7bbc613bea329c30a"]
             bannerAd.adSize = kGADAdSizeSmartBannerPortrait
             bannerAd.adUnitID = "ca-app-pub-1164601417724423/6161128687"
             bannerAd.rootViewController = self
@@ -214,8 +214,13 @@ class HomeViewController: UIViewController {
     func animate(label: UILabel, anim: UIDynamicAnimator) {
         // Set the push animation
         // Choose a random magnitude between .15 and .35 to vary speeds
+        var magnitude = Double(arc4random_uniform(16) + 25) / 100
+        if UIDevice.current.model == "iPad" {
+            // Increase the speed for falling on a bigger screen
+            magnitude = Double(arc4random_uniform(16) + 35) / 100
+        }
         let push = UIPushBehavior(items: [label], mode: .instantaneous)
-        push.setAngle(.pi/2.0, magnitude: CGFloat(Double(arc4random_uniform(16)) + 25) / 100)
+        push.setAngle(.pi/2.0, magnitude: CGFloat(magnitude))
         
         // Begin animation
         anim.addBehavior(push)
@@ -240,7 +245,7 @@ class HomeViewController: UIViewController {
         
         // Keep our arrays a manageable size and remove emojis/animations that have left the screen
         // Therefore, our loops won't be giant if the user keeps app at the homescreen
-        if animators.count > 50 {
+        if animators.count > 100 {
             animators.removeSubrange(0...25)
             labels.removeSubrange(0...25)
         }
