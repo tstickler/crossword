@@ -10,6 +10,8 @@ import UIKit
 import Firebase
 
 class HomeViewController: UIViewController {
+    var ref: DatabaseReference!
+
     @IBAction func unwindSegue(_ sender: UIStoryboardSegue) {
         // Unwind segue allows jumping from the menu or game over view controllers
         // all the way back to home.
@@ -44,6 +46,10 @@ class HomeViewController: UIViewController {
     @IBOutlet var bannerAd: GADBannerView!
     @IBOutlet var bannerHeightConstraint: NSLayoutConstraint!
     
+    @IBOutlet var cover: UIView!
+    @IBOutlet var internetLabel: UILabel!
+    @IBOutlet var wheel: UIActivityIndicatorView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -53,6 +59,50 @@ class HomeViewController: UIViewController {
         // Load the user selected settings
         // If its the first time, loads default settings
         loadSettings()
+        
+        if !ReachabilityTest.isConnectedToNetwork() && !Settings.gatheredData {
+            self.wheel.startAnimating()
+            self.cover.isHidden = false
+            self.internetLabel.text = "Internet connection required to retreive necessary files."
+        }
+        
+        // Loads master from firebase
+        ref = Database.database().reference()
+        ref.observe(.value, with: { (snap) in
+            // Everything from the firebase
+            let everything = snap.value as! Dictionary<String, Any>
+            
+            // Just the clues
+            let clues = everything["master"] as! Array<Dictionary<String, String>>
+            
+            // Just the max number of levels
+            Settings.maxNumOfLevels = everything["maxNumLevels"] as! Int
+            
+            // Just the new levels
+            Settings.newLevels = everything["newLevels"] as! Array<Int>
+            
+            // Just the levels
+            // Accessed as levels[level-1]["Across"/"Down"/"Board"]["Property"]
+            let levels = everything["levels"] as! Array<Dictionary<String, Dictionary<String, String>>>
+            
+            // Create master array
+            for element in clues {
+                Settings.master.append(element)
+            }
+            
+            for level in levels {
+                Settings.levels.append(level)
+            }
+                        
+            self.wheel.hidesWhenStopped = true
+            self.wheel.stopAnimating()
+            self.internetLabel.text = ""
+            self.defaults.set(true, forKey: "gatheredData")
+            
+            UIView.animate(withDuration: 1.0, animations: {
+                self.cover.alpha = 0
+            })
+        })
         
         /* Removing the free hints for 1.1
         if !defaults.bool(forKey: "freeHintsFor1.1"){
@@ -267,13 +317,14 @@ class HomeViewController: UIViewController {
             Settings.adsDisabled = defaults.bool(forKey: "adsDisabled")
             Settings.cheatCount = defaults.integer(forKey: "cheatCount")
             Settings.userLevel = defaults.integer(forKey: "userLevel")
+            Settings.gatheredData = defaults.bool(forKey: "gatheredData")
         } else {
             // If this is the user's first time, start all the settings as enabled.
             // This must happen because loading from defaults when there is no key associated
             // with the setting, it will just return false.
             // If the user decides they don't like a setting, they can change it later
             defaults.set(true, forKey: "launchedBefore")
-            
+            defaults.set(false, forKey: "gatheredData")
             defaults.set(true, forKey: "musicEnabled")
             defaults.set(true, forKey: "soundEffects")
             defaults.set(true, forKey: "showTimer")
@@ -296,7 +347,7 @@ class HomeViewController: UIViewController {
             Settings.lockCorrect = true
             Settings.correctAnim = true
             Settings.adsDisabled = false
-            
+            Settings.gatheredData = false
         }
     }
 }

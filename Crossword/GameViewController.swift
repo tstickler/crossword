@@ -161,6 +161,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     
     @IBOutlet var helpNumIndicator: UIImageView!
     
+    var ref: DatabaseReference!
     
     /*****************************************
     *                                        *
@@ -2166,37 +2167,18 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     
      /*****************************************
      *                                        *
-     *               PLIST READING            *
+     *               Level Set up             *
      *                                        *
      *****************************************/
     
-    func getInfoFromPlist(level: Int) -> (Array<Dictionary<String, String>>) {
-        let levelName = "level_\(level)"
-        
-        // Path to the plist
-        let path = Bundle.main.path(forResource: levelName, ofType: "plist")
-        
-        // Array to store information from plist
-        var storedInfoArray: NSArray?
-        
-        // Set array with information from the plist
-        storedInfoArray = NSArray(contentsOfFile: path!)
-        
-        // Return the array to be filtered
-        return (storedInfoArray as? Array<Dictionary<String, String>>)!
-    }
-    
     func fillAcrossDownArrays() {
-        // Grab across and down numbers from the plist and append them to the array
-        for i in 0..<getInfoFromPlist(level: Settings.userLevel).count {
-            let ac = getInfoFromPlist(level: Settings.userLevel)[i]["Across"]!
-            let down = getInfoFromPlist(level: Settings.userLevel)[i]["Down"]!
-            if ac != "" {
-                acrossNumbers.append(Int(ac)!)
-            }
-            if down != "" {
-                downNumbers.append(Int(down)!)
-            }
+        // Grab across and down numbers and append them to the array
+        for key in Settings.levels[Settings.userLevel - 1]["Across"]!.keys {
+            acrossNumbers.append(Int(key)!)
+        }
+
+        for key in Settings.levels[Settings.userLevel - 1]["Down"]!.keys {
+            downNumbers.append(Int(key)!)
         }
         
         // Sort the arrays from lowest to highest
@@ -2204,69 +2186,37 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         downNumbers.sort()
     }
     
-    // Gets the important information from the level plist. These arrays allow
-    // for faster access to the information since we don't need to keep reading
-    // from the plist
+    // Gets the important information from the level array created from JSON.
     func makeClueArrays() {
         // Master clues are used to easily manage hints and clues.
         // Any updates to hints or clues will apply to all phrases
-        // without needing to modify each level plist
-        let info = getInfoFromMasterFile()
-        var masterClues = [(Phrase: String, Clue: String, Hint: String, WordCt: String)]()
-        for i in 0..<getInfoFromMasterFile().count {
-            masterClues.append((info[i]["Phrase"]!,
-                                info[i]["Clue"]!,
-                                info[i]["Hint"]!,
-                                info[i]["# of words"]!))
-        }
+        // without needing to modify each level
+        var masterClues = Settings.master
         
-        // Construct the level arrays
-        let levelArray = getInfoFromPlist(level: Settings.userLevel)
-        for i in 0..<levelArray.count{
-            // Find the phrase in the master plist and grab the clue,
-            // hint, and number of words related to it
-
-            if levelArray[i]["Across"]! != "" {
-                for j in 0..<masterClues.count {
-                    if levelArray[i]["Phrase"] == masterClues[j].Phrase {
-                    acrossClues.append((levelArray[i]["Across"]!,
-                    masterClues[j].Clue,
-                    masterClues[j].Hint,
-                    masterClues[j].WordCt))
-                    }
-                }
-            }
-            
-            if levelArray[i]["Down"]! != "" {
-                for j in 0..<masterClues.count {
-                    if levelArray[i]["Phrase"] == masterClues[j].Phrase {
-                        downClues.append((levelArray[i]["Down"]!,
-                                            masterClues[j].Clue,
-                                            masterClues[j].Hint,
-                                            masterClues[j].WordCt))
-                    }
+        let ac = Settings.levels[Settings.userLevel - 1]["Across"]!
+        let dw = Settings.levels[Settings.userLevel - 1]["Down"]!
+        
+        for (key, value) in ac {
+            for j in 0..<masterClues.count {
+                if value == masterClues[j]["Phrase"] {
+                    acrossClues.append((String(Int(key)!),
+                                        masterClues[j]["Clue"]!,
+                                        masterClues[j]["Hint"]!,
+                                        masterClues[j]["Num of words"]!))
                 }
             }
         }
-    }
-    
-    // Reads in from the master list so that the clues and hints are always up to date
-    // and can easily managed.
-    func getInfoFromMasterFile() -> (Array<Dictionary<String, String>>) {
-        // Read from master file so we always have the most up to date hints and clues
-        // for each phrase.
         
-        // Path to the plist
-        let path = Bundle.main.path(forResource: "master", ofType: "plist")
-        
-        // Array to store information from plist
-        var storedInfoArray: NSArray?
-        
-        // Set array with information from the plist
-        storedInfoArray = NSArray(contentsOfFile: path!)
-        
-        // Return the array to be filtered
-        return (storedInfoArray as? Array<Dictionary<String, String>>)!
+        for (key, value) in dw {
+            for j in 0..<masterClues.count {
+                if value == masterClues[j]["Phrase"] {
+                    downClues.append((String(Int(key)!),
+                                        masterClues[j]["Clue"]!,
+                                        masterClues[j]["Hint"]!,
+                                        masterClues[j]["Num of words"]!))
+                }
+            }
+        }
     }
     
     
@@ -2492,15 +2442,15 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         super.viewDidLoad()
         
         interstitialAd = createAndLoadInterstitial()
+        ref = Database.database().reference()
         
         // This is the board that needs to be set up
         // board[0] contains the letters in their locations
         // board[1] contains numbers superscripts for across/down
         // board[2] contains across/down information for each individual square
-        let board = [getInfoFromPlist(level: Settings.userLevel)[0]["Board"]!,
-                     getInfoFromPlist(level: Settings.userLevel)[1]["Board"]!,
-                     getInfoFromPlist(level: Settings.userLevel)[2]["Board"]!]
-        
+        let board = [Settings.levels[Settings.userLevel - 1]["Board"]!["Letters"]!,
+                     Settings.levels[Settings.userLevel - 1]["Board"]!["Numbers"]!,
+                     Settings.levels[Settings.userLevel - 1]["Board"]!["Properties"]!]
         
         // Set everything up
         formatter.minimumIntegerDigits = 2
@@ -2519,7 +2469,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         
         // Initialize from defaults
         readFromDefaults()
-        clueAreaSetup()
+        clueAreaSetup()        
     }
     
     override func viewWillAppear(_ animated: Bool) {

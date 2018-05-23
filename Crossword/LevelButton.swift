@@ -78,5 +78,9 @@ class LevelButton: UIButton {
         
         NSLayoutConstraint.activate(newIndicatorConstraints)
     }
+    
+    func removeNewIndicator() {
+        
+    }
 }
 

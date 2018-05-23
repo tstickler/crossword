@@ -42,6 +42,7 @@ class LevelsViewController: UIViewController {
     
     var pageNum: Int!
     var maxNumOfPages = 2
+    var ref: DatabaseReference!
     
     @IBAction func levelButtonTapped(_ sender: UIButton) {
         selectedLevel = sender.tag
@@ -102,9 +103,18 @@ class LevelsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Indicate if a level is new or not
-        for level in Settings.newLevels {
-            levelButtons[level - 1].setNewIndicator()
+        //Read if there are new levels from firebase
+        ref = Database.database().reference()
+        ref.child("newLevels").observeSingleEvent(of: .value) { (snap) in
+            let newLevsFromFB = snap.value as? NSArray
+
+            // Iterates through new levels gathered from firebase and appends to new levels
+            if let newLevels = newLevsFromFB {
+                for level in newLevels {
+                    let lev = level as! Int
+                    self.levelButtons[lev - 1].setNewIndicator()
+                }
+            }
         }
         
         // Set how big the level should display depending on the user device

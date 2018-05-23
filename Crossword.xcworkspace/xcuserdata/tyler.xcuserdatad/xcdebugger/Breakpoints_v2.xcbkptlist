@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Crossword/GameViewController.swift"
-            timestampString = "544032195.396724"
+            timestampString = "548723368.245559"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2354"
-            endingLineNumber = "2354"
+            startingLineNumber = "2304"
+            endingLineNumber = "2304"
             landmarkName = "readFromDefaults()"
             landmarkType = "7">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Crossword/GameViewController.swift"
-            timestampString = "544032195.397323"
+            timestampString = "548723368.2460901"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1166"
-            endingLineNumber = "1166"
+            startingLineNumber = "1167"
+            endingLineNumber = "1167"
             landmarkName = "keyboardButtonPressed(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Crossword/GameViewController.swift"
-            timestampString = "544032195.397718"
+            timestampString = "548723368.246473"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1007"
-            endingLineNumber = "1007"
+            startingLineNumber = "1008"
+            endingLineNumber = "1008"
             landmarkName = "fillSquareButtonTapped(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Crossword/GameViewController.swift"
-            timestampString = "544032195.3980581"
+            timestampString = "548723368.247072"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1446"
-            endingLineNumber = "1446"
+            startingLineNumber = "1447"
+            endingLineNumber = "1447"
             landmarkName = "getSpotInfo(indexOfButton:info:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -74,11 +74,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Crossword/GameViewController.swift"
-            timestampString = "544032195.398423"
+            timestampString = "548723368.248592"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "362"
-            endingLineNumber = "362"
+            startingLineNumber = "363"
+            endingLineNumber = "363"
             landmarkName = "giveBoardSpacesProperties(board:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Crossword/GameViewController.swift"
-            timestampString = "544032195.398725"
+            timestampString = "548723368.250172"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1827"
-            endingLineNumber = "1827"
+            startingLineNumber = "1828"
+            endingLineNumber = "1828"
             landmarkName = "highlight(selectedSpaces:atSquare:prevSquare:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -106,11 +106,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Crossword/GameViewController.swift"
-            timestampString = "544032195.399018"
+            timestampString = "548723368.2506731"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "2119"
-            endingLineNumber = "2119"
+            startingLineNumber = "2120"
+            endingLineNumber = "2120"
             landmarkName = "animateGameOver()"
             landmarkType = "7">
             <Locations>
@@ -122,12 +122,12 @@
                   moduleName = "Crossword"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Tyler/Desktop/Swift/crossword/Crossword/GameViewController.swift"
-                  timestampString = "543972724.052159"
+                  timestampString = "548721116.740384"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "2115"
-                  endingLineNumber = "2115"
-                  offsetFromSymbolStart = "1116">
+                  startingLineNumber = "2121"
+                  endingLineNumber = "2121"
+                  offsetFromSymbolStart = "1428">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
@@ -137,12 +137,12 @@
                   moduleName = "Crossword"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/Tyler/Desktop/Swift/crossword/Crossword/GameViewController.swift"
-                  timestampString = "543972724.053861"
+                  timestampString = "548721116.743521"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "2117"
-                  endingLineNumber = "2117"
-                  offsetFromSymbolStart = "24">
+                  startingLineNumber = "2123"
+                  endingLineNumber = "2123"
+                  offsetFromSymbolStart = "18">
                </Location>
             </Locations>
          </BreakpointContent>

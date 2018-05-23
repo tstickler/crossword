@@ -7,6 +7,7 @@ target 'Crossword' do
 
   # Pods for Crossword
 	pod 'Firebase/Core'
+	pod 'Firebase/Database'
 	pod 'Google-Mobile-Ads-SDK', '7.29.0'
 
   target 'CrosswordTests' do

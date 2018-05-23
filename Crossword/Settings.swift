@@ -20,9 +20,14 @@ class Settings {
     static var cheatCount = 0
     static var adsDisabled: Bool!
     static var userLevel: Int!
-    static let maxNumOfLevels = 24
+    static var maxNumOfLevels: Int!
     static var completedLevels = [Int]()
     static var uncompletedLevels = [Int]()
+    static var newLevels = [Int]()
     static var lockedLevels = [Int]()
-    static let newLevels = [Int]()
+    static var gatheredData: Bool!
+    
+    static var master = [Dictionary<String, String>]()
+    static var levels = [Dictionary<String, Dictionary<String, String>>]()
+
 }

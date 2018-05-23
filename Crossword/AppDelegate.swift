@@ -20,6 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         FirebaseApp.configure()
+        Database.database().isPersistenceEnabled = true
         GADMobileAds.configure(withApplicationID: "ca-app-pub-1164601417724423~7678881026")
         
         // IAP observer is set here
