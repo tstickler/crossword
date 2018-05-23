@@ -22,11 +22,10 @@ class LevelsViewController: UIViewController {
     @IBOutlet var nextLevels: UIButton!
         
     @IBOutlet var backHomeWidth: NSLayoutConstraint!
+    @IBOutlet var firstStack: UIStackView!
     @IBOutlet var firstStackCenterX: NSLayoutConstraint!
     @IBOutlet var firstStackWidth: NSLayoutConstraint!
-    @IBOutlet var secondStackLeading: NSLayoutConstraint!
-    @IBOutlet var secondStackWidth: NSLayoutConstraint!
-    
+
     // Banner ad
     @IBOutlet var bannerAd: GADBannerView!
     @IBOutlet var bannerHeightConstraint: NSLayoutConstraint!
@@ -41,8 +40,7 @@ class LevelsViewController: UIViewController {
     var timer: Timer!
     
     var pageNum: Int!
-    var maxNumOfPages = 2
-    var ref: DatabaseReference!
+    var maxNumOfPages = 1
     
     @IBAction func levelButtonTapped(_ sender: UIButton) {
         selectedLevel = sender.tag
@@ -102,59 +100,54 @@ class LevelsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        //Read if there are new levels from firebase
-        ref = Database.database().reference()
-        ref.child("newLevels").observeSingleEvent(of: .value) { (snap) in
-            let newLevsFromFB = snap.value as? NSArray
-
-            // Iterates through new levels gathered from firebase and appends to new levels
-            if let newLevels = newLevsFromFB {
-                for level in newLevels {
-                    let lev = level as! Int
-                    self.levelButtons[lev - 1].setNewIndicator()
-                }
-            }
-        }
+//        for level in Settings.newLevels {
+//            levelButtons[level - 1].setNewIndicator()
+//        }
         
         // Set how big the level should display depending on the user device
         switch UIScreen.main.bounds.height {
         case 568:
             firstStackWidth.constant = 220
-            secondStackWidth.constant = 220
             backHomeWidth.constant = 70
         case 667:
             firstStackWidth.constant = 260
-            secondStackWidth.constant = 260
             backHomeWidth.constant = 75
         case 736:
             firstStackWidth.constant = 280
-            secondStackWidth.constant = 280
             backHomeWidth.constant = 80
         case 812:
             firstStackWidth.constant = 260
-            secondStackWidth.constant = 260
             backHomeWidth.constant = 80
         default:
             firstStackWidth.constant = 260
-            secondStackWidth.constant = 260
             backHomeWidth.constant = 80
         }
         
         // Page num is which level stack is displayed
         pageNum = 1
         backLevels.isHidden = true
+        nextLevels.isHidden = true
         
-        // Start the second stack off page
-        secondStackLeading.constant = view.frame.width
+        for i in 1..<Settings.maxNumOfLevels {
+            if i % 2 == 0 {
+                createNewLevelsStack(tagStart: i, numOfPages: CGFloat(maxNumOfPages))
+                maxNumOfPages += 1
+            }
+        }
+        
+        if maxNumOfPages > 1 {
+            nextLevels.isHidden = false
+        }
         
         setUpLevelStatusArrays()
         
         // Set the images for each level button
-        for i in 1...Settings.maxNumOfLevels {
-            levelButtons[i - 1].setBackgroundImage(UIImage(named: "num_\(i)"), for: .normal)
-            levelButtons[i - 1].layer.backgroundColor = UIColor.clear.cgColor
-            levelButtons[i - 1].setTitle(nil, for: .normal)
+        for i in 0...Settings.maxNumOfLevels - 1 {
+            levelButtons[i].setBackgroundImage(UIImage(named: "num_\(i+1)"), for: .normal)
+            levelButtons[i].layer.backgroundColor = UIColor.clear.cgColor
+            levelButtons[i].setTitle(nil, for: .normal)
+            levelButtons[i].alpha = 1.0
+            levelButtons[i].isEnabled = true
         }
 
         // Possible emojis that will randomly fall from the top (160 to choose from)
@@ -310,6 +303,46 @@ class LevelsViewController: UIViewController {
         }
     }
     
+    func createNewLevelsStack(tagStart: Int, numOfPages: CGFloat) {
+        var tag = tagStart + 1
+        let levelStack = UIStackView()
+        levelStack.axis = .vertical
+        
+        let v = UIView()
+        v.backgroundColor = .green
+        
+        levelStack.translatesAutoresizingMaskIntoConstraints = false
+
+        
+        for _ in 0...3 {
+            let buttonStack = UIStackView()
+            buttonStack.axis = .horizontal
+
+            for _ in 0...2 {
+                let levelButton = LevelButton()
+                levelButton.backgroundColor = .black
+                levelButton.setTitle(String(tag), for: .normal)
+                levelButton.tag = tag
+                levelButtons.append(levelButton)
+                tag += 1
+                buttonStack.addArrangedSubview(levelButton)
+            }
+
+            levelStack.addArrangedSubview(buttonStack)
+        }
+        
+        levelStack.addArrangedSubview(v)
+        view.addSubview(levelStack)
+        
+        levelStack.leadingAnchor.constraint(equalTo: firstStack.leadingAnchor, constant: (view.frame.width * numOfPages)).isActive = true
+        levelStack.topAnchor.constraint(equalTo: firstStack.topAnchor, constant: 0).isActive = true
+
+        levelStack.widthAnchor.constraint(equalToConstant: firstStackWidth.constant).isActive = true
+        levelStack.heightAnchor.constraint(equalToConstant: firstStack.frame.height).isActive = true
+        
+
+    }
+    
     func setUpLevelStatusArrays() {
         // Set up completed levels
         // If there are none saved, start empty
@@ -332,23 +365,23 @@ class LevelsViewController: UIViewController {
         // If there are none saved, start empty and add new levels
         if let lockedLevels = defaults.array(forKey: "lockedLevels") {
             Settings.lockedLevels = lockedLevels as! [Int]
-            addNewLevels()
+            
+            for i in 1...Settings.maxNumOfLevels {
+                if Settings.completedLevels.contains(i) || Settings.uncompletedLevels.contains(i) {
+                    continue
+                } else if !Settings.lockedLevels.contains(i){
+                    Settings.lockedLevels.append(i)
+                }
+            }
         } else {
-            Settings.lockedLevels = [6,7,8,9,10,
-                                     11,12,13,14,15,
-                                     16,17,18]
-            addNewLevels()
+            for i in 6...Settings.maxNumOfLevels {
+                Settings.lockedLevels.append(i)
+            }
         }
         
         // Fill the uncompleted levels from the locked levels if there are less than 5
         // uncompleted levels and the locked levels aren't empty
-        // Changed from 12 to 5 at 1.1.1, anyone who had the 1.1 update can stay with 12
-        // since switching them to 5 would mess up the count when pulling out of the locked
-        // levels
-        var levelsAvailable = 5
-        if defaults.bool(forKey: "1.1_update_levels") {
-            levelsAvailable = 12
-        }
+        let levelsAvailable = 5
         while Settings.uncompletedLevels.count < levelsAvailable && !Settings.lockedLevels.isEmpty {
             let num = Settings.lockedLevels[0]
             Settings.uncompletedLevels.append(num)
@@ -369,22 +402,5 @@ class LevelsViewController: UIViewController {
         defaults.set(Settings.completedLevels, forKey: "completedLevels")
         defaults.set(Settings.uncompletedLevels, forKey: "uncompletedLevels")
         defaults.set(Settings.lockedLevels, forKey: "lockedLevels")
-    }
-    
-    func addNewLevels() {
-        // If the user hasn't got the 1.1 levels, add them.
-        // Added to the locked levels
-//        if !defaults.bool(forKey: "1.1_update_levels") {
-//            let levels = [11,12,13,14,15,16,17,18]
-//            Settings.lockedLevels.append(contentsOf: levels)
-//            defaults.set(true, forKey: "1.1_update_levels")
-//        }
-        
-        // If the user hasn't got the 1.1.1 levels, add them.
-        if !defaults.bool(forKey: "1.1.1_update_levels") {
-            let levels = [19,20,21,22,23,24]
-            Settings.lockedLevels.append(contentsOf: levels)
-            defaults.set(true, forKey: "1.1.1_update_levels")
-        }
     }
 }

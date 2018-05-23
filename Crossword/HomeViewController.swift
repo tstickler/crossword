@@ -74,17 +74,15 @@ class HomeViewController: UIViewController {
             
             // Just the clues
             let clues = everything["master"] as! Array<Dictionary<String, String>>
-            
-            // Just the max number of levels
-            Settings.maxNumOfLevels = everything["maxNumLevels"] as! Int
-            
+                        
             // Just the new levels
             Settings.newLevels = everything["newLevels"] as! Array<Int>
             
             // Just the levels
             // Accessed as levels[level-1]["Across"/"Down"/"Board"]["Property"]
             let levels = everything["levels"] as! Array<Dictionary<String, Dictionary<String, String>>>
-            
+            Settings.maxNumOfLevels = levels.count
+
             // Create master array
             for element in clues {
                 Settings.master.append(element)
@@ -103,6 +101,7 @@ class HomeViewController: UIViewController {
                 self.cover.alpha = 0
             })
         })
+        ref.keepSynced(true)
         
         /* Removing the free hints for 1.1
         if !defaults.bool(forKey: "freeHintsFor1.1"){

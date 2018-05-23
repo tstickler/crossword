@@ -2216,7 +2216,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                                         masterClues[j]["Num of words"]!))
                 }
             }
-        }
+        }        
     }
     
     
