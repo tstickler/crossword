@@ -100,9 +100,6 @@ class LevelsViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        for level in Settings.newLevels {
-//            levelButtons[level - 1].setNewIndicator()
-//        }
         
         // Set how big the level should display depending on the user device
         switch UIScreen.main.bounds.height {
@@ -129,7 +126,7 @@ class LevelsViewController: UIViewController {
         nextLevels.isHidden = true
         
         for i in 1..<Settings.maxNumOfLevels {
-            if i % 2 == 0 {
+            if i % 12 == 0 {
                 createNewLevelsStack(tagStart: i, numOfPages: CGFloat(maxNumOfPages))
                 maxNumOfPages += 1
             }
@@ -148,6 +145,10 @@ class LevelsViewController: UIViewController {
             levelButtons[i].setTitle(nil, for: .normal)
             levelButtons[i].alpha = 1.0
             levelButtons[i].isEnabled = true
+        }
+        
+        for level in Settings.newLevels {
+            levelButtons[level - 1].setNewIndicator()
         }
 
         // Possible emojis that will randomly fall from the top (160 to choose from)
@@ -304,25 +305,37 @@ class LevelsViewController: UIViewController {
     }
     
     func createNewLevelsStack(tagStart: Int, numOfPages: CGFloat) {
-        var tag = tagStart + 1
+        // Stack that will hold 4 button stacks
         let levelStack = UIStackView()
         levelStack.axis = .vertical
+        levelStack.alignment = .fill
+        levelStack.distribution = .fillEqually
+        levelStack.spacing = 15.0
         
-        let v = UIView()
-        v.backgroundColor = .green
-        
-        levelStack.translatesAutoresizingMaskIntoConstraints = false
-
-        
+        var tag = tagStart + 1
         for _ in 0...3 {
+            // Button stacks hold 3 buttons each
             let buttonStack = UIStackView()
             buttonStack.axis = .horizontal
-
+            buttonStack.alignment = .fill
+            buttonStack.distribution = .fillEqually
+            buttonStack.spacing = 15.0
+            
+            // Each button should be hidden initially
             for _ in 0...2 {
+                // Button creation and setup
                 let levelButton = LevelButton()
-                levelButton.backgroundColor = .black
-                levelButton.setTitle(String(tag), for: .normal)
+                levelButton.backgroundColor = .clear
+                levelButton.setTitle(nil, for: .normal)
+                levelButton.alpha = 0
+                levelButton.isEnabled = false
+                levelButton.addTarget(self, action: #selector(levelButtonTapped), for: .touchUpInside)
+
+                // Tags are used to determine what level to show
+                // when a button is pressed.
                 levelButton.tag = tag
+
+                
                 levelButtons.append(levelButton)
                 tag += 1
                 buttonStack.addArrangedSubview(levelButton)
@@ -331,16 +344,14 @@ class LevelsViewController: UIViewController {
             levelStack.addArrangedSubview(buttonStack)
         }
         
-        levelStack.addArrangedSubview(v)
+        // Set constraints for the stack and add it to the view
         view.addSubview(levelStack)
-        
+        levelStack.translatesAutoresizingMaskIntoConstraints = false
         levelStack.leadingAnchor.constraint(equalTo: firstStack.leadingAnchor, constant: (view.frame.width * numOfPages)).isActive = true
         levelStack.topAnchor.constraint(equalTo: firstStack.topAnchor, constant: 0).isActive = true
 
         levelStack.widthAnchor.constraint(equalToConstant: firstStackWidth.constant).isActive = true
-        levelStack.heightAnchor.constraint(equalToConstant: firstStack.frame.height).isActive = true
-        
-
+        levelStack.heightAnchor.constraint(equalTo: levelStack.widthAnchor, multiplier: 19.0/14.0).isActive = true
     }
     
     func setUpLevelStatusArrays() {
@@ -372,7 +383,7 @@ class LevelsViewController: UIViewController {
                 } else if !Settings.lockedLevels.contains(i){
                     Settings.lockedLevels.append(i)
                 }
-            }
+            }            
         } else {
             for i in 6...Settings.maxNumOfLevels {
                 Settings.lockedLevels.append(i)

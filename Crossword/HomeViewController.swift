@@ -11,7 +11,9 @@ import Firebase
 
 class HomeViewController: UIViewController {
     var ref: DatabaseReference!
-
+    @IBOutlet var homeTitleImage: UIImageView!
+    @IBOutlet var playButton: UIButton!
+    
     @IBAction func unwindSegue(_ sender: UIStoryboardSegue) {
         // Unwind segue allows jumping from the menu or game over view controllers
         // all the way back to home.
@@ -53,6 +55,12 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Star these off hidden, they'll be animated in later
+        homeTitleImage.alpha = 0
+        playButton.alpha = 0
+        muteButton.alpha = 0
+        homeTitleImage.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+        
         // Start playing music
         MusicPlayer.start(musicTitle: "home", ext: "mp3")
         
@@ -64,6 +72,10 @@ class HomeViewController: UIViewController {
             self.wheel.startAnimating()
             self.cover.isHidden = false
             self.internetLabel.text = "Internet connection required to retreive necessary files."
+        } else if !Settings.gatheredData {
+            self.wheel.startAnimating()
+            self.cover.isHidden = false
+            self.internetLabel.text = "Retrieving Necessary Files..."
         }
         
         // Loads master from firebase
@@ -99,6 +111,7 @@ class HomeViewController: UIViewController {
             
             UIView.animate(withDuration: 1.0, animations: {
                 self.cover.alpha = 0
+                self.animateLoadIn()
             })
         })
         ref.keepSynced(true)
@@ -188,6 +201,27 @@ class HomeViewController: UIViewController {
         transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         transition.type = kCATransitionFade
         self.navigationController?.view.layer.add(transition, forKey: nil)
+    }
+    
+    func animateLoadIn() {
+
+        UIView.animate(withDuration: 2.0,
+                       delay: 0.3,
+                       usingSpringWithDamping: 0.4,
+                       initialSpringVelocity: 0.5,
+                       options: .curveEaseInOut,
+                       animations: {
+                        self.homeTitleImage.alpha = 1.0
+                        self.homeTitleImage.transform = CGAffineTransform(scaleX: 1.0, y: 1.0)
+        }, completion: {
+            //Code to run after animating
+            (value: Bool) in
+            
+            UIView.animate(withDuration: 1.0, animations: {
+                self.playButton.alpha = 1.0
+                self.muteButton.alpha = 1.0
+            })
+        })
     }
 
     @IBAction func muteButtonTapped(_ sender: Any) {

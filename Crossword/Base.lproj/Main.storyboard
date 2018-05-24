@@ -219,8 +219,10 @@
                         <outlet property="bannerAd" destination="mgP-Ir-n9J" id="XmE-x4-Igu"/>
                         <outlet property="bannerHeightConstraint" destination="l3c-Cu-ueQ" id="Lo9-mc-Swq"/>
                         <outlet property="cover" destination="TY1-3B-yvF" id="o0z-EZ-M4B"/>
+                        <outlet property="homeTitleImage" destination="9dT-DP-0kx" id="Lj7-wX-1x4"/>
                         <outlet property="internetLabel" destination="wu0-jO-Qte" id="d7Y-tD-Okc"/>
-                        <outlet property="muteButton" destination="9x3-fH-e0u" id="Vxl-Hz-sP0"/>
+                        <outlet property="muteButton" destination="9x3-fH-e0u" id="H6F-Fs-39v"/>
+                        <outlet property="playButton" destination="Ekd-hd-Wcd" id="cb7-rj-krr"/>
                         <outlet property="wheel" destination="h6G-pw-LNI" id="JeN-xu-XTX"/>
                         <segue destination="D62-me-3rC" kind="presentation" identifier="notificationSegue" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="k0q-DY-wEY"/>
                     </connections>

@@ -335,22 +335,11 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         var DAIterator = 0
         
         // Containers for object at specific index
-        var letter: Character
         var number: Character
         var daString: String
         
         // Go through all the buttons and assign each one their needed information
         for i in 0...168 {
-            
-            // Grabs the letter in the string
-            letter = buttonLetterArray[i]
-            
-            // If the letter is a "-", square should be disables and turned black
-            // Otherwise, assign the letter to the square
-            if letter == "-" {
-                boardSpaces[i].isEnabled = false
-                boardSpaces[i].backgroundColor = .black
-            }
             
             // Grab the number in the string
             number = gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator)]
@@ -2164,6 +2153,33 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         })
     }
     
+    func animateGameStart() {
+        for i in 0...168 {
+            // Grabs the letter in the string
+            let letter = buttonLetterArray[i]
+            
+            // If the letter is a "-", square should be disabled and not shown
+            if letter == "-" {
+                // Make the spaces inactive
+                boardSpaces[i].isEnabled = false
+                
+                // Make inactive spaces a little smaller for spinning
+                boardSpaces[i].transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
+                boardSpaces[i].rotate360Degrees(duration: 2)
+
+                // Animate spaces fading out/shrinking
+                UIView.animate(withDuration: 2, delay: 0, options: .curveEaseInOut, animations:  {
+                    self.boardSpaces[i].alpha = 0
+                    self.boardSpaces[i].transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
+                }, completion: {
+                    Void in
+                    self.boardSpaces[i].layer.removeAllAnimations()
+                })
+
+            }
+        }
+    }
+    
     
      /*****************************************
      *                                        *
@@ -2438,6 +2454,12 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
      *                                        *
      *****************************************/
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        animateGameStart()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -2459,8 +2481,11 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         setUpBoard(board: board)
         startTimer()
         
+        
         // Start playing game music
-        MusicPlayer.start(musicTitle: "game_\(Settings.userLevel!)", ext: "mp3")
+        // Select a random track between 1 and 24
+        let random = arc4random_uniform(24) + 1
+        MusicPlayer.start(musicTitle: "game_\(random)", ext: "mp3")
         if !Settings.musicEnabled {
             MusicPlayer.gameMusicPlayer.volume = 0
         }
@@ -2618,5 +2643,16 @@ extension UIView {
             self.alpha = 1
             
             })
+    }
+    
+    // Spins the UI view
+    func rotate360Degrees(duration: CFTimeInterval) {
+        let rotateAnimation = CABasicAnimation(keyPath: "transform.rotation")
+        rotateAnimation.fromValue = 0.0
+        rotateAnimation.toValue = CGFloat(Double.pi * 2)
+        rotateAnimation.isRemovedOnCompletion = false
+        rotateAnimation.duration = duration
+        rotateAnimation.repeatCount = .infinity
+        self.layer.add(rotateAnimation, forKey: nil)
     }
 }
