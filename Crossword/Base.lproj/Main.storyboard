@@ -87,6 +87,7 @@
                     </view>
                     <connections>
                         <outlet property="background" destination="G47-K6-xtY" id="Fxn-Uh-Ccu"/>
+                        <outlet property="emoji" destination="wh1-g2-2di" id="ifm-2W-hnT"/>
                         <outlet property="notificationLabel" destination="M4e-zl-Ecg" id="DhH-5J-Itx"/>
                         <outlet property="okayButton" destination="jhp-hh-Cfa" id="NXN-Ge-zY7"/>
                     </connections>

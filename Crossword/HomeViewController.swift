@@ -41,6 +41,8 @@ class HomeViewController: UIViewController {
     var emojisToChoose = [String]()
     var timer: Timer!
     
+    var notificationsInfo: Dictionary<String, Any>!
+    
     // Home screen music enabling/disabling button
     @IBOutlet var muteButton: UIButton!
     
@@ -80,41 +82,19 @@ class HomeViewController: UIViewController {
         
         // Loads master from firebase
         ref = Database.database().reference()
-        ref.observe(.value, with: { (snap) in
-            // Everything from the firebase
-            let everything = snap.value as! Dictionary<String, Any>
-            
-            // Just the clues
-            let clues = everything["master"] as! Array<Dictionary<String, String>>
-                        
-            // Just the new levels
-            Settings.newLevels = everything["newLevels"] as! Array<Int>
-            
-            // Just the levels
-            // Accessed as levels[level-1]["Across"/"Down"/"Board"]["Property"]
-            let levels = everything["levels"] as! Array<Dictionary<String, Dictionary<String, String>>>
-            Settings.maxNumOfLevels = levels.count
-
-            // Create master array
-            for element in clues {
-                Settings.master.append(element)
-            }
-            
-            for level in levels {
-                Settings.levels.append(level)
-            }
-                        
-            self.wheel.hidesWhenStopped = true
-            self.wheel.stopAnimating()
-            self.internetLabel.text = ""
-            self.defaults.set(true, forKey: "gatheredData")
-            
-            UIView.animate(withDuration: 1.0, animations: {
-                self.cover.alpha = 0
-                self.animateLoadIn()
-            })
-        })
         ref.keepSynced(true)
+        
+        // Wrapping read inside a write block forces reading from the database prior to cache
+        if ReachabilityTest.isConnectedToNetwork() {
+            // Wrapping the read in a write block allows us to grab the most
+            // recent data from firebase before looking at the cache
+            ref.child("a").setValue("b") { (error, afb) in
+                self.readFromFirebase()
+            }
+        } else {
+            // If there is no internet, just perform read which will grab from cache
+            readFromFirebase()
+        }
         
         /* Removing the free hints for 1.1
         if !defaults.bool(forKey: "freeHintsFor1.1"){
@@ -182,6 +162,7 @@ class HomeViewController: UIViewController {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
+        ref.removeAllObservers()
         
         // Remove the labels
         for lab in labels {
@@ -382,5 +363,73 @@ class HomeViewController: UIViewController {
             Settings.adsDisabled = false
             Settings.gatheredData = false
         }
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // When the setting button is clicked, give the view information needed
+        // to set the switches to their initial positions which can then be modified
+        // by the user.
+        if segue.identifier == "notificationSegue" {
+            if let notifVC = segue.destination as? NotificationViewController {
+                notifVC.notificationsInfo = notificationsInfo
+            }
+        }
+    }
+    
+    func readFromFirebase() {
+        ref.observe(.value, with: { (snap) in
+            // Everything from the firebase
+            let everything = snap.value as! Dictionary<String, Any>
+            
+            // Just the clues
+            let clues = everything["master"] as! Array<Dictionary<String, String>>
+            
+            // Just the new levels
+            let newLevels = everything["newLevels"] as! Array<String>
+            let determineNewLevels = newLevels[0].lowercased()
+            if determineNewLevels == "none" || determineNewLevels == "0" {
+                Settings.newLevels = []
+            } else {
+                for level in newLevels {
+                    let integerLevel = Int(level)
+                    if let lev = integerLevel {
+                        Settings.newLevels.append(lev)
+                    }
+                }
+            }
+            
+            // Handles popping up the notificaiton view controller
+            // Using a number, we can determine if the user has seen a popup before or not
+            self.notificationsInfo = everything["notificationPopup"] as! Dictionary<String, Any>
+            let notificationNumber = self.notificationsInfo["popupNum"] as! Int
+            if notificationNumber > self.defaults.integer(forKey: "notificationNum") {
+                self.performSegue(withIdentifier: "notificationSegue", sender: self)
+            }
+            self.defaults.set(notificationNumber, forKey: "notificationNum")
+            
+            // Just the levels
+            // Accessed as levels[level-1]["Across"/"Down"/"Board"]["Property"]
+            let levels = everything["levels"] as! Array<Dictionary<String, Dictionary<String, String>>>
+            Settings.maxNumOfLevels = levels.count
+            
+            // Create master array
+            for element in clues {
+                Settings.master.append(element)
+            }
+            
+            for level in levels {
+                Settings.levels.append(level)
+            }
+            
+            self.wheel.hidesWhenStopped = true
+            self.wheel.stopAnimating()
+            self.internetLabel.text = ""
+            self.defaults.set(true, forKey: "gatheredData")
+            
+            UIView.animate(withDuration: 1.0, animations: {
+                self.cover.alpha = 0
+                self.animateLoadIn()
+            })
+        })
     }
 }

@@ -252,6 +252,19 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         
         // Gives each space on the board specific properties depending on how the board is arranged
         giveBoardSpacesProperties(board: board)
+        
+        // Any space that should be inactive is hidden
+        for i in 0...168 {
+            // Grabs the letter in the string
+            let letter = buttonLetterArray[i]
+            
+            if letter == "-" {
+                // Make the spaces inactive
+                boardSpaces[i].isEnabled = false
+                boardSpaces[i].alpha = 0
+                continue
+            }
+        }
     }
     
     func clueAreaSetup() {
@@ -2155,28 +2168,55 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     
     func animateGameStart() {
         for i in 0...168 {
-            // Grabs the letter in the string
-            let letter = buttonLetterArray[i]
-            
-            // If the letter is a "-", square should be disabled and not shown
-            if letter == "-" {
-                // Make the spaces inactive
-                boardSpaces[i].isEnabled = false
-                
-                // Make inactive spaces a little smaller for spinning
-                boardSpaces[i].transform = CGAffineTransform(scaleX: 0.75, y: 0.75)
-                boardSpaces[i].rotate360Degrees(duration: 2)
-
-                // Animate spaces fading out/shrinking
-                UIView.animate(withDuration: 2, delay: 0, options: .curveEaseInOut, animations:  {
-                    self.boardSpaces[i].alpha = 0
-                    self.boardSpaces[i].transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
-                }, completion: {
-                    Void in
-                    self.boardSpaces[i].layer.removeAllAnimations()
-                })
-
+            // Sets randomly where each button will start
+            let randomDirection = arc4random_uniform(4)
+            let randomModifier = (CGFloat(arc4random_uniform(101)) / 50) - 1
+            switch randomDirection {
+                case 0:
+                    boardSpaces[i].frame.origin.y -= view.frame.height
+                    boardSpaces[i].frame.origin.x += view.frame.width * randomModifier
+                case 1:
+                    boardSpaces[i].frame.origin.x += view.frame.width
+                    boardSpaces[i].frame.origin.y += view.frame.height * randomModifier
+                case 2:
+                    boardSpaces[i].frame.origin.y += view.frame.height
+                    boardSpaces[i].frame.origin.x += view.frame.width * randomModifier
+                case 3:
+                    boardSpaces[i].frame.origin.x -= view.frame.width
+                    boardSpaces[i].frame.origin.y += view.frame.height * randomModifier
+                default:
+                    print("Error")
             }
+            
+            // Generate a speed between 1.0 and 1.5 seconds
+            let randomSpeed = Double(arc4random_uniform(200) + 51) / 100.0
+            
+            UIView.animate(withDuration: randomSpeed,
+                           delay: 0,
+                           usingSpringWithDamping: 0.95,
+                           initialSpringVelocity: 0,
+                           options: .curveEaseOut,
+                           animations:  {
+                switch randomDirection {
+                case 0:
+                    self.boardSpaces[i].frame.origin.y += self.view.frame.height
+                    self.boardSpaces[i].frame.origin.x -= self.view.frame.width * randomModifier
+                case 1:
+                    self.boardSpaces[i].frame.origin.x -= self.view.frame.width
+                    self.boardSpaces[i].frame.origin.y -= self.view.frame.height * randomModifier
+                case 2:
+                    self.boardSpaces[i].frame.origin.y -= self.view.frame.height
+                    self.boardSpaces[i].frame.origin.x -= self.view.frame.width * randomModifier
+                case 3:
+                    self.boardSpaces[i].frame.origin.x += self.view.frame.width
+                    self.boardSpaces[i].frame.origin.y -= self.view.frame.height * randomModifier
+                default:
+                    print("Error")
+                }
+            }, completion: {
+                Void in
+
+            })
         }
     }
     
@@ -2457,7 +2497,9 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        animateGameStart()
+        if defaults.bool(forKey: "helpShownBefore") {
+            animateGameStart()
+        }
     }
     
     override func viewDidLoad() {

@@ -9,7 +9,9 @@
 import UIKit
 
 class NotificationViewController: UIViewController, UIGestureRecognizerDelegate {
+    var notificationsInfo: Dictionary<String, Any>!
     
+    @IBOutlet var emoji: UILabel!
     @IBOutlet var background: UIView!
     @IBOutlet var notificationLabel: UILabel!
     @IBOutlet var okayButton: UIButton!
@@ -20,18 +22,6 @@ class NotificationViewController: UIViewController, UIGestureRecognizerDelegate 
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // For 1.1 *REMOVED*
-        // freeHints(number: 10)
-        
-        
-    }
-    
-    func freeHints(number numOfHints: Int) {
-        let freeHints = numOfHints
-        Settings.cheatCount += freeHints
-        
-        notificationLabel.text = "Here's \(freeHints) free hints to help you out! Thank you for playing!"
-        
         background.layer.borderColor = UIColor.init(red: 255/255, green: 150/255, blue: 176/255, alpha: 1).cgColor
         background.layer.borderWidth = 3
         background.layer.cornerRadius = 20
@@ -39,6 +29,10 @@ class NotificationViewController: UIViewController, UIGestureRecognizerDelegate 
         okayButton.layer.borderColor = UIColor.white.cgColor
         okayButton.layer.borderWidth = 2
         okayButton.layer.cornerRadius = 5
+        
+        notificationLabel.text = notificationsInfo["message"] as? String
+        emoji.text = notificationsInfo["emoji"] as? String
+        Settings.cheatCount += notificationsInfo["award"] as! Int
     }
     
     // Gesture recognizer control
