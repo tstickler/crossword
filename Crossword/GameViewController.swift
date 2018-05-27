@@ -194,8 +194,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             bottomKeysHeight.constant = keyboardBackHeight.constant * 0.275
         }
         // Seperation of the keys should be 4% of the key background area
-        topMidKeySep.constant = keyboardBackHeight.constant * 0.06
-        bottomMidKeySep.constant = keyboardBackHeight.constant * 0.06
+        topMidKeySep.constant = keyboardBackHeight.constant * 0.04
+        bottomMidKeySep.constant = keyboardBackHeight.constant * 0.04
         
         // Leading and trailing of the bottom row are 10% of the key background area
         // Gives room for settings and erase buttons
@@ -223,6 +223,13 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         
         // Gives buttons a nice rounded corner
         for button in keys {
+            if button.tag != 0 {
+                // Add button actions for the keys
+                // Only the letter keys, not backspace or menu
+                button.addTarget(self, action: #selector(GameViewController.buttonDown), for: .touchDown)
+                button.addTarget(self, action: #selector(GameViewController.removeView), for: .touchDragExit)
+            }
+            
             button.layer.cornerRadius = keyboardBackHeight.constant * 0.05
             if UIDevice.current.model == "iPad" {
                 button.titleLabel?.font = button.titleLabel?.font.withSize(33.0)
@@ -1033,16 +1040,82 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
     }
     
-    @IBAction func keyboardButtonPressed(_ sender: UIButton) {        
+    @objc func removeView() {
+        // Get rid of other views if they are still in the view
+        popUpToRemove?.removeFromSuperview()
+        keyBlockerToRemove?.removeFromSuperview()
+        tappedButton?.setTitleColor(.white, for: .normal)
+    }
+    
+    @IBOutlet var topKeysStack: UIStackView!
+    @IBOutlet var midKeysStack: UIStackView!
+    @IBOutlet var bottomKeysStack: UIStackView!
+    var popUpToRemove: UIView?
+    var keyBlockerToRemove: UIView?
+    var tappedButton: UIButton?
+    @objc func buttonDown(_ sender: UIButton) {
+        removeView()
+        tappedButton = sender
+
+
+        // Gathers button location relative to the entire view
+        var f = CGRect(x: 0, y: 0, width: 0, height: 0)
+        switch sender.tag {
+        case 1...10:
+            f = topKeysStack.convert(sender.frame, to: self.view)
+        case 11...19:
+            f = midKeysStack.convert(sender.frame, to: self.view)
+        case 20...26:
+            f = bottomKeysStack.convert(sender.frame, to: self.view)
+        default:
+            return
+        }
+        
+        let buttonX = f.origin.x
+        let buttonY = f.origin.y
+                
+        // Create a pop up over the tapped button
+        let popUp = UIView(frame: CGRect(x: buttonX - 7.5, y: buttonY - f.height - 10, width: f.width + 15, height: f.height + 30))
+        popUp.layer.cornerRadius = sender.layer.cornerRadius
+        popUp.backgroundColor = .black
+        popUp.layer.shadowColor = UIColor.black.cgColor
+        popUp.layer.shadowOpacity = 1
+        popUp.layer.shadowOffset = CGSize.zero
+        popUp.layer.shadowRadius = 5
+        popUp.layer.shadowPath = UIBezierPath(rect: popUp.bounds).cgPath
+        view.addSubview(popUp)
+        
+        // Add letter to the view equal to the button pressed
+        let popUpTitle = UILabel(frame: CGRect(x: 0, y: -5, width: popUp.frame.width, height: popUp.frame.height))
+        popUpTitle.textAlignment = .center
+        popUpTitle.textColor = .white
+        popUpTitle.font  = popUpTitle.font.withSize(sender.titleLabel!.font.pointSize * 1.5)
+        popUpTitle.text = sender.title(for: .normal)
+        popUp.addSubview(popUpTitle)
+        sender.setTitleColor(.black, for: .normal)
+        
+        // Invisible view to block the user from tapping multiple buttons in the keyboard area
+        // Will be removed on touchUpInside or touchDragExit
+        let keyBlocker = UIView(frame: CGRect(x: 0, y: (screenSize.height - (screenSize.height * 0.25)), width: screenSize.width, height: screenSize.height * 0.25))
+        keyBlocker.backgroundColor = .clear
+        view.addSubview(keyBlocker)
+        
+        keyBlockerToRemove = keyBlocker
+        popUpToRemove = popUp
+    }
+    
+    @IBAction func keyboardButtonPressed(_ sender: UIButton) {
         // Play a click sound when the keys are tapped
         if Settings.soundEffects {
             MusicPlayer.playSoundEffect(of: "click", ext: "wav")
         }
         
+        removeView()
+        
         // Each key of the keyboard has a tag from 1-26. The tag tells which key was pressed.
         // Keyboard is standard qwerty and tags start at Q(1) and end at M(26)
         var letter: Character!
-                
+        
         switch sender.tag {
         case 1:
             letter = "q"
@@ -1236,8 +1309,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         } else {
             moveToNextDown()
         }
-        
-
     }
     
     func gameOver() -> Bool {
@@ -2494,14 +2565,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
      *                                        *
      *****************************************/
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        if defaults.bool(forKey: "helpShownBefore") {
-            animateGameStart()
-        }
-    }
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -2536,7 +2599,12 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         
         // Initialize from defaults
         readFromDefaults()
-        clueAreaSetup()        
+        clueAreaSetup()
+        
+        print(defaults.bool(forKey: "helpShownBefore"))
+        if defaults.bool(forKey: "helpShownBefore") {
+            animateGameStart()
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -2648,7 +2716,10 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             
             startNewGame = false
         }
-        MusicPlayer.gameMusicPlayer.setVolume(0.2, fadeDuration: 0.3)
+        
+        if Settings.musicEnabled {
+            MusicPlayer.gameMusicPlayer.setVolume(0.2, fadeDuration: 0.3)
+        }
     }
     
     func checkAdProgress() {
@@ -2660,6 +2731,14 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         shouldShowAdCounter += 1
         if interstitialAd.isReady && shouldShowAdCounter % showAdAfterNumCorrect == 0
             && !allSquaresFilled() && !Settings.adsDisabled {
+            print(Settings.musicEnabled)
+            if Settings.musicEnabled {
+                GADMobileAds.sharedInstance().applicationVolume = 0.2
+                GADMobileAds.sharedInstance().applicationMuted = false
+            } else {
+                GADMobileAds.sharedInstance().applicationVolume = 0.0
+                GADMobileAds.sharedInstance().applicationMuted = true
+            }
             interstitialAd.present(fromRootViewController: self)
             MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 0.3)
         }
@@ -2672,6 +2751,17 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         interstitial.delegate = self
         interstitial.load(request)
         return interstitial
+    }
+}
+
+extension UIControl {
+    
+    open override func point(inside point: CGPoint, with event: UIEvent?) -> Bool {
+        let inside = super.point(inside: point, with: event)
+        if inside != isHighlighted && event?.type == .touches {
+            isHighlighted = inside
+        }
+        return inside
     }
 }
 

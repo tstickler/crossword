@@ -1680,7 +1680,7 @@
                                 <color key="backgroundColor" red="0.33333333333333331" green="0.33333333333333331" blue="0.33333333333333331" alpha="1" colorSpace="calibratedRGB"/>
                             </view>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="SDX-nf-MkU" userLabel="Top Keyboard Row">
-                                <rect key="frame" x="6" y="625" width="363" height="45"/>
+                                <rect key="frame" x="6" y="623" width="363" height="45"/>
                                 <subviews>
                                     <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AH0-Uj-tmF">
                                         <rect key="frame" x="0.0" y="0.0" width="31.666666666666668" height="45"/>
@@ -1798,7 +1798,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="QUV-wa-LY7" userLabel="Middle Keyboard Row">
-                                <rect key="frame" x="17" y="678" width="341" height="45"/>
+                                <rect key="frame" x="17" y="674" width="341" height="45"/>
                                 <subviews>
                                     <button opaque="NO" tag="11" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zWR-IW-Msu">
                                         <rect key="frame" x="0.0" y="0.0" width="33.333333333333336" height="45"/>
@@ -1905,7 +1905,7 @@
                                 </constraints>
                             </stackView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="CbG-1b-voo" userLabel="Bottom Keyboard Row">
-                                <rect key="frame" x="56" y="731" width="263" height="45"/>
+                                <rect key="frame" x="56" y="725" width="263" height="45"/>
                                 <subviews>
                                     <button opaque="NO" tag="20" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6cI-65-gPi">
                                         <rect key="frame" x="0.0" y="0.0" width="33.333333333333336" height="45"/>
@@ -1990,7 +1990,7 @@
                                 </constraints>
                             </stackView>
                             <button opaque="NO" contentMode="scaleToFill" horizontalCompressionResistancePriority="1000" verticalCompressionResistancePriority="1000" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Z1E-eb-3pe" userLabel="Backspace">
-                                <rect key="frame" x="324" y="731" width="45" height="45"/>
+                                <rect key="frame" x="324" y="725" width="45" height="45"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="Z1E-eb-3pe" secondAttribute="height" multiplier="1:1" id="QX9-er-5nT"/>
@@ -2005,7 +2005,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i1V-zv-Ra3" userLabel="Menu">
-                                <rect key="frame" x="6" y="731" width="45" height="45"/>
+                                <rect key="frame" x="6" y="725" width="45" height="45"/>
                                 <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="i1V-zv-Ra3" secondAttribute="height" multiplier="1:1" id="Egp-8W-Zqi"/>
@@ -2187,15 +2187,15 @@
                                 <color key="backgroundColor" white="0.0" alpha="0.80000000000000004" colorSpace="calibratedWhite"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4VL-tX-FZe" userLabel="Keys Dimmer">
-                                <rect key="frame" x="0.0" y="628" width="375" height="95"/>
+                                <rect key="frame" x="0.0" y="628" width="375" height="91"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.80000000000000004" colorSpace="calibratedWhite"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Azw-OF-UGq" userLabel="Bottom Dimmer">
-                                <rect key="frame" x="56" y="723" width="319" height="89"/>
+                                <rect key="frame" x="56" y="719" width="319" height="93"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.80000000000000004" colorSpace="calibratedWhite"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Jkh-qU-vvz" userLabel="Menu Dimmer">
-                                <rect key="frame" x="0.0" y="723" width="56" height="55"/>
+                                <rect key="frame" x="0.0" y="719" width="56" height="59"/>
                                 <color key="backgroundColor" white="0.0" alpha="0.80000000000000004" colorSpace="calibratedWhite"/>
                             </view>
                             <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TUP-0H-gU4">
@@ -2312,14 +2312,14 @@
                             <constraint firstItem="aCC-9D-Kyq" firstAttribute="top" secondItem="pgr-oj-KNO" secondAttribute="bottom" constant="5" id="7F3-Xw-8AB"/>
                             <constraint firstItem="QUV-wa-LY7" firstAttribute="leading" secondItem="1WR-0j-Sjf" secondAttribute="leading" constant="17" id="7hh-6h-bBy"/>
                             <constraint firstItem="TUP-0H-gU4" firstAttribute="top" secondItem="Jkh-qU-vvz" secondAttribute="bottom" id="7na-Dl-kZm"/>
-                            <constraint firstItem="CbG-1b-voo" firstAttribute="top" secondItem="QUV-wa-LY7" secondAttribute="bottom" constant="8" id="7rA-mm-lDO"/>
+                            <constraint firstItem="CbG-1b-voo" firstAttribute="top" secondItem="QUV-wa-LY7" secondAttribute="bottom" constant="6" id="7rA-mm-lDO"/>
                             <constraint firstItem="1WR-0j-Sjf" firstAttribute="trailing" secondItem="SDX-nf-MkU" secondAttribute="trailing" constant="6" id="840-QT-vjF"/>
                             <constraint firstItem="NEQ-gs-OeF" firstAttribute="leading" secondItem="3eP-Dy-RBW" secondAttribute="trailing" constant="5" id="8tk-RW-Sbw"/>
                             <constraint firstAttribute="bottom" secondItem="TUP-0H-gU4" secondAttribute="bottom" id="AiH-iR-6QW"/>
                             <constraint firstItem="Ic6-W3-HGD" firstAttribute="top" secondItem="cwF-FE-x0m" secondAttribute="bottom" constant="5" id="Awg-bB-lsT"/>
                             <constraint firstItem="1WR-0j-Sjf" firstAttribute="trailing" secondItem="EN3-7R-zbT" secondAttribute="trailing" constant="10" id="BT3-Ov-LfN"/>
                             <constraint firstItem="Z1E-eb-3pe" firstAttribute="top" secondItem="CbG-1b-voo" secondAttribute="top" id="CoH-ct-jFA"/>
-                            <constraint firstItem="1WR-0j-Sjf" firstAttribute="bottom" secondItem="Z1E-eb-3pe" secondAttribute="bottom" constant="2" id="DHJ-m9-E1C"/>
+                            <constraint firstItem="1WR-0j-Sjf" firstAttribute="bottom" secondItem="Z1E-eb-3pe" secondAttribute="bottom" constant="8" id="DHJ-m9-E1C"/>
                             <constraint firstItem="CbG-1b-voo" firstAttribute="centerX" secondItem="XjK-D1-LS5" secondAttribute="centerX" id="ERt-jX-NRG"/>
                             <constraint firstItem="Azw-OF-UGq" firstAttribute="leading" secondItem="TUP-0H-gU4" secondAttribute="trailing" id="ElL-pk-rhb"/>
                             <constraint firstItem="Wn2-n4-O1F" firstAttribute="top" secondItem="cEC-de-W0A" secondAttribute="bottom" constant="5" id="Et6-vl-SeV"/>
@@ -2351,7 +2351,7 @@
                             <constraint firstItem="SDX-nf-MkU" firstAttribute="leading" secondItem="1WR-0j-Sjf" secondAttribute="leading" constant="6" id="TdQ-aq-wp6"/>
                             <constraint firstItem="Jkh-qU-vvz" firstAttribute="top" secondItem="4VL-tX-FZe" secondAttribute="bottom" id="UQV-FU-u1M"/>
                             <constraint firstItem="1WR-0j-Sjf" firstAttribute="bottom" secondItem="Ic6-W3-HGD" secondAttribute="bottom" constant="10" id="UdX-Sa-pgb"/>
-                            <constraint firstItem="1WR-0j-Sjf" firstAttribute="bottom" secondItem="CbG-1b-voo" secondAttribute="bottom" constant="2" id="UgJ-hj-f6l"/>
+                            <constraint firstItem="1WR-0j-Sjf" firstAttribute="bottom" secondItem="CbG-1b-voo" secondAttribute="bottom" constant="8" id="UgJ-hj-f6l"/>
                             <constraint firstItem="E5g-KQ-zde" firstAttribute="centerY" secondItem="90s-1e-1RX" secondAttribute="centerY" constant="-68.799999999999997" id="Uu9-gK-wMI"/>
                             <constraint firstItem="CbG-1b-voo" firstAttribute="leading" secondItem="i1V-zv-Ra3" secondAttribute="trailing" constant="5" id="Vsz-Ja-3kV"/>
                             <constraint firstItem="LKf-Be-Bi1" firstAttribute="top" secondItem="NEQ-gs-OeF" secondAttribute="top" constant="6" id="W44-9V-c4b"/>
@@ -2391,7 +2391,7 @@
                             <constraint firstItem="Z1E-eb-3pe" firstAttribute="leading" secondItem="CbG-1b-voo" secondAttribute="trailing" constant="5" id="ryY-E4-Cz8"/>
                             <constraint firstItem="1WR-0j-Sjf" firstAttribute="bottom" secondItem="Jkh-qU-vvz" secondAttribute="bottom" id="s00-Yd-2cE"/>
                             <constraint firstItem="HHL-sI-5b8" firstAttribute="leading" secondItem="NEQ-gs-OeF" secondAttribute="trailing" constant="5" id="sNe-zm-yMv"/>
-                            <constraint firstItem="1WR-0j-Sjf" firstAttribute="bottom" secondItem="i1V-zv-Ra3" secondAttribute="bottom" constant="2" id="t7g-hV-pga"/>
+                            <constraint firstItem="1WR-0j-Sjf" firstAttribute="bottom" secondItem="i1V-zv-Ra3" secondAttribute="bottom" constant="8" id="t7g-hV-pga"/>
                             <constraint firstItem="1WR-0j-Sjf" firstAttribute="trailing" secondItem="pgr-oj-KNO" secondAttribute="trailing" id="tOe-j1-CCF"/>
                             <constraint firstItem="1WR-0j-Sjf" firstAttribute="trailing" secondItem="aCC-9D-Kyq" secondAttribute="trailing" constant="60" id="twt-q6-rYP"/>
                             <constraint firstItem="QvO-0V-rwb" firstAttribute="top" secondItem="XjK-D1-LS5" secondAttribute="top" id="ukO-Ke-H0j"/>
@@ -2404,7 +2404,7 @@
                             <constraint firstItem="XvG-ru-a2P" firstAttribute="centerX" secondItem="XjK-D1-LS5" secondAttribute="centerX" id="yUP-xB-Nda"/>
                             <constraint firstItem="YMg-NW-SC9" firstAttribute="centerX" secondItem="XjK-D1-LS5" secondAttribute="centerX" id="ydW-QJ-V92"/>
                             <constraint firstItem="1WR-0j-Sjf" firstAttribute="trailing" secondItem="QUV-wa-LY7" secondAttribute="trailing" constant="17" id="ysz-go-OdI"/>
-                            <constraint firstItem="QUV-wa-LY7" firstAttribute="top" secondItem="SDX-nf-MkU" secondAttribute="bottom" constant="8" id="z3o-bQ-GPv"/>
+                            <constraint firstItem="QUV-wa-LY7" firstAttribute="top" secondItem="SDX-nf-MkU" secondAttribute="bottom" constant="6" id="z3o-bQ-GPv"/>
                             <constraint firstItem="5HK-MV-4Bb" firstAttribute="top" secondItem="3eP-Dy-RBW" secondAttribute="bottom" constant="5" id="zVt-27-GCF"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="1WR-0j-Sjf"/>
@@ -2422,6 +2422,7 @@
                         <outlet property="boardTrailing" destination="5Q9-GD-kwQ" id="5m7-Cf-Hqn"/>
                         <outlet property="bottomDimmer" destination="Azw-OF-UGq" id="HkK-9S-qxZ"/>
                         <outlet property="bottomKeysHeight" destination="rqQ-UR-nQx" id="1E5-jW-qE6"/>
+                        <outlet property="bottomKeysStack" destination="CbG-1b-voo" id="jih-WQ-OxK"/>
                         <outlet property="bottomMidKeySep" destination="7rA-mm-lDO" id="rmt-iU-bZH"/>
                         <outlet property="bottomRowLeading" destination="Vsz-Ja-3kV" id="9NF-uT-Ryv"/>
                         <outlet property="bottomRowTrailing" destination="ryY-E4-Cz8" id="1PK-cw-7Lf"/>
@@ -2452,6 +2453,7 @@
                         <outlet property="menuDimmer" destination="Jkh-qU-vvz" id="ZIF-QM-ytf"/>
                         <outlet property="menuHelpArrow" destination="Ic6-W3-HGD" id="zHW-Xh-9t9"/>
                         <outlet property="menuHelpLabel" destination="cwF-FE-x0m" id="yaY-m9-Z8r"/>
+                        <outlet property="midKeysStack" destination="QUV-wa-LY7" id="IOb-QA-BUt"/>
                         <outlet property="middleKeysHeight" destination="AWt-1b-nbb" id="Bi2-Ax-He5"/>
                         <outlet property="middleRowLeading" destination="ysz-go-OdI" id="UdB-1X-YrP"/>
                         <outlet property="middleRowTrailing" destination="7hh-6h-bBy" id="OLk-5M-7y7"/>
@@ -2466,6 +2468,7 @@
                         <outlet property="topBarDimmer" destination="QvO-0V-rwb" id="LrN-Pu-u2b"/>
                         <outlet property="topBarHeightConstraint" destination="dEB-FP-SAx" id="3hJ-eY-mfb"/>
                         <outlet property="topKeysHeight" destination="tM8-4k-nIe" id="lLP-m4-0bJ"/>
+                        <outlet property="topKeysStack" destination="SDX-nf-MkU" id="WwJ-sz-qdQ"/>
                         <outlet property="topMidKeySep" destination="z3o-bQ-GPv" id="3MX-ps-TWi"/>
                         <outletCollection property="keys" destination="AH0-Uj-tmF" collectionClass="NSMutableArray" id="zYw-r8-ueV"/>
                         <outletCollection property="keys" destination="bbt-6H-1t0" collectionClass="NSMutableArray" id="DTd-Ng-0Aa"/>

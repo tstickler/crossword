@@ -116,8 +116,8 @@ class LevelsViewController: UIViewController {
             firstStackWidth.constant = 260
             backHomeWidth.constant = 80
         default:
-            firstStackWidth.constant = 260
-            backHomeWidth.constant = 80
+            firstStackWidth.constant = 350
+            backHomeWidth.constant = 100
         }
         
         // Page num is which level stack is displayed
