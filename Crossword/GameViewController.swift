@@ -2536,7 +2536,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 self.navigationController?.view.layer.add(transition, forKey: nil)
                 
                 self.navigationController?.pushViewController(vc, animated: false)
-                
+                self.navigationController?.viewControllers.remove(at: (navigationController?.viewControllers.count)! - 2)
+
                 startNewGame = false
             }
         }
@@ -2601,7 +2602,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         readFromDefaults()
         clueAreaSetup()
         
-        print(defaults.bool(forKey: "helpShownBefore"))
         if defaults.bool(forKey: "helpShownBefore") {
             animateGameStart()
         }
@@ -2661,14 +2661,12 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
         if UIDevice.current.orientation.isLandscape {
-            print("Landscape")
             boardLeading.constant = 200
             boardTrailing.constant = 200
         } else {
             boardLeading.constant = 20
             boardTrailing.constant = 20
 
-            print("Portrait")
         }
     }
     
@@ -2731,7 +2729,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         shouldShowAdCounter += 1
         if interstitialAd.isReady && shouldShowAdCounter % showAdAfterNumCorrect == 0
             && !allSquaresFilled() && !Settings.adsDisabled {
-            print(Settings.musicEnabled)
             if Settings.musicEnabled {
                 GADMobileAds.sharedInstance().applicationVolume = 0.2
                 GADMobileAds.sharedInstance().applicationMuted = false

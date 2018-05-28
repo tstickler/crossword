@@ -80,7 +80,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
     func registerForPushNotifications() {
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .sound, .badge]) {
             (granted, error) in
-            print("Permission granted: \(granted)")
         
             guard granted else { return }
             self.getNotificationSettings()
@@ -89,7 +88,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
     
     func getNotificationSettings() {
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
-            print("Notification settings: \(settings)")
             
             guard settings.authorizationStatus == .authorized else { return }
             
@@ -105,13 +103,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
             return String(format: "%02.2hhx", data)
         }
         
-        let token = tokenParts.joined()
-        print("Device Token: \(token)")
+        let _ = tokenParts.joined()
     }
     
     func application(_ application: UIApplication,
                      didFailToRegisterForRemoteNotificationsWithError error: Error) {
-        print("Failed to register: \(error)")
     }
 }
 
