@@ -79,11 +79,8 @@ class GameOverViewController: UIViewController {
 
             // Fade in the home music
             if Settings.musicEnabled {
-                MusicPlayer.homeMusicPlayer.setVolume(1.0, fadeDuration: 1.0)
+                MusicPlayer.homeMusicPlayer.setVolume(0.1, fadeDuration: 1.0)
             }
-            
-            // Increase user level since they successfully completed it
-            Settings.userLevel! += 1
             
             // unwind to home screen
             performSegue(withIdentifier: "unwindSegue", sender: self)
@@ -137,13 +134,31 @@ class GameOverViewController: UIViewController {
                 
                 
                 viewBackground.layer.borderColor = UIColor.green.cgColor
-                titleLabel.text = "Nice Job!"
+                
+                let random = arc4random_uniform(5)
+                switch random {
+                case 0:
+                    titleLabel.text = "Nice Job!"
+                case 1:
+                    titleLabel.text = "Well Done!"
+                case 2:
+                    titleLabel.text = "Congratulations!"
+                case 3:
+                    titleLabel.text = "Excellent!"
+                case 4:
+                    titleLabel.text = "Good Work!"
+                default:
+                    titleLabel.text = "Nice Job!"
+                }
                 
                 // Determines if we should tell the user a new level was unlocked
                 // If there are no levels to unlock, then we don't want to tell
                 // the user they unlocked a level
-                if !Settings.lockedLevels.isEmpty {
+                // If the user completed a daily level, new level isn't unlocked
+                if !Settings.lockedLevels.isEmpty && Settings.userLevel < 1000 {
                     newLevelText = " and unlocked a new level!"
+                } else if Settings.userLevel >= 1000 {
+                    newLevelText = " and earned 2 hints!"
                 } else {
                     newLevelText = "!"
                 }
@@ -198,10 +213,21 @@ class GameOverViewController: UIViewController {
                 
                 // If the user has completed all the levels, then tell them
                 // that there will be more levels coming
-                if Settings.completedLevels.count == Settings.maxNumOfLevels {
+                if Settings.completedLevels.count == Settings.maxNumOfLevels &&
+                    Settings.userLevel < 1000 {
                     topButton.isHidden = true
                     titleLabel.text = "That's all for now!"
                     messageLabel.text = "Stay tuned for more levels coming soon!"
+                } else if Settings.userLevel >= 1000 {
+                    Settings.dailiesCompleted = Settings.dailiesCompleted + 1
+                    Settings.highestDailyComplete = Settings.today
+                    topButton.isHidden = true
+                    bottomButton.backgroundColor = .green
+                    Settings.cheatCount += 2
+                    parentVC.cheatCountLabel.text = "\(Settings.cheatCount)"
+                    defaults.set(Settings.cheatCount, forKey: "cheatCount")
+                    defaults.set(Settings.today, forKey: "highestDailyComplete")
+                    defaults.set(Settings.dailiesCompleted, forKey: "dailiesCompleted")
                 } else {
                     topButton.setTitle("Next Level", for: .normal)
                     topButton.layer.backgroundColor = UIColor.green.cgColor

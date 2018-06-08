@@ -10,23 +10,21 @@ import UIKit
 
 class LevelButton: UIButton {
     var levelStatus = UIImageView()
-    
     var levelStatusConstraints = [NSLayoutConstraint]()
-
     var statusInsetConstant: CGFloat!
     
-    func setLevelStatus(_ status: String) {
+    func setLevelStatus(_ status: String, _ levelType: String) {
         self.addSubview(levelStatus)
         
         levelStatus.layer.opacity = 0.85
         levelStatus.image = UIImage(named: "\(status).png")
         levelStatus.contentMode = .scaleAspectFit
         levelStatus.translatesAutoresizingMaskIntoConstraints = false
-
-        if UIScreen.main.bounds.height == 568 {
-            statusInsetConstant = 10.0
-        } else {
-            statusInsetConstant = 15.0
+        
+        if levelType == "level" {
+            statusInsetConstant = 12.5
+        } else if levelType == "daily" {
+            statusInsetConstant = 75
         }
         
         self.isEnabled = true
@@ -47,21 +45,21 @@ class LevelButton: UIButton {
         
         NSLayoutConstraint.activate(levelStatusConstraints)
     }
-    
-    func setNewIndicator() {
+        
+    func setNewIndicator(_ levelType: String) {
         let newIndicator = UIImageView()
         var newIndicatorConstraints = [NSLayoutConstraint]()
-        var insetConstant: CGFloat
+        var insetConstant: CGFloat = 40.0
         
         newIndicator.image = UIImage(named: "new_indicator.png")
         newIndicator.contentMode = .scaleAspectFit
         newIndicator.translatesAutoresizingMaskIntoConstraints = false
         self.addSubview(newIndicator)
         
-        if UIScreen.main.bounds.height == 568 {
+        if levelType == "level" {
             insetConstant = 40.0
-        } else {
-            insetConstant = 50.0
+        } else if levelType == "daily" {
+            insetConstant = 200.0
         }
         
         newIndicatorConstraints.append(NSLayoutConstraint(item: newIndicator, attribute: .leading, relatedBy: .equal, toItem: self,

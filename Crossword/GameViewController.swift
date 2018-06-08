@@ -170,56 +170,60 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     *****************************************/
     
     func setUpBoard(board: [String]) {
+        // Proportion to their containing view
+        let TOP_BAR_PROPORTION: CGFloat = 0.05
+        let CLUE_PROPORTION: CGFloat = 0.10
+        let KEYBOARD_PROPORTION: CGFloat = 0.25
+        let KEYS_PROPORTION: CGFloat = 0.275
+        let KEY_SEPERATION_PROPORTION: CGFloat = 0.04
+        let CLUE_OFFSET: CGFloat = 0.20
+        let FONT_PROPORTION: CGFloat = 0.60
+        let MIDDLE_KEYS_TO_EDGE: CGFloat = 0.10
+        let NEXT_BACK_PHRASE_WIDTH: CGFloat = 0.40
+        
         // Top bar should take 5% of screen
-        // If the 5 % is less than 40 points, then the top bar should be 40
-        topBarHeightConstraint.constant = (screenSize.height * 0.05)
+        // If the 5 % is less than 35 points, then the top bar should be 35
+        topBarHeightConstraint.constant = (screenSize.height * TOP_BAR_PROPORTION)
         if topBarHeightConstraint.constant < 35 {
             topBarHeightConstraint.constant = 35
         }
         
         // Clue area takes up 10% of screen
-        clueHeightConstraint.constant = (screenSize.height * 0.10)
+        clueHeightConstraint.constant = (screenSize.height * CLUE_PROPORTION)
         
-        // Key background area takes up 22% of screen
-        keyboardBackHeight.constant = (screenSize.height * 0.25)
+        // Key background area takes up 25% of screen
+        keyboardBackHeight.constant = (screenSize.height * KEYBOARD_PROPORTION)
         
-        // Each row of keys takes up 28% of the keyboard area
-        topKeysHeight.constant = keyboardBackHeight.constant * 0.275
-        middleKeysHeight.constant = keyboardBackHeight.constant * 0.275
+        // Each row of keys takes up 27.5% of the keyboard area
+        topKeysHeight.constant = keyboardBackHeight.constant * KEYS_PROPORTION
+        middleKeysHeight.constant = keyboardBackHeight.constant * KEYS_PROPORTION
         
         if screenSize.height == 812 {
             bottomKeysHeight.constant = keyboardBackHeight.constant * 0.25
-
         } else {
-            bottomKeysHeight.constant = keyboardBackHeight.constant * 0.275
+            bottomKeysHeight.constant = keyboardBackHeight.constant * KEYS_PROPORTION
         }
         // Seperation of the keys should be 4% of the key background area
-        topMidKeySep.constant = keyboardBackHeight.constant * 0.04
-        bottomMidKeySep.constant = keyboardBackHeight.constant * 0.04
+        topMidKeySep.constant = keyboardBackHeight.constant * KEY_SEPERATION_PROPORTION
+        bottomMidKeySep.constant = keyboardBackHeight.constant * KEY_SEPERATION_PROPORTION
         
-        // Leading and trailing of the bottom row are 10% of the key background area
-        // Gives room for settings and erase buttons
-        bottomRowLeading.constant = keyboardBackHeight.constant * 0.04
-        bottomRowTrailing.constant = keyboardBackHeight.constant * 0.04
+        // Leading and trailing of the bottom row are 4% of the key background area
+        bottomRowLeading.constant = keyboardBackHeight.constant * KEY_SEPERATION_PROPORTION
+        bottomRowTrailing.constant = keyboardBackHeight.constant * KEY_SEPERATION_PROPORTION
         
         // Offset for clue is 20% of clue area height
-        emojiClueConstraint.constant = clueHeightConstraint.constant * 0.2
+        emojiClueConstraint.constant = clueHeightConstraint.constant * CLUE_OFFSET
         
         // Font size of the clue is 60% of the clue area height
-        emojiClue.font = clueLabel.font.withSize(clueHeightConstraint.constant * 0.6)
+        emojiClue.font = clueLabel.font.withSize(clueHeightConstraint.constant * FONT_PROPORTION)
         
-        middleRowLeading.constant = keyboardBackHeight.constant * 0.1
-        middleRowTrailing.constant = keyboardBackHeight.constant * 0.1
+        // Middle row should have 10% blank on each side
+        middleRowLeading.constant = keyboardBackHeight.constant * MIDDLE_KEYS_TO_EDGE
+        middleRowTrailing.constant = keyboardBackHeight.constant * MIDDLE_KEYS_TO_EDGE
         
-        nextPhraseWidth.constant = clueHeightConstraint.constant * 0.4
-        backPhraseWidth.constant = clueHeightConstraint.constant * 0.4
-        
-        if screenSize.height > 812 {
-            boardLeading.constant = 20
-            boardTrailing.constant = 20
-            boardTop.constant = 10
-            boardBottom.constant = 10
-        }
+        // Jump phrase buttons should be 40% as wide as clue height
+        nextPhraseWidth.constant = clueHeightConstraint.constant * NEXT_BACK_PHRASE_WIDTH
+        backPhraseWidth.constant = clueHeightConstraint.constant * NEXT_BACK_PHRASE_WIDTH
         
         // Gives buttons a nice rounded corner
         for button in keys {
@@ -313,7 +317,11 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         
         cheatCountLabel.text = String(Settings.cheatCount)
 
-        levelLabel.text = "Level \(Settings.userLevel!)"
+        if Settings.userLevel! >= 1000 {
+            levelLabel.text = "Daily"
+        } else {
+            levelLabel.text = "Level \(Settings.userLevel!)"
+        }
         
         if !Settings.showTimer {
             timerStack.isHidden = true
@@ -328,12 +336,18 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         minutesLabel.text = ":\(mins!)"
         hoursLabel.text = "\(hoursCounter)"
         
-        // Indicates to the user that the leve they're on has already been
+        // Indicates to the user that the level they're on has already been
         // completed
         for level in Settings.completedLevels {
-            if level == Settings.userLevel {
+            if level == Settings.userLevel! {
                 completeIndicator.isHidden = false
             } 
+        }
+        
+        // Indicates to the user that the daily they're on has already been
+        // completed
+        if Settings.highestDailyComplete == Settings.today && Settings.userLevel! >= 1000 {
+            completeIndicator.isHidden = false
         }
     }
     
@@ -510,12 +524,12 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         if currentSquareTitle != nil && (buttonLockedForCorrect[indexOfButton] == false || !Settings.lockCorrect) && !buttonRevealedByHelper[indexOfButton] {
             boardSpaces[indexOfButton].setTitleWithOutAnimation(title: nil)
             buttonTitleArray[indexOfButton] = ""
-            defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel)_buttonTitles")
+            defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel!)_buttonTitles")
             
             // Erasing a correct answer should make it uncorrect again
             if buttonLockedForCorrect[indexOfButton] {
                 buttonLockedForCorrect[indexOfButton] = false
-                defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockedCorrect")
+                defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel!)_lockedCorrect")
             }
         } else {
             // Otherwise, if the square is empty see if we're at the beginning of
@@ -549,12 +563,12 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             if (buttonLockedForCorrect[indexOfButton] == false || !Settings.lockCorrect) && !buttonRevealedByHelper[indexOfButton] {
                 boardSpaces[indexOfButton].setTitleWithOutAnimation(title: nil)
                 buttonTitleArray[indexOfButton] = ""
-                defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel)_buttonTitles")
+                defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel!)_buttonTitles")
 
                 // If it was locked, we need to unlock it since it is being erased
                 if buttonLockedForCorrect[indexOfButton] == true {
                     buttonLockedForCorrect[indexOfButton] = false
-                    defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockedCorrect")
+                    defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel!)_lockedCorrect")
                 }
             }
         }
@@ -888,11 +902,11 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         for index in selectedBoardSpaces {
             if across {
                 buttonHintAcrossEnabled[index] = true
-                defaults.set(buttonHintAcrossEnabled, forKey: "\(Settings.userLevel)_hintAcross")
+                defaults.set(buttonHintAcrossEnabled, forKey: "\(Settings.userLevel!)_hintAcross")
                 boardSpaces[index].showHintLabel()
             } else {
                 buttonHintDownEnabled[index] = true
-                defaults.set(buttonHintDownEnabled, forKey: "\(Settings.userLevel)_hintDown")
+                defaults.set(buttonHintDownEnabled, forKey: "\(Settings.userLevel!)_hintDown")
                 boardSpaces[index].showHintLabel()
             }
         }
@@ -934,14 +948,14 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         // A square revealed by a cheat should never be able to be erased or changed
         buttonRevealedByHelper[indexOfButton] = true
         buttonLockedForCorrect[indexOfButton] = true
-        defaults.set(buttonRevealedByHelper, forKey: "\(Settings.userLevel)_revealed")
-        defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockedCorrect")
+        defaults.set(buttonRevealedByHelper, forKey: "\(Settings.userLevel!)_revealed")
+        defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel!)_lockedCorrect")
         
         // Set the title equal to the correct answer
         // Set the background to indicate a cheat was used at that square
         boardSpaces[indexOfButton].setTitleWithOutAnimation(title: String(buttonLetterArray[indexOfButton]).uppercased())
         buttonTitleArray[indexOfButton] = String(buttonLetterArray[indexOfButton]).uppercased()
-        defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel)_buttonTitles")
+        defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel!)_buttonTitles")
 
         boardSpaces[indexOfButton].backgroundColor = UIColor.init(cgColor: orangeColorCG)
         
@@ -998,8 +1012,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 }
                 
                 // If they do, perform game over actions
-                if Settings.userLevel < Settings.maxNumOfLevels {
-                    defaults.set(Settings.userLevel + 1, forKey: "userLevel")
+                if Settings.userLevel! < Settings.maxNumOfLevels {
+                    defaults.set(Settings.userLevel! + 1, forKey: "userLevel")
                 } else {
                     defaults.set(1, forKey: "userLevel")
                 }
@@ -1011,8 +1025,9 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 gameTimer.invalidate()
                 
                 // Prepare for the next game
-                resetDefaults()
-                
+                if Settings.userLevel! < 1000 {
+                    resetDefaults(Settings.userLevel!)
+                }
                 
                 // Perform game over animation
                 animateGameOver()
@@ -1079,9 +1094,9 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         popUp.layer.cornerRadius = sender.layer.cornerRadius
         popUp.backgroundColor = .black
         popUp.layer.shadowColor = UIColor.black.cgColor
-        popUp.layer.shadowOpacity = 1
+        popUp.layer.shadowOpacity = 0.75
         popUp.layer.shadowOffset = CGSize.zero
-        popUp.layer.shadowRadius = 5
+        popUp.layer.shadowRadius = sender.layer.cornerRadius
         popUp.layer.shadowPath = UIBezierPath(rect: popUp.bounds).cgPath
         view.addSubview(popUp)
         
@@ -1179,11 +1194,11 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             if buttonLockedForCorrect[indexOfButton] &&
                 letter != buttonLetterArray[indexOfButton] {
                 buttonLockedForCorrect[indexOfButton] = false
-                defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockedCorrect")
+                defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel!)_lockedCorrect")
             }
             boardSpaces[indexOfButton].setTitleWithOutAnimation(title: String(letter).uppercased())
             buttonTitleArray[indexOfButton] = String(letter).uppercased()
-            defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel)_buttonTitles")
+            defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel!)_buttonTitles")
         } else {
             // If the space is locked, lets just move to the next square
             if across {
@@ -1236,8 +1251,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                     }
                     
                     // Increase the user level
-                    if Settings.userLevel < Settings.maxNumOfLevels {
-                        defaults.set(Settings.userLevel + 1, forKey: "userLevel")
+                    if Settings.userLevel! < Settings.maxNumOfLevels {
+                        defaults.set(Settings.userLevel! + 1, forKey: "userLevel")
                     } else {
                         defaults.set(1, forKey: "userLevel")
                     }
@@ -1246,7 +1261,9 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                     MusicPlayer.gameMusicPlayer.setVolume(0, fadeDuration: 2.0)
                     
                     // Prepare for next level
-                    resetDefaults()
+                    if Settings.userLevel! < 1000 {
+                        resetDefaults(Settings.userLevel!)
+                    }
 
                     // Perform the game over animation
                     animateGameOver()
@@ -1362,7 +1379,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         // Disallow changing of letters after correct answer entered
         for space in selectedBoardSpaces {
             buttonLockedForCorrect[space] = true
-            defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockedCorrect")
+            defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel!)_lockedCorrect")
         }
         
         // Should only play correct sound effect if 3 conditions are met
@@ -2299,13 +2316,27 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
      *****************************************/
     
     func fillAcrossDownArrays() {
-        // Grab across and down numbers and append them to the array
-        for key in Settings.levels[Settings.userLevel - 1]["Across"]!.keys {
-            acrossNumbers.append(Int(key)!)
-        }
-
-        for key in Settings.levels[Settings.userLevel - 1]["Down"]!.keys {
-            downNumbers.append(Int(key)!)
+        
+        if Settings.userLevel! >= 1000 {
+            let LEVEL_INDEX = Settings.userLevel! - 1000
+            // Grab across and down numbers and append them to the array
+            for key in Settings.dailies[LEVEL_INDEX]["Across"]!.keys {
+                acrossNumbers.append(Int(key)!)
+            }
+            
+            for key in Settings.dailies[LEVEL_INDEX]["Down"]!.keys {
+                downNumbers.append(Int(key)!)
+            }
+        } else {
+            let LEVEL_INDEX = Settings.userLevel! - 1
+            // Grab across and down numbers and append them to the array
+            for key in Settings.levels[LEVEL_INDEX]["Across"]!.keys {
+                acrossNumbers.append(Int(key)!)
+            }
+            
+            for key in Settings.levels[LEVEL_INDEX]["Down"]!.keys {
+                downNumbers.append(Int(key)!)
+            }
         }
         
         // Sort the arrays from lowest to highest
@@ -2315,13 +2346,26 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     
     // Gets the important information from the level array created from JSON.
     func makeClueArrays() {
+
         // Master clues are used to easily manage hints and clues.
         // Any updates to hints or clues will apply to all phrases
         // without needing to modify each level
         var masterClues = Settings.master
         
-        let ac = Settings.levels[Settings.userLevel - 1]["Across"]!
-        let dw = Settings.levels[Settings.userLevel - 1]["Down"]!
+        var ac: Dictionary<String, String>
+        var dw: Dictionary<String, String>
+        
+        if Settings.userLevel! >= 1000 {
+            let LEVEL_INDEX = Settings.userLevel! - 1000
+
+            ac = Settings.dailies[LEVEL_INDEX]["Across"]!
+            dw = Settings.dailies[LEVEL_INDEX]["Down"]!
+        } else {
+            let LEVEL_INDEX = Settings.userLevel! - 1
+
+            ac = Settings.levels[LEVEL_INDEX]["Across"]!
+            dw = Settings.levels[LEVEL_INDEX]["Down"]!
+        }
         
         for (key, value) in ac {
             for j in 0..<masterClues.count {
@@ -2359,37 +2403,40 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     }
     
     @objc func updateTimerLabel() {
-        // Increase the seconds counter every tick
-        // At 60, increase the minutes counter
-        secondsCounter += 1
-        if secondsCounter == 60 {
-            secondsCounter = 0
-            minutesCounter += 1
+        if Settings.highestDailyComplete != Settings.today ||
+            Settings.userLevel! < 1000 {
+            // Increase the seconds counter every tick
+            // At 60, increase the minutes counter
+            secondsCounter += 1
+            if secondsCounter == 60 {
+                secondsCounter = 0
+                minutesCounter += 1
+            }
+            
+            // At 60, increase the hours counter
+            if minutesCounter == 60 {
+                minutesCounter = 0
+                hoursCounter += 1
+            }
+            
+            // Display the timer
+            let secs = formatter.string(for: secondsCounter)
+            let mins = formatter.string(for: minutesCounter)
+            
+            secondsLabel.text = ":\(secs!)"
+            minutesLabel.text = ":\(mins!)"
+            hoursLabel.text = "\(hoursCounter)"
+            
+            // Save the timer every time through
+            defaults.set(secondsCounter, forKey: "\(Settings.userLevel!)_seconds")
+            defaults.set(minutesCounter, forKey: "\(Settings.userLevel!)_minutes")
+            defaults.set(hoursCounter, forKey: "\(Settings.userLevel!)_hours")
         }
-        
-        // At 60, increase the hours counter
-        if minutesCounter == 60 {
-            minutesCounter = 0
-            hoursCounter += 1
-        }
-        
-        // Display the timer
-        let secs = formatter.string(for: secondsCounter)
-        let mins = formatter.string(for: minutesCounter)
-        
-        secondsLabel.text = ":\(secs!)"
-        minutesLabel.text = ":\(mins!)"
-        hoursLabel.text = "\(hoursCounter)"
-        
-        // Save the timer every time through
-        defaults.set(secondsCounter, forKey: "\(Settings.userLevel)_seconds")
-        defaults.set(minutesCounter, forKey: "\(Settings.userLevel)_minutes")
-        defaults.set(hoursCounter, forKey: "\(Settings.userLevel)_hours")
     }
     
     func readFromDefaults() {
         // If there are saved answers, then we want to display those
-        if let savedAnswers = defaults.array(forKey: "\(Settings.userLevel)_buttonTitles") {
+        if let savedAnswers = defaults.array(forKey: "\(Settings.userLevel!)_buttonTitles") {
             buttonTitleArray = (savedAnswers as? [String])!
             for i in 0...168 {
                 if buttonTitleArray[i] != "" {
@@ -2402,7 +2449,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
         
         // If there are locked answers, then we want to set those
-        if let locked = defaults.array(forKey: "\(Settings.userLevel)_lockedCorrect") {
+        if let locked = defaults.array(forKey: "\(Settings.userLevel!)_lockedCorrect") {
             buttonLockedForCorrect = (locked as? [Bool])!
         } else {
             // Otherwise, start new
@@ -2410,7 +2457,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
         
         // If there are squares with hints, then we want to display those
-        if let acrossHint = defaults.array(forKey: "\(Settings.userLevel)_hintAcross") {
+        if let acrossHint = defaults.array(forKey: "\(Settings.userLevel!)_hintAcross") {
             buttonHintAcrossEnabled = (acrossHint as? [Bool])!
             for i in 0...168 {
                 if buttonHintAcrossEnabled[i] == true {
@@ -2423,7 +2470,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
         
         // If there are squares with hints, then we want to display those
-        if let downHint = defaults.array(forKey: "\(Settings.userLevel)_hintDown") {
+        if let downHint = defaults.array(forKey: "\(Settings.userLevel!)_hintDown") {
             buttonHintDownEnabled = (downHint as? [Bool])!
             for i in 0...168 {
                 if buttonHintDownEnabled[i] == true {
@@ -2436,7 +2483,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
         
         // If there are squares revealed, then we want to display those
-        if let revealed = defaults.array(forKey: "\(Settings.userLevel)_revealed") {
+        if let revealed = defaults.array(forKey: "\(Settings.userLevel!)_revealed") {
             buttonRevealedByHelper = (revealed as? [Bool])!
             for i in 0...168 {
                 if buttonRevealedByHelper[i] == true {
@@ -2451,8 +2498,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                         buttonLockedForCorrect[i] = true
                         
                         // Save it into the arrays
-                        defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel)_lockedCorrect")
-                        defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel)_buttonTitles")
+                        defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel!)_lockedCorrect")
+                        defaults.set(buttonTitleArray, forKey: "\(Settings.userLevel!)_buttonTitles")
                     }
                 }
             }
@@ -2462,24 +2509,32 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
         
         // Set the timing counters, they are 0 if there is no corresponding key
-        secondsCounter = defaults.integer(forKey: "\(Settings.userLevel)_seconds")
-        minutesCounter = defaults.integer(forKey: "\(Settings.userLevel)_minutes")
-        hoursCounter = defaults.integer(forKey: "\(Settings.userLevel)_hours")
+        secondsCounter = defaults.integer(forKey: "\(Settings.userLevel!)_seconds")
+        minutesCounter = defaults.integer(forKey: "\(Settings.userLevel!)_minutes")
+        hoursCounter = defaults.integer(forKey: "\(Settings.userLevel!)_hours")
+        
+        if Settings.highestDailyComplete == Settings.today && Settings.userLevel! >= 1000 {
+            for i in 0...168 {
+                buttonRevealedByHelper[i] = true
+            }
+        }
     }
     
-    func resetDefaults() {
+    func resetDefaults(_ forLevel: Int) {
         // Set level specific board states back to initial board
-        defaults.set(Array(repeating: "", count: 169), forKey: "\(Settings.userLevel)_buttonTitles")
-        defaults.set(Array(repeating: false, count: 169), forKey: "\(Settings.userLevel)_lockedCorrect")
+        defaults.set(Array(repeating: "", count: 169), forKey: "\(forLevel)_buttonTitles")
+        defaults.set(Array(repeating: false, count: 169), forKey: "\(forLevel)_lockedCorrect")
         
-        // These no longer need to be emptied since the user can come back to the level
-        //defaults.set(Array(repeating: false, count: 169), forKey: "\(Settings.userLevel)_hintAcross")
-        //defaults.set(Array(repeating: false, count: 169), forKey: "\(Settings.userLevel)_hintDown")
-        //defaults.set(Array(repeating: false, count: 169), forKey: "\(Settings.userLevel)_revealed")
+        if forLevel >= 1000 {
+            defaults.set(Array(repeating: false, count: 169), forKey: "\(forLevel)_hintAcross")
+            defaults.set(Array(repeating: false, count: 169), forKey: "\(forLevel)_hintDown")
+            defaults.set(Array(repeating: false, count: 169), forKey: "\(forLevel)_revealed")
+            defaults.set("", forKey: "highestDailyComplete")
+        }
         
-        defaults.set(0, forKey: "\(Settings.userLevel)_seconds")
-        defaults.set(0, forKey: "\(Settings.userLevel)_minutes")
-        defaults.set(0, forKey: "\(Settings.userLevel)_hours")
+        defaults.set(0, forKey: "\(forLevel)_seconds")
+        defaults.set(0, forKey: "\(forLevel)_minutes")
+        defaults.set(0, forKey: "\(forLevel)_hours")
     }
     
 
@@ -2576,9 +2631,21 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         // board[0] contains the letters in their locations
         // board[1] contains numbers superscripts for across/down
         // board[2] contains across/down information for each individual square
-        let board = [Settings.levels[Settings.userLevel - 1]["Board"]!["Letters"]!,
-                     Settings.levels[Settings.userLevel - 1]["Board"]!["Numbers"]!,
-                     Settings.levels[Settings.userLevel - 1]["Board"]!["Properties"]!]
+        var board = [String]()
+        
+        if Settings.userLevel! >= 1000 {
+            let LEVEL_INDEX = Settings.userLevel! - 1000
+
+            board = [Settings.dailies[LEVEL_INDEX]["Board"]!["Letters"]!,
+                     Settings.dailies[LEVEL_INDEX]["Board"]!["Numbers"]!,
+                     Settings.dailies[LEVEL_INDEX]["Board"]!["Properties"]!]
+        } else {
+            let LEVEL_INDEX = Settings.userLevel! - 1
+
+            board = [Settings.levels[LEVEL_INDEX]["Board"]!["Letters"]!,
+                    Settings.levels[LEVEL_INDEX]["Board"]!["Numbers"]!,
+                    Settings.levels[LEVEL_INDEX]["Board"]!["Properties"]!]
+        }
         
         // Set everything up
         formatter.minimumIntegerDigits = 2
@@ -2586,7 +2653,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         makeClueArrays()
         setUpBoard(board: board)
         startTimer()
-        
         
         // Start playing game music
         // Select a random track between 1 and 24
@@ -2604,6 +2670,12 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         
         if defaults.bool(forKey: "helpShownBefore") {
             animateGameStart()
+        }
+        
+        if Settings.userLevel! >= 1000 {
+            for i in 1000..<Settings.userLevel! {
+                resetDefaults(i)
+            }
         }
     }
     

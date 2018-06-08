@@ -45,7 +45,6 @@ class LevelsViewController: UIViewController {
     @IBAction func levelButtonTapped(_ sender: UIButton) {
         selectedLevel = sender.tag
         for level in Settings.lockedLevels {
-            
             if selectedLevel == level {
                 performSegue(withIdentifier: "lockedSegue", sender: self)
                 return
@@ -148,7 +147,7 @@ class LevelsViewController: UIViewController {
         }
         
         for level in Settings.newLevels {
-            levelButtons[level - 1].setNewIndicator()
+            levelButtons[level - 1].setNewIndicator("level")
         }
 
         // Possible emojis that will randomly fall from the top (160 to choose from)
@@ -401,12 +400,12 @@ class LevelsViewController: UIViewController {
         
         // Set a lock image on locked levels
         for i in 0..<Settings.lockedLevels.count {
-            levelButtons[Settings.lockedLevels[i] - 1].setLevelStatus("locked")
+            levelButtons[Settings.lockedLevels[i] - 1].setLevelStatus("locked", "level")
         }
         
         // Set a check image on completed levels
         for i in 0..<Settings.completedLevels.count {
-            levelButtons[Settings.completedLevels[i] - 1].setLevelStatus("complete")
+            levelButtons[Settings.completedLevels[i] - 1].setLevelStatus("complete", "level")
         }
         
         // Save the state of the level arrays

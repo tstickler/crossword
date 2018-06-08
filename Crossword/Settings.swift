@@ -26,8 +26,12 @@ class Settings {
     static var newLevels = [Int]()
     static var lockedLevels = [Int]()
     static var gatheredData: Bool!
+    static var highestDailyComplete: String!
+    static var today: String!
+    static var dailiesCompleted: Int!
     
     static var master = [Dictionary<String, String>]()
     static var levels = [Dictionary<String, Dictionary<String, String>>]()
+    static var dailies = [Dictionary<String, Dictionary<String, String>>]()
 
 }

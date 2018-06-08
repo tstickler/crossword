@@ -13,6 +13,7 @@ class HomeViewController: UIViewController {
     var ref: DatabaseReference!
     @IBOutlet var homeTitleImage: UIImageView!
     @IBOutlet var playButton: UIButton!
+    @IBOutlet var dailyButton: LevelButton!
     
     @IBAction func unwindSegue(_ sender: UIStoryboardSegue) {
         // Unwind segue allows jumping from the menu or game over view controllers
@@ -27,6 +28,18 @@ class HomeViewController: UIViewController {
         _ = self.navigationController?.popToRootViewController(animated: false)
     }
 
+    @IBAction func dailyButtonTapped(_ sender: Any) {
+        // Go to the daily level
+        // Try to match date with one from firebase for today's puzzle
+        for i in 0..<Settings.dailies.count {
+            if Settings.dailies[i]["Date"]!["d"]! == Settings.today {
+                Settings.userLevel = 1000 + i
+                MusicPlayer.homeMusicPlayer.setVolume(0, fadeDuration: 1.0)
+                performSegue(withIdentifier: "gameSegue", sender: self)
+            }
+        }
+    }
+    
     override var prefersStatusBarHidden: Bool {
         // No status bar allows for more board room
         return true
@@ -56,11 +69,11 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Star these off hidden, they'll be animated in later
+        // Start these off hidden, they'll be animated in later
         homeTitleImage.alpha = 0
         playButton.alpha = 0
         muteButton.alpha = 0
+        dailyButton.alpha = 0
         homeTitleImage.transform = CGAffineTransform(scaleX: 0.01, y: 0.01)
         
         // Start playing music
@@ -121,10 +134,19 @@ class HomeViewController: UIViewController {
                           "🎨", "🎤", "🎷", "🎳", "🚗", "✈️", "🚀", "🗽", "🏝", "📱",
                           "📸", "☎️", "💡", "💵", "💎", "💣", "🔮", "🔑", "✉️", "❤️",
                           "💔", "💘", "⚠️", "🌀", "🃏", "🤞🏻", "👏🏼", "👌🏻", "👉🏼", "👍🏻"]
+        
+        dailyButton.setNewIndicator("daily")
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        
+        // Gets todays date in format yyyy-mm-dd
+        // Will be compared with dailies pulled from firebase
+        getTodaysDate()
+        if Settings.highestDailyComplete == Settings.today {
+            dailyButton.setLevelStatus("complete", "daily")
+        }
         
         // When timer fires, will create a new label to be dropped from the view
         timer = Timer.scheduledTimer(timeInterval: 0.5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
@@ -185,7 +207,6 @@ class HomeViewController: UIViewController {
     }
     
     func animateLoadIn() {
-
         UIView.animate(withDuration: 2.0,
                        delay: 0.3,
                        usingSpringWithDamping: 0.4,
@@ -201,6 +222,7 @@ class HomeViewController: UIViewController {
             UIView.animate(withDuration: 1.0, animations: {
                 self.playButton.alpha = 1.0
                 self.muteButton.alpha = 1.0
+                self.dailyButton.alpha = 1.0
             })
         })
     }
@@ -332,6 +354,8 @@ class HomeViewController: UIViewController {
             Settings.cheatCount = defaults.integer(forKey: "cheatCount")
             Settings.userLevel = defaults.integer(forKey: "userLevel")
             Settings.gatheredData = defaults.bool(forKey: "gatheredData")
+            Settings.highestDailyComplete = defaults.string(forKey: "highestDailyComplete")
+            Settings.dailiesCompleted = defaults.integer(forKey: "dailiesCompleted")
         } else {
             // If this is the user's first time, start all the settings as enabled.
             // This must happen because loading from defaults when there is no key associated
@@ -353,6 +377,9 @@ class HomeViewController: UIViewController {
             
             Settings.userLevel = 1
             defaults.set(Settings.userLevel, forKey: "userLevel")
+            
+            defaults.set("", forKey: "highestDailyComplete")
+            defaults.set(0, forKey: "dailiesCompleted")
             
             Settings.musicEnabled = true
             Settings.soundEffects = true
@@ -412,13 +439,21 @@ class HomeViewController: UIViewController {
             let levels = everything["levels"] as! Array<Dictionary<String, Dictionary<String, String>>>
             Settings.maxNumOfLevels = levels.count
             
+            let dailies = everything["dailies"] as! Array<Dictionary<String, Dictionary<String, String>>>
+            
             // Create master array
             for element in clues {
                 Settings.master.append(element)
             }
             
+            // Create levels array
             for level in levels {
                 Settings.levels.append(level)
+            }
+            
+            // Create dailies array
+            for daily in dailies {
+                Settings.dailies.append(daily)
             }
             
             self.wheel.hidesWhenStopped = true
@@ -431,5 +466,14 @@ class HomeViewController: UIViewController {
                 self.animateLoadIn()
             })
         })
+    }
+    
+    func getTodaysDate() {
+        // Sets todays date
+        let date = Date()
+        let formatter = DateFormatter()
+        formatter.timeZone = TimeZone.current
+        formatter.dateFormat = "yyyy-MM-dd"
+        Settings.today = formatter.string(from: date)
     }
 }
