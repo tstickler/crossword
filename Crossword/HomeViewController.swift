@@ -84,13 +84,13 @@ class HomeViewController: UIViewController {
         loadSettings()
         
         if !ReachabilityTest.isConnectedToNetwork() && !Settings.gatheredData {
-            self.wheel.startAnimating()
-            self.cover.isHidden = false
-            self.internetLabel.text = "Internet connection required to retreive necessary files."
-        } else if !Settings.gatheredData {
-            self.wheel.startAnimating()
-            self.cover.isHidden = false
-            self.internetLabel.text = "Retrieving Necessary Files..."
+            wheel.startAnimating()
+            cover.isHidden = false
+            internetLabel.text = "Internet connection required to retreive necessary files."
+        } else {
+            wheel.startAnimating()
+            cover.isHidden = false
+            internetLabel.text = "Retrieving Necessary Files..."
         }
         
         // Loads master from firebase

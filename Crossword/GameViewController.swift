@@ -2529,7 +2529,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             defaults.set(Array(repeating: false, count: 169), forKey: "\(forLevel)_hintAcross")
             defaults.set(Array(repeating: false, count: 169), forKey: "\(forLevel)_hintDown")
             defaults.set(Array(repeating: false, count: 169), forKey: "\(forLevel)_revealed")
-            defaults.set("", forKey: "highestDailyComplete")
         }
         
         defaults.set(0, forKey: "\(forLevel)_seconds")

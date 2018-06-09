@@ -194,6 +194,8 @@ class LevelsViewController: UIViewController {
             bannerAd.isHidden = true
             bannerHeightConstraint.constant = 0
         }
+        
+        addProgressBar()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -412,5 +414,78 @@ class LevelsViewController: UIViewController {
         defaults.set(Settings.completedLevels, forKey: "completedLevels")
         defaults.set(Settings.uncompletedLevels, forKey: "uncompletedLevels")
         defaults.set(Settings.lockedLevels, forKey: "lockedLevels")
+    }
+    
+    func addProgressBar() {
+        // Frame
+        let progBarFrame = UIView()
+        let frameW = view.frame.width - (view.frame.width * 0.20)
+        let frameH = view.frame.height * 0.055
+        let frameX = view.frame.width * 0.10
+        let frameY = view.frame.height - 50 - frameH * 2
+        let frameC = frameH / 2
+        let frame = CGRect(x: frameX,
+                          y: frameY,
+                          width: frameW,
+                          height: frameH)
+        
+        progBarFrame.frame = frame
+        progBarFrame.layer.cornerRadius = frameC
+        progBarFrame.backgroundColor = .black
+        progBarFrame.layer.borderColor = UIColor.darkGray.cgColor
+        progBarFrame.layer.borderWidth = 2
+        view.addSubview(progBarFrame)
+        
+        
+        // Bar
+        let progBar = UIView()
+        let barW = ((frameW-frameH * 0.2) * getProgress())
+        let barH = frameH * 0.8
+        let barX = frameX + frameH * 0.1
+        let barY = frameY + frameH * 0.1
+        let barC = barH / 2
+        
+        // Initial bar starts with 0 width, will be animated in
+        progBar.frame = CGRect(x: barX,
+                               y: barY,
+                               width: 0,
+                               height: barH)
+        progBar.layer.cornerRadius = barC
+        progBar.backgroundColor = UIColor.init(red: 86/255, green: 212/255, blue: 120/255, alpha: 1)
+        view.addSubview(progBar)
+        
+        // Animate progress bar
+        UIView.animate(withDuration: Double(5.0 * getProgress()), delay: 0, options: .curveEaseInOut, animations: {
+            progBar.frame = CGRect(x: barX,
+                                   y: barY,
+                                   width: barW,
+                                   height: barH)
+        })
+        
+        
+        // Label
+        let progLabel = UILabel()
+        let labW = frameW
+        let labH = barH
+        let labX = frameX
+        let labY = barY
+        progLabel.frame = CGRect(x: labX, y: labY, width: labW, height: labH)
+        progLabel.textAlignment = .center
+        progLabel.text = "\(Settings.completedLevels.count) / \(Settings.maxNumOfLevels!)"
+        progLabel.textColor = .white
+        view.addSubview(progLabel)
+    }
+    
+    func getProgress() -> CGFloat {
+        if Settings.completedLevels.count == 0 {
+            return 0
+        } else {
+            var levelsCompleted = CGFloat(Float(Settings.completedLevels.count) / Float(Settings.maxNumOfLevels))
+            if levelsCompleted < 0.10 {
+                levelsCompleted = 0.10
+            }
+            return levelsCompleted
+        }
+    
     }
 }
