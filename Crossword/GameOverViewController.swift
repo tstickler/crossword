@@ -158,7 +158,7 @@ class GameOverViewController: UIViewController {
                 if !Settings.lockedLevels.isEmpty && Settings.userLevel < 1000 {
                     newLevelText = " and unlocked a new level!"
                 } else if Settings.userLevel >= 1000 {
-                    newLevelText = " and earned 2 hints!"
+                    newLevelText = " and earned 20 Gems!"
                 } else {
                     newLevelText = "!"
                 }
@@ -203,7 +203,7 @@ class GameOverViewController: UIViewController {
                         
                         // User gets another cheat for completing the level
                         // Only needs to happen when the level is completed the first time
-                        Settings.cheatCount += 1
+                        Settings.cheatCount += 10
                         parentVC.cheatCountLabel.text = "\(Settings.cheatCount)"
                         defaults.set(Settings.cheatCount, forKey: "cheatCount")
                         
@@ -223,7 +223,7 @@ class GameOverViewController: UIViewController {
                     Settings.highestDailyComplete = Settings.today
                     topButton.isHidden = true
                     bottomButton.backgroundColor = .green
-                    Settings.cheatCount += 2
+                    Settings.cheatCount += 20
                     parentVC.cheatCountLabel.text = "\(Settings.cheatCount)"
                     defaults.set(Settings.cheatCount, forKey: "cheatCount")
                     defaults.set(Settings.today, forKey: "highestDailyComplete")

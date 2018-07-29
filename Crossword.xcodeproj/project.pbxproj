@@ -63,6 +63,7 @@
 		2FADDA8B1FC8D16A0069AAF0 /* InAppPurchase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FADDA8A1FC8D16A0069AAF0 /* InAppPurchase.swift */; };
 		2FD413761FDB72E600B0D1A0 /* LockedViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FD413751FDB72E600B0D1A0 /* LockedViewController.swift */; };
 		2FDC7C371FAFA4A200A3EABE /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */; };
+		2FF385922107D42E00C70F15 /* CodeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2FF385912107D42E00C70F15 /* CodeViewController.swift */; };
 		DD47337F967C59A1196B08C3 /* Pods_CrosswordUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E7A1F12BD8469BEB52DD6297 /* Pods_CrosswordUITests.framework */; };
 		FA541F5D310B5B886DF5CBE4 /* Pods_CrosswordTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 8BA7F006000A0E6EB67A386E /* Pods_CrosswordTests.framework */; };
 /* End PBXBuildFile section */
@@ -151,6 +152,7 @@
 		2FADDA8A1FC8D16A0069AAF0 /* InAppPurchase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InAppPurchase.swift; sourceTree = "<group>"; };
 		2FD413751FDB72E600B0D1A0 /* LockedViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LockedViewController.swift; sourceTree = "<group>"; };
 		2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		2FF385912107D42E00C70F15 /* CodeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeViewController.swift; sourceTree = "<group>"; };
 		4A3278F256C80F5572606B93 /* Pods-CrosswordUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CrosswordUITests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CrosswordUITests/Pods-CrosswordUITests.release.xcconfig"; sourceTree = "<group>"; };
 		65B4CEE3811F32B335769A9A /* Pods-CrosswordUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CrosswordUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-CrosswordUITests/Pods-CrosswordUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		66F51F77CC075E9E76C3D43C /* Pods-CrosswordTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-CrosswordTests.release.xcconfig"; path = "Pods/Target Support Files/Pods-CrosswordTests/Pods-CrosswordTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -254,6 +256,7 @@
 				2FDC7C361FAFA4A200A3EABE /* HomeViewController.swift */,
 				2F0929DF1FC0A6EF00EA18B2 /* InfoViewController.swift */,
 				2F1E54A11FDB9BE600A72EDB /* NotificationViewController.swift */,
+				2FF385912107D42E00C70F15 /* CodeViewController.swift */,
 				2F5A66C61FD7A3AB001502F5 /* LevelsViewController.swift */,
 				2FD413751FDB72E600B0D1A0 /* LockedViewController.swift */,
 				2F35EC611F9B1C06000014E5 /* GameViewController.swift */,
@@ -501,6 +504,13 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Crossword/Pods-Crossword-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Bolts/Bolts.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKCoreKit/FBSDKCoreKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKLoginKit/FBSDKLoginKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FBSDKShareKit/FBSDKShareKit.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookCore/FacebookCore.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookLogin/FacebookLogin.framework",
+				"${BUILT_PRODUCTS_DIR}/FacebookShare/FacebookShare.framework",
 				"${BUILT_PRODUCTS_DIR}/GoogleToolboxForMac/GoogleToolboxForMac.framework",
 				"${BUILT_PRODUCTS_DIR}/Protobuf/Protobuf.framework",
 				"${BUILT_PRODUCTS_DIR}/leveldb-library/leveldb.framework",
@@ -508,6 +518,13 @@
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bolts.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKCoreKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKLoginKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FBSDKShareKit.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookCore.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookLogin.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/FacebookShare.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/GoogleToolboxForMac.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Protobuf.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/leveldb.framework",
@@ -594,6 +611,7 @@
 				2F35EC621F9B1C06000014E5 /* GameViewController.swift in Sources */,
 				2F07758D1FBA391C001C9ABD /* MusicPlayer.swift in Sources */,
 				2F5D9E701FA1522B004A2AB5 /* MenuViewController.swift in Sources */,
+				2FF385922107D42E00C70F15 /* CodeViewController.swift in Sources */,
 				2F35EC601F9B1C06000014E5 /* AppDelegate.swift in Sources */,
 				2F36BED71FBE03AE00095519 /* GameOverViewController.swift in Sources */,
 			);

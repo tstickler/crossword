@@ -11,9 +11,22 @@ import Firebase
 import FirebaseCore
 import FirebaseMessaging
 import UserNotifications
+import FacebookCore
+import FacebookLogin
+import FacebookShare
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate, GADRewardBasedVideoAdDelegate {
+    func rewardBasedVideoAd(_ rewardBasedVideoAd: GADRewardBasedVideoAd, didRewardUserWith reward: GADAdReward) {
+        print("Reward received with currency: \(reward.type), amount \(reward.amount).")
+
+    }
+    
+    func rewardBasedVideoAdDidClose(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        GADRewardBasedVideoAd.sharedInstance().load(GADRequest(),
+                                                    withAdUnitID: "ca-app-pub-1164601417724423/5486191208")
+    }
+    
     
     var gameViewController = GameViewController()
     
@@ -29,12 +42,22 @@ class AppDelegate: UIResponder, UIApplicationDelegate, MessagingDelegate {
 
         GADMobileAds.configure(withApplicationID: "ca-app-pub-1164601417724423~7678881026")
         
+        GADRewardBasedVideoAd.sharedInstance().delegate = self
+        GADRewardBasedVideoAd.sharedInstance().load(GADRequest(),
+                                                    withAdUnitID: "ca-app-pub-1164601417724423/5486191208")
+        
         // IAP observer is set here
         InAppPurchase.shared.getProducts()
         
         // Try push notifications
         registerForPushNotifications()
+        SDKApplicationDelegate.shared.application(application, didFinishLaunchingWithOptions: launchOptions)
+
         return true
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        return SDKApplicationDelegate.shared.application(app, open: url, options: options)
     }
 
     func applicationWillResignActive(_ application: UIApplication) {

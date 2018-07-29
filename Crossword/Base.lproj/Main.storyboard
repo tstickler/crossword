@@ -17,6 +17,180 @@
         </array>
     </customFonts>
     <scenes>
+        <!--Code View Controller-->
+        <scene sceneID="8e1-T4-bhj">
+            <objects>
+                <viewController id="Jcg-gW-U9r" customClass="CodeViewController" customModule="Crossword" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="xsf-7L-iHs">
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TgA-h6-0P6">
+                                <rect key="frame" x="25" y="119" width="270" height="330"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TtY-XG-Ut9">
+                                        <rect key="frame" x="105" y="284" width="61" height="38"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="20"/>
+                                        <state key="normal" title="Submit">
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="codeSubmitTapped:" destination="Jcg-gW-U9r" eventType="touchUpInside" id="6gM-fV-ark"/>
+                                        </connections>
+                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="rPD-I0-1RO">
+                                        <rect key="frame" x="8" y="90" width="254" height="186"/>
+                                        <subviews>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="HMj-8i-GcF">
+                                                <rect key="frame" x="0.0" y="0.0" width="254" height="62"/>
+                                                <subviews>
+                                                    <button opaque="NO" tag="50" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="UuU-ZC-wm1">
+                                                        <rect key="frame" x="0.0" y="0.0" width="84.5" height="62"/>
+                                                        <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="40"/>
+                                                        <inset key="contentEdgeInsets" minX="0.0" minY="9" maxX="0.0" maxY="0.0"/>
+                                                        <state key="normal" title="😂"/>
+                                                        <connections>
+                                                            <action selector="codeKeyTapped:" destination="Jcg-gW-U9r" eventType="touchUpInside" id="TWS-a5-ayG"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" tag="51" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="oCa-i9-kCA">
+                                                        <rect key="frame" x="84.5" y="0.0" width="85" height="62"/>
+                                                        <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="40"/>
+                                                        <inset key="contentEdgeInsets" minX="0.0" minY="9" maxX="0.0" maxY="0.0"/>
+                                                        <state key="normal" title="😡"/>
+                                                        <connections>
+                                                            <action selector="codeKeyTapped:" destination="Jcg-gW-U9r" eventType="touchUpInside" id="RMH-Dt-OJQ"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" tag="52" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="GWe-Kh-7Vj">
+                                                        <rect key="frame" x="169.5" y="0.0" width="84.5" height="62"/>
+                                                        <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="40"/>
+                                                        <inset key="contentEdgeInsets" minX="0.0" minY="9" maxX="0.0" maxY="0.0"/>
+                                                        <state key="normal" title="👽"/>
+                                                        <connections>
+                                                            <action selector="codeKeyTapped:" destination="Jcg-gW-U9r" eventType="touchUpInside" id="fvc-bs-BiZ"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="7R7-0j-Bpd">
+                                                <rect key="frame" x="0.0" y="62" width="254" height="62"/>
+                                                <subviews>
+                                                    <button opaque="NO" tag="53" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HAR-Hz-OzV">
+                                                        <rect key="frame" x="0.0" y="0.0" width="84.5" height="62"/>
+                                                        <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="40"/>
+                                                        <inset key="contentEdgeInsets" minX="0.0" minY="9" maxX="0.0" maxY="0.0"/>
+                                                        <state key="normal" title="😍"/>
+                                                        <connections>
+                                                            <action selector="codeKeyTapped:" destination="Jcg-gW-U9r" eventType="touchUpInside" id="Vmi-Yz-3yG"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" tag="54" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="skf-5G-f1q">
+                                                        <rect key="frame" x="84.5" y="0.0" width="85" height="62"/>
+                                                        <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="40"/>
+                                                        <inset key="contentEdgeInsets" minX="0.0" minY="9" maxX="0.0" maxY="0.0"/>
+                                                        <state key="normal" title="🍕"/>
+                                                        <connections>
+                                                            <action selector="codeKeyTapped:" destination="Jcg-gW-U9r" eventType="touchUpInside" id="TBG-fk-Go4"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" tag="55" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DBD-DX-u2z">
+                                                        <rect key="frame" x="169.5" y="0.0" width="84.5" height="62"/>
+                                                        <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="40"/>
+                                                        <inset key="contentEdgeInsets" minX="0.0" minY="9" maxX="0.0" maxY="0.0"/>
+                                                        <state key="normal" title="💩"/>
+                                                        <connections>
+                                                            <action selector="codeKeyTapped:" destination="Jcg-gW-U9r" eventType="touchUpInside" id="qfO-LS-0RE"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="bkz-uG-beh">
+                                                <rect key="frame" x="0.0" y="124" width="254" height="62"/>
+                                                <subviews>
+                                                    <button opaque="NO" tag="56" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="QW9-i8-yjX">
+                                                        <rect key="frame" x="0.0" y="0.0" width="84.5" height="62"/>
+                                                        <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="40"/>
+                                                        <inset key="contentEdgeInsets" minX="0.0" minY="9" maxX="0.0" maxY="0.0"/>
+                                                        <state key="normal" title="🌮"/>
+                                                        <connections>
+                                                            <action selector="codeKeyTapped:" destination="Jcg-gW-U9r" eventType="touchUpInside" id="r7e-hq-z5H"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" tag="57" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Hlt-yh-TEh">
+                                                        <rect key="frame" x="84.5" y="0.0" width="85" height="62"/>
+                                                        <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="40"/>
+                                                        <inset key="contentEdgeInsets" minX="0.0" minY="9" maxX="0.0" maxY="0.0"/>
+                                                        <state key="normal" title="🐬"/>
+                                                        <connections>
+                                                            <action selector="codeKeyTapped:" destination="Jcg-gW-U9r" eventType="touchUpInside" id="X06-VN-kij"/>
+                                                        </connections>
+                                                    </button>
+                                                    <button opaque="NO" tag="58" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="gr8-lu-XfE">
+                                                        <rect key="frame" x="169.5" y="0.0" width="84.5" height="62"/>
+                                                        <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="40"/>
+                                                        <inset key="contentEdgeInsets" minX="0.0" minY="9" maxX="0.0" maxY="0.0"/>
+                                                        <state key="normal" title="🌭"/>
+                                                        <connections>
+                                                            <action selector="codeKeyTapped:" destination="Jcg-gW-U9r" eventType="touchUpInside" id="i3g-2X-YRz"/>
+                                                        </connections>
+                                                    </button>
+                                                </subviews>
+                                            </stackView>
+                                        </subviews>
+                                    </stackView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="" textAlignment="center" lineBreakMode="clip" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="igc-sI-VzU">
+                                        <rect key="frame" x="12" y="15" width="246" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="cOM-Bt-gkk"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="38"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="330" id="1Di-kd-CB8"/>
+                                    <constraint firstItem="igc-sI-VzU" firstAttribute="leading" secondItem="TgA-h6-0P6" secondAttribute="leading" constant="12" id="7Yr-oL-8AS"/>
+                                    <constraint firstAttribute="trailing" secondItem="rPD-I0-1RO" secondAttribute="trailing" constant="8" id="HSK-xV-dCX"/>
+                                    <constraint firstItem="igc-sI-VzU" firstAttribute="top" secondItem="TgA-h6-0P6" secondAttribute="top" constant="15" id="Kz6-Rk-hsy"/>
+                                    <constraint firstAttribute="width" constant="270" id="ZJ9-Xo-eSF"/>
+                                    <constraint firstItem="TtY-XG-Ut9" firstAttribute="top" secondItem="rPD-I0-1RO" secondAttribute="bottom" constant="8" id="b9b-za-3mH"/>
+                                    <constraint firstItem="TtY-XG-Ut9" firstAttribute="centerX" secondItem="TgA-h6-0P6" secondAttribute="centerX" id="bFi-iN-jxh"/>
+                                    <constraint firstAttribute="bottom" secondItem="TtY-XG-Ut9" secondAttribute="bottom" constant="8" id="bwU-je-oC6"/>
+                                    <constraint firstAttribute="trailing" secondItem="igc-sI-VzU" secondAttribute="trailing" constant="12" id="dAz-zl-Mak"/>
+                                    <constraint firstItem="rPD-I0-1RO" firstAttribute="leading" secondItem="TgA-h6-0P6" secondAttribute="leading" constant="8" id="gdJ-5t-Z1C"/>
+                                </constraints>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="0.70382063360000002" colorSpace="custom" customColorSpace="sRGB"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="TgA-h6-0P6" firstAttribute="centerX" secondItem="xsf-7L-iHs" secondAttribute="centerX" id="KkQ-6D-jkR"/>
+                            <constraint firstItem="TgA-h6-0P6" firstAttribute="centerY" secondItem="xsf-7L-iHs" secondAttribute="centerY" id="v59-B7-zz3"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="zBd-oy-olx"/>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="sqZ-NI-2U5" appends="YES" id="Jnr-h2-ju7"/>
+                        </connections>
+                    </view>
+                    <connections>
+                        <outlet property="codeEntryView" destination="TgA-h6-0P6" id="mO1-gp-zr1"/>
+                        <outlet property="codeLabel" destination="igc-sI-VzU" id="Ozi-EV-lg2"/>
+                        <outlet property="submitBtn" destination="TtY-XG-Ut9" id="Z6q-EK-cuN"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="xWe-p4-IQJ" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="sqZ-NI-2U5">
+                    <connections>
+                        <action selector="backgroundTapped:" destination="Jcg-gW-U9r" id="qTA-fT-zhs"/>
+                        <outlet property="delegate" destination="Jcg-gW-U9r" id="GgC-Si-Jy7"/>
+                    </connections>
+                </tapGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="2117" y="-1396"/>
+        </scene>
         <!--Notification View Controller-->
         <scene sceneID="nQO-tX-oJV">
             <objects>
@@ -51,7 +225,7 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Daily Puzzles are here! Check back each day for a new puzzle that awards extra hints!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M4e-zl-Ecg">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Daily Puzzles are here! Check back each day for a new puzzle that awards extra gems!" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="M4e-zl-Ecg">
                                         <rect key="frame" x="16" y="122" width="238" height="131"/>
                                         <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -110,6 +284,16 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="3ut-B8-vYX">
+                                <rect key="frame" x="8" y="470" width="110" height="40"/>
+                                <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="21"/>
+                                <state key="normal" title="Free Gems!">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <connections>
+                                    <segue destination="Jcg-gW-U9r" kind="presentation" modalPresentationStyle="overCurrentContext" modalTransitionStyle="crossDissolve" id="vUL-eE-OVp"/>
+                                </connections>
+                            </button>
                             <button opaque="NO" tag="1" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ekd-hd-Wcd" userLabel="Play Button">
                                 <rect key="frame" x="46" y="278" width="228" height="60"/>
                                 <constraints>
@@ -208,6 +392,7 @@
                             <constraint firstItem="mgP-Ir-n9J" firstAttribute="top" secondItem="9x3-fH-e0u" secondAttribute="bottom" constant="30" id="1R4-Mc-UKR"/>
                             <constraint firstItem="TY1-3B-yvF" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="46c-Gd-fXN"/>
                             <constraint firstItem="9dT-DP-0kx" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="48I-61-enV"/>
+                            <constraint firstItem="mgP-Ir-n9J" firstAttribute="top" secondItem="3ut-B8-vYX" secondAttribute="bottom" constant="8" id="4hh-jF-tb1"/>
                             <constraint firstAttribute="bottomMargin" secondItem="TY1-3B-yvF" secondAttribute="bottom" id="5KI-3h-0cr"/>
                             <constraint firstItem="k8c-XI-oLT" firstAttribute="leading" secondItem="Ekd-hd-Wcd" secondAttribute="leading" id="Kit-PZ-YJP"/>
                             <constraint firstItem="9dT-DP-0kx" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="-40" id="PN3-kt-CAi"/>
@@ -225,6 +410,7 @@
                             <constraint firstItem="mgP-Ir-n9J" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="o4r-tl-vyN"/>
                             <constraint firstItem="9x3-fH-e0u" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="o8V-nj-43o"/>
                             <constraint firstItem="k8c-XI-oLT" firstAttribute="top" secondItem="Ekd-hd-Wcd" secondAttribute="bottom" constant="15" id="sbq-lf-H3j"/>
+                            <constraint firstItem="3ut-B8-vYX" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="8" id="ujk-DU-jg1"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -2048,17 +2234,20 @@
                                             <constraint firstAttribute="width" constant="40" id="wMd-U8-m1C"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gRj-CF-uVH">
-                                        <rect key="frame" x="277" y="5" width="40" height="30"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="40" id="c61-uh-Zcc"/>
-                                        </constraints>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="💎" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pgD-QX-Z6O">
+                                        <rect key="frame" x="268.5" y="8" width="19" height="27"/>
+                                        <fontDescription key="fontDescription" name="EmojiOneColor" family="EmojiOne" pointSize="19"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="gRj-CF-uVH">
+                                        <rect key="frame" x="288.5" y="5" width="28.5" height="30"/>
                                         <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                         <color key="textColor" red="0.99999600649999998" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="-1" translatesAutoresizingMaskIntoConstraints="NO" id="anP-6j-nQf" userLabel="Timer">
-                                        <rect key="frame" x="118" y="5" width="62" height="30"/>
+                                        <rect key="frame" x="142.5" y="5" width="62" height="30"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="j7t-b5-9QG">
                                                 <rect key="frame" x="0.0" y="0.0" width="10.5" height="30"/>
@@ -2087,31 +2276,28 @@
                                         </subviews>
                                     </stackView>
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="FBW-3F-Xbr" userLabel="Timer Bar Line">
-                                        <rect key="frame" x="189" y="6" width="1" height="28"/>
+                                        <rect key="frame" x="213.5" y="6" width="1" height="28"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="1" id="aok-Y8-Ig4"/>
                                         </constraints>
                                     </view>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="2jV-Os-jYS" userLabel="Help Buttons">
-                                        <rect key="frame" x="202" y="5" width="70" height="30"/>
+                                        <rect key="frame" x="226.5" y="5" width="30" height="30"/>
                                         <subviews>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kUD-h2-99s">
-                                                <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
-                                                <color key="backgroundColor" red="0.28627450980392155" green="0.87058823529411766" blue="0.48505878448486328" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                                <inset key="imageEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                                <state key="normal" title="..." image="fill_square2-1">
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kUD-h2-99s">
+                                                <rect key="frame" x="-226.5" y="0.0" width="0.0" height="30"/>
+                                                <state key="normal" image="one_reveal">
                                                     <color key="titleColor" red="1" green="0.77425130208333337" blue="0.4928927951388889" alpha="1" colorSpace="calibratedRGB"/>
                                                 </state>
                                                 <connections>
                                                     <action selector="fillSquareButtonTapped:" destination="CQO-aK-gww" eventType="touchUpInside" id="Evy-IH-xHy"/>
                                                 </connections>
                                             </button>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" showsTouchWhenHighlighted="YES" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="3uM-qU-Rzy">
-                                                <rect key="frame" x="40" y="0.0" width="30" height="30"/>
-                                                <color key="backgroundColor" red="1" green="0.58985140930000002" blue="0.69019607839999997" alpha="1" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                                                <state key="normal" title="?">
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="wordWrap" translatesAutoresizingMaskIntoConstraints="NO" id="3uM-qU-Rzy">
+                                                <rect key="frame" x="0.0" y="0.0" width="30" height="30"/>
+                                                <color key="backgroundColor" red="1" green="0.58985140930000002" blue="0.69019607839999997" alpha="0.0" colorSpace="calibratedRGB"/>
+                                                <state key="normal" image="hint_button">
                                                     <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 </state>
                                                 <connections>
@@ -2120,7 +2306,7 @@
                                             </button>
                                         </subviews>
                                         <constraints>
-                                            <constraint firstAttribute="width" secondItem="2jV-Os-jYS" secondAttribute="height" multiplier="7:3" id="akw-Z5-53a"/>
+                                            <constraint firstAttribute="width" secondItem="2jV-Os-jYS" secondAttribute="height" multiplier="1:1" id="akw-Z5-53a"/>
                                         </constraints>
                                     </stackView>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="line2-1" translatesAutoresizingMaskIntoConstraints="NO" id="VcI-Uz-Ctc" userLabel="Seperator">
@@ -2133,18 +2319,21 @@
                                 <color key="backgroundColor" white="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="anP-6j-nQf" secondAttribute="bottom" constant="5" id="0vB-8K-5Dd"/>
+                                    <constraint firstItem="pgD-QX-Z6O" firstAttribute="bottom" secondItem="gRj-CF-uVH" secondAttribute="bottom" id="2YO-mY-TRP"/>
                                     <constraint firstItem="WDw-4S-cLn" firstAttribute="leading" secondItem="pgr-oj-KNO" secondAttribute="leading" constant="5" id="8wI-Se-3Bz"/>
                                     <constraint firstItem="2jV-Os-jYS" firstAttribute="top" secondItem="anP-6j-nQf" secondAttribute="top" id="B7K-tt-tBC"/>
-                                    <constraint firstItem="gRj-CF-uVH" firstAttribute="leading" secondItem="2jV-Os-jYS" secondAttribute="trailing" constant="5" id="DWa-mi-MJl"/>
                                     <constraint firstItem="2jV-Os-jYS" firstAttribute="leading" secondItem="FBW-3F-Xbr" secondAttribute="trailing" constant="12" id="EkZ-aa-GGW"/>
                                     <constraint firstItem="gRj-CF-uVH" firstAttribute="top" secondItem="pgr-oj-KNO" secondAttribute="top" constant="5" id="FMq-Qx-BMa"/>
                                     <constraint firstItem="WDw-4S-cLn" firstAttribute="top" secondItem="pgr-oj-KNO" secondAttribute="top" constant="5" id="GLK-oh-TnJ"/>
                                     <constraint firstAttribute="bottom" secondItem="VcI-Uz-Ctc" secondAttribute="bottom" id="Hda-tm-Zrn"/>
+                                    <constraint firstItem="pgD-QX-Z6O" firstAttribute="top" secondItem="gRj-CF-uVH" secondAttribute="top" constant="3" id="HnF-FU-Ghw"/>
+                                    <constraint firstItem="gRj-CF-uVH" firstAttribute="leading" secondItem="pgD-QX-Z6O" secondAttribute="trailing" constant="1" id="LaO-Gc-pKY"/>
                                     <constraint firstItem="pvb-mN-77S" firstAttribute="centerY" secondItem="pgr-oj-KNO" secondAttribute="centerY" id="Lru-nR-XoN"/>
                                     <constraint firstItem="FBW-3F-Xbr" firstAttribute="top" secondItem="pgr-oj-KNO" secondAttribute="top" constant="6" id="PsV-Fp-FaZ"/>
                                     <constraint firstItem="anP-6j-nQf" firstAttribute="top" secondItem="pgr-oj-KNO" secondAttribute="top" constant="5" id="W7f-1f-mQp"/>
                                     <constraint firstAttribute="height" constant="40" id="dEB-FP-SAx"/>
                                     <constraint firstAttribute="trailing" secondItem="VcI-Uz-Ctc" secondAttribute="trailing" id="eWk-nq-y5m"/>
+                                    <constraint firstItem="pgD-QX-Z6O" firstAttribute="leading" secondItem="2jV-Os-jYS" secondAttribute="trailing" constant="12" id="fjp-x2-wJh"/>
                                     <constraint firstAttribute="trailing" secondItem="gRj-CF-uVH" secondAttribute="trailing" constant="3" id="gCw-he-5Qh"/>
                                     <constraint firstItem="VcI-Uz-Ctc" firstAttribute="leading" secondItem="pgr-oj-KNO" secondAttribute="leading" constant="-1" id="h0i-Zc-2CQ"/>
                                     <constraint firstItem="2jV-Os-jYS" firstAttribute="bottom" secondItem="anP-6j-nQf" secondAttribute="bottom" id="j6C-r2-8DL"/>
@@ -2250,8 +2439,8 @@
                                 </constraints>
                             </imageView>
                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Xsu-U9-FC7">
-                                <rect key="frame" x="10" y="46.5" width="202" height="188"/>
-                                <string key="text">These are your hints. The orange button reveals the correct letter for the selected space. The pink button gives extra information about the selected phrase. Completing levels will gain you more hints.</string>
+                                <rect key="frame" x="10" y="46.5" width="202" height="167"/>
+                                <string key="text">This is your hint button which will give you extra information about the selected phrase. Be careful! Each hint will cost you 10 gems. Complete more levels to gain more gems.</string>
                                 <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
@@ -2270,7 +2459,7 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use the menu to modify game settings, get more hints, or return to the home screen." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cwF-FE-x0m">
+                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Use the menu to modify game settings, purchase more gems, or return to the home screen." textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cwF-FE-x0m">
                                 <rect key="frame" x="64" y="450" width="246" height="63"/>
                                 <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                 <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -2340,7 +2529,7 @@
                             <constraint firstItem="Wn2-n4-O1F" firstAttribute="top" secondItem="cEC-de-W0A" secondAttribute="bottom" constant="5" id="Et6-vl-SeV"/>
                             <constraint firstItem="5HK-MV-4Bb" firstAttribute="trailing" secondItem="1WR-0j-Sjf" secondAttribute="trailing" id="EvZ-rJ-VLM"/>
                             <constraint firstAttribute="trailing" secondItem="QvO-0V-rwb" secondAttribute="trailing" id="Gf7-VN-mJq"/>
-                            <constraint firstItem="Xsu-U9-FC7" firstAttribute="centerY" secondItem="aCC-9D-Kyq" secondAttribute="centerY" constant="40" id="HRY-t8-mgC"/>
+                            <constraint firstItem="Xsu-U9-FC7" firstAttribute="centerY" secondItem="aCC-9D-Kyq" secondAttribute="centerY" constant="30" id="HRY-t8-mgC"/>
                             <constraint firstItem="cwF-FE-x0m" firstAttribute="leading" secondItem="Ic6-W3-HGD" secondAttribute="leading" id="I9p-Vx-VXg"/>
                             <constraint firstItem="1pg-3J-CUF" firstAttribute="top" secondItem="NEQ-gs-OeF" secondAttribute="top" id="IYj-ky-lEh"/>
                             <constraint firstItem="3eP-Dy-RBW" firstAttribute="leading" secondItem="1WR-0j-Sjf" secondAttribute="leading" constant="5" id="IZA-Ht-do5"/>
@@ -3037,7 +3226,7 @@
                                         <rect key="frame" x="20" y="65" width="190" height="35"/>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
-                                        <state key="normal" title="3 Hints">
+                                        <state key="normal" title="30 Gems">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
@@ -3054,7 +3243,7 @@
                                         <rect key="frame" x="20" y="108" width="190" height="35"/>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
-                                        <state key="normal" title="10 Hints">
+                                        <state key="normal" title="100 Gems">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
@@ -3077,7 +3266,7 @@
                                         <rect key="frame" x="20" y="151" width="190" height="35"/>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
-                                        <state key="normal" title="30 Hints">
+                                        <state key="normal" title="300 Gems">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
@@ -3100,7 +3289,7 @@
                                         <rect key="frame" x="20" y="237" width="190" height="35"/>
                                         <color key="backgroundColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
-                                        <state key="normal" title="200 Hints">
+                                        <state key="normal" title="2000 Gems">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
@@ -3113,8 +3302,8 @@
                                         <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="BUY HINTS" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UIc-mZ-CP8">
-                                        <rect key="frame" x="71" y="15" width="129" height="40"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Buy Gems" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UIc-mZ-CP8">
+                                        <rect key="frame" x="79" y="15" width="113" height="40"/>
                                         <constraints>
                                             <constraint firstAttribute="height" constant="40" id="E2i-cO-dLp"/>
                                         </constraints>
@@ -3140,7 +3329,7 @@
                                         <rect key="frame" x="20" y="194" width="190" height="35"/>
                                         <color key="backgroundColor" red="0.0" green="0.47934520244598389" blue="0.99908632040023804" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
-                                        <state key="normal" title="75 Hints">
+                                        <state key="normal" title="750 Gems">
                                             <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         </state>
                                         <connections>
@@ -3442,7 +3631,7 @@
                                 <rect key="frame" x="25" y="109" width="270" height="350"/>
                                 <subviews>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="dcL-fn-8MQ" userLabel="Music Switch">
-                                        <rect key="frame" x="206" y="15" width="51" height="31"/>
+                                        <rect key="frame" x="206" y="19" width="51" height="31"/>
                                         <color key="onTintColor" red="0.37647058823529411" green="0.7803921568627451" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
@@ -3450,7 +3639,7 @@
                                         </connections>
                                     </switch>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vFx-nw-FBG" userLabel="Sound Effects Switch">
-                                        <rect key="frame" x="206" y="56" width="51" height="31"/>
+                                        <rect key="frame" x="206" y="68.5" width="51" height="31"/>
                                         <color key="onTintColor" red="0.37647058823529411" green="0.7803921568627451" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
@@ -3458,7 +3647,7 @@
                                         </connections>
                                     </switch>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Xp-21-HT5" userLabel="Timer Switch">
-                                        <rect key="frame" x="206" y="97.5" width="51" height="31"/>
+                                        <rect key="frame" x="206" y="118" width="51" height="31"/>
                                         <color key="onTintColor" red="0.37647058823529411" green="0.7803921568627451" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
@@ -3466,15 +3655,15 @@
                                         </connections>
                                     </switch>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tT4-xb-IXj" userLabel="Skip Filled Switch">
-                                        <rect key="frame" x="206" y="138" width="51" height="31"/>
+                                        <rect key="frame" x="206" y="166.5" width="51" height="31"/>
                                         <color key="onTintColor" red="0.37647058823529411" green="0.7803921568627451" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <action selector="skipFilledToggled:" destination="Ppb-1U-1o0" eventType="valueChanged" id="bxy-px-qSY"/>
                                         </connections>
                                     </switch>
-                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PGb-eY-8cZ" userLabel="Lock Correct Switch">
-                                        <rect key="frame" x="206" y="179" width="51" height="31"/>
+                                    <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="PGb-eY-8cZ" userLabel="Lock Correct Switch">
+                                        <rect key="frame" x="206" y="191.5" width="51" height="31"/>
                                         <color key="onTintColor" red="0.37647058823529411" green="0.7803921568627451" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
@@ -3482,7 +3671,7 @@
                                         </connections>
                                     </switch>
                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="xVN-9E-NrB" userLabel="Correct Animation Switch">
-                                        <rect key="frame" x="206" y="220" width="51" height="31"/>
+                                        <rect key="frame" x="206" y="216" width="51" height="31"/>
                                         <color key="onTintColor" red="0.37647058820000001" green="0.78039215689999997" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <color key="thumbTintColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
@@ -3493,37 +3682,37 @@
                                         <rect key="frame" x="15" y="10" width="167.5" height="246"/>
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Music" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z98-Pe-rFy">
-                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="41"/>
+                                                <rect key="frame" x="0.0" y="0.0" width="167.5" height="49"/>
                                                 <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                                 <color key="textColor" red="0.99864394430000003" green="0.99864394430000003" blue="0.99864394430000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sound Effects" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2AJ-Ra-50n">
-                                                <rect key="frame" x="0.0" y="41" width="167.5" height="41"/>
+                                                <rect key="frame" x="0.0" y="49" width="167.5" height="49.5"/>
                                                 <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                                 <color key="textColor" red="0.99864394430000003" green="0.99864394430000003" blue="0.99864394430000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Timer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DxJ-Ec-ORj">
-                                                <rect key="frame" x="0.0" y="82" width="167.5" height="41"/>
+                                                <rect key="frame" x="0.0" y="98.5" width="167.5" height="49"/>
                                                 <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                                 <color key="textColor" red="0.99864394430000003" green="0.99864394430000003" blue="0.99864394430000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Skip Filled Squares" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vfn-Cr-iI3">
-                                                <rect key="frame" x="0.0" y="123" width="167.5" height="41"/>
+                                                <rect key="frame" x="0.0" y="147.5" width="167.5" height="49.5"/>
                                                 <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                                 <color key="textColor" red="0.99864394430000003" green="0.99864394430000003" blue="0.99864394430000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lock Correct Answers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DVk-kM-fzF">
-                                                <rect key="frame" x="0.0" y="164" width="167.5" height="41"/>
+                                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Lock Correct Answers" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="DVk-kM-fzF">
+                                                <rect key="frame" x="0.0" y="197" width="167.5" height="0.0"/>
                                                 <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                                 <color key="textColor" red="0.99864394430000003" green="0.99864394430000003" blue="0.99864394430000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Correct Animation" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nVy-48-1ia" userLabel="Correct Answer Indicator">
-                                                <rect key="frame" x="0.0" y="205" width="167.5" height="41"/>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Correct Highlighting" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nVy-48-1ia" userLabel="Correct Answer Indicator">
+                                                <rect key="frame" x="0.0" y="197" width="167.5" height="49"/>
                                                 <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                                 <color key="textColor" red="0.99864394430000003" green="0.99864394430000003" blue="0.99864394430000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                 <nil key="highlightedColor"/>
@@ -3564,7 +3753,7 @@
                                             <constraint firstAttribute="height" constant="35" id="Xmh-Xa-JXR"/>
                                         </constraints>
                                         <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="15"/>
-                                        <state key="normal" title="Buy Hints">
+                                        <state key="normal" title="Buy Gems">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
@@ -3677,12 +3866,12 @@
         <image name="115714-512" width="512" height="512"/>
         <image name="Daily" width="2897" height="957"/>
         <image name="back_home" width="1687" height="608"/>
-        <image name="complete" width="1169" height="596"/>
+        <image name="complete" width="300" height="153"/>
         <image name="down_arrow" width="534" height="909"/>
         <image name="down_arrow2" width="913" height="536"/>
         <image name="erase arrow" width="459" height="459"/>
-        <image name="fill_square2-1" width="439" height="438"/>
         <image name="help1" width="2270" height="509"/>
+        <image name="hint_button" width="418" height="418"/>
         <image name="icons8-facebook-512 (1)" width="512" height="512"/>
         <image name="icons8-instagram-512" width="512" height="512"/>
         <image name="levels" width="5839" height="943"/>
@@ -3694,6 +3883,7 @@
         <image name="num_3" width="939" height="939"/>
         <image name="num_4" width="939" height="939"/>
         <image name="num_5" width="939" height="939"/>
+        <image name="one_reveal" width="418" height="418"/>
         <image name="play-1" width="3969" height="1041"/>
         <image name="settings" width="624" height="614"/>
         <image name="title" width="1621" height="642"/>
@@ -3701,6 +3891,6 @@
         <image name="up_arrow2" width="537" height="914"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="gz9-x0-X3G"/>
+        <segue reference="G09-md-MIA"/>
     </inferredMetricsTieBreakers>
 </document>

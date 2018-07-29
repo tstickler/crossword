@@ -9,7 +9,7 @@
 import UIKit
 import Firebase
 
-class HomeViewController: UIViewController {
+class HomeViewController: UIViewController, CAAnimationDelegate {
     var ref: DatabaseReference!
     @IBOutlet var homeTitleImage: UIImageView!
     @IBOutlet var playButton: UIButton!
@@ -69,6 +69,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         // Start these off hidden, they'll be animated in later
         homeTitleImage.alpha = 0
         playButton.alpha = 0
@@ -348,7 +349,7 @@ class HomeViewController: UIViewController {
             Settings.soundEffects = defaults.bool(forKey: "soundEffects")
             Settings.showTimer = defaults.bool(forKey: "showTimer")
             Settings.skipFilledSquares = defaults.bool(forKey: "skipFilledSquares")
-            Settings.lockCorrect = defaults.bool(forKey: "lockCorrect")
+            Settings.lockCorrect = true//defaults.bool(forKey: "lockCorrect")
             Settings.correctAnim = defaults.bool(forKey: "correctAnim")
             Settings.adsDisabled = defaults.bool(forKey: "adsDisabled")
             Settings.cheatCount = defaults.integer(forKey: "cheatCount")
@@ -356,6 +357,12 @@ class HomeViewController: UIViewController {
             Settings.gatheredData = defaults.bool(forKey: "gatheredData")
             Settings.highestDailyComplete = defaults.string(forKey: "highestDailyComplete")
             Settings.dailiesCompleted = defaults.integer(forKey: "dailiesCompleted")
+            
+            // Updated cheat count to gems
+            // Should only occur once, the first time app is loaded
+            if (!defaults.bool(forKey: "updatedToGems")) {
+                Settings.cheatCount *= 10
+            }
         } else {
             // If this is the user's first time, start all the settings as enabled.
             // This must happen because loading from defaults when there is no key associated
@@ -369,10 +376,11 @@ class HomeViewController: UIViewController {
             defaults.set(true, forKey: "skipFilledSquares")
             defaults.set(true, forKey: "lockCorrect")
             defaults.set(true, forKey: "correctAnim")
+            defaults.set(true, forKey: "updatedToGems")
             
             defaults.set(false, forKey: "adsDisabled")
                         
-            Settings.cheatCount = 10
+            Settings.cheatCount = 100
             defaults.set(Settings.cheatCount, forKey: "cheatCount")
             
             Settings.userLevel = 1
@@ -461,10 +469,11 @@ class HomeViewController: UIViewController {
             self.internetLabel.text = ""
             self.defaults.set(true, forKey: "gatheredData")
             
-            UIView.animate(withDuration: 1.0, animations: {
+            UIView.animate(withDuration:0.25, animations: {
                 self.cover.alpha = 0
-                self.animateLoadIn()
             })
+            
+            self.animateLoadIn()
         })
     }
     

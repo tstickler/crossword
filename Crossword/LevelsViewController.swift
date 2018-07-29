@@ -60,37 +60,41 @@ class LevelsViewController: UIViewController {
     }
     
     @IBAction func nextLevelsTapped(_ sender: Any) {
-        // Move the stacks left
-        firstStackCenterX.constant += -view.frame.width
-        
-        // pageNum determines what arrows should be shown
-        pageNum! += 1
-        backLevels.isHidden = false
-        if pageNum == maxNumOfPages {
-            nextLevels.isHidden = true
+        if pageNum < maxNumOfPages {
+            // Move the stacks left
+            firstStackCenterX.constant += -view.frame.width
+            
+            // pageNum determines what arrows should be shown
+            pageNum! += 1
+            backLevels.isHidden = false
+            if pageNum == maxNumOfPages {
+                nextLevels.isHidden = true
+            }
+            
+            // Animate the switch between level pages
+            UIView.animate(withDuration: 0.25, animations: {
+                self.view.layoutIfNeeded()
+            })
         }
-        
-        // Animate the switch between level pages
-        UIView.animate(withDuration: 0.25, animations: {
-            self.view.layoutIfNeeded()
-        })
     }
     
     @IBAction func previousLevelsTapped(_ sender: Any) {
-        // Move the stacks right
-        firstStackCenterX.constant += view.frame.width
-        
-        // pageNum determines what arrows should be shown
-        pageNum! -= 1
-        nextLevels.isHidden = false
-        if pageNum == 1 {
-            backLevels.isHidden = true
+        if pageNum > 1 {
+            // Move the stacks right
+            firstStackCenterX.constant += view.frame.width
+            
+            // pageNum determines what arrows should be shown
+            pageNum! -= 1
+            nextLevels.isHidden = false
+            if pageNum == 1 {
+                backLevels.isHidden = true
+            }
+            
+            // Animate the switch between level pages
+            UIView.animate(withDuration: 0.25, animations: {
+                self.view.layoutIfNeeded()
+            })
         }
-        
-        // Animate the switch between level pages
-        UIView.animate(withDuration: 0.25, animations: {
-            self.view.layoutIfNeeded()
-        })
     }
     
     @IBAction func backHomeTapped(_ sender: Any) {
@@ -100,55 +104,14 @@ class LevelsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Set how big the level should display depending on the user device
-        switch UIScreen.main.bounds.height {
-        case 568:
-            firstStackWidth.constant = 220
-            backHomeWidth.constant = 70
-        case 667:
-            firstStackWidth.constant = 260
-            backHomeWidth.constant = 75
-        case 736:
-            firstStackWidth.constant = 280
-            backHomeWidth.constant = 80
-        case 812:
-            firstStackWidth.constant = 260
-            backHomeWidth.constant = 80
-        default:
-            firstStackWidth.constant = 350
-            backHomeWidth.constant = 100
-        }
+        // Swipes will move level pages
+        addSwipeFunctionality()
         
-        // Page num is which level stack is displayed
-        pageNum = 1
-        backLevels.isHidden = true
-        nextLevels.isHidden = true
+        // Construct UI to be interacted with
+        setUpLevelUI()
         
-        for i in 1..<Settings.maxNumOfLevels {
-            if i % 12 == 0 {
-                createNewLevelsStack(tagStart: i, numOfPages: CGFloat(maxNumOfPages))
-                maxNumOfPages += 1
-            }
-        }
-        
-        if maxNumOfPages > 1 {
-            nextLevels.isHidden = false
-        }
-        
+        // Sets up completed levels, locked levels, new levels, and available levels
         setUpLevelStatusArrays()
-        
-        // Set the images for each level button
-        for i in 0...Settings.maxNumOfLevels - 1 {
-            levelButtons[i].setBackgroundImage(UIImage(named: "num_\(i+1)"), for: .normal)
-            levelButtons[i].layer.backgroundColor = UIColor.clear.cgColor
-            levelButtons[i].setTitle(nil, for: .normal)
-            levelButtons[i].alpha = 1.0
-            levelButtons[i].isEnabled = true
-        }
-        
-        for level in Settings.newLevels {
-            levelButtons[level - 1].setNewIndicator("level")
-        }
 
         // Possible emojis that will randomly fall from the top (160 to choose from)
         emojisToChoose = ["😄", "😇", "😂", "🤣", "🙂", "🙃", "😍", "😘", "😋", "😜",
@@ -167,6 +130,8 @@ class LevelsViewController: UIViewController {
                           "🎨", "🎤", "🎷", "🎳", "🚗", "✈️", "🚀", "🗽", "🏝", "📱",
                           "📸", "☎️", "💡", "💵", "💎", "💣", "🔮", "🔑", "✉️", "❤️",
                           "💔", "💘", "⚠️", "🌀", "🃏", "🤞🏻", "👏🏼", "👌🏻", "👉🏼", "👍🏻"]
+        
+
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -196,6 +161,8 @@ class LevelsViewController: UIViewController {
         }
         
         addProgressBar()
+        
+
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -222,6 +189,23 @@ class LevelsViewController: UIViewController {
         transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
         transition.type = kCATransitionFade
         self.navigationController?.view.layer.add(transition, forKey: nil)
+    }
+    
+    //var animationBegan = false
+    override func viewDidLayoutSubviews() {
+        // Animate the next levels button
+        // Not sure if should be implemented
+//        if !animationBegan {
+//            let animationNL = CABasicAnimation(keyPath: "position")
+//            animationNL.duration = 0.75
+//            animationNL.repeatCount = .infinity
+//            animationNL.autoreverses = true
+//            animationNL.fromValue = CGPoint(x: nextLevels.center.x - 4, y: nextLevels.center.y)
+//            animationNL.toValue = CGPoint(x: nextLevels.center.x + 4, y: nextLevels.center.y)
+//
+//            nextLevels.layer.add(animationNL, forKey: "position")
+//            animationBegan = true
+//        }
     }
     
     @objc func update() {
@@ -487,5 +471,66 @@ class LevelsViewController: UIViewController {
             return levelsCompleted
         }
     
+    }
+    
+    func addSwipeFunctionality() {
+        let rightSwipe = UISwipeGestureRecognizer(target: self, action: #selector(previousLevelsTapped))
+        rightSwipe.direction = .right
+        
+        let leftSwipe = UISwipeGestureRecognizer(target: self, action: #selector(nextLevelsTapped))
+        leftSwipe.direction = .left
+        
+        view.addGestureRecognizer(rightSwipe)
+        view.addGestureRecognizer(leftSwipe)
+    }
+    
+    func setUpLevelUI() {
+        // Set how big the level should display depending on the user device
+        switch UIScreen.main.bounds.height {
+        case 568:
+            firstStackWidth.constant = 220
+            backHomeWidth.constant = 70
+        case 667:
+            firstStackWidth.constant = 260
+            backHomeWidth.constant = 75
+        case 736:
+            firstStackWidth.constant = 280
+            backHomeWidth.constant = 80
+        case 812:
+            firstStackWidth.constant = 260
+            backHomeWidth.constant = 80
+        default:
+            firstStackWidth.constant = 350
+            backHomeWidth.constant = 100
+        }
+        
+        // Page num is which level stack is displayed
+        pageNum = 1
+        backLevels.isHidden = true
+        nextLevels.isHidden = true
+        
+        for i in 1..<Settings.maxNumOfLevels {
+            if i % 12 == 0 {
+                createNewLevelsStack(tagStart: i, numOfPages: CGFloat(maxNumOfPages))
+                maxNumOfPages += 1
+            }
+        }
+        
+        if maxNumOfPages > 1 {
+            nextLevels.isHidden = false
+        }
+        
+        // Set the images for each level button
+        for i in 0...Settings.maxNumOfLevels - 1 {
+            levelButtons[i].setBackgroundImage(UIImage(named: "num_\(i+1)"), for: .normal)
+            levelButtons[i].layer.backgroundColor = UIColor.clear.cgColor
+            levelButtons[i].setTitle(nil, for: .normal)
+            levelButtons[i].alpha = 1.0
+            levelButtons[i].isEnabled = true
+        }
+        
+        for level in Settings.newLevels {
+            levelButtons[level - 1].setNewIndicator("level")
+        }
     }
 }

@@ -276,6 +276,11 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 continue
             }
         }
+        
+        if Settings.cheatCount == 0 {
+            fillSquareButton.setImage(UIImage(named: "one_reveal_disabled.png"), for: .normal)
+            hintButton.setImage(UIImage(named: "hint_disabled.png"), for: .normal)
+        }
     }
     
     func clueAreaSetup() {
@@ -283,7 +288,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         clueLabel.layer.masksToBounds = true
         clueLabel.layer.borderWidth = 5
         clueLabel.layer.cornerRadius = 10
-        clueLabel.layer.borderColor = blueColorCG
         
         nextPhraseButton.layer.borderWidth = 1
         nextPhraseButton.layer.cornerRadius = 4
@@ -295,16 +299,14 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         backPhraseButton.layer.borderColor = UIColor.white.cgColor
         backPhraseButton.setTitleColor(blueColor, for: .normal)
         
-        hintButton.layer.cornerRadius = 5
-        hintButton.layer.backgroundColor = redColorCG
+        hintButton.layer.cornerRadius = 1
         
         hintButton.titleLabel!.numberOfLines = 1
         hintButton.titleLabel?.minimumScaleFactor = 0.5
         hintButton.titleLabel!.adjustsFontSizeToFitWidth = true
         hintButton.titleLabel!.baselineAdjustment = .alignCenters
-        
-        fillSquareButton.layer.cornerRadius = 5
-        fillSquareButton.layer.backgroundColor = orangeColorCG
+        cheatCountLabel.sizeToFit()
+        fillSquareButton.layer.cornerRadius = 1
         
         hintEnabledButton.layer.cornerRadius = 14
         if UIDevice.current.model == "iPad" {
@@ -314,7 +316,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
         hintEnabledButton.layer.borderColor = UIColor.black.cgColor
         hintEnabledButton.layer.borderWidth = 0
-        
+
         cheatCountLabel.text = String(Settings.cheatCount)
 
         if Settings.userLevel! >= 1000 {
@@ -488,22 +490,33 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             hintEnabledButton.isHidden = false
             hintEnabledButton.isEnabled = true
             
-            hintButton.backgroundColor = .gray
+            hintButton.setImage(UIImage(named: "hint_disabled.png"), for: .normal)
             hintButton.isEnabled = false
         } else {
-            hintButton.backgroundColor = UIColor(cgColor: redColorCG)
             hintEnabledButton.isHidden = true
             hintEnabledButton.isEnabled = false
             
+            hintButton.setImage(UIImage(named: "hint_button.png"), for: .normal)
             hintButton.isEnabled = true
         }
         
         if buttonRevealedByHelper[indexOfButton] {
             fillSquareButton.isEnabled = false
-            fillSquareButton.backgroundColor = .gray
+            fillSquareButton.setImage(UIImage(named: "one_reveal_disabled.png"), for: .normal)
         } else {
-            fillSquareButton.backgroundColor = UIColor(cgColor: orangeColorCG)
+            fillSquareButton.setImage(UIImage(named: "one_reveal.png"), for: .normal)
             fillSquareButton.isEnabled = true
+        }
+        
+        if Settings.cheatCount == 0 {
+            fillSquareButton.setImage(UIImage(named: "one_reveal_disabled.png"), for: .normal)
+            hintButton.setImage(UIImage(named: "hint_disabled.png"), for: .normal)
+        }
+        
+        if (correctAnswerEntered() && Settings.correctAnim) {
+            clueLabel.layer.borderColor = greenColorCG
+        } else {
+            clueLabel.layer.borderColor = blueColorCG
         }
         
         // Allows us to look back one to see what the last press was
@@ -914,16 +927,16 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         // Display the button on the clue area to allow the user to reopen the hint view
         hintEnabledButton.isEnabled = true
         hintEnabledButton.isHidden = false
-        hintButton.backgroundColor = .gray
+        hintButton.setImage(UIImage(named: "hint_disabled.png"), for: .normal)
         
         // Remove a cheat and save to defaults
-        Settings.cheatCount -= 1
+        Settings.cheatCount -= 10
         defaults.set(Settings.cheatCount, forKey: "cheatCount")
         
         // If the user is out of cheats, gray out the buttons
         if Settings.cheatCount == 0 {
-            fillSquareButton.backgroundColor = .gray
-            hintButton.backgroundColor = .gray
+            fillSquareButton.setImage(UIImage(named: "one_reveal_disabled.png"), for: .normal)
+            hintButton.setImage(UIImage(named: "hint_disabled.png"), for: .normal)
         }
         
         // Update the cheatlabel
@@ -960,12 +973,12 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         boardSpaces[indexOfButton].backgroundColor = UIColor.init(cgColor: orangeColorCG)
         
         // Remove a cheat and save to defaults
-        Settings.cheatCount -= 1
+        Settings.cheatCount -= 10
         defaults.set(Settings.cheatCount, forKey: "cheatCount")
         
         if Settings.cheatCount == 0 {
-            fillSquareButton.backgroundColor = .gray
-            hintButton.backgroundColor = .gray
+            fillSquareButton.setImage(UIImage(named: "one_reveal_disabled.png"), for: .normal)
+            hintButton.setImage(UIImage(named: "hint_disabled.png"), for: .normal)
         }
         
         // Update the cheatlabel
@@ -975,6 +988,15 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         if correctAnswerEntered() {
             if Settings.correctAnim {
                 highlightCorrectAnswer(withDuration: 0.45)
+                
+                // Should only play correct sound effect if 3 conditions are met
+                // 1. All squares are not filled
+                // 2. Sound effects are enabled
+                // 3. Correct animations are enabled (If user has turned off the animation,
+                //    they most likely don't want confirmation at all of any right answers)
+                if !allSquaresFilled() && Settings.soundEffects {
+                    MusicPlayer.start(musicTitle: "correct", ext: "mp3")
+                }
             }
             
             checkAdProgress()
@@ -991,6 +1013,15 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
             if correctAnswerEntered() {
                 highlightCorrectAnswer(withDuration: 0.45)
+                
+                // Should only play correct sound effect if 3 conditions are met
+                // 1. All squares are not filled
+                // 2. Sound effects are enabled
+                // 3. Correct animations are enabled (If user has turned off the animation,
+                //    they most likely don't want confirmation at all of any right answers)
+                if !allSquaresFilled() && Settings.soundEffects {
+                    MusicPlayer.start(musicTitle: "correct", ext: "mp3")
+                }
                 
                 checkAdProgress()
             }
@@ -1072,7 +1103,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         removeView()
         tappedButton = sender
 
-
         // Gathers button location relative to the entire view
         var f = CGRect(x: 0, y: 0, width: 0, height: 0)
         switch sender.tag {
@@ -1085,10 +1115,10 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         default:
             return
         }
-        
+
         let buttonX = f.origin.x
         let buttonY = f.origin.y
-                
+
         // Create a pop up over the tapped button
         let popUp = UIView(frame: CGRect(x: buttonX - 7.5, y: buttonY - f.height - 10, width: f.width + 15, height: f.height + 30))
         popUp.layer.cornerRadius = sender.layer.cornerRadius
@@ -1099,7 +1129,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         popUp.layer.shadowRadius = sender.layer.cornerRadius
         popUp.layer.shadowPath = UIBezierPath(rect: popUp.bounds).cgPath
         view.addSubview(popUp)
-        
+
         // Add letter to the view equal to the button pressed
         let popUpTitle = UILabel(frame: CGRect(x: 0, y: -5, width: popUp.frame.width, height: popUp.frame.height))
         popUpTitle.textAlignment = .center
@@ -1108,13 +1138,13 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         popUpTitle.text = sender.title(for: .normal)
         popUp.addSubview(popUpTitle)
         sender.setTitleColor(.black, for: .normal)
-        
+
         // Invisible view to block the user from tapping multiple buttons in the keyboard area
         // Will be removed on touchUpInside or touchDragExit
         let keyBlocker = UIView(frame: CGRect(x: 0, y: (screenSize.height - (screenSize.height * 0.25)), width: screenSize.width, height: screenSize.height * 0.25))
         keyBlocker.backgroundColor = .clear
         view.addSubview(keyBlocker)
-        
+
         keyBlockerToRemove = keyBlocker
         popUpToRemove = popUp
     }
@@ -1215,6 +1245,15 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         if correctAnswerEntered() {
             if Settings.correctAnim {
                 highlightCorrectAnswer(withDuration: 0.45)
+                
+                // Should only play correct sound effect if 3 conditions are met
+                // 1. All squares are not filled
+                // 2. Sound effects are enabled
+                // 3. Correct animations are enabled (If user has turned off the animation,
+                //    they most likely don't want confirmation at all of any right answers)
+                if !allSquaresFilled() && Settings.soundEffects {
+                    MusicPlayer.start(musicTitle: "correct", ext: "mp3")
+                }
 
                 // We also need to check if correct answer was entered at an intersection.
                 // This occurs when one letter of across is left and one letter of down is left.
@@ -1226,6 +1265,15 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                     (!across && buttonAcrossArray[indexOfButton] != "00a") {
                     boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
                     if correctAnswerEntered() {
+                        // Should only play correct sound effect if 3 conditions are met
+                        // 1. All squares are not filled
+                        // 2. Sound effects are enabled
+                        // 3. Correct animations are enabled (If user has turned off the animation,
+                        //    they most likely don't want confirmation at all of any right answers)
+                        if !allSquaresFilled() && Settings.soundEffects {
+                            MusicPlayer.start(musicTitle: "correct", ext: "mp3")
+                        }
+                        
                         highlightCorrectAnswer(withDuration: 0.45)
                     }
                     
@@ -1314,6 +1362,15 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             // See if that direction is correct and highlight if it is
             if correctAnswerEntered() && Settings.correctAnim {
                 highlightCorrectAnswer(withDuration: 0.45)
+                
+                // Should only play correct sound effect if 3 conditions are met
+                // 1. All squares are not filled
+                // 2. Sound effects are enabled
+                // 3. Correct animations are enabled (If user has turned off the animation,
+                //    they most likely don't want confirmation at all of any right answers)
+                if !allSquaresFilled() && Settings.soundEffects {
+                    MusicPlayer.start(musicTitle: "correct", ext: "mp3")
+                }
             }
             
             // Go back to the original direction
@@ -1381,15 +1438,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             buttonLockedForCorrect[space] = true
             defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel!)_lockedCorrect")
         }
-        
-        // Should only play correct sound effect if 3 conditions are met
-        // 1. All squares are not filled
-        // 2. Sound effects are enabled
-        // 3. Correct animations are enabled (If user has turned off the animation,
-        //    they most likely don't want confirmation at all of any right answers)
-        if !allSquaresFilled() && Settings.soundEffects && Settings.correctAnim {
-            MusicPlayer.start(musicTitle: "correct", ext: "mp3")
-        }
+    
         return true
     }
     
@@ -1911,7 +1960,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             pulse.repeatCount = .infinity
             pulse.fromValue = 1
             pulse.toValue = 1.25
-            self.boardSpaces[atSquare].layer.add(pulse, forKey: "")
+            self.boardSpaces[atSquare].layer.add(pulse, forKey: "pulse")
             boardSpaces[atSquare].layer.zPosition = 1000
             
             // Make sure that the pulsing button always grows above the others
@@ -1931,6 +1980,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             
             // Sets the properties of the border
             border.frame = boardSpaces[i].bounds
+            border.name = "correctBorder"
 
             // Width is 0 since we don't want a border left over after the animation
             border.lineWidth = 0
@@ -1946,8 +1996,9 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             animation.fromValue = 0
             animation.toValue = 5
             animation.autoreverses = true
-            border.add(animation, forKey: "")
+            border.add(animation, forKey: "correct")
             border.zPosition = 1000
+            boardSpaces[i].rotate360Degrees(duration: amount)
         }
     }
     
@@ -2154,7 +2205,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         // previousButton is only < 0 during initial highlighting. This prevents
         // animation from being removed when we actually want it.
         if indexOfButton != previousButton && previousButton >= 0 {
-            boardSpaces[previousButton].layer.removeAllAnimations()
+            boardSpaces[previousButton].layer.removeAnimation(forKey: "pulse")
+            boardSpaces[previousButton].layer.removeAnimation(forKey: "correct")
         }
         
         // Converts the board spaces to a set to make all entries unique, then back to an array
@@ -2256,7 +2308,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     
     func animateGameStart() {
         for i in 0...168 {
-            // Sets randomly where each button will start
+            // FLY IN ANIMATION
             let randomDirection = arc4random_uniform(4)
             let randomModifier = (CGFloat(arc4random_uniform(101)) / 50) - 1
             switch randomDirection {
@@ -2271,14 +2323,13 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                     boardSpaces[i].frame.origin.x += view.frame.width * randomModifier
                 case 3:
                     boardSpaces[i].frame.origin.x -= view.frame.width
-                    boardSpaces[i].frame.origin.y += view.frame.height * randomModifier
                 default:
                     print("Error")
             }
-            
+
             // Generate a speed between 1.0 and 1.5 seconds
             let randomSpeed = Double(arc4random_uniform(200) + 51) / 100.0
-            
+
             UIView.animate(withDuration: randomSpeed,
                            delay: 0,
                            usingSpringWithDamping: 0.95,
@@ -2301,13 +2352,9 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 default:
                     print("Error")
                 }
-            }, completion: {
-                Void in
-
             })
         }
     }
-    
     
      /*****************************************
      *                                        *
@@ -2488,7 +2535,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             for i in 0...168 {
                 if buttonRevealedByHelper[i] == true {
                     // Set the background to indicate a cheat was used at that square
-                    boardSpaces[i].backgroundColor = UIColor.init(cgColor: orangeColorCG)
+                    // boardSpaces[i].backgroundColor = UIColor.init(cgColor: orangeColorCG)
                     if buttonTitleArray[i] == "" {
                         // Set the title equal to the correct answer
                         boardSpaces[i].setTitleWithOutAnimation(title: String(buttonLetterArray[i]).uppercased())
@@ -2518,6 +2565,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 buttonRevealedByHelper[i] = true
             }
         }
+
     }
     
     func resetDefaults(_ forLevel: Int) {
@@ -2588,7 +2636,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 transition.timingFunction = CAMediaTimingFunction(name: kCAMediaTimingFunctionEaseInEaseOut)
                 transition.type = kCATransitionFade
                 self.navigationController?.view.layer.add(transition, forKey: nil)
-                
                 self.navigationController?.pushViewController(vc, animated: false)
                 self.navigationController?.viewControllers.remove(at: (navigationController?.viewControllers.count)! - 2)
 
@@ -2852,7 +2899,16 @@ extension UIView {
         rotateAnimation.toValue = CGFloat(Double.pi * 2)
         rotateAnimation.isRemovedOnCompletion = false
         rotateAnimation.duration = duration
-        rotateAnimation.repeatCount = .infinity
+        rotateAnimation.repeatCount = 0
         self.layer.add(rotateAnimation, forKey: nil)
+    }
+    
+    func grow(duration: CFTimeInterval) {
+        let pulse = CABasicAnimation(keyPath: "transform.scale")
+        pulse.duration = duration
+        pulse.repeatCount = 0
+        pulse.fromValue = 0
+        pulse.toValue = 1
+        self.layer.add(pulse, forKey: nil)
     }
 }

@@ -113,27 +113,21 @@ class InAppPurchase: NSObject {
         // Handles the purchase and gives the user what they bought
         switch purchase {
         case IAP.ThreeHints.rawValue:
-            print("Purchased 3 hints")
-            Settings.cheatCount += 3
-            defaults.set(Settings.cheatCount, forKey: "cheatCount")
-        case IAP.TenHints.rawValue:
-            print("Purchased 10 hints")
-            Settings.cheatCount += 10
-            defaults.set(Settings.cheatCount, forKey: "cheatCount")
-        case IAP.ThirtyHints.rawValue:
-            print("Purchased 30 hints")
             Settings.cheatCount += 30
             defaults.set(Settings.cheatCount, forKey: "cheatCount")
+        case IAP.TenHints.rawValue:
+            Settings.cheatCount += 100
+            defaults.set(Settings.cheatCount, forKey: "cheatCount")
+        case IAP.ThirtyHints.rawValue:
+            Settings.cheatCount += 300
+            defaults.set(Settings.cheatCount, forKey: "cheatCount")
         case IAP.SeventyfiveHints.rawValue:
-            print("Purchased 75 hints")
-            Settings.cheatCount += 75
+            Settings.cheatCount += 750
             defaults.set(Settings.cheatCount, forKey: "cheatCount")
         case IAP.TwohundredHints.rawValue:
-            print("Purchased 200 hints")
-            Settings.cheatCount += 200
+            Settings.cheatCount += 2000
             defaults.set(Settings.cheatCount, forKey: "cheatCount")
         case IAP.RemoveAds.rawValue:
-            print("Purchased/Restored remove ads")
             Settings.adsDisabled = true
             defaults.set(Settings.adsDisabled, forKey: "adsDisabled")
         default:
