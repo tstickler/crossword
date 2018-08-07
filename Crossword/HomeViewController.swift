@@ -10,7 +10,6 @@ import UIKit
 import Firebase
 
 class HomeViewController: UIViewController, CAAnimationDelegate {
-    var ref: DatabaseReference!
     @IBOutlet var homeTitleImage: UIImageView!
     @IBOutlet var playButton: UIButton!
     @IBOutlet var dailyButton: LevelButton!
@@ -95,16 +94,17 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
         }
         
         // Loads master from firebase
-        ref = Database.database().reference()
-        ref.keepSynced(true)
+        Settings.ref = Database.database().reference()
+        Settings.ref.keepSynced(true)
         
         // Wrapping read inside a write block forces reading from the database prior to cache
         if ReachabilityTest.isConnectedToNetwork() {
             // Wrapping the read in a write block allows us to grab the most
             // recent data from firebase before looking at the cache
-            ref.child("a").setValue("b") { (error, afb) in
+            Settings.ref.child("a").setValue("b") { (error, afb) in
                 self.readFromFirebase()
             }
+        
         } else {
             // If there is no internet, just perform read which will grab from cache
             readFromFirebase()
@@ -135,8 +135,6 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
                           "🎨", "🎤", "🎷", "🎳", "🚗", "✈️", "🚀", "🗽", "🏝", "📱",
                           "📸", "☎️", "💡", "💵", "💎", "💣", "🔮", "🔑", "✉️", "❤️",
                           "💔", "💘", "⚠️", "🌀", "🃏", "🤞🏻", "👏🏼", "👌🏻", "👉🏼", "👍🏻"]
-        
-        dailyButton.setNewIndicator("daily")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -185,7 +183,7 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
     }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        ref.removeAllObservers()
+        Settings.ref.removeAllObservers()
         
         // Remove the labels
         for lab in labels {
@@ -362,6 +360,8 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             // Should only occur once, the first time app is loaded
             if (!defaults.bool(forKey: "updatedToGems")) {
                 Settings.cheatCount *= 10
+                defaults.set(Settings.cheatCount, forKey: "cheatCount")
+                defaults.set(true, forKey: "updatedToGems")
             }
         } else {
             // If this is the user's first time, start all the settings as enabled.
@@ -377,6 +377,7 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             defaults.set(true, forKey: "lockCorrect")
             defaults.set(true, forKey: "correctAnim")
             defaults.set(true, forKey: "updatedToGems")
+            defaults.set(1, forKey: "notificationNum")
             
             defaults.set(false, forKey: "adsDisabled")
                         
@@ -398,6 +399,34 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             Settings.adsDisabled = false
             Settings.gatheredData = false
         }
+        
+        // Create a unique identifier for the user
+        var identifier = defaults.string(forKey: "uniqueID")
+        if identifier == nil {
+            identifier = "i-"
+            for _ in 0..<12 {
+                // Determine if letter or number should be added to the identifier
+                let number = arc4random_uniform(2)
+                
+                // Case 0: append a number 0-9 to identifier
+                // Case 1: append a letter A-Z to identifier
+                if number == 0 {
+                    let num = arc4random_uniform(9) + 1
+                    identifier?.append("\(num)")
+                } else {
+                    let startingValue = Int(("A" as UnicodeScalar).value) // 65
+                    let c = Character(UnicodeScalar(Int(arc4random_uniform(26)) + startingValue)!)
+                    identifier?.append(c)
+                }
+                
+                // Add a - after every 4 characters in the identifier
+                if identifier?.count == 6 || identifier?.count == 11  {
+                    identifier?.append("-")
+                }
+            }
+            defaults.set(identifier!, forKey: "uniqueID")
+        }
+        Settings.uniqueID = identifier!
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -412,7 +441,27 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
     }
     
     func readFromFirebase() {
-        ref.observe(.value, with: { (snap) in
+        Settings.ref.child("cheats").child(Settings.uniqueID).observeSingleEvent(of: .value, with: { (snap) in
+            let cheatValue = snap.value as? String
+            
+            // Allows remote changing the cheat count from the database
+            // Prefixing a 'u' onto a value in the database means it should be updated
+            if cheatValue != nil && cheatValue![cheatValue!.startIndex] == "u" {
+                // Grab the actual cheat count
+                let startIndex = cheatValue!.index(cheatValue!.startIndex, offsetBy: 2)
+                let endIndex = cheatValue!.endIndex
+                let range = startIndex..<endIndex
+                
+                // Record the new cheat count
+                Settings.cheatCount = Int(String(cheatValue![range]))!
+                self.defaults.set(Settings.cheatCount, forKey: "cheatCount")
+            }
+            
+            // Write back to the database the current user cheat count
+            Settings.ref.child("userStats").child("cheats").child(Settings.uniqueID).setValue("\(Settings.cheatCount)")
+        })
+        
+        Settings.ref.child("toRead").observe(.value, with: { (snap) in
             // Everything from the firebase
             let everything = snap.value as! Dictionary<String, Any>
             
@@ -463,6 +512,9 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             for daily in dailies {
                 Settings.dailies.append(daily)
             }
+            
+            // Write back to the database the current user cheat count
+            Settings.ref.child("userStats").child("completedLevels").child(Settings.uniqueID).setValue(Settings.completedLevels.count)
             
             self.wheel.hidesWhenStopped = true
             self.wheel.stopAnimating()

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Firebase
 
 class Settings {
     // Settings the user can modify to their preferences
@@ -29,6 +30,8 @@ class Settings {
     static var highestDailyComplete: String!
     static var today: String!
     static var dailiesCompleted: Int!
+    static var uniqueID: String!
+    static var ref: DatabaseReference!
     
     static var master = [Dictionary<String, String>]()
     static var levels = [Dictionary<String, Dictionary<String, String>>]()

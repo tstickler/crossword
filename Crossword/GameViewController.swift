@@ -133,7 +133,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     // Ad
     var interstitialAd: GADInterstitial!
     var shouldShowAdCounter = 0
-    var showAdAfterNumCorrect = 5
+    var showAdAfterNumCorrect = 3
     var inGame = false
     
     // Help labels, dimmers, and buttons

@@ -4,6 +4,9 @@
 target 'Crossword' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
   use_frameworks!
+  
+  # ignore all warnings from all pods
+  inhibit_all_warnings!
 
   # Pods for Crossword
 	pod 'Firebase/Core'
@@ -13,6 +16,8 @@ target 'Crossword' do
 	pod 'FacebookCore'
 	pod 'FacebookLogin'
 	pod 'FacebookShare'
+    pod 'Fabric', '~> 1.7.9'
+    pod 'Crashlytics', '~> 3.10.5'
 
   target 'CrosswordTests' do
     inherit! :search_paths

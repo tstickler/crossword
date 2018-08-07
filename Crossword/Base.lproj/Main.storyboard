@@ -442,10 +442,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OWY-Z2-TUi">
-                                <rect key="frame" x="25" y="134" width="270" height="300"/>
+                                <rect key="frame" x="25" y="119" width="270" height="330"/>
                                 <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="User ID:" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NZF-xu-IZo">
+                                        <rect key="frame" x="10" y="253" width="250" height="21"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="D22-Zm-Nv3">
-                                        <rect key="frame" x="5" y="271" width="260" height="21"/>
+                                        <rect key="frame" x="5" y="301" width="260" height="21"/>
                                         <string key="text">www.soundimage.org
 
 </string>
@@ -469,23 +475,13 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Music and sound by Eric Matyas" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0YM-Tp-Fns">
-                                        <rect key="frame" x="5" y="249" width="260" height="21"/>
+                                        <rect key="frame" x="5" y="279" width="260" height="21"/>
                                         <fontDescription key="fontDescription" name="GeezaPro" family="Geeza Pro" pointSize="17"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L2j-MB-HDg">
-                                        <rect key="frame" x="65.5" y="204" width="139" height="35"/>
-                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
-                                        <state key="normal" title="Restore Purchases">
-                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="restorePurchasesTapped:" destination="dOf-1j-VPJ" eventType="touchUpInside" id="KBW-lu-PrD"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7J4-0S-yOr">
-                                        <rect key="frame" x="40" y="136" width="64" height="64"/>
+                                        <rect key="frame" x="40" y="140" width="64" height="64"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="64" id="7Am-zt-WXo"/>
                                             <constraint firstAttribute="height" constant="64" id="lUr-p2-mf4"/>
@@ -496,7 +492,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="eyT-kw-vH2">
-                                        <rect key="frame" x="103" y="136" width="64" height="64"/>
+                                        <rect key="frame" x="103" y="140" width="64" height="64"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="64" id="EaB-JE-jOs"/>
                                             <constraint firstAttribute="height" constant="64" id="ziI-EN-e7I"/>
@@ -507,7 +503,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Au1-mh-lkP">
-                                        <rect key="frame" x="175" y="136" width="55" height="64"/>
+                                        <rect key="frame" x="175" y="140" width="55" height="64"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="55" id="9xE-MA-SSb"/>
                                             <constraint firstAttribute="height" constant="64" id="KLW-ew-6yM"/>
@@ -517,11 +513,22 @@
                                             <action selector="mailButtonTapped:" destination="dOf-1j-VPJ" eventType="touchUpInside" id="SKP-CR-De3"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="L2j-MB-HDg">
+                                        <rect key="frame" x="66" y="208" width="139" height="35"/>
+                                        <fontDescription key="fontDescription" name="Futura-Medium" family="Futura" pointSize="17"/>
+                                        <state key="normal" title="Restore Purchases">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="restorePurchasesTapped:" destination="dOf-1j-VPJ" eventType="touchUpInside" id="KBW-lu-PrD"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="wYI-Ds-MXm" secondAttribute="trailing" constant="45" id="4Xv-Do-roY"/>
                                     <constraint firstItem="eyT-kw-vH2" firstAttribute="centerX" secondItem="OWY-Z2-TUi" secondAttribute="centerX" id="5tv-ZQ-7ui"/>
+                                    <constraint firstItem="NZF-xu-IZo" firstAttribute="leading" secondItem="0YM-Tp-Fns" secondAttribute="leading" constant="5" id="6JT-8i-WuE"/>
                                     <constraint firstAttribute="width" constant="270" id="98J-Ul-iJx"/>
                                     <constraint firstItem="47t-mb-vbM" firstAttribute="trailing" secondItem="wYI-Ds-MXm" secondAttribute="trailing" id="BMk-gh-WOe"/>
                                     <constraint firstItem="D22-Zm-Nv3" firstAttribute="top" secondItem="0YM-Tp-Fns" secondAttribute="bottom" constant="1" id="Eeh-1g-anZ"/>
@@ -529,7 +536,9 @@
                                     <constraint firstItem="L2j-MB-HDg" firstAttribute="top" secondItem="Au1-mh-lkP" secondAttribute="bottom" constant="4" id="GtJ-3l-c1q"/>
                                     <constraint firstItem="7J4-0S-yOr" firstAttribute="leading" secondItem="OWY-Z2-TUi" secondAttribute="leading" constant="40" id="M0W-bI-1Uz"/>
                                     <constraint firstItem="L2j-MB-HDg" firstAttribute="centerX" secondItem="OWY-Z2-TUi" secondAttribute="centerX" id="RIu-U7-nXu"/>
+                                    <constraint firstItem="NZF-xu-IZo" firstAttribute="trailing" secondItem="0YM-Tp-Fns" secondAttribute="trailing" constant="-5" id="VPb-jf-SIz"/>
                                     <constraint firstItem="D22-Zm-Nv3" firstAttribute="leading" secondItem="OWY-Z2-TUi" secondAttribute="leading" constant="5" id="Vwj-gQ-KxU"/>
+                                    <constraint firstItem="0YM-Tp-Fns" firstAttribute="top" secondItem="NZF-xu-IZo" secondAttribute="bottom" constant="5" id="WA4-XP-1JI"/>
                                     <constraint firstItem="L2j-MB-HDg" firstAttribute="top" secondItem="eyT-kw-vH2" secondAttribute="bottom" constant="4" id="Y49-8U-aWY"/>
                                     <constraint firstItem="wYI-Ds-MXm" firstAttribute="top" secondItem="OWY-Z2-TUi" secondAttribute="top" constant="8" id="YL2-IG-es8"/>
                                     <constraint firstItem="47t-mb-vbM" firstAttribute="top" secondItem="wYI-Ds-MXm" secondAttribute="bottom" constant="2" id="cef-32-bl7"/>
@@ -538,9 +547,9 @@
                                     <constraint firstItem="0YM-Tp-Fns" firstAttribute="leading" secondItem="OWY-Z2-TUi" secondAttribute="leading" constant="5" id="n4W-aR-zLK"/>
                                     <constraint firstAttribute="bottom" secondItem="D22-Zm-Nv3" secondAttribute="bottom" constant="8" id="rb7-4i-1IG"/>
                                     <constraint firstItem="L2j-MB-HDg" firstAttribute="top" secondItem="7J4-0S-yOr" secondAttribute="bottom" constant="4" id="tmN-Yv-FPJ"/>
-                                    <constraint firstItem="0YM-Tp-Fns" firstAttribute="top" secondItem="L2j-MB-HDg" secondAttribute="bottom" constant="10" id="uXV-6Z-KBA"/>
                                     <constraint firstAttribute="trailing" secondItem="D22-Zm-Nv3" secondAttribute="trailing" constant="5" id="wXK-SJ-YFS"/>
-                                    <constraint firstAttribute="height" constant="300" id="znr-jg-Ahj"/>
+                                    <constraint firstItem="NZF-xu-IZo" firstAttribute="top" secondItem="L2j-MB-HDg" secondAttribute="bottom" constant="10" id="zZY-fB-Thi"/>
+                                    <constraint firstAttribute="height" constant="330" id="znr-jg-Ahj"/>
                                 </constraints>
                             </view>
                         </subviews>
@@ -557,6 +566,7 @@
                     </view>
                     <connections>
                         <outlet property="infoBackground" destination="OWY-Z2-TUi" id="Pl9-OJ-Pce"/>
+                        <outlet property="userIdLabel" destination="NZF-xu-IZo" id="7mg-Kb-1J8"/>
                         <outlet property="versionLabel" destination="47t-mb-vbM" id="ukx-Na-PAA"/>
                     </connections>
                 </viewController>
@@ -568,7 +578,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2975.1999999999998" y="-657.63546798029563"/>
+            <point key="canvasLocation" x="2973.75" y="-658.09859154929575"/>
         </scene>
         <!--Game View Controller-->
         <scene sceneID="k3e-By-1MV">

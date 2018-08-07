@@ -11,6 +11,7 @@ import UIKit
 class InfoViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var infoBackground: UIView!
     @IBOutlet var versionLabel: UILabel!
+    @IBOutlet var userIdLabel: UILabel!
     
     let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString")!
     
@@ -19,7 +20,8 @@ class InfoViewController: UIViewController, UIGestureRecognizerDelegate {
 
         
         // The version of the app
-        versionLabel.text = "Version \(version)"
+        versionLabel.text = "Version: \(version)"
+        userIdLabel.text = "User ID: \(Settings.uniqueID!)"
         
         // Gives the background border a nice color/shape
         infoBackground.layer.cornerRadius = 15
