@@ -24,7 +24,11 @@ class LevelButton: UIButton {
         if levelType == "level" {
             statusInsetConstant = 12.5
         } else if levelType == "daily" {
-            statusInsetConstant = 75
+            if UIDevice.current.model == "iPad" {
+                statusInsetConstant = 220
+            } else {
+                statusInsetConstant = 150
+            }
         }
         
         self.isEnabled = true

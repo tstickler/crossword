@@ -38,9 +38,14 @@ class LevelsViewController: UIViewController {
     var emojisToChoose = [String]()
     var animators = [UIDynamicAnimator]()
     var timer: Timer!
+    var levels = [Dictionary<String, Dictionary<String, String>>]()
     
     var pageNum: Int!
     var maxNumOfPages = 1
+    var puzzleSize: Int!
+    var completedKey: String!
+    var uncompletedKey: String!
+    var lockedKey: String!
     
     @IBAction func levelButtonTapped(_ sender: UIButton) {
         selectedLevel = sender.tag
@@ -52,7 +57,17 @@ class LevelsViewController: UIViewController {
         }
         
         // Go to the selected level
-        Settings.userLevel = sender.tag
+        switch puzzleSize {
+        case 13:
+            Settings.userLevel = sender.tag
+        case 18:
+            Settings.userLevel = sender.tag + 200
+        case 23:
+            Settings.userLevel = sender.tag + 400
+        default:
+            Settings.userLevel = sender.tag
+        }
+        
         performSegue(withIdentifier: "gameSegue", sender: self)
         
         // Fade out the home music
@@ -101,8 +116,46 @@ class LevelsViewController: UIViewController {
         navigationController?.popViewController(animated: false)
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        // When the setting button is clicked, give the view information needed
+        // to set the switches to their initial positions which can then be modified
+        // by the user.
+        if segue.identifier == "gameSegue" {
+            if let gameVC = segue.destination as? GameViewController {
+                gameVC.levels = levels
+            }
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        switch puzzleSize {
+        case 13:
+            levels = Settings.levels
+            Settings.maxNumOfLevels = levels.count
+            completedKey = "completedLevels"
+            uncompletedKey = "uncompletedLevels"
+            lockedKey = "lockedLevels"
+        case 18:
+            levels = Settings.levels18
+            Settings.maxNumOfLevels = levels.count
+            completedKey = "completedLevels_18"
+            uncompletedKey = "uncompletedLevels_18"
+            lockedKey = "lockedLevels_18"
+        case 23:
+            levels = Settings.levels23
+            Settings.maxNumOfLevels = levels.count
+            completedKey = "completedLevels_23"
+            uncompletedKey = "uncompletedLevels_23"
+            lockedKey = "lockedLevels_23"
+        default:
+            levels = Settings.levels
+            Settings.maxNumOfLevels = levels.count
+            completedKey = "completedLevels"
+            uncompletedKey = "uncompletedLevels"
+            lockedKey = "lockedLevels"
+        }
         
         // Swipes will move level pages
         addSwipeFunctionality()
@@ -162,7 +215,17 @@ class LevelsViewController: UIViewController {
         
         addProgressBar()
         
-
+        // Write back to the database the current user completion
+        switch puzzleSize {
+        case 13:
+            Settings.ref.child("userStats").child("completedLevels_13").child(Settings.uniqueID).setValue(Settings.completedLevels.count)
+        case 18:
+            Settings.ref.child("userStats").child("completedLevels_18").child(Settings.uniqueID).setValue(Settings.completedLevels.count)
+        case 23:
+            Settings.ref.child("userStats").child("completedLevels_23").child(Settings.uniqueID).setValue(Settings.completedLevels.count)
+        default:
+            return
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -342,7 +405,7 @@ class LevelsViewController: UIViewController {
     func setUpLevelStatusArrays() {
         // Set up completed levels
         // If there are none saved, start empty
-        if let completeLevels = defaults.array(forKey: "completedLevels") {
+        if let completeLevels = defaults.array(forKey: completedKey) {
             Settings.completedLevels = completeLevels as! [Int]
         } else {
             Settings.completedLevels = []
@@ -350,16 +413,16 @@ class LevelsViewController: UIViewController {
         
         // Set up uncompleted levels
         // If there are none saved, start with 1-5
-        if let uncompleteLevels = defaults.array(forKey: "uncompletedLevels") {
+        if let uncompleteLevels = defaults.array(forKey: uncompletedKey) {
             Settings.uncompletedLevels = uncompleteLevels as! [Int]
         } else {
             // The initial levels
-            Settings.uncompletedLevels = [1,2,3,4,5]
+            Settings.uncompletedLevels = []
         }
         
         // Set up locked levels
         // If there are none saved, start empty and add new levels
-        if let lockedLevels = defaults.array(forKey: "lockedLevels") {
+        if let lockedLevels = defaults.array(forKey: lockedKey) {
             Settings.lockedLevels = lockedLevels as! [Int]
             
             for i in 1...Settings.maxNumOfLevels {
@@ -370,14 +433,20 @@ class LevelsViewController: UIViewController {
                 }
             }            
         } else {
-            for i in 6...Settings.maxNumOfLevels {
+            Settings.lockedLevels = []
+            for i in 1...Settings.maxNumOfLevels {
                 Settings.lockedLevels.append(i)
             }
         }
         
         // Fill the uncompleted levels from the locked levels if there are less than 5
         // uncompleted levels and the locked levels aren't empty
-        let levelsAvailable = 5
+        var levelsAvailable: Int!
+        if puzzleSize == 13 {
+            levelsAvailable = 5
+        } else {
+            levelsAvailable = 1
+        }
         while Settings.uncompletedLevels.count < levelsAvailable && !Settings.lockedLevels.isEmpty {
             let num = Settings.lockedLevels[0]
             Settings.uncompletedLevels.append(num)
@@ -395,9 +464,9 @@ class LevelsViewController: UIViewController {
         }
         
         // Save the state of the level arrays
-        defaults.set(Settings.completedLevels, forKey: "completedLevels")
-        defaults.set(Settings.uncompletedLevels, forKey: "uncompletedLevels")
-        defaults.set(Settings.lockedLevels, forKey: "lockedLevels")
+        defaults.set(Settings.completedLevels, forKey: completedKey)
+        defaults.set(Settings.uncompletedLevels, forKey: uncompletedKey)
+        defaults.set(Settings.lockedLevels, forKey: lockedKey)
     }
     
     func addProgressBar() {
@@ -529,7 +598,19 @@ class LevelsViewController: UIViewController {
             levelButtons[i].isEnabled = true
         }
         
-        for level in Settings.newLevels {
+        var newLevels = [Int]()
+        switch puzzleSize {
+        case 13:
+            newLevels = Settings.newLevels
+        case 18:
+            newLevels = Settings.newLevels18
+        case 23:
+            newLevels = Settings.newLevels23
+        default:
+            newLevels = Settings.newLevels
+        }
+        
+        for level in newLevels {
             levelButtons[level - 1].setNewIndicator("level")
         }
     }

@@ -14,9 +14,9 @@
 		2F07758D1FBA391C001C9ABD /* MusicPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F07758C1FBA391C001C9ABD /* MusicPlayer.swift */; };
 		2F07758F1FBA4404001C9ABD /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F07758E1FBA4404001C9ABD /* Settings.swift */; };
 		2F0929E01FC0A6EF00EA18B2 /* InfoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0929DF1FC0A6EF00EA18B2 /* InfoViewController.swift */; };
-		2F0E24D61FD10BC50030E0C2 /* emojione.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F0E24D51FD10BC50030E0C2 /* emojione.ttf */; };
 		2F1029981FC2436D0053096D /* erase.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F1029961FC2436D0053096D /* erase.wav */; };
 		2F1029991FC2436D0053096D /* click.wav in Resources */ = {isa = PBXBuildFile; fileRef = 2F1029971FC2436D0053096D /* click.wav */; };
+		2F154B51216BF892003EE62D /* emojione.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 2F154B50216BF890003EE62D /* emojione.ttf */; };
 		2F1D35491FCB49F800D1172F /* gameOver.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2F1D35481FCB49F700D1172F /* gameOver.mp3 */; };
 		2F1D354B1FCB500D00D1172F /* errors.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2F1D354A1FCB500D00D1172F /* errors.mp3 */; };
 		2F1D354D1FCB587000D1172F /* correct.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2F1D354C1FCB587000D1172F /* correct.mp3 */; };
@@ -54,6 +54,7 @@
 		2F3986292020E9160057F7D9 /* game_6.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 2F3986122020E9160057F7D9 /* game_6.mp3 */; };
 		2F5A66C71FD7A3AB001502F5 /* LevelsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5A66C61FD7A3AB001502F5 /* LevelsViewController.swift */; };
 		2F5D9E701FA1522B004A2AB5 /* MenuViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F5D9E6F1FA1522B004A2AB5 /* MenuViewController.swift */; };
+		2F6CFF7021530C49008C6C11 /* ClueCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F6CFF6F21530C49008C6C11 /* ClueCell.swift */; };
 		2F705BBE1FC7CE17005E77F3 /* PurchasesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F705BBD1FC7CE17005E77F3 /* PurchasesViewController.swift */; };
 		2F789C981FCE0F17000139A3 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2F789C971FCE0F17000139A3 /* GoogleService-Info.plist */; };
 		2F7CC5F61FB8D04A00ABA677 /* HintViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F7CC5F51FB8D04A00ABA677 /* HintViewController.swift */; };
@@ -97,9 +98,9 @@
 		2F07758C1FBA391C001C9ABD /* MusicPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MusicPlayer.swift; sourceTree = "<group>"; };
 		2F07758E1FBA4404001C9ABD /* Settings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		2F0929DF1FC0A6EF00EA18B2 /* InfoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InfoViewController.swift; sourceTree = "<group>"; };
-		2F0E24D51FD10BC50030E0C2 /* emojione.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = emojione.ttf; sourceTree = "<group>"; };
 		2F1029961FC2436D0053096D /* erase.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = erase.wav; sourceTree = "<group>"; };
 		2F1029971FC2436D0053096D /* click.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = click.wav; sourceTree = "<group>"; };
+		2F154B50216BF890003EE62D /* emojione.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = emojione.ttf; sourceTree = "<group>"; };
 		2F1D35481FCB49F700D1172F /* gameOver.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = gameOver.mp3; sourceTree = "<group>"; };
 		2F1D354A1FCB500D00D1172F /* errors.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = errors.mp3; sourceTree = "<group>"; };
 		2F1D354C1FCB587000D1172F /* correct.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = correct.mp3; sourceTree = "<group>"; };
@@ -143,6 +144,7 @@
 		2F3986122020E9160057F7D9 /* game_6.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = game_6.mp3; sourceTree = "<group>"; };
 		2F5A66C61FD7A3AB001502F5 /* LevelsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelsViewController.swift; sourceTree = "<group>"; };
 		2F5D9E6F1FA1522B004A2AB5 /* MenuViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MenuViewController.swift; sourceTree = "<group>"; };
+		2F6CFF6F21530C49008C6C11 /* ClueCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClueCell.swift; sourceTree = "<group>"; };
 		2F705BBD1FC7CE17005E77F3 /* PurchasesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PurchasesViewController.swift; sourceTree = "<group>"; };
 		2F789C971FCE0F17000139A3 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		2F7CC5F51FB8D04A00ABA677 /* HintViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintViewController.swift; sourceTree = "<group>"; };
@@ -270,12 +272,13 @@
 				2FA3F60B1FA2D8AD006938E2 /* BoardButton.swift */,
 				2F9AC3CB1FD7B53F0042A005 /* LevelButton.swift */,
 				2F02833620AE1FB200960034 /* InternetTest.swift */,
+				2F6CFF6F21530C49008C6C11 /* ClueCell.swift */,
 				2F35EC631F9B1C06000014E5 /* Main.storyboard */,
 				2F35EC661F9B1C06000014E5 /* Assets.xcassets */,
 				2F35EC681F9B1C06000014E5 /* LaunchScreen.storyboard */,
+				2F154B50216BF890003EE62D /* emojione.ttf */,
 				2F35EC6B1F9B1C06000014E5 /* Info.plist */,
 				2F789C971FCE0F17000139A3 /* GoogleService-Info.plist */,
-				2F0E24D51FD10BC50030E0C2 /* emojione.ttf */,
 				2F111B121FB964E200DBA3EE /* Music */,
 			);
 			path = Crossword;
@@ -449,6 +452,7 @@
 				2F39861E2020E9160057F7D9 /* game_17.mp3 in Resources */,
 				2F3986232020E9160057F7D9 /* game_4.mp3 in Resources */,
 				2F3986172020E9160057F7D9 /* game_19.mp3 in Resources */,
+				2F154B51216BF892003EE62D /* emojione.ttf in Resources */,
 				2F3986222020E9160057F7D9 /* game_7.mp3 in Resources */,
 				2F3986292020E9160057F7D9 /* game_6.mp3 in Resources */,
 				2F3986202020E9160057F7D9 /* game_23.mp3 in Resources */,
@@ -476,7 +480,6 @@
 				2F789C981FCE0F17000139A3 /* GoogleService-Info.plist in Resources */,
 				2F07758A1FBA3713001C9ABD /* home.mp3 in Resources */,
 				2F3986162020E9160057F7D9 /* game_15.mp3 in Resources */,
-				2F0E24D61FD10BC50030E0C2 /* emojione.ttf in Resources */,
 				2F3986282020E9160057F7D9 /* game_11.mp3 in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -626,6 +629,7 @@
 				2F35EC621F9B1C06000014E5 /* GameViewController.swift in Sources */,
 				2F07758D1FBA391C001C9ABD /* MusicPlayer.swift in Sources */,
 				2F5D9E701FA1522B004A2AB5 /* MenuViewController.swift in Sources */,
+				2F6CFF7021530C49008C6C11 /* ClueCell.swift in Sources */,
 				2FF385922107D42E00C70F15 /* CodeViewController.swift in Sources */,
 				2F35EC601F9B1C06000014E5 /* AppDelegate.swift in Sources */,
 				2F36BED71FBE03AE00095519 /* GameOverViewController.swift in Sources */,

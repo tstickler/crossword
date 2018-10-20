@@ -22,14 +22,7 @@ class BoardButton: UIButton {
         hintLabel.text = "!"
         hintLabel.textColor = UIColor.init(red: 255/255, green: 150/255, blue: 176/255, alpha: 1)
         
-        if UIScreen.main.bounds.height == 568 {
-            hintLabel.font = hintLabel.font.withSize(10)
-        } else if UIScreen.main.bounds.height < 813 {
-            hintLabel.font = hintLabel.font.withSize(12)
-        } else {
-            hintLabel.font = hintLabel.font.withSize(20)
-        }
-        
+        hintLabel.font = hintLabel.font.withSize(16)
         // Put the ! on the top right corner
         hintConstraints.append(NSLayoutConstraint(item: self.hintLabel, attribute: .trailing, relatedBy: .equal, toItem: self,
                                                   attribute: .trailing, multiplier: 1.0, constant: -2))
@@ -38,6 +31,7 @@ class BoardButton: UIButton {
                                                   attribute: .top, multiplier: 1.0, constant: 1))
         
         NSLayoutConstraint.activate(hintConstraints)
+        self.layoutIfNeeded()
     }
     
     // Adds number superscript to idicate beginning of phrase
@@ -45,10 +39,8 @@ class BoardButton: UIButton {
         self.addSubview(superscriptLabel)
         superscriptLabel.translatesAutoresizingMaskIntoConstraints = false
         superscriptLabel.text = number
-        if UIScreen.main.bounds.height == 568 {
-            superscriptLabel.font = superscriptLabel.font.withSize(6)
-        } else if UIScreen.main.bounds.height < 813 {
-            superscriptLabel.font = superscriptLabel.font.withSize(7)
+        if UIScreen.main.bounds.height < 813 {
+            superscriptLabel.font = superscriptLabel.font.withSize(8)
         } else {
             superscriptLabel.font = superscriptLabel.font.withSize(10)
         }

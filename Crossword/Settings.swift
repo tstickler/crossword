@@ -8,6 +8,7 @@
 
 import UIKit
 import Firebase
+import FirebaseDatabase
 
 class Settings {
     // Settings the user can modify to their preferences
@@ -17,6 +18,7 @@ class Settings {
     static var skipFilledSquares: Bool!
     static var lockCorrect: Bool!
     static var correctAnim: Bool!
+    static var autoscroll: Bool!
     static var launchedBefore: Bool!
     static var cheatCount = 0
     static var adsDisabled: Bool!
@@ -25,6 +27,8 @@ class Settings {
     static var completedLevels = [Int]()
     static var uncompletedLevels = [Int]()
     static var newLevels = [Int]()
+    static var newLevels18 = [Int]()
+    static var newLevels23 = [Int]()
     static var lockedLevels = [Int]()
     static var gatheredData: Bool!
     static var highestDailyComplete: String!
@@ -35,6 +39,8 @@ class Settings {
     
     static var master = [Dictionary<String, String>]()
     static var levels = [Dictionary<String, Dictionary<String, String>>]()
+    static var levels18 = [Dictionary<String, Dictionary<String, String>>]()
+    static var levels23 = [Dictionary<String, Dictionary<String, String>>]()
     static var dailies = [Dictionary<String, Dictionary<String, String>>]()
 
 }

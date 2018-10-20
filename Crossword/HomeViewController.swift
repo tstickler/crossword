@@ -8,11 +8,14 @@
 
 import UIKit
 import Firebase
+import Crashlytics
 
 class HomeViewController: UIViewController, CAAnimationDelegate {
     @IBOutlet var homeTitleImage: UIImageView!
     @IBOutlet var playButton: UIButton!
     @IBOutlet var dailyButton: LevelButton!
+    @IBOutlet var puzzlesImg: UIImageView!
+    @IBOutlet var puzzlesStack: UIStackView!
     
     @IBAction func unwindSegue(_ sender: UIStoryboardSegue) {
         // Unwind segue allows jumping from the menu or game over view controllers
@@ -27,6 +30,10 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
         _ = self.navigationController?.popToRootViewController(animated: false)
     }
 
+    @IBAction func playButtonTapped(_ sender: Any) {
+        animatePlayTapped()
+    }
+    
     @IBAction func dailyButtonTapped(_ sender: Any) {
         // Go to the daily level
         // Try to match date with one from firebase for today's puzzle
@@ -37,6 +44,10 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
                 performSegue(withIdentifier: "gameSegue", sender: self)
             }
         }
+    }
+    
+    @IBAction func levelSizeTapped(_ sender: UIButton) {
+        performSegue(withIdentifier: "levelsSegue", sender: sender)
     }
     
     override var prefersStatusBarHidden: Bool {
@@ -110,14 +121,6 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             readFromFirebase()
         }
         
-        /* Removing the free hints for 1.1
-        if !defaults.bool(forKey: "freeHintsFor1.1"){
-            performSegue(withIdentifier: "notificationSegue", sender: self)
-            defaults.set(true, forKey: "freeHintsFor1.1")
-            defaults.set(Settings.cheatCount, forKey: "cheatCount")
-        }
-        */
-        
         // Possible emojis that will randomly fall from the top (160 to choose from)
         emojisToChoose = ["😄", "😇", "😂", "🤣", "🙂", "🙃", "😍", "😘", "😋", "😜",
                           "🤪", "🤩", "😎", "🤓", "😏", "😭", "😤", "😢", "😡", "🤬",
@@ -180,7 +183,10 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             bannerAd.isHidden = true
             bannerHeightConstraint.constant = 0
         }
+
+        Settings.ref.child("userStats").child("completedDailies").child(Settings.uniqueID).setValue(Settings.dailiesCompleted)
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         Settings.ref.removeAllObservers()
@@ -205,6 +211,11 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
         self.navigationController?.view.layer.add(transition, forKey: nil)
     }
     
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        prepareHomeReturn()
+    }
+    
     func animateLoadIn() {
         UIView.animate(withDuration: 2.0,
                        delay: 0.3,
@@ -221,8 +232,18 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             UIView.animate(withDuration: 1.0, animations: {
                 self.playButton.alpha = 1.0
                 self.muteButton.alpha = 1.0
-                self.dailyButton.alpha = 1.0
             })
+        })
+    }
+    
+    func animatePlayTapped() {
+        UIView.animate(withDuration: 1.0, animations: {
+            self.homeTitleImage.alpha = 0.0
+            self.playButton.alpha = 0.0
+            self.muteButton.alpha = 0.0
+            self.puzzlesImg.alpha = 1.0
+            self.puzzlesStack.alpha = 1.0
+            self.dailyButton.alpha = 1.0
         })
     }
 
@@ -257,7 +278,6 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
         muteButton.setBackgroundImage(musicButtonImage, for: .normal)
     }
     
-    
     @objc func update() {
         // Create the emoji and add it to a label
         let emoji = emojisToChoose[Int(arc4random_uniform(160))]
@@ -291,7 +311,7 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
         
         // Begin animation for the label
         animate(label: label, anim: anim)
-
+        
         // Remove any labels that are out of screen range
         removeEmojis()
     }
@@ -348,6 +368,7 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             Settings.showTimer = defaults.bool(forKey: "showTimer")
             Settings.skipFilledSquares = defaults.bool(forKey: "skipFilledSquares")
             Settings.lockCorrect = true//defaults.bool(forKey: "lockCorrect")
+            Settings.autoscroll = defaults.bool(forKey: "autoscroll")
             Settings.correctAnim = defaults.bool(forKey: "correctAnim")
             Settings.adsDisabled = defaults.bool(forKey: "adsDisabled")
             Settings.cheatCount = defaults.integer(forKey: "cheatCount")
@@ -363,6 +384,12 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
                 defaults.set(Settings.cheatCount, forKey: "cheatCount")
                 defaults.set(true, forKey: "updatedToGems")
             }
+            
+            if !defaults.bool(forKey: "updatedWithAutoscroll") {
+                Settings.autoscroll = true
+                defaults.set(true, forKey: "autoscroll")
+                defaults.set(true, forKey: "updatedWithAutoscroll")
+            }
         } else {
             // If this is the user's first time, start all the settings as enabled.
             // This must happen because loading from defaults when there is no key associated
@@ -375,8 +402,10 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             defaults.set(true, forKey: "showTimer")
             defaults.set(true, forKey: "skipFilledSquares")
             defaults.set(true, forKey: "lockCorrect")
+            defaults.set(true, forKey: "autoscroll")
             defaults.set(true, forKey: "correctAnim")
             defaults.set(true, forKey: "updatedToGems")
+            defaults.set(true, forKey: "updatedWithAutoscroll")
             defaults.set(1, forKey: "notificationNum")
             
             defaults.set(false, forKey: "adsDisabled")
@@ -396,6 +425,7 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             Settings.skipFilledSquares = true
             Settings.lockCorrect = true
             Settings.correctAnim = true
+            Settings.autoscroll = true
             Settings.adsDisabled = false
             Settings.gatheredData = false
         }
@@ -438,10 +468,16 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
                 notifVC.notificationsInfo = notificationsInfo
             }
         }
+        
+        if segue.identifier == "levelsSegue" {
+            if let levelsVC = segue.destination as? LevelsViewController {
+                levelsVC.puzzleSize = (sender as! UIButton).tag
+            }
+        }
     }
     
     func readFromFirebase() {
-        Settings.ref.child("cheats").child(Settings.uniqueID).observeSingleEvent(of: .value, with: { (snap) in
+        Settings.ref.child("userStats").child("cheats").child(Settings.uniqueID).observeSingleEvent(of: .value, with: { (snap) in
             let cheatValue = snap.value as? String
             
             // Allows remote changing the cheat count from the database
@@ -461,6 +497,20 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             Settings.ref.child("userStats").child("cheats").child(Settings.uniqueID).setValue("\(Settings.cheatCount)")
         })
         
+        Settings.ref.child("userStats").child("awardedCheats").child(Settings.uniqueID).observeSingleEvent(of: .value, with: { (snap) in
+            let awarded = snap.value as? Int
+            
+            if awarded != nil {
+                Settings.cheatCount += awarded!
+                self.defaults.set(Settings.cheatCount, forKey: "cheatCount")
+            }
+            
+            Settings.ref.child("userStats").child("awardedCheats").child(Settings.uniqueID).setValue(0)
+            
+            // Write back to the database the current user cheat count
+            Settings.ref.child("userStats").child("cheats").child(Settings.uniqueID).setValue("\(Settings.cheatCount)")
+        })
+        
         Settings.ref.child("toRead").observe(.value, with: { (snap) in
             // Everything from the firebase
             let everything = snap.value as! Dictionary<String, Any>
@@ -470,14 +520,40 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             
             // Just the new levels
             let newLevels = everything["newLevels"] as! Array<String>
-            let determineNewLevels = newLevels[0].lowercased()
-            if determineNewLevels == "none" || determineNewLevels == "0" {
+            let determineNewLevels = newLevels[0]
+            if determineNewLevels == "0" {
                 Settings.newLevels = []
             } else {
                 for level in newLevels {
                     let integerLevel = Int(level)
                     if let lev = integerLevel {
                         Settings.newLevels.append(lev)
+                    }
+                }
+            }
+            
+            let newLevels18 = everything["new18"] as! Array<String>
+            let determineNewLevels18 = newLevels18[0]
+            if determineNewLevels18 == "0" {
+                Settings.newLevels18 = []
+            } else {
+                for level in newLevels18 {
+                    let integerLevel = Int(level)
+                    if let lev = integerLevel {
+                        Settings.newLevels18.append(lev)
+                    }
+                }
+            }
+            
+            let newLevels23 = everything["new23"] as! Array<String>
+            let determineNewLevels23 = newLevels23[0]
+            if determineNewLevels23 == "0" {
+                Settings.newLevels23 = []
+            } else {
+                for level in newLevels23 {
+                    let integerLevel = Int(level)
+                    if let lev = integerLevel {
+                        Settings.newLevels23.append(lev)
                     }
                 }
             }
@@ -494,7 +570,8 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             // Just the levels
             // Accessed as levels[level-1]["Across"/"Down"/"Board"]["Property"]
             let levels = everything["levels"] as! Array<Dictionary<String, Dictionary<String, String>>>
-            Settings.maxNumOfLevels = levels.count
+            let levels18 = everything["levels18"] as! Array<Dictionary<String, Dictionary<String, String>>>
+            let levels23 = everything["levels23"] as! Array<Dictionary<String, Dictionary<String, String>>>
             
             let dailies = everything["dailies"] as! Array<Dictionary<String, Dictionary<String, String>>>
             
@@ -508,14 +585,22 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
                 Settings.levels.append(level)
             }
             
+            // Create levels array
+            for level in levels18 {
+                Settings.levels18.append(level)
+            }
+            
+            // Create levels array
+            for level in levels23 {
+                Settings.levels23.append(level)
+            }
+            
             // Create dailies array
             for daily in dailies {
                 Settings.dailies.append(daily)
             }
             
-            // Write back to the database the current user cheat count
-            Settings.ref.child("userStats").child("completedLevels").child(Settings.uniqueID).setValue(Settings.completedLevels.count)
-            
+            Settings.maxNumOfLevels = levels.count
             self.wheel.hidesWhenStopped = true
             self.wheel.stopAnimating()
             self.internetLabel.text = ""
@@ -527,6 +612,7 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
             
             self.animateLoadIn()
         })
+        
     }
     
     func getTodaysDate() {
@@ -536,5 +622,14 @@ class HomeViewController: UIViewController, CAAnimationDelegate {
         formatter.timeZone = TimeZone.current
         formatter.dateFormat = "yyyy-MM-dd"
         Settings.today = formatter.string(from: date)
+    }
+    
+    func prepareHomeReturn() {
+        self.homeTitleImage.alpha = 1.0
+        self.playButton.alpha = 1.0
+        self.muteButton.alpha = 1.0
+        self.puzzlesImg.alpha = 0.0
+        self.puzzlesStack.alpha = 0.0
+        self.dailyButton.alpha = 0.0
     }
 }

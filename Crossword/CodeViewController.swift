@@ -9,7 +9,9 @@
 import UIKit
 import GoogleMobileAds
 
-class CodeViewController: UIViewController, CAAnimationDelegate, UIGestureRecognizerDelegate {
+class CodeViewController: UIViewController, CAAnimationDelegate, UIGestureRecognizerDelegate, GADRewardBasedVideoAdDelegate {
+
+    
     // Allows storing and reading from the disk
     let defaults = UserDefaults.standard
     
@@ -21,6 +23,7 @@ class CodeViewController: UIViewController, CAAnimationDelegate, UIGestureRecogn
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        GADRewardBasedVideoAd.sharedInstance().delegate = self
         
         // Set the frame of the view
         codeEntryView.layer.cornerRadius = 15
@@ -32,10 +35,6 @@ class CodeViewController: UIViewController, CAAnimationDelegate, UIGestureRecogn
     }
     
     @IBAction func codeSubmitTapped(_ sender: Any) {
-//        if GADRewardBasedVideoAd.sharedInstance().isReady {
-//            GADRewardBasedVideoAd.sharedInstance().present(fromRootViewController: self)
-//        }
-        
         // Reset the text on the label
         codeLabel.text = ""
         
@@ -87,6 +86,37 @@ class CodeViewController: UIViewController, CAAnimationDelegate, UIGestureRecogn
         
         // Reset the entered code
         code = ""
+    }
+    
+    @IBAction func watchAdTapped(_ sender: Any) {
+        if GADRewardBasedVideoAd.sharedInstance().isReady {
+            GADRewardBasedVideoAd.sharedInstance().present(fromRootViewController: self)
+        }
+    }
+    
+    func rewardBasedVideoAd(_ rewardBasedVideoAd: GADRewardBasedVideoAd, didRewardUserWith reward: GADAdReward) {
+        let awarded = 10
+        codeLabel.font = UIFont.init(name: "Geeza Pro", size: 24)
+        codeLabel.text = "\(awarded) Gems awarded!"
+        Settings.cheatCount += awarded
+        defaults.set(Settings.cheatCount, forKey: "cheatCount")
+        
+        UIView.transition(with: codeLabel, duration: 0.5, options: .transitionCrossDissolve, animations: {
+            // User is shown a message
+            self.codeLabel.textColor = .white
+        })
+    }
+    
+    func rewardBasedVideoAdDidClose(_ rewardBasedVideoAd: GADRewardBasedVideoAd) {
+        GADRewardBasedVideoAd.sharedInstance().load(GADRequest(),
+                                                    withAdUnitID: "ca-app-pub-1164601417724423/5486191208")
+        // Fade out the message
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+            UIView.transition(with: self.codeLabel, duration: 0.5, options: .transitionCrossDissolve, animations: {
+                self.codeLabel.font = UIFont.init(name: "EmojiOneColor", size: 38)
+                self.codeLabel.text = ""
+            }, completion: nil)
+        })
     }
     
     func animationDidStart(_ anim: CAAnimation) {

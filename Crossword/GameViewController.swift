@@ -10,8 +10,9 @@ import UIKit
 import AVFoundation
 import AudioToolbox
 import Firebase
+import FirebaseDatabase
 
-class GameViewController: UIViewController, GADInterstitialDelegate {
+class GameViewController: UIViewController, GADInterstitialDelegate, UIScrollViewDelegate {
     // Contraints that will be modified during runtime to fit device
     @IBOutlet var topMidKeySep: NSLayoutConstraint!
     @IBOutlet var bottomMidKeySep: NSLayoutConstraint!
@@ -22,25 +23,29 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     @IBOutlet var middleRowLeading: NSLayoutConstraint!
     @IBOutlet var middleRowTrailing: NSLayoutConstraint!
     @IBOutlet var theBoard: UIStackView!
+    @IBOutlet var theBoardHeight: NSLayoutConstraint!
+    @IBOutlet var theBoardWidth: NSLayoutConstraint!
+    @IBOutlet var theBoardTrailing: NSLayoutConstraint!
+    @IBOutlet var theBoardLeading: NSLayoutConstraint!
+    @IBOutlet var scroller: UIScrollView!
     @IBOutlet var boardTrailing: NSLayoutConstraint!
     @IBOutlet var boardLeading: NSLayoutConstraint!
     @IBOutlet var boardTop: NSLayoutConstraint!
     @IBOutlet var boardBottom: NSLayoutConstraint!
     @IBOutlet var hintEnabledHeight: NSLayoutConstraint!
     
-    
     // Allows us to animate fall of boardspaces at the end of the level
     var animator: UIDynamicAnimator!
 
     // Containers for button properties
     var buttonLetterArray: [Character]!
-    var buttonTitleArray = Array(repeating: "", count: 169)
-    var buttonAcrossArray = Array(repeating: "", count: 169)
-    var buttonDownArray = Array(repeating: "", count: 169)
-    var buttonLockedForCorrect = Array(repeating: false, count: 169)
-    var buttonHintAcrossEnabled = Array(repeating: false, count: 169)
-    var buttonHintDownEnabled = Array(repeating: false, count: 169)
-    var buttonRevealedByHelper = Array(repeating: false, count: 169)
+    var buttonTitleArray: [String]!
+    var buttonAcrossArray: [String]!
+    var buttonDownArray: [String]!
+    var buttonLockedForCorrect: [Bool]!
+    var buttonHintAcrossEnabled: [Bool]!
+    var buttonHintDownEnabled: [Bool]!
+    var buttonRevealedByHelper: [Bool]!
     
     // Allows us to save board state for user to come back to
     let defaults = UserDefaults.standard
@@ -85,13 +90,14 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     @IBOutlet var fillSquareButton: UIButton!
     @IBOutlet weak var cheatCountLabel: UILabel!
     @IBOutlet var hintEnabledButton: UIButton!
-        
+    @IBOutlet var iapButton: UIButton!
+    
     // Iterator to prevent inifinte loop
     var checkAllDirectionFilledIterator = 0
 
     // Buttons for the keyboard and gameboard
     @IBOutlet var keys: [UIButton]!
-    @IBOutlet var boardSpaces: [BoardButton]!
+    @IBOutlet var boardSpaces = [BoardButton]()
     
     // Keyboard area constraints to manage size on different devices
     @IBOutlet var topKeysHeight: NSLayoutConstraint!
@@ -162,6 +168,17 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     @IBOutlet var helpNumIndicator: UIImageView!
     
     var ref: DatabaseReference!
+    var levelIndex: Int!
+    var puzzleSize: Int!
+    
+    var levels = [Dictionary<String, Dictionary<String, String>>]()
+    @IBOutlet var clueTableButton: UIButton!
+    @IBOutlet var clueTable: UITableView!
+    var scrollingDisabled = false
+    var correctClues = [String]()
+    @IBOutlet var gemChangeTopConstraint: NSLayoutConstraint!
+    @IBOutlet var gemChangeStack: UIStackView!
+    @IBOutlet var gemChangeText: UILabel!
     
     /*****************************************
     *                                        *
@@ -225,6 +242,10 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         nextPhraseWidth.constant = clueHeightConstraint.constant * NEXT_BACK_PHRASE_WIDTH
         backPhraseWidth.constant = clueHeightConstraint.constant * NEXT_BACK_PHRASE_WIDTH
         
+        clueTable.layer.cornerRadius = 5
+        clueTable.layer.borderColor = UIColor.init(red: 85/255, green: 85/255, blue: 85/255, alpha: 1.0).cgColor
+        clueTable.layer.borderWidth = 3
+        
         // Gives buttons a nice rounded corner
         for button in keys {
             if button.tag != 0 {
@@ -240,35 +261,17 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             }
         }
         
-        // Set up the board buttons
-        for button in boardSpaces {
-            // If we are on a smaller screen have a smaller font for letters
-            if screenSize.width == 320 {
-                button.titleLabel?.font = button.titleLabel?.font.withSize(9.0)
-            } else if screenSize.height < 813 {
-                button.titleLabel?.font = button.titleLabel?.font.withSize(13.0)
-            } else {
-                button.titleLabel?.font = button.titleLabel?.font.withSize(23.0)
-            }
-            
-            // Button letters should be black
-            button.setTitleColor(.black, for: .normal)
-            
-            // Give buttons a nice rounded corner
-            button.layer.cornerRadius = 2
-            if screenSize.height > 812 {
-                button.layer.cornerRadius = 4
-            }
-        }
+        // Create the board buttons to be used for the puzzle
+        createBoardButtons()
         
         // Gives each space on the board specific properties depending on how the board is arranged
         giveBoardSpacesProperties(board: board)
-        
+
         // Any space that should be inactive is hidden
-        for i in 0...168 {
+        for i in 0...puzzleSize * puzzleSize - 1 {
             // Grabs the letter in the string
             let letter = buttonLetterArray[i]
-            
+
             if letter == "-" {
                 // Make the spaces inactive
                 boardSpaces[i].isEnabled = false
@@ -277,9 +280,48 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             }
         }
         
-        if Settings.cheatCount == 0 {
+        if Settings.cheatCount < 5 {
             fillSquareButton.setImage(UIImage(named: "one_reveal_disabled.png"), for: .normal)
+        }
+        
+        if Settings.cheatCount < 10 {
             hintButton.setImage(UIImage(named: "hint_disabled.png"), for: .normal)
+        }
+    }
+    
+    func createBoardButtons() {
+        for i in 0...puzzleSize - 1 {
+            let stack = UIStackView()
+            stack.axis = .horizontal
+            stack.alignment = .fill
+            stack.distribution = .fillEqually
+            stack.spacing = 3
+            stack.backgroundColor = .green
+            theBoard.addArrangedSubview(stack)
+
+            for j in 0...puzzleSize - 1 {
+                let button = BoardButton(frame: CGRect(x: 0, y: 0, width: 30, height: 30))
+                
+                button.titleLabel?.font = button.titleLabel?.font.withSize(18.0)
+            
+                // Button letters should be black
+                button.setTitleColor(.black, for: .normal)
+                
+                // Give buttons a nice rounded corner
+                button.layer.cornerRadius = 3
+                if screenSize.height > 812 {
+                    button.layer.cornerRadius = 4
+                }
+                
+                // Set button tag so when tapped we know where it is
+                button.tag = (i * puzzleSize) + j
+                button.backgroundColor = .white
+                button.addTarget(self, action: #selector(boardButtonTapped), for: .touchUpInside)
+                
+                boardSpaces.append(button)
+                stack.addArrangedSubview(button)
+            }
+            
         }
     }
     
@@ -300,6 +342,9 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         backPhraseButton.setTitleColor(blueColor, for: .normal)
         
         hintButton.layer.cornerRadius = 1
+        iapButton.layer.cornerRadius = 4
+        iapButton.layer.borderWidth = 1
+        iapButton.layer.borderColor = UIColor.white.cgColor
         
         hintButton.titleLabel!.numberOfLines = 1
         hintButton.titleLabel?.minimumScaleFactor = 0.5
@@ -354,6 +399,14 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     }
     
     func giveBoardSpacesProperties(board: [String]) {
+        buttonTitleArray = Array(repeating: "", count: puzzleSize * puzzleSize)
+        buttonAcrossArray = Array(repeating: "", count: puzzleSize * puzzleSize)
+        buttonDownArray = Array(repeating: "", count: puzzleSize * puzzleSize)
+        buttonLockedForCorrect = Array(repeating: false, count: puzzleSize * puzzleSize)
+        buttonHintAcrossEnabled = Array(repeating: false, count: puzzleSize * puzzleSize)
+        buttonHintDownEnabled = Array(repeating: false, count: puzzleSize * puzzleSize)
+        buttonRevealedByHelper = Array(repeating: false, count: puzzleSize * puzzleSize)
+        
         // Board[0] contains the letter of each square. If square should be blank, letter is "-"
         let gameBoardLetters = board[0]
         buttonLetterArray = Array(gameBoardLetters)
@@ -375,27 +428,38 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         var daString: String
         
         // Go through all the buttons and assign each one their needed information
-        for i in 0...168 {
+        for i in 0...puzzleSize * puzzleSize - 1 {
             
             // Grab the number in the string
             number = gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator)]
             
             // If the number is a "-" then there should be no number in the top corner so set the label to an empty string
             // Otherwise, set the label on the square to the corresponing number grabbed
-            if number == "-" {
+            if number == "-"  {
+                boardSpaces[i].superscriptLabel.text?.append("")
+            } else if number == "," {
                 boardSpaces[i].superscriptLabel.text?.append("")
             } else {
                 boardSpaces[i].setSuperScriptLabel(number: String(number))
                 
                 // If the next character is a number as well, append it to the space label (so we can represent 2 digit numbers)
                 if gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)] != "-" &&
-                    numbersIterator > 13 && boardSpaces[i].superscriptLabel.text == "1" {
+                    numbersIterator > puzzleSize && boardSpaces[i].superscriptLabel.text == "1" && puzzleSize == 13 {
                     boardSpaces[i].superscriptLabel.text?.append(gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)])
                     
                     // Need serperate iterator because sometimes we need to take 2 from the string
                     numbersIterator += 1
                 }
                 
+                if puzzleSize > 13 {
+                    if gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)] != "-" {
+                        if gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)] != "," {
+                            boardSpaces[i].superscriptLabel.text?.append(gameBoardNums[gameBoardNums.index(gameBoardNums.startIndex, offsetBy: numbersIterator + 1)])
+                            numbersIterator += 1
+                        }
+                    }
+                    numbersIterator += 1
+                }
             }
             
             // The gameBoardDA is set up differently than the other two. Each space contains 6 characters in this format:
@@ -424,6 +488,23 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
     }
     
+    func scrollToSpot(_ sender: BoardButton) {
+        var f = CGRect(x: 0, y: 0, width: 0, height: 0)
+        f = (boardSpaces[indexOfButton].superview?.convert(sender.frame, to: scroller))!
+        
+        let buttonX = f.origin.x
+        let buttonY = f.origin.y
+        
+        if !scrollingDisabled && Settings.autoscroll {
+            UIView.animate(withDuration: 0.4, animations: {
+                self.scroller.scrollRectToVisible(CGRect(x: buttonX - self.scroller.frame.width / 2 - 38,
+                                                         y: buttonY - self.scroller.frame.height / 2 - 38,
+                                                         width: self.scroller.frame.width,
+                                                         height: self.scroller.frame.height), animated: false)
+            })
+            
+        }
+    }
     
      /*****************************************
      *                                        *
@@ -431,49 +512,12 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
      *                                        *
      *****************************************/
     
-    @IBAction func boardButtonTapped(_ sender: BoardButton) {
-        // Uses tag of tapped square to determine row/column that user tapped
-        let square = String(sender.tag)
-        var selectedRow = ""
-        var selectedColumn = ""
-        
-        // Tags go from 101 to 1313
-        // First digit with a 3 digit tag is row of square
-        // First two digits with a 4 digit tag is row of square
-        // Last two digits of the tag is column
-        if square.count == 4 {
-            // Index 0 and 1
-            let startRow = square.startIndex
-            let endRow = square.index(startRow, offsetBy: 1)
-            
-            // Index 2 and 3
-            let startCol = square.index(square.startIndex, offsetBy: 2)
-            let endCol = square.endIndex
-            
-            // First two digits
-            selectedRow = String(square[startRow...endRow])
-            
-            // Last two digits
-            selectedColumn = String(square[startCol..<endCol])
-        } else {
-            // Index 1 and 2
-            let startCol = square.index(square.startIndex, offsetBy: 1)
-            let endCol = square.endIndex
-            
-            // First digit
-            selectedRow = String(square[square.startIndex])
-            
-            // Last two digits
-            selectedColumn = String(square[startCol..<endCol])
-        }
-        
-        // Convert the row and column to integers
-        let row = Int(selectedRow)!
-        let col = Int(selectedColumn)!
-        
+    @objc func boardButtonTapped(_ sender: BoardButton) {
         // Use row and column to determine where in the outlet array the
         // selected button is
-        indexOfButton = ((row - 1) * 13) + col - 1
+        indexOfButton = sender.tag
+        
+        scrollToSpot(sender)
         
         // Determines which buttons are selected and should be highlighted
         rowAndColumnDetermination(indexOfButton: indexOfButton)
@@ -508,8 +552,11 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             fillSquareButton.isEnabled = true
         }
         
-        if Settings.cheatCount == 0 {
+        if Settings.cheatCount < 5 {
             fillSquareButton.setImage(UIImage(named: "one_reveal_disabled.png"), for: .normal)
+        }
+        
+        if Settings.cheatCount < 10 {
             hintButton.setImage(UIImage(named: "hint_disabled.png"), for: .normal)
         }
         
@@ -521,6 +568,10 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         
         // Allows us to look back one to see what the last press was
         previousButton = indexOfButton
+        
+        if clueTableRotated {
+            clueTableButton.sendActions(for: .touchUpInside)
+        }
     }
 
     var erasing = false
@@ -564,11 +615,11 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 
             } else {
                 // If we aren't at the beginning of a phrase, just move a square
-                // back if across or 13 back if down
+                // back if across or puzzleSize back if down
                 if across {
                     boardButtonTapped(boardSpaces[indexOfButton - 1])
                 } else {
-                    boardButtonTapped(boardSpaces[indexOfButton - 13])
+                    boardButtonTapped(boardSpaces[indexOfButton - puzzleSize])
                 }
             }
             
@@ -587,17 +638,24 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
     }
     
-    
+    var checkedAcross = false
+    var checkedDown = false
     @IBAction func nextPhraseButtonTapped(_ sender: Any) {
         // Container for candidates that are available to move to
         var moveCandidates = [Int]()
         
+        if checkedAcross && checkedDown {
+            checkedAcross = false
+            checkedDown = false
+            
+            return
+        }
+        
         if across {
             // Generate possible candidates for move
             // Looks at the current square to get its across number
-            let acrossString = buttonAcrossArray[indexOfButton]
-            let acrossStart = acrossString.startIndex
-            let num = Int(acrossString[acrossStart...acrossString.index(after: acrossStart)])!
+            let acrossString = String(buttonAcrossArray[indexOfButton].dropLast())
+            let num = Int(acrossString)!
             
             // Candidate for forward movement are any number in across numbers that
             // is greater than the current across value.
@@ -622,7 +680,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 }
                 
                 // Evaluate the current candidate
-                test: for i in 0...168 {
+                test: for i in 0...puzzleSize * puzzleSize - 1 {
                     // Found the candidate
                     if buttonAcrossArray[i] == stringToLook {
                         // Move to candidate
@@ -640,7 +698,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                         for x in selectedBoardSpaces.min()!...selectedBoardSpaces.max()! {
                             if(boardSpaces[x].currentTitle == nil) {
                                 boardButtonTapped(boardSpaces[x])
-                                break test
+                                return
+                                
                             }
                         }
                         
@@ -652,6 +711,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             } else {
                 // If our across candidates were empty, switch to down
                 across = false
+                checkedAcross = true
                 
                 // Find a blank landing spot (00a00d) so we can evaluate
                 // all possibilites
@@ -667,9 +727,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         } else if !across {
             // Generate possible candidates for move
             // Looks at the current square to get its down number
-            let downString = buttonDownArray[indexOfButton]
-            let downStart = downString.startIndex
-            let num = Int(downString[downStart...downString.index(after: downStart)])!
+            let downString = String(buttonDownArray[indexOfButton].dropLast())
+            let num = Int(downString)!
             
             // Candidate for forward movement are any number in down numbers that
             // is greater than the current down value.
@@ -694,7 +753,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 }
                 
                 // Evaluate the current candidate
-                test: for i in 0...168 {
+                test: for i in 0...puzzleSize * puzzleSize - 1 {
                     // Found the candidate
                     if buttonDownArray[i] == stringToLook {
                         boardButtonTapped(boardSpaces[i])
@@ -708,11 +767,11 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                         }
                         
                         // Move foward through the selected phrase until an empty spot is found
-                        // Uses stride to allow iterating by 13 each loop
-                        for x in stride(from: selectedBoardSpaces.min()!, to: selectedBoardSpaces.max()!, by: 13) {
+                        // Uses stride to allow iterating by puzzleSize each loop
+                        for x in stride(from: selectedBoardSpaces.min()!, to: selectedBoardSpaces.max()! + 1, by: puzzleSize) {
                             if(boardSpaces[x].currentTitle == nil) {
                                 boardButtonTapped(boardSpaces[x])
-                                break test
+                                return
                             }
                         }
                         
@@ -724,6 +783,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             } else {
                 // If our down candidates were empty, switch to across
                 across = true
+                checkedDown = true
                 
                 // Find a blank landing spot (00a00d) so we can evaluate
                 // all possibilites
@@ -746,9 +806,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         if across {
             // Generate possible candidates for move
             // Looks at the current square to get its across number
-            let acrossString = buttonAcrossArray[indexOfButton]
-            let acrossStart = acrossString.startIndex
-            var num = Int(acrossString[acrossStart...acrossString.index(after: acrossStart)])!
+            let acrossString = String(buttonAcrossArray[indexOfButton].dropLast())
+            var num = Int(acrossString)!
             
             // If we're starting from a blank landing spot, all values should be candidates
             if num == 0 {
@@ -762,6 +821,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                     moveCandidates.append(potentialCandidate)
                 }
             }
+            
             
             // TEST CANDIDATE
             if !moveCandidates.isEmpty {
@@ -778,7 +838,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 }
                 
                 // Evaluate our current candidate
-                test: for i in 0...168 {
+                test: for i in 0...puzzleSize * puzzleSize - 1 {
                     // Foud the candidate
                     if buttonAcrossArray[i] == stringToLook {
                         // Move to candidate
@@ -795,9 +855,11 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                         
                         // Move foward through the selected phrase until an empty spot is found
                         for x in selectedBoardSpaces.min()!...selectedBoardSpaces.max()! {
-                            if(boardSpaces[x].currentTitle == nil) {
+                            print(x)
+                            print(boardSpaces[x].titleLabel?.text)
+                            if(boardSpaces[x].titleLabel?.text == nil && !buttonLockedForCorrect[x]) {
                                 boardButtonTapped(boardSpaces[x])
-                                break test
+                                return
                             }
                         }
                         
@@ -824,9 +886,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         } else if !across {
             // Generate possible candidates for move
             // Looks at the current square to get its across number
-            let downString = buttonDownArray[indexOfButton]
-            let downStart = downString.startIndex
-            var num = Int(downString[downStart...downString.index(after: downStart)])!
+            let downString = String(buttonDownArray[indexOfButton].dropLast())
+            var num = Int(downString)!
             
             // If we're starting from a blank landing spot, all values should be candidates
             if num == 0 {
@@ -856,7 +917,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 }
                 
                 // Evaluate our current candidate
-                for i in 0...168 {
+                for i in 0...puzzleSize * puzzleSize - 1 {
                     if buttonDownArray[i] == stringToLook {
                         // Move to candidate
                         boardButtonTapped(boardSpaces[i])
@@ -871,10 +932,10 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                         }
                         
                         // Move foward through the selected phrase until an empty spot is found
-                        test: for x in stride(from: selectedBoardSpaces.min()!, to: selectedBoardSpaces.max()!, by: 13) {
-                            if(boardSpaces[x].currentTitle == nil) {
+                        test: for x in stride(from: selectedBoardSpaces.min()!, to: selectedBoardSpaces.max()! + 1, by: puzzleSize) {
+                            if(boardSpaces[x].currentTitle == nil && !buttonLockedForCorrect[x]) {
                                 boardButtonTapped(boardSpaces[x])
-                                break test
+                                return
                             }
                         }
                         
@@ -903,7 +964,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
 
     @IBAction func hintButtonTapped(_ sender: Any) {
         // If the user is out of cheats, don't do anything
-        if Settings.cheatCount == 0 {
+        if Settings.cheatCount < 10 {
             showIAPView()
             return
         }
@@ -934,21 +995,27 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         defaults.set(Settings.cheatCount, forKey: "cheatCount")
         
         // If the user is out of cheats, gray out the buttons
-        if Settings.cheatCount == 0 {
+        if Settings.cheatCount < 5 {
             fillSquareButton.setImage(UIImage(named: "one_reveal_disabled.png"), for: .normal)
+        }
+        
+        if Settings.cheatCount < 10 {
             hintButton.setImage(UIImage(named: "hint_disabled.png"), for: .normal)
         }
         
         // Update the cheatlabel
         cheatCountLabel.text = String(Settings.cheatCount)
+        view.layoutIfNeeded()
         
         // Don't allow hitting the button again without moving
         hintButton.isEnabled = false
+        
+        animateGemChange(10, false)
     }
     
     @IBAction func fillSquareButtonTapped(_ sender: Any) {
         // If the user is out of cheats, don't do anything
-        if Settings.cheatCount == 0 {
+        if Settings.cheatCount < 5 {
             showIAPView()
             return
         }
@@ -973,11 +1040,14 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         boardSpaces[indexOfButton].backgroundColor = UIColor.init(cgColor: orangeColorCG)
         
         // Remove a cheat and save to defaults
-        Settings.cheatCount -= 10
+        Settings.cheatCount -= 5
         defaults.set(Settings.cheatCount, forKey: "cheatCount")
         
-        if Settings.cheatCount == 0 {
+        if Settings.cheatCount < 5 {
             fillSquareButton.setImage(UIImage(named: "one_reveal_disabled.png"), for: .normal)
+        }
+        
+        if Settings.cheatCount < 10 {
             hintButton.setImage(UIImage(named: "hint_disabled.png"), for: .normal)
         }
         
@@ -1084,6 +1154,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         } else {
             moveToNextDown()
         }
+        
+        animateGemChange(5, false)
     }
     
     @objc func removeView() {
@@ -1091,6 +1163,10 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         popUpToRemove?.removeFromSuperview()
         keyBlockerToRemove?.removeFromSuperview()
         tappedButton?.setTitleColor(.white, for: .normal)
+    }
+    
+    @IBAction func iapButtonTapped(_ sender: Any) {
+        showIAPView()
     }
     
     @IBOutlet var topKeysStack: UIStackView!
@@ -1217,8 +1293,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         default:
             letter = nil
         }
-        
-        // Sets the board space to display the uppercase letter if the space isn't locked
+                // Sets the board space to display the uppercase letter if the space isn't locked
         if (!buttonLockedForCorrect[indexOfButton] || !Settings.lockCorrect) && !buttonRevealedByHelper[indexOfButton]{
             // If the space was a correct answer but was changed, indicate that square is wrong
             if buttonLockedForCorrect[indexOfButton] &&
@@ -1386,7 +1461,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     }
     
     func gameOver() -> Bool {
-        for i in 0...168 {
+        for i in 0...puzzleSize * puzzleSize - 1 {
             // Each inactive space is assigned a "-" as their letter.
             // Check if all the buttons that can be tapped have non-nil values.
             // If there is still a nil value, there is an open board space, which
@@ -1417,6 +1492,39 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         return true
     }
     
+    func determineAllCorrect() {
+        var counter = 0
+        if across {
+            while across && counter < 100 {
+                _ = correctAnswerEntered()
+                nextPhraseButton.sendActions(for: .touchUpInside)
+                counter += 1
+            }
+            
+            counter = 0
+            while !across && counter < 100 {
+                _ = correctAnswerEntered()
+                nextPhraseButton.sendActions(for: .touchUpInside)
+                counter += 1
+            }
+        } else {
+            while !across && counter < 100 {
+                _ = correctAnswerEntered()
+                nextPhraseButton.sendActions(for: .touchUpInside)
+                counter += 1
+            }
+            
+            counter = 0
+            while across && counter < 100 {
+                _ = correctAnswerEntered()
+                nextPhraseButton.sendActions(for: .touchUpInside)
+                counter += 1
+            }
+        }
+        
+        nextPhraseButton.sendActions(for: .touchUpInside)
+    }
+    
     func correctAnswerEntered() -> Bool {
         // Checks the selected spaces with their assigned letters, if it determines that
         // they are all correct returns true, otherwise returns false.
@@ -1434,17 +1542,22 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
         
         // Disallow changing of letters after correct answer entered
-        for space in selectedBoardSpaces {
-            buttonLockedForCorrect[space] = true
-            defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel!)_lockedCorrect")
+        if (!gameOver()) {
+            for space in selectedBoardSpaces {
+                buttonLockedForCorrect[space] = true
+                defaults.set(buttonLockedForCorrect, forKey: "\(Settings.userLevel!)_lockedCorrect")
+            }
         }
     
+        if !selectedBoardSpaces.isEmpty && !correctClues.contains(getSpotInfo(indexOfButton: selectedBoardSpaces[0], info: "Clue")) {
+            correctClues.append(getSpotInfo(indexOfButton: selectedBoardSpaces[0], info: "Clue"))
+        }
         return true
     }
     
     func moveToNextAcross() {
         // Checks bounds before movement
-        if indexOfButton < 168 {
+        if indexOfButton < puzzleSize * puzzleSize - 1 {
             boardSpaces[indexOfButton + 1].sendActions(for: .touchUpInside)
         } else {
             across = false
@@ -1474,7 +1587,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             
             // Do the iterator checking
             checkAllDirectionFilledIterator += 1
-            if checkAllDirectionFilledIterator > 168 {
+            if checkAllDirectionFilledIterator > puzzleSize * puzzleSize - 1 {
                 indexOfButton = 0
                 checkAllDirectionFilledIterator = 0
                 across = false
@@ -1492,12 +1605,12 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     func moveToNextDown() {
         // Bounds check
         var outOfBounds = false
-        if indexOfButton + 13 > 168 {
+        if indexOfButton + puzzleSize > puzzleSize * puzzleSize - 1 {
             outOfBounds = true
         }
         
         if !outOfBounds {
-            boardSpaces[indexOfButton + 13].sendActions(for: .touchUpInside)
+            boardSpaces[indexOfButton + puzzleSize].sendActions(for: .touchUpInside)
             across = false
         }
         
@@ -1506,7 +1619,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         // If we ever hit a spot where we loop through the whole down array, we're going
         // to flip the orientation to across and go to the first across.
         if outOfBounds || !boardSpaces[indexOfButton].isEnabled || buttonDownArray[indexOfButton] == "00d" {
-            boardSpaces[indexOfButton - 13].sendActions(for: .touchUpInside)
+            boardSpaces[indexOfButton - puzzleSize].sendActions(for: .touchUpInside)
             nextPhraseButton.sendActions(for: .touchUpInside)
         }
         
@@ -1526,7 +1639,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             
             // Do the iterator checking
             checkAllDirectionFilledIterator += 1
-            if checkAllDirectionFilledIterator > 168 {
+            if checkAllDirectionFilledIterator > puzzleSize * puzzleSize - 1 {
                 indexOfButton = 0
                 checkAllDirectionFilledIterator = 0
                 across = true
@@ -1642,7 +1755,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         indexOfWrong.removeAll()
         
         // Loop through the board spaces and find how many errors the user made
-        for i in 0...168 {
+        for i in 0...puzzleSize * puzzleSize - 1 {
             if var spaceTitle = boardSpaces[i].title(for: .normal) {
                 // Letters are stored lowercase while titles are displayed as uppercase.
                 // Lowercase the title so we can compare it with the stored letter.
@@ -1925,6 +2038,31 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         helpScreenPicker()
     }
     
+    var clueTableRotated = false
+    @IBAction func toggleClueTable(_ sender: Any) {
+        if clueTable.alpha < 1 {
+            clueTable.reloadData()
+            UIView.animate(withDuration: 0.5) {
+                self.clueTable.alpha = 1
+            }
+        } else {
+            UIView.animate(withDuration: 0.5) {
+                self.clueTable.alpha = 0
+            }
+        }
+        
+        if !clueTableRotated {
+            UIView.animate(withDuration: 0.25) {
+                self.clueTableButton.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+            }
+            clueTableRotated = true
+        } else {
+            UIView.animate(withDuration: 0.25) {
+                self.clueTableButton.transform = CGAffineTransform(rotationAngle: CGFloat.pi * 2)
+            }
+            clueTableRotated = false
+        }
+    }
     
     
      /*****************************************
@@ -2113,20 +2251,20 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             var atBeginningOfRow: Bool
             var atEndOfRow: Bool
             
-            // Since everything is layed out in an array with 13 squares each,
+            // Since everything is layed out in an array with puzzleSize squares each,
             // the first square in the row will always equal 0 when modulo'd
-            // with 13. This way we can see if we should stop picking squares
+            // with puzzleSize. This way we can see if we should stop picking squares
             // in the left direction
-            if i % 13 == 0 {
+            if i % puzzleSize == 0 {
                 atBeginningOfRow = true
             } else {
                 atBeginningOfRow = false
             }
             
             // Likewise, each end of the row + 1 will be 0 when modulo'd with
-            // 13. This way we can determine if we should stop picking squares
+            // puzzleSize. This way we can determine if we should stop picking squares
             // in the right direction
-            if (i + 1) % 13 == 0 {
+            if (i + 1) % puzzleSize == 0 {
                 atEndOfRow = true
             } else {
                 atEndOfRow = false
@@ -2137,7 +2275,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             // of the row or a disabled button
             while !atBeginningOfRow && boardSpaces[i].isEnabled {
                 selectedBoardSpaces.append(i)
-                if i % 13 == 0 {
+                if i % puzzleSize == 0 {
                     atBeginningOfRow = true
                 }
                 i -= 1
@@ -2149,7 +2287,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             i = indexOfButton
             while !atEndOfRow && boardSpaces[i].isEnabled {
                 selectedBoardSpaces.append(i)
-                if (i + 1) % 13 == 0 {
+                if (i + 1) % puzzleSize == 0 {
                     atEndOfRow = true
                 }
                 i += 1
@@ -2159,19 +2297,19 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             var topOfColumn: Bool
             var bottomOfColumn: Bool
             
-            // To determine if we hit the top, decrease our index by 13.
+            // To determine if we hit the top, decrease our index by puzzleSize.
             // If it is negative, then there are no further squares to
             // continue going up.
-            if (i - 13) < 0 {
+            if (i - puzzleSize) < 0 {
                 topOfColumn = true
             } else {
                 topOfColumn = false
             }
             
-            // To determine if we hit the bottom, increase our index by 13.
-            // If it is over 169 (total number of squares), then there are
+            // To determine if we hit the bottom, increase our index by puzzleSize.
+            // If it is over puzzleSize sqaured (total number of squares), then there are
             // no further squares to continue going down.
-            if (i + 13) > 168 {
+            if (i + puzzleSize) > puzzleSize * puzzleSize - 1 {
                 bottomOfColumn = true
             } else {
                 bottomOfColumn = false
@@ -2182,7 +2320,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             // of the column or a disabled button
             while !topOfColumn && boardSpaces[i].isEnabled {
                 selectedBoardSpaces.append(i)
-                i -= 13
+                i -= puzzleSize
                 if i < 0 {
                     topOfColumn = true
                 }
@@ -2194,8 +2332,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             i = indexOfButton
             while !bottomOfColumn && boardSpaces[i].isEnabled {
                 selectedBoardSpaces.append(i)
-                i += 13
-                if i > 168 {
+                i += puzzleSize
+                if i > puzzleSize * puzzleSize - 1 {
                     bottomOfColumn = true
                 }
             }
@@ -2219,7 +2357,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     func initialHighlight() {
         // Ensures that animation will always be active when coming back from background
         previousButton = -1
-        
+
         if inGame {
             // inGame is set at the initial viewWillAppear, this allows us to jump
             // to the right spot and animate it after coming from background or
@@ -2227,16 +2365,17 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
             return
         }
-        
+
         // Start the user on whatever 1 is available (prefers 1 across)
-        for i in 0...168 {
+        for i in 0...puzzleSize * puzzleSize - 1 {
             // If there is no 1 across, start vertical
             if buttonAcrossArray[i] == "01a" || buttonDownArray[i] == "01d" {
                 if buttonDownArray[i] == "01d" && buttonAcrossArray[i] != "01a" {
                     across = false
                 }
-                
+
                 boardSpaces[i].sendActions(for: .touchUpInside)
+                
                 break
             }
         }
@@ -2250,7 +2389,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         
         // Set all active buttons as our selected spaces so we can highlight them
         selectedBoardSpaces.removeAll()
-        for i in 0...168 {
+        for i in 0...puzzleSize * puzzleSize - 1 {
             if boardSpaces[i].isEnabled {
                 selectedBoardSpaces.append(i)
             }
@@ -2262,7 +2401,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         // Perform the spin animation
         UIView.animate(withDuration: 1.0, delay: 0.0, options: .curveLinear, animations: {
             () -> Void in
-            for i in 0...168 {
+            for i in 0...self.puzzleSize * self.puzzleSize - 1 {
                 // For every enabled button, if its enabled, make it spin
                 if self.boardSpaces[i].isEnabled {
                     // Put z postion high to spin over the black squares
@@ -2276,7 +2415,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         // Perform second spin to get from 180 degrees back to original position
         UIView.animate(withDuration: 1.0, delay: 0.95, options: .curveLinear,animations: {
             () -> Void in
-            for i in 0...168 {
+            for i in 0...self.puzzleSize * self.puzzleSize - 1 {
                 if self.boardSpaces[i].isEnabled {
                     self.boardSpaces[i].layer.zPosition = 1000
                     self.boardSpaces[i].transform = CGAffineTransform(rotationAngle: CGFloat.pi * 2)
@@ -2286,7 +2425,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             Void in
             
             // After completion of spin, let the board spaces fall off screen
-            for i in 0...168 {
+            for i in 0...self.puzzleSize * self.puzzleSize - 1 {
                 if self.boardSpaces[i].isEnabled {
                     // z position at -1 lets spaces go behind the keyboard
                     self.boardSpaces[i].layer.zPosition = -1
@@ -2307,7 +2446,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     }
     
     func animateGameStart() {
-        for i in 0...168 {
+        for i in 0...puzzleSize * puzzleSize - 1 {
             // FLY IN ANIMATION
             let randomDirection = arc4random_uniform(4)
             let randomModifier = (CGFloat(arc4random_uniform(101)) / 50) - 1
@@ -2365,7 +2504,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     func fillAcrossDownArrays() {
         
         if Settings.userLevel! >= 1000 {
-            let LEVEL_INDEX = Settings.userLevel! - 1000
+            let LEVEL_INDEX = levelIndex!
             // Grab across and down numbers and append them to the array
             for key in Settings.dailies[LEVEL_INDEX]["Across"]!.keys {
                 acrossNumbers.append(Int(key)!)
@@ -2375,13 +2514,20 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 downNumbers.append(Int(key)!)
             }
         } else {
-            let LEVEL_INDEX = Settings.userLevel! - 1
+            var levelIndex: Int!
+            if Settings.userLevel < 200 {
+                levelIndex = Settings.userLevel! - 1
+            } else if Settings.userLevel >= 200 && Settings.userLevel < 400 {
+                levelIndex = Settings.userLevel! - 201
+            } else if Settings.userLevel >= 400 && Settings.userLevel < 600 {
+                levelIndex = Settings.userLevel! - 401
+            }
             // Grab across and down numbers and append them to the array
-            for key in Settings.levels[LEVEL_INDEX]["Across"]!.keys {
+            for key in levels[levelIndex]["Across"]!.keys {
                 acrossNumbers.append(Int(key)!)
             }
             
-            for key in Settings.levels[LEVEL_INDEX]["Down"]!.keys {
+            for key in levels[levelIndex]["Down"]!.keys {
                 downNumbers.append(Int(key)!)
             }
         }
@@ -2403,15 +2549,22 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         var dw: Dictionary<String, String>
         
         if Settings.userLevel! >= 1000 {
-            let LEVEL_INDEX = Settings.userLevel! - 1000
+            let LEVEL_INDEX = levelIndex!
 
             ac = Settings.dailies[LEVEL_INDEX]["Across"]!
             dw = Settings.dailies[LEVEL_INDEX]["Down"]!
         } else {
-            let LEVEL_INDEX = Settings.userLevel! - 1
+            var levelIndex: Int!
+            if Settings.userLevel < 200 {
+                levelIndex = Settings.userLevel! - 1
+            } else if Settings.userLevel >= 200 && Settings.userLevel < 400 {
+                levelIndex = Settings.userLevel! - 201
+            } else if Settings.userLevel >= 400 && Settings.userLevel < 600 {
+                levelIndex = Settings.userLevel! - 401
+            }
 
-            ac = Settings.levels[LEVEL_INDEX]["Across"]!
-            dw = Settings.levels[LEVEL_INDEX]["Down"]!
+            ac = levels[levelIndex]["Across"]!
+            dw = levels[levelIndex]["Down"]!
         }
         
         for (key, value) in ac {
@@ -2434,7 +2587,10 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                                         masterClues[j]["Num of words"]!))
                 }
             }
-        }        
+        }
+        
+        acrossClues.sort(by: {Int($0.Num)! < Int($1.Num)!})
+        downClues.sort(by: {Int($0.Num)! < Int($1.Num)!})
     }
     
     
@@ -2447,6 +2603,8 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     func startTimer() {
         // Start counting how long the user has been on the level
         gameTimer = Timer.scheduledTimer(timeInterval: 1.0, target: self, selector: #selector(self.updateTimerLabel), userInfo: nil, repeats: true)
+        
+        RunLoop.main.add(gameTimer, forMode: RunLoopMode.commonModes)
     }
     
     @objc func updateTimerLabel() {
@@ -2474,6 +2632,12 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             minutesLabel.text = ":\(mins!)"
             hoursLabel.text = "\(hoursCounter)"
             
+            if Settings.cheatCount > Int(cheatCountLabel.text!)! {
+                let amountChanged = Settings.cheatCount - Int(cheatCountLabel.text!)!
+                animateGemChange(amountChanged, true)
+                cheatCountLabel.text = "\(Settings.cheatCount)"
+            }
+            
             // Save the timer every time through
             defaults.set(secondsCounter, forKey: "\(Settings.userLevel!)_seconds")
             defaults.set(minutesCounter, forKey: "\(Settings.userLevel!)_minutes")
@@ -2481,18 +2645,50 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         }
     }
     
+    var isAnimatingGems = false
+    func animateGemChange(_ count: Int, _ increase: Bool) {
+        view.layoutIfNeeded()
+        gemChangeStack.alpha = 1.0
+        let originalTopSpace = gemChangeTopConstraint.constant
+        
+        if increase {
+            gemChangeText.textColor = .green
+            gemChangeText.text = "+\(count)"
+        } else {
+            gemChangeText.textColor = .red
+            gemChangeText.text = "-\(count)"
+        }
+        
+        self.gemChangeTopConstraint.constant -= originalTopSpace
+        if !isAnimatingGems {
+            isAnimatingGems = true
+            UIView.animate(withDuration: 1.5, animations: {
+                self.view.layoutIfNeeded()
+            }) {
+                (Void) in
+                UIView.animate(withDuration: 0.3, animations: {
+                    self.gemChangeStack.alpha = 0
+                }) {
+                    (Void) in
+                    self.isAnimatingGems = false
+                    self.gemChangeTopConstraint.constant = originalTopSpace
+                }
+            }
+        }
+    }
+    
     func readFromDefaults() {
         // If there are saved answers, then we want to display those
         if let savedAnswers = defaults.array(forKey: "\(Settings.userLevel!)_buttonTitles") {
             buttonTitleArray = (savedAnswers as? [String])!
-            for i in 0...168 {
+            for i in 0...puzzleSize * puzzleSize - 1 {
                 if buttonTitleArray[i] != "" {
                     boardSpaces[i].setTitleWithOutAnimation(title: buttonTitleArray[i])
                 }
             }
         } else {
             // Otherwise, start new
-            buttonTitleArray = Array(repeating: "", count: 169)
+            buttonTitleArray = Array(repeating: "", count: puzzleSize * puzzleSize)
         }
         
         // If there are locked answers, then we want to set those
@@ -2500,42 +2696,42 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             buttonLockedForCorrect = (locked as? [Bool])!
         } else {
             // Otherwise, start new
-            buttonLockedForCorrect = Array(repeating: false, count: 169)
+            buttonLockedForCorrect = Array(repeating: false, count: puzzleSize * puzzleSize)
         }
         
         // If there are squares with hints, then we want to display those
         if let acrossHint = defaults.array(forKey: "\(Settings.userLevel!)_hintAcross") {
             buttonHintAcrossEnabled = (acrossHint as? [Bool])!
-            for i in 0...168 {
+            for i in 0...puzzleSize * puzzleSize - 1 {
                 if buttonHintAcrossEnabled[i] == true {
                     boardSpaces[i].showHintLabel()
                 }
             }
         } else {
             // Otherwise, start new
-            buttonHintAcrossEnabled = Array(repeating: false, count: 169)
+            buttonHintAcrossEnabled = Array(repeating: false, count: puzzleSize * puzzleSize)
         }
         
         // If there are squares with hints, then we want to display those
         if let downHint = defaults.array(forKey: "\(Settings.userLevel!)_hintDown") {
             buttonHintDownEnabled = (downHint as? [Bool])!
-            for i in 0...168 {
+            for i in 0...puzzleSize * puzzleSize - 1 {
                 if buttonHintDownEnabled[i] == true {
                     boardSpaces[i].showHintLabel()
                 }
             }
         } else {
             // Otherwise, start new
-            buttonHintDownEnabled = Array(repeating: false, count: 169)
+            buttonHintDownEnabled = Array(repeating: false, count: puzzleSize * puzzleSize)
         }
         
         // If there are squares revealed, then we want to display those
         if let revealed = defaults.array(forKey: "\(Settings.userLevel!)_revealed") {
             buttonRevealedByHelper = (revealed as? [Bool])!
-            for i in 0...168 {
+            for i in 0...puzzleSize * puzzleSize - 1 {
                 if buttonRevealedByHelper[i] == true {
                     // Set the background to indicate a cheat was used at that square
-                    // boardSpaces[i].backgroundColor = UIColor.init(cgColor: orangeColorCG)
+                    boardSpaces[i].backgroundColor = UIColor.init(cgColor: orangeColorCG)
                     if buttonTitleArray[i] == "" {
                         // Set the title equal to the correct answer
                         boardSpaces[i].setTitleWithOutAnimation(title: String(buttonLetterArray[i]).uppercased())
@@ -2552,7 +2748,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
             }
         } else {
             // Otherwise, start new
-            buttonRevealedByHelper = Array(repeating: false, count: 169)
+            buttonRevealedByHelper = Array(repeating: false, count: puzzleSize * puzzleSize)
         }
         
         // Set the timing counters, they are 0 if there is no corresponding key
@@ -2561,7 +2757,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         hoursCounter = defaults.integer(forKey: "\(Settings.userLevel!)_hours")
         
         if Settings.highestDailyComplete == Settings.today && Settings.userLevel! >= 1000 {
-            for i in 0...168 {
+            for i in 0...puzzleSize * puzzleSize - 1 {
                 buttonRevealedByHelper[i] = true
             }
         }
@@ -2570,13 +2766,13 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     
     func resetDefaults(_ forLevel: Int) {
         // Set level specific board states back to initial board
-        defaults.set(Array(repeating: "", count: 169), forKey: "\(forLevel)_buttonTitles")
-        defaults.set(Array(repeating: false, count: 169), forKey: "\(forLevel)_lockedCorrect")
+        defaults.set(Array(repeating: "", count: puzzleSize * puzzleSize), forKey: "\(forLevel)_buttonTitles")
+        defaults.set(Array(repeating: false, count: puzzleSize * puzzleSize), forKey: "\(forLevel)_lockedCorrect")
         
         if forLevel >= 1000 {
-            defaults.set(Array(repeating: false, count: 169), forKey: "\(forLevel)_hintAcross")
-            defaults.set(Array(repeating: false, count: 169), forKey: "\(forLevel)_hintDown")
-            defaults.set(Array(repeating: false, count: 169), forKey: "\(forLevel)_revealed")
+            defaults.set(Array(repeating: false, count: puzzleSize * puzzleSize), forKey: "\(forLevel)_hintAcross")
+            defaults.set(Array(repeating: false, count: puzzleSize * puzzleSize), forKey: "\(forLevel)_hintDown")
+            defaults.set(Array(repeating: false, count: puzzleSize * puzzleSize), forKey: "\(forLevel)_revealed")
         }
         
         defaults.set(0, forKey: "\(forLevel)_seconds")
@@ -2629,6 +2825,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
                 // Creates a new board and pushes it onto the navigation stack
                 let storyboard = UIStoryboard(name: "Main", bundle: nil)
                 let vc = storyboard.instantiateViewController(withIdentifier: "GameViewController") as! GameViewController
+                vc.levels = self.levels
                 
                 // Gives a nice animation to the next view
                 let transition = CATransition()
@@ -2672,6 +2869,9 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         
         interstitialAd = createAndLoadInterstitial()
         ref = Database.database().reference()
+        scroller.delegate = self
+        clueTable.delegate = self
+        clueTable.dataSource = self
         
         // This is the board that needs to be set up
         // board[0] contains the letters in their locations
@@ -2680,24 +2880,48 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         var board = [String]()
         
         if Settings.userLevel! >= 1000 {
-            let LEVEL_INDEX = Settings.userLevel! - 1000
+            levelIndex = Settings.userLevel! - 1000
 
-            board = [Settings.dailies[LEVEL_INDEX]["Board"]!["Letters"]!,
-                     Settings.dailies[LEVEL_INDEX]["Board"]!["Numbers"]!,
-                     Settings.dailies[LEVEL_INDEX]["Board"]!["Properties"]!]
+            board = [Settings.dailies[levelIndex]["Board"]!["Letters"]!,
+                     Settings.dailies[levelIndex]["Board"]!["Numbers"]!,
+                     Settings.dailies[levelIndex]["Board"]!["Properties"]!]
+            
+            let firstStartIndex = Settings.today.startIndex
+            let firstEndIndex = Settings.today.index(firstStartIndex, offsetBy: 4)
+            let firstRange = firstStartIndex..<firstEndIndex
+            
+            let secondStartIndex = Settings.today.index(firstEndIndex, offsetBy: 1)
+            let secondEndIndex = Settings.today.index(secondStartIndex, offsetBy: 2)
+            let secondRange = secondStartIndex..<secondEndIndex
+            
+            let thirdStartIndex = Settings.today.index(secondEndIndex, offsetBy: 1)
+            let thirdEndIndex = Settings.today.index(thirdStartIndex, offsetBy: 2)
+            let thirdRange = thirdStartIndex..<thirdEndIndex
+            
+            Settings.userLevel = Int("\(Settings.today[firstRange])\(Settings.today[secondRange])\(Settings.today[thirdRange])")
         } else {
-            let LEVEL_INDEX = Settings.userLevel! - 1
+            var levelIndex: Int!
+            if Settings.userLevel < 200 {
+                levelIndex = Settings.userLevel! - 1
+            } else if Settings.userLevel >= 200 && Settings.userLevel < 400 {
+                levelIndex = Settings.userLevel! - 201
+            } else if Settings.userLevel >= 400 && Settings.userLevel < 600 {
+                levelIndex = Settings.userLevel! - 401
+            }
 
-            board = [Settings.levels[LEVEL_INDEX]["Board"]!["Letters"]!,
-                    Settings.levels[LEVEL_INDEX]["Board"]!["Numbers"]!,
-                    Settings.levels[LEVEL_INDEX]["Board"]!["Properties"]!]
+            board = [levels[levelIndex]["Board"]!["Letters"]!,
+                    levels[levelIndex]["Board"]!["Numbers"]!,
+                    levels[levelIndex]["Board"]!["Properties"]!]
         }
+        
+        puzzleSize = Int(sqrt(Double(board[0].count)))
         
         // Set everything up
         formatter.minimumIntegerDigits = 2
+        setUpBoard(board: board)
+
         fillAcrossDownArrays()
         makeClueArrays()
-        setUpBoard(board: board)
         startTimer()
         
         // Start playing game music
@@ -2717,12 +2941,6 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         if defaults.bool(forKey: "helpShownBefore") {
             animateGameStart()
         }
-        
-        if Settings.userLevel! >= 1000 {
-            for i in 1000..<Settings.userLevel! {
-                resetDefaults(i)
-            }
-        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -2741,34 +2959,60 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         if !inGame {
             // Our initial tap
             initialHighlight()
+            determineAllCorrect()
             inGame = true
         }
     }
     
     var gameStarted = false
+    var counter = 0
+    var boardFillsScrollView = false
     override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+
         if !gameStarted {
-            var height = theBoard.frame.height
-            var width = theBoard.frame.width
+            theBoardHeight.constant = CGFloat(38 * puzzleSize)
+            theBoardWidth.constant = CGFloat(38 * puzzleSize)
+            let height = theBoardHeight.constant
+            let width = theBoardWidth.constant
             
-            while width > height {
-                boardLeading.constant += 0.5
-                boardTrailing.constant += 0.5
-                width -= 1
+            if scroller.frame.height > height {
+                boardFillsScrollView = true
+                theBoardHeight.constant = scroller.frame.height - 20
+                theBoardWidth.constant = scroller.frame.height - 20
+                scrollingDisabled = true
             }
-            
-            while height > width {
-                boardTop.constant += 0.5
-                boardBottom.constant += 0.5
-                height -= 1
-            }
-            
+
+            scroller.minimumZoomScale = min((scroller.frame.height / height), (scroller.frame.width / width)) - 0.019
+            scroller.maximumZoomScale = 2
             gameStarted = true
+
         }
         
-        // Keeps highlighted word border from breaking
-        boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
-        boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
+        if boardFillsScrollView {
+            scroller.panGestureRecognizer.isEnabled = false
+            scroller.pinchGestureRecognizer?.isEnabled = false
+        } else {
+            scroller.panGestureRecognizer.isEnabled = true
+            scroller.pinchGestureRecognizer?.isEnabled = true
+        }
+
+        //Keeps highlighted word border from breaking
+        if counter < 2 {
+            boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
+            boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
+            counter += 1
+            
+            var offset: CGFloat = 0.0
+            if scroller.zoomScale - 0.05 < scroller.minimumZoomScale {
+                offset = 5.0
+            }
+            
+            let offsetX = max((scroller.bounds.width - scroller.contentSize.width) * 0.5, 0) - offset
+            let offsetY = max((scroller.bounds.height - scroller.contentSize.height) * 0.5, 0) - offset
+
+            scroller.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: offsetY, right: offsetX)
+        }
     }
     
     /*****************************************
@@ -2792,7 +3036,7 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
     func interstitialDidDismissScreen(_ ad: GADInterstitial) {
         interstitialAd = createAndLoadInterstitial()
         if across {
-            if indexOfButton < 168 {
+            if indexOfButton < puzzleSize * puzzleSize - 1 {
                 boardSpaces[indexOfButton! + 1].sendActions(for: .touchUpInside)
                 boardSpaces[indexOfButton! - 1].sendActions(for: .touchUpInside)
             } else {
@@ -2802,12 +3046,13 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
 
             across = true
         } else {
-            if indexOfButton > 12 {
-                boardSpaces[indexOfButton! - 13].sendActions(for: .touchUpInside)
-                boardSpaces[indexOfButton! + 13].sendActions(for: .touchUpInside)
+            if indexOfButton > puzzleSize - 1 &&
+                boardSpaces[indexOfButton - puzzleSize].isEnabled {
+                boardSpaces[indexOfButton! - puzzleSize].sendActions(for: .touchUpInside)
+                boardSpaces[indexOfButton! + puzzleSize].sendActions(for: .touchUpInside)
             } else {
-                boardSpaces[indexOfButton! + 13].sendActions(for: .touchUpInside)
-                boardSpaces[indexOfButton! - 13].sendActions(for: .touchUpInside)
+                boardSpaces[indexOfButton! + puzzleSize].sendActions(for: .touchUpInside)
+                boardSpaces[indexOfButton! - puzzleSize].sendActions(for: .touchUpInside)
             }
 
             across = false
@@ -2867,6 +3112,38 @@ class GameViewController: UIViewController, GADInterstitialDelegate {
         interstitial.load(request)
         return interstitial
     }
+    
+    func viewForZooming(in scrollView: UIScrollView) -> UIView? {
+        return theBoard
+    }
+    
+    func scrollViewDidEndZooming(_ scrollView: UIScrollView,
+                                          with view: UIView?,
+                                          atScale scale: CGFloat) {
+        scrollView.contentSize = CGSize(width: scrollView.contentSize.width + (15 * scale), height: scrollView.contentSize.height + (15 * scale))
+        
+        if scrollView.zoomScale - 0.07 < scrollView.minimumZoomScale {
+            scrollingDisabled = true
+            scrollView.panGestureRecognizer.isEnabled = false
+        } else {
+            scrollingDisabled = false
+            scrollView.panGestureRecognizer.isEnabled = true
+        }
+
+    }
+    
+    func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        var offset: CGFloat = 0.0
+        
+        if scrollView.zoomScale - 0.05 < scrollView.minimumZoomScale {
+            offset = 5.0
+        }
+        
+        let offsetX = max((scrollView.bounds.width - scrollView.contentSize.width) * 0.5, 0) - offset
+        let offsetY = max((scrollView.bounds.height - scrollView.contentSize.height) * 0.5, 0) - offset
+
+        scrollView.contentInset = UIEdgeInsets(top: offsetY, left: offsetX, bottom: offsetY, right: offsetX)
+    }
 }
 
 extension UIControl {
@@ -2910,5 +3187,96 @@ extension UIView {
         pulse.fromValue = 0
         pulse.toValue = 1
         self.layer.add(pulse, forKey: nil)
+    }
+}
+
+extension GameViewController: UITableViewDataSource, UITableViewDelegate {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if section == 0 {
+            return acrossClues.count
+        } else {
+            return downClues.count
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        var clue: (Num: String, Clue: String, Hint: String, WordCt: String)
+
+        if indexPath.section == 0 {
+            clue = acrossClues[indexPath.row]
+        } else {
+            clue = downClues[indexPath.row]
+        }
+        
+
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ClueCell") as! ClueCell
+        cell.setNumber(clue.Num)
+        cell.setClue(clue.Clue)
+        if correctClues.contains(clue.Clue) {
+            cell.backgroundColor = UIColor.init(red: 73/255, green: 222/255, blue: 124/255, alpha: 1)
+        } else {
+            cell.backgroundColor = UIColor.init(red: 235/255, green: 235/255, blue: 241/255, alpha: 1)
+        }
+        cell.selectionStyle = .none
+        
+        return cell
+    }
+    
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if section == 0 {
+            return "Across"
+        } else {
+            return "Down"
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let header: UITableViewHeaderFooterView = view as! UITableViewHeaderFooterView
+        header.textLabel?.font = UIFont(name: "Geeza Pro Regular", size: 18.0)
+        header.textLabel?.textAlignment = NSTextAlignment.center
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        var spotToFind = ""
+        var arr = [String]()
+        
+        if indexPath.section == 0 {
+            let num = acrossClues[indexPath.row].Num
+            if Int(num)! < 10 {
+                spotToFind.append("0\(num)a")
+            } else {
+                spotToFind.append("\(num)a")
+            }
+            arr = buttonAcrossArray
+        } else {
+            let num = downClues[indexPath.row].Num
+            if Int(num)! < 10 {
+                spotToFind.append("0\(num)d")
+            } else {
+                spotToFind.append("\(num)d")
+            }
+            arr = buttonDownArray
+        }
+        
+        for i in 0...arr.count - 1 {
+            if spotToFind == arr[i] {
+                boardSpaces[i].sendActions(for: .touchUpInside)
+                break
+            }
+        }
+        
+        if indexPath.section == 0 {
+            if !across {
+                boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
+            }
+        } else {
+            if across {
+                boardSpaces[indexOfButton].sendActions(for: .touchUpInside)
+            }
+        }
     }
 }

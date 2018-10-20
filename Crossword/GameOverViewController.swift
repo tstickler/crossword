@@ -16,12 +16,15 @@ class GameOverViewController: UIViewController {
     @IBOutlet weak var topButton: UIButton!
     @IBOutlet weak var bottomButton: UIButton!
     @IBOutlet weak var viewBackground: UIView!
+    @IBOutlet var gemCountWon: UILabel!
+    @IBOutlet var gem: UILabel!
     
     var gameOver: Bool!
     var hours: Int!
     var minutes: Int!
     var seconds: Int!
     var numberWrong: Int!
+    var levelOffset: Int!
     
     // Should always end up being 1 but this is safer
     var indexOfPresenter: Int!
@@ -97,6 +100,16 @@ class GameOverViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        if Settings.userLevel < 200 {
+            levelOffset = 0
+        } else if Settings.userLevel >= 200 && Settings.userLevel < 400 {
+            levelOffset = 200
+        } else if Settings.userLevel >= 400 && Settings.userLevel < 600 {
+            levelOffset = 400
+        } else {
+            levelOffset = 0
+        }
+        
         // Should be 1 (the top view on the navigation stack)
         indexOfPresenter = (self.presentingViewController?.childViewControllers.count)! - 1
     }
@@ -113,6 +126,8 @@ class GameOverViewController: UIViewController {
                 hours = parentVC.hoursCounter
                 minutes = parentVC.minutesCounter
                 seconds = parentVC.secondsCounter
+                gemCountWon.isHidden = false
+                gem.isHidden = false
                 
                 var hoursPlural = "hours"
                 var minutesPlural = "minutes"
@@ -123,11 +138,11 @@ class GameOverViewController: UIViewController {
                 if hours == 1 {
                     hoursPlural = "hour"
                 }
-                
+
                 if minutes == 1 {
                     minutesPlural = "minute"
                 }
-                
+
                 if seconds == 1 {
                     secondsPlural = "second"
                 }
@@ -142,7 +157,7 @@ class GameOverViewController: UIViewController {
                 case 1:
                     titleLabel.text = "Well Done!"
                 case 2:
-                    titleLabel.text = "Congratulations!"
+                    titleLabel.text = "Congrats!"
                 case 3:
                     titleLabel.text = "Excellent!"
                 case 4:
@@ -183,11 +198,11 @@ class GameOverViewController: UIViewController {
                 for i in 0..<Settings.uncompletedLevels.count {
                     // Go until we find the current level in uncompleted
                     // levels
-                    if Settings.uncompletedLevels[i] == Settings.userLevel {
+                    if Settings.uncompletedLevels[i] == Settings.userLevel - levelOffset {
                         
                         // Put the level into the completed levels and remove from
                         // uncompleted levels
-                        Settings.completedLevels.append(Settings.userLevel)
+                        Settings.completedLevels.append(Settings.userLevel - levelOffset)
                         Settings.uncompletedLevels.remove(at: i)
                         
                         // Move a locked level into the uncompleted levels
@@ -196,15 +211,39 @@ class GameOverViewController: UIViewController {
                             Settings.lockedLevels.remove(at: 0)
                         }
                         
+                        var completedKey: String!
+                        var uncompletedKey: String!
+                        var lockedKey: String!
+                        switch levelOffset {
+                        case 0:
+                            completedKey = "completedLevels"
+                            uncompletedKey = "uncompletedLevels"
+                            lockedKey = "lockedLevels"
+                        case 200:
+                            completedKey = "completedLevels_18"
+                            uncompletedKey = "uncompletedLevels_18"
+                            lockedKey = "lockedLevels_18"
+                        case 400:
+                            completedKey = "completedLevels_23"
+                            uncompletedKey = "uncompletedLevels_23"
+                            lockedKey = "lockedLevels_23"
+                        default:
+                            completedKey = "completedLevels"
+                            uncompletedKey = "uncompletedLevels"
+                            lockedKey = "lockedLevels"
+                        }
+
                         // Save the state of the level arrays
-                        defaults.set(Settings.completedLevels, forKey: "completedLevels")
-                        defaults.set(Settings.uncompletedLevels, forKey: "uncompletedLevels")
-                        defaults.set(Settings.lockedLevels, forKey: "lockedLevels")
+                        defaults.set(Settings.completedLevels, forKey: completedKey)
+                        defaults.set(Settings.uncompletedLevels, forKey: uncompletedKey)
+                        defaults.set(Settings.lockedLevels, forKey: lockedKey)
                         
                         // User gets another cheat for completing the level
                         // Only needs to happen when the level is completed the first time
                         Settings.cheatCount += 10
+                        gemCountWon.text = "+10"
                         parentVC.cheatCountLabel.text = "\(Settings.cheatCount)"
+                        parentVC.animateGemChange(10, true)
                         defaults.set(Settings.cheatCount, forKey: "cheatCount")
                         
                         break
@@ -224,7 +263,9 @@ class GameOverViewController: UIViewController {
                     topButton.isHidden = true
                     bottomButton.backgroundColor = .green
                     Settings.cheatCount += 20
+                    gemCountWon.text = "+20"
                     parentVC.cheatCountLabel.text = "\(Settings.cheatCount)"
+                    parentVC.animateGemChange(20, true)
                     defaults.set(Settings.cheatCount, forKey: "cheatCount")
                     defaults.set(Settings.today, forKey: "highestDailyComplete")
                     defaults.set(Settings.dailiesCompleted, forKey: "dailiesCompleted")
@@ -259,6 +300,8 @@ class GameOverViewController: UIViewController {
                 bottomButton.layer.borderWidth = 1
                 bottomButton.layer.cornerRadius = 5
                 bottomButton.setTitle("Continue", for: .normal)
+                gemCountWon.isHidden = true
+                gem.isHidden = true
             }
         }
     }
@@ -272,7 +315,7 @@ class GameOverViewController: UIViewController {
         
         // Find the next available level greater than current level
         for level in Settings.uncompletedLevels {
-            if level > Settings.userLevel {
+            if level  + levelOffset > Settings.userLevel {
                 potentialNextLevels.append(level)
             }
         }
@@ -281,7 +324,7 @@ class GameOverViewController: UIViewController {
         // level
         if potentialNextLevels.isEmpty {
             for level in Settings.uncompletedLevels {
-                if level < Settings.userLevel {
+                if level + levelOffset < Settings.userLevel {
                     potentialNextLevels.append(level)
                 }
             }
@@ -290,6 +333,6 @@ class GameOverViewController: UIViewController {
         // Go to the lowest found potential level
         nextLevel = potentialNextLevels.min()!
         
-        return nextLevel
+        return nextLevel + levelOffset
     }
 }

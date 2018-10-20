@@ -30,6 +30,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
     @IBOutlet var skipFilledSwitch: UISwitch!
     @IBOutlet var lockCorrectSwitch: UISwitch!
     @IBOutlet var correctAnimationSwitch: UISwitch!
+    @IBOutlet var autoscrollSwitch: UISwitch!
     
     // Should always end up being 1 but this is safer
     var indexOfPresenter: Int!
@@ -95,6 +96,7 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         skipFilledSwitch.setOn(Settings.skipFilledSquares, animated: false)
         lockCorrectSwitch.setOn(Settings.lockCorrect, animated: false)
         correctAnimationSwitch.setOn(Settings.correctAnim, animated: false)
+        autoscrollSwitch.setOn(Settings.autoscroll, animated: false)
     }
     
     // Switch toggling
@@ -182,6 +184,17 @@ class MenuViewController: UIViewController, UIGestureRecognizerDelegate {
         
         // Save the state of the setting
         defaults.set(Settings.correctAnim, forKey: "correctAnim")
+    }
+    
+    @IBAction func autoscrollSwitchToggled(_ sender: Any) {
+        if autoscrollSwitch.isOn == true {
+            Settings.autoscroll = true
+        } else {
+            Settings.autoscroll = false
+        }
+        
+        // Save the state of the setting
+        defaults.set(Settings.autoscroll, forKey: "autoscroll")
     }
     
     // Gesture recognizer control
